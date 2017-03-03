@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ajax快捷方法</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">ajax简单的get方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+var url = "http://localhost:8080/a/sys/menu/checkMenuName";
+$.get(url,function(data){
+	alert(data);
+});
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+<div class="aTitle">ajax完整的get方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+jQuery.get( url [, data ] [, success(data, textStatus, jqXHR) ] [, dataType ] )
+<b>url</b>
+类型: String
+一个包含发送请求的URL字符串
+<b>data</b>
+类型: PlainObject, String
+发送给服务器的字符串或Key/value键值对。【data参数可以省略】
+<b>success(data, textStatus, jqXHR)</b>
+类型: Function()
+当请求成功后执行的回调函数。
+<b>dataType</b>
+类型: String
+从服务器返回的预期的数据类型。默认：智能猜测（xml, json, script, 或 html）。
+
+
+var url = "http://localhost:8080/a/sys/menu/checkMenuName?oldMenuName=个人中心";
+$.get(
+	url,
+	{
+		menuName:"个人信息"
+	},
+	function(data){
+		alert(data);
+	},
+	"html"
+);
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+<div class="aTitle">ajax简单的post方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+var url = "http://localhost:8080/a/sys/menu/checkMenuName";
+$.post(
+	url,
+	{
+		oldMenuName:"个人中心", 
+		menuName:"个人信息"
+	},
+	function(data){
+		alert(data);
+	}
+);
+
+或
+
+$.post(
+	url,
+	"oldMenuName=个人中心&menuName=个人信息",
+	function(data){
+		alert(data);
+	}
+);
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+
+<div class="aTitle">ajax完整的post方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>jQuery.post( url [, data ] [, success(data, textStatus, jqXHR) ] [, dataType ] )</b>
+
+var url = "http://localhost:8080/a/sys/menu/checkMenuName";
+$.post(
+	url,
+	{
+		oldMenuName:"个人中心", 
+		menuName:"个人信息"
+	},
+	function(data){
+		alert(data);
+	},
+	"html"
+);
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+
+<div class="aTitle">ajax的getJSON方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+jQuery.getJSON( url [, data ] [, success(data, textStatus, jqXHR) ] )
+<b>url</b>
+类型: String
+一个包含发送请求的URL字符串
+<b>data</b>
+类型: PlainObject
+发送给服务器的字符串或Key/value键值对。
+<b>success(data, textStatus, jqXHR)</b>
+类型: Function()
+当请求成功后执行的回调函数。
+
+等同：jQuery.get( url, data, success, "json" );
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+<div class="aTitle">ajax的getScript方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+jQuery.getScript( url [, success(script, textStatus, jqXHR) ] )
+<b>url</b>
+类型: String
+一个包含发送请求的URL字符串。
+<b>success(script, textStatus, jqXHR)</b>
+类型: Function()
+当请求成功后执行的回调函数。
+
+等同：jQuery.get( url, undefined, success, "script" );
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$(".aShow").load("data.txt",function(data){
+			alert(data);
+		});
+	});
+</script>
+<div class="aTitle">ajax的load方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.load( url [, data ] [, complete(responseText, textStatus, XMLHttpRequest) ] )
+<b>url</b>
+类型: String
+一个包含发送请求的URL字符串
+<b>data</b>
+类型: PlainObject, String
+向服务器发送请求的Key/value参数，例如{name:"",age:23}
+<b>complete(responseText, textStatus, XMLHttpRequest)</b>
+类型: Function()
+当请求成功后执行的回调函数。
+
+var url = "${ctx}/sys/menu/checkMenuName";
+$("#resultDiv").load(url);
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+</body>
+</html>

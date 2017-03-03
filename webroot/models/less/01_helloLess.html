@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>less简单示例（IE8不兼容）</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<link rel="stylesheet/less" type="text/css" href="hello.less">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<script type="text/javascript" src="../../js/less.js"></script>
+	<meta charset="utf-8">
+	<style type="text/css">
+
+	</style>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<script type="text/javascript">
+	
+</script>
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+&lt;div class="hello"&gt;&lt;/div&gt;
+
+<b>hello.less</b>
+@color: #4D926F; 
+
+.hello { 
+	background-color: @color; 
+	width: 100px;
+	height: 100px;
+}
+
+<b>文件引入</b>
+&lt;link rel="stylesheet/less" type="text/css" href="hello.less"&gt;
+&lt;script type="text/javascript" src="../../js/less.js"&gt;&lt;/script&gt;
+
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<div class="hello"></div>
+	</div>
+</div>
+
+</body>
+</html>

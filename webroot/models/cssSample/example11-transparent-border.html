@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>透明边框</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style>
+.content{
+	width: 300px;
+	height: 300px;
+	box-sizing: border-box;
+	background: url(../../img/bk.png);
+	padding: 0px;
+	padding-top: 80px;
+}
+.title{
+	margin: auto;
+	width: 180px;
+	height: 50px;
+	background-color: #fff;
+	border: 10px solid rgba(255,255,255,0.6);
+	background-clip: padding-box;
+
+	font-size: 30px;
+	line-height: 50px;
+	text-align: center;
+}
+</style>
+
+
+<div class="aTitle">透明边框【IE8不适用】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.content{
+	width: 300px;
+	height: 300px;
+	box-sizing: border-box;
+	background: url(../../img/bk.png);
+	padding: 0px;
+	padding-top: 80px;
+}
+.title{
+	margin: auto;
+	width: 180px;
+	height: 50px;
+	background-color: #fff;
+	<mark>border: 10px solid rgba(255,255,255,0.6);
+	background-clip: padding-box;</mark>
+
+	font-size: 30px;
+	line-height: 50px;
+	text-align: center;
+}
+
+<b>页面：</b>
+&lt;div class="content"&gt;
+	&lt;div class="title"&gt;欢迎光临&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="content">
+			<div class="title">欢迎光临</div>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript表单-文本框</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">选择文本</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>选择（select）事件</b>
+在选择了文本框中的文本时，就会触发select事件。什么时候触发select 事件，还会因浏览器而异。
+在IE9+、Opera、Firefox、Chrome和Safari 中，只有用户选择了文本（而且要释放鼠标），
+才会触发select 事件。而在IE8 及更早版本中，只要用户选择了一个字母（不必释放鼠标），
+就会触发select 事件。
+
+<b>取得选择的文本</b>
+HTML5添加两个属性：selectionStart 和selectionEnd。
+这两个属性中保存的是基于0 的数值，表示所选择文本的范围（即文本选区开头和结尾的偏移量）。
+IE9+、Firefox、Safari、Chrome 和Opera 都支持这两个属性。
+var selText = textbox.value.substring(textbox.selectionStart, textbox.selectionEnd);
+
+IE8 及之前版本不支持这两个属性，而是提供了另一种方案。
+document.selection 对象，其中保存着用户在整个文档范围内选择的文本信息；
+var selText = document.selection.createRange().text;
+
+<b>选择部分文本</b>
+HTML5 也为选择文本框中的部分文本提供了解决方案， 即最早由Firefox 引入的
+setSelectionRange()方法。
+
+textbox.value = "Hello world!"
+//选择所有文本
+textbox.setSelectionRange(0, textbox.value.length); //"Hello world!"
+//选择前3 个字符
+textbox.setSelectionRange(0, 3); //"Hel"
+//选择第4 到第6 个字符
+textbox.setSelectionRange(4, 7); //"o w"
+
+<b>示例：</b>
+&lt;div&gt;选择的文字是：&lt;span id="showSelDiv"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;input id="ipt1" type="text" value="abcdef"&gt;&lt;br/&gt;
+&lt;button id="selAllBtn"&gt;全选&lt;/button&gt;&lt;br/&gt;
+&lt;button id="selPartBtn"&gt;部分选择&lt;/button&gt;
+
+<b>脚本：</b>
+var ipt1 = document.getElementById("ipt1");
+//全选按钮绑定事件
+eventUtil.bind(document.getElementById("selAllBtn"),"click",
+	function(){
+		ipt1.focus();//先获得焦点
+		ipt1.select();
+	});
+
+//部分选择按钮绑定事件
+eventUtil.bind(document.getElementById("selPartBtn"),"click",
+	function(){
+		ipt1.focus();//先获得焦点
+		if(ipt1.setSelectionRange){
+			ipt1.setSelectionRange(1,3);
+		}else{//IE
+			var range = ipt1.createTextRange();
+			range.collapse(true);
+			range.moveStart("character", 1);
+			range.moveEnd("character", 3);
+			range.select();
+		}
+	});
+
+//输入框绑定选中时间
+eventUtil.bind(ipt1,"select",function(event){
+		event=eventUtil.getEvent(event);
+		var target = eventUtil.getTarget(event);
+		document.getElementById("showSelDiv").innerHTML=getSelectedText(target);
+	});
+
+//获得选中的文字
+function getSelectedText(textbox){
+	if (typeof textbox.selectionStart == "number"){
+		return textbox.value.substring(textbox.selectionStart,
+		textbox.selectionEnd);
+	} else if (document.selection){
+		return document.selection.createRange().text;
+	}
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<div>选择的文字是：<span id="showSelDiv"></span></div>
+		<input id="ipt1" type="text" value="abcdef"><br/>
+		<button id="selAllBtn">全选</button><br/>
+		<button id="selPartBtn">部分选择</button>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var ipt1 = document.getElementById("ipt1");
+	//全选按钮绑定事件
+	eventUtil.bind(document.getElementById("selAllBtn"),"click",
+		function(){
+			ipt1.focus();//先获得焦点
+			ipt1.select();
+		});
+
+	//部分选择按钮绑定事件
+	eventUtil.bind(document.getElementById("selPartBtn"),"click",
+		function(){
+			ipt1.focus();//先获得焦点
+			if(ipt1.setSelectionRange){
+				ipt1.setSelectionRange(1,3);
+			}else{//IE
+				var range = ipt1.createTextRange();
+				range.collapse(true);
+				range.moveStart("character", 1);
+				range.moveEnd("character", 3);
+				range.select();
+			}
+		});
+
+	//输入框绑定选中时间
+	eventUtil.bind(ipt1,"select",function(event){
+			event=eventUtil.getEvent(event);
+			var target = eventUtil.getTarget(event);
+			document.getElementById("showSelDiv").innerHTML=getSelectedText(target);
+		});
+
+	//获得选中的文字
+	function getSelectedText(textbox){
+		if (typeof textbox.selectionStart == "number"){
+			return textbox.value.substring(textbox.selectionStart,
+			textbox.selectionEnd);
+		} else if (document.selection){
+			return document.selection.createRange().text;
+		}
+	}
+});
+</script>
+
+<div class="aTitle">屏蔽字符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+手机号码：&lt;input id="phone" type="text"&gt;&lt;br/&gt;
+验证码：&lt;input id="verifyCode" type="text"&gt;&lt;br/&gt;
+
+//ERROR：1. 未屏蔽粘贴的非法字符 2. 未屏蔽汉字输入法下shift+数字键
+eventUtil.bind(document.getElementById("phone"),"keydown",
+	function(event){
+		event = eventUtil.getEvent(event);
+		var keyCode = event.keyCode;
+		var charValue = String.fromCharCode(keyCode);
+		console.log("keyCode=",keyCode);
+		console.log("charValue=",charValue);
+		if(!/\d/.test(charValue) && keyCode > 9 &&!event.ctrlKey || event.shiftKey){
+			eventUtil.preventDefault(event);
+		}
+	});
+
+
+
+//ERROR：无法屏蔽最后按ctrl输入汉字的情况
+eventUtil.bind(document.getElementById("verifyCode"),"keyup",verifyCodeCheck);
+//eventUtil.bind(document.getElementById("verifyCode"),"textInput",verifyCodeCheck);
+function verifyCodeCheck(event){
+	event = eventUtil.getEvent(event);
+	var target = eventUtil.getTarget(event);
+	var val = target.value;
+	console.log(val);
+	if(!/^[\da-zA-Z]*$/.test(val)){
+		window.console&&console.log("error");
+		target.value=target.getAttribute("oldValue");
+		eventUtil.preventDefault(event);
+	}else{
+		window.console&&console.log("ok");
+		target.setAttribute("oldValue",val);
+	}
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+		手机号码：<input id="phone" type="text"><br/>
+		验证码：<input id="verifyCode" type="text"><br/>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+//ERROR：1. 未屏蔽粘贴的非法字符 2. 未屏蔽汉字输入法下shift+数字键
+eventUtil.bind(document.getElementById("phone"),"keydown",
+	function(event){
+		event = eventUtil.getEvent(event);
+		var keyCode = event.keyCode;
+		var charValue = String.fromCharCode(keyCode);
+		console.log("keyCode=",keyCode);
+		console.log("charValue=",charValue);
+		if(!/\d/.test(charValue) && keyCode > 9 &&!event.ctrlKey || event.shiftKey){
+			eventUtil.preventDefault(event);
+		}
+	});
+
+
+//ERROR：无法屏蔽最后按ctrl输入汉字的情况
+eventUtil.bind(document.getElementById("verifyCode"),"keyup",verifyCodeCheck);
+//eventUtil.bind(document.getElementById("verifyCode"),"textInput",verifyCodeCheck);
+function verifyCodeCheck(event){
+	event = eventUtil.getEvent(event);
+	var target = eventUtil.getTarget(event);
+	var val = target.value;
+	console.log(val);
+	if(!/^[\da-zA-Z]*$/.test(val)){
+		window.console&&console.log("error");
+		target.value=target.getAttribute("oldValue")||"";
+		eventUtil.preventDefault(event);
+	}else{
+		window.console&&console.log("ok");
+		target.setAttribute("oldValue",val);
+	}
+}
+
+});
+</script>
+
+
+<div class="aTitle">操作剪贴板【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+IE 是第一个支持与剪贴板相关事件，以及通过JavaScript 访问剪贴板数据的浏览器。
+HTML 5 后来也把剪贴板事件纳入了规范。下列就是6 个剪贴板事件。
+1. beforecopy：在发生复制操作前触发。
+2. copy：在发生复制操作时触发。
+3. beforecut：在发生剪切操作前触发。
+4. cut：在发生剪切操作时触发。
+5. beforepaste：在发生粘贴操作前触发。
+6. paste：在发生粘贴操作时触发。
+
+由于并非所有浏览器都支持访问剪贴板，所以更简单的做法是屏蔽一或多个剪贴板操作。在支持
+copy、cut 和paste 事件的浏览器中（IE、Safari、Chrome 和Firefox 3 及更高版本），很容易阻止这些
+事件的默认行为。在Opera 中，则需要阻止那些会触发这些事件的按键操作，同时还要阻止在文本框中
+显示上下文菜单。
+
+function getClipboardText(event){
+	var clipboardData = (event.clipboardData || window.clipboardData);
+	return clipboardData.getData("text");
+}
+
+function setClipboardText(event,value){
+	var clipboardData = (event.clipboardData || window.clipboardData);
+	clipboardData.setData("text",value);
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+		<textarea id="textContent" cols="20" rows="3">abcdefg</textarea>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult3");
+}
+eventUtil.bind(document.getElementById("textContent"),"beforecopy",
+	function(event){
+		event = eventUtil.getEvent(event);
+		_show("textarea beforecopy ["+getClipboardText(event)+"]");
+	});
+eventUtil.bind(document.getElementById("textContent"),"copy",
+	function(event){
+		event = eventUtil.getEvent(event);
+		_show("textarea copy ["+getClipboardText(event)+"]");
+	});
+eventUtil.bind(document.getElementById("textContent"),"beforecut",
+	function(event){
+		event = eventUtil.getEvent(event);
+		_show("textarea beforecut ["+getClipboardText(event)+"]");
+	});
+eventUtil.bind(document.getElementById("textContent"),"cut",
+	function(event){
+		event = eventUtil.getEvent(event);
+		_show("textarea cut ["+getClipboardText(event)+"]");
+	});
+eventUtil.bind(document.getElementById("textContent"),"beforepaste",
+	function(event){
+		event = eventUtil.getEvent(event);
+		_show("textarea beforepaste ["+getClipboardText(event)+"]");
+	});
+eventUtil.bind(document.getElementById("textContent"),"paste",
+	function(event){
+		event = eventUtil.getEvent(event);
+		_show("textarea paste ["+getClipboardText(event)+"]");
+	});
+
+
+eventUtil.bind(document,"beforecopy",
+	function(event){
+		_show("document beforecopy");
+	});
+eventUtil.bind(document,"copy",
+	function(event){
+		_show("document copy");
+	});
+eventUtil.bind(document,"beforecut",
+	function(event){
+		_show("document beforecut");
+	});
+eventUtil.bind(document,"cut",
+	function(event){
+		_show("document cut");
+	});
+eventUtil.bind(document,"beforepaste",
+	function(event){
+		_show("document beforepaste");
+	});
+eventUtil.bind(document,"paste",
+	function(event){
+		_show("document paste");
+	});
+
+
+eventUtil.bind(document.body,"beforecopy",
+	function(event){
+		_show("body beforecopy");
+	});
+eventUtil.bind(document,"copy",
+	function(event){
+		_show("body copy");
+	});
+eventUtil.bind(document.body,"beforecut",
+	function(event){
+		_show("body beforecut");
+	});
+eventUtil.bind(document.body,"cut",
+	function(event){
+		_show("body cut");
+	});
+eventUtil.bind(document.body,"beforepaste",
+	function(event){
+		_show("body beforepaste");
+	});
+eventUtil.bind(document.body,"paste",
+	function(event){
+		_show("body paste");
+	});
+});
+
+
+function getClipboardText(event){
+	var clipboardData = (event.clipboardData || window.clipboardData);
+	return clipboardData.getData("text");
+}
+
+function setClipboardText(event,value){
+	var clipboardData = (event.clipboardData || window.clipboardData);
+	clipboardData.setData("text",value);
+}
+</script>
+
+
+<style>
+.phone-input{
+	padding: 0px;
+	margin: 0px;
+	border: 1px solid #CECECE;
+	font-size: 20px;
+	background-color: #FDFEEC;
+}
+.phone-3x{
+	width: 40px;
+}
+.phone-4x{
+	width: 50px;
+}
+
+</style>
+<div class="aTitle">自动切换焦点</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+手机号码：
+&lt;span id="numGroup"&gt;
+	&lt;input id="part1" class="phone-input phone-3x" type="text" maxlength="3"&gt;
+	&lt;input id="part2" class="phone-input phone-4x" type="text" maxlength="4"&gt;
+	&lt;input id="part3" class="phone-input phone-4x" type="text" maxlength="4"&gt;
+&lt;/span&gt;
+
+<b>脚本：</b>
+var numGroup = document.getElementById("numGroup");
+var inputs = numGroup.getElementsByTagName("input");
+
+function autofocus(event){
+	event = eventUtil.getEvent(event);
+	var target = eventUtil.getTarget(event);
+	if(target.value.length==target.maxLength){
+		var len = inputs.length;
+		for(var i=0; i< len; i++){
+			if(i==(len-1)){
+				alert("完成");
+			}else if(inputs[i].id==target.id){
+				inputs[i+1].focus();
+				break;
+			}
+		}
+	}
+}
+
+eventUtil.bind(document.getElementById("part1"),"keyup",autofocus);
+eventUtil.bind(document.getElementById("part2"),"keyup",autofocus);
+eventUtil.bind(document.getElementById("part3"),"keyup",autofocus);
+		</pre>
+	</div>
+	<div class="aShow" id="showResult4">
+		手机号码：
+		<span id="numGroup">
+			<input id="part1" class="phone-input phone-3x" type="text" maxlength="3">
+			<input id="part2" class="phone-input phone-4x" type="text" maxlength="4">
+			<input id="part3" class="phone-input phone-4x" type="text" maxlength="4">
+		</span>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+var numGroup = document.getElementById("numGroup");
+var inputs = numGroup.getElementsByTagName("input");
+
+function autofocus(event){
+	event = eventUtil.getEvent(event);
+	var target = eventUtil.getTarget(event);
+	if(target.value.length==target.maxLength){
+		var len = inputs.length;
+		for(var i=0; i< len; i++){
+			if(i==(len-1)){
+				alert("完成");
+			}else if(inputs[i].id==target.id){
+				inputs[i+1].focus();
+				break;
+			}
+		}
+	}
+}
+
+eventUtil.bind(document.getElementById("part1"),"keyup",autofocus);
+eventUtil.bind(document.getElementById("part2"),"keyup",autofocus);
+eventUtil.bind(document.getElementById("part3"),"keyup",autofocus);
+});
+</script>
+
+
+<div class="aTitle">HTML5 约束验证API</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. 必填字段</b>
+第一种情况是在表单字段中指定了required 属性，如下面的例子所示：
+&lt;input type="text" name="username" required&gt;
+
+在JavaScript 中，通过对应的required 属性，可以检查某个表单字段是否为必填字段。
+var isUsernameRequired = document.forms[0].elements["username"].required;
+
+另外，使用下面这行代码可以测试浏览器是否支持required 属性。
+var isRequiredSupported = "required" in document.createElement("input");
+
+<b>2. 其他输入类型</b>
+"email"、"url"
+var input = document.createElement("input");
+/*input.type = "email";//IE不支持对type属性的写*/
+input.setAttribute("type","email");
+var isEmailSupported = (input.type == "email");
+
+<b>3. 数值范围类型</b>
+"number"、"range"、"datetime"、"datetime-local"、
+"date"、"month"、"week"、"time"
+
+浏览器对这几个类型的支持情况并不好，因此如果真想选用的话，要特别小心。
+对所有这些数值类型的输入元素，可以指定min 属性（最小的可能值）、
+max 属性（最大的可能值）和step 属性（从min 到max 的两个刻度间的差值）
+&lt;input type="number" min="0" max="100" step="5" name="count"&gt;
+
+此外，还有两个方法：stepUp()和stepDown()，都接收一个可选的参数
+input.stepUp(); //加1
+input.stepUp(5); //加5
+input.stepDown(); //减1
+input.stepDown(10); //减10
+
+<b>4. 输入模式</b>
+HTML5 为文本字段新增了pattern 属性。这个属性的值是一个正则表达式，
+用于匹配文本框中的值。
+如果只想允许在文本字段中输入数值，可以像下面的代码一样应用约束：
+&lt;input type="text" pattern="\d+" name="count"&gt;
+<span class="error">模式的开头和末尾不用加^和$符号（假定已经有了）</span>
+
+在JavaScript 中可以通过pattern 属性访问模式。
+var pattern = document.forms[0].elements["count"].pattern;
+
+使用以下代码可以检测浏览器是否支持pattern 属性。
+var isPatternSupported = "pattern" in document.createElement("input");
+
+<b>5.检测有效性</b>
+1) 使用checkValidity()方法可以检测表单中的某个字段是否有效。
+if (document.forms[0].elements[0].checkValidity()){
+	//字段有效，继续
+} else {
+	//字段无效
+}
+
+if(document.forms[0].checkValidity()){
+	//表单有效，继续
+} else {
+	//表单无效
+}
+
+2) validity 属性, 这个对象中包含一系列属性，每个属性会返回一个布尔值。
+ customError ：如果设置了setCustomValidity()，则为true，否则返回false。
+ patternMismatch：如果值与指定的pattern 属性不匹配，返回true。
+ rangeOverflow：如果值比max 值大，返回true。
+ rangeUnderflow：如果值比min 值小，返回true。
+ stepMisMatch：如果min 和max 之间的步长值不合理，返回true。
+ tooLong：如果值的长度超过了maxlength 属性指定的长度，返回true。有的浏览器（如Firefox 4）
+会自动约束字符数量，因此这个值可能永远都返回false。
+ typeMismatch：如果值不是"mail"或"url"要求的格式，返回true。
+ valid：如果这里的其他属性都是false，返回true。checkValidity()也要求相同的值。
+ valueMissing：如果标注为required 的字段中没有值，返回true。
+
+ <b>6. 禁用验证</b>
+ 通过设置novalidate 属性，可以告诉表单不进行验证。
+&lt;form method="post" action="signup.php" <mark>novalidate</mark>&gt;
+	&lt;!--这里插入表单元素--&gt;
+&lt;/form&gt;
+
+如果一个表单中有多个提交按钮，为了指定点击某个提交按钮不必验证表单，可以在相应的按钮上
+添加formnovalidate 属性。
+&lt;form method="post" action="foo.php"&gt;
+	&lt;!--这里插入表单元素--&gt;
+	&lt;input type="submit" value="验证提交"&gt;
+	&lt;input type="submit" <mark>formnovalidate</mark> value="不验证提交"&gt;
+&lt;/form&gt;
+		</pre>
+	</div>
+	<div class="aShow" id="showResult5">
+		email：<input type="email" name ="email"><br/>
+		url：<input type="url" name="url"><br/>
+		number：<input id="numIpt" type="number" name="number" min="2" max="10" step="2"><br/>
+		range：<input type="range" name="range"><br/>
+		datetime：<input type="datetime" name="datetime"><br/>
+		datetime-local：<input type="datetime-local" name="datetime-local"><br/>
+		date：<input type="date" name="date"><br/>
+		month：<input type="month" name="month"><br/>
+		week：<input type="week" name="week"><br/>
+		time：<input type="time" name="time"><br/>
+		pattern属性：<input type="text" pattern="\d+">
+
+		<button id="validNum">验证number</button>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult5");
+}
+var isRequiredSupported = "required" in document.createElement("input");
+_show("isRequiredSupported="+isRequiredSupported);
+
+var input = document.createElement("input");
+input.setAttribute("type","email");
+var isEmailSupported = (input.type == "email");
+_show("isEmailSupported="+isEmailSupported);
+
+var isPatternSupported = "pattern" in document.createElement("input");
+_show("isPatternSupported="+isPatternSupported);
+
+eventUtil.bind(document.getElementById("validNum"),"click",
+	function(event){
+		var numIpt = document.getElementById("numIpt");
+		if(numIpt.checkValidity){
+			_show("numIpt.checkValidity() --> "+numIpt.checkValidity());
+		}
+		if(numIpt.validity){
+			_show("numIpt.validity.rangeOverflow --> "+numIpt.validity.rangeOverflow);
+			_show("numIpt.validity.rangeUnderflow --> "+numIpt.validity.rangeUnderflow);
+		}
+	});
+});
+	
+</script>
+
+</body>
+</html>
+
+<script type="text/javascript">
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+};	
+</script>

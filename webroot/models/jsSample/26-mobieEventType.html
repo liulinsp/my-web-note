@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript移动设备事件</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">orientationchange 事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.orientation 属性中可能包含4个值：
+0 表示肖像模式，
+90 表示向左旋转的横向模式（“主屏幕”按钮在右侧），
+-90 表示向右旋转的横向模式（“主屏幕”按钮在左侧）。
+180 表示手机头朝下。
+
+eventUtil.bind(window,"orientationchange",function(event){
+	event = eventUtil.getEvent(event);
+	_show("window.orientation="+window.orientation);
+});
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult1")
+	}
+	eventUtil.bind(window,"orientationchange",function(event){
+		event = eventUtil.getEvent(event);
+		_show("window.orientation="+window.orientation);
+	});
+});
+</script>
+
+
+
+<div class="aTitle">MozOrientation 事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Firefox 3.6 为检测设备的方向引入了一个名为MozOrientation 的新事件。
+（前缀Moz 表示这是特定于浏览器开发商的事件，不是标准事件。）
+当设备的加速计检测到设备方向改变时，就会触发这个事件。
+但这个事件与iOS 中的orientationchange 事件不同，该事件只能提供一个平面的方向变化。
+
+event 对象包含三个属性：x、y 和z。这几个属性的值都介于1 到-1 之间，表示不同坐标
+轴上的方向。在静止状态下，x 值为0，y 值为0，z 值为1（表示设备处于竖直状态）。如果设备向右倾
+斜，x 值会减小；反之，向左倾斜，x 值会增大。类似地，如果设备向远离用户的方向倾斜，y 值会减
+小，向接近用户的方向倾斜，y 值会增大。z 轴检测垂直加速度度，1 表示静止不动，在设备移动时值
+会减小。（失重状态下值为0。)
+
+这是一个实验性API，将来可能会变（可能会被其他事件取代）。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult2")
+	}
+	eventUtil.bind(window,"MozOrientation",function(event){
+		event = eventUtil.getEvent(event);
+		_show("X=" + event.x + ", Y=" + event.y + ", Z=" + event.z);
+	});
+});
+</script>
+
+<div class="aTitle">deviceorientation 事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+deviceorientation事件对象包含以下5 个属性。
+ alpha：在围绕z 轴旋转时（即左右旋转时），y 轴的度数差；是一个介于0 到360 之间的浮点数。
+	      【正北方向为0，逆时针方向旋转90度值为90...旋转一周又归0】
+ beta：在围绕x 轴旋转时（即前后旋转时），z 轴的度数差；是一个介于180 到180 之间的浮点数。
+		  【手机屏幕朝上水平放置为0，home键端固定，另一端向上旋转90度值为90，再转到水平值为180；
+		    手机屏幕朝上水平放置为0，home键端固定，另一端向下旋转90度值为-90，再转到水平值为-180；
+		    手机屏幕朝下水平放置为180和-180】
+ gamma：在围绕y 轴旋转时（即扭转设备时），z 轴的度数差；是一个介于90 到90 之间的浮点数。
+          【手机屏幕朝上水平放置为0，左侧固定，右侧向下旋转90度值为90（也是-90）；
+          继续旋转至水平（屏幕向下），值由-90到0；继续旋转90度，屏幕朝左，值由0到90（也是-90）；
+          继续旋转90度，屏幕水平向上，值由-90到0。
+
+ absolute：布尔值，表示设备是否返回一个绝对值。
+ compassCalibrated：布尔值，表示设备的指南针是否校准过。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("#showResult3").html(msg);
+	}
+	eventUtil.bind(window,"deviceorientation",function(event){
+		event = eventUtil.getEvent(event);
+		_show("event.alpha=" + event.alpha 
+			+ ",<br/> event.beta=" + event.beta 
+			+",<br/> event.gamma=" + event.gamma
+			+"<br/>event.absolute="+event.absolute
+			+",<br/>event.compassCalibrated="+event.compassCalibrated);
+	});
+});
+</script>
+
+<div class="aTitle">devicemotion 事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+devicemotion 事件告诉开发人员设备什么时候移动，而不仅仅是设备方向如何改变。
+例如，通过devicemotion 能够检测到设备是不是正在往下掉，或者是不是被走着的人拿在手里。
+触发devicemotion 事件时，事件对象包含以下属性。
+1. acceleration：一个包含x、y 和z 属性的对象，在不考虑重力的情况下，告诉你在每个方向
+上的加速度。
+2. accelerationIncludingGravity：一个包含x、y 和z 属性的对象，在考虑z 轴自然重力加
+速度的情况下，告诉你在每个方向上的加速度。
+3. interval：以毫秒表示的时间值，必须在另一个devicemotion 事件触发前传入。这个值在每
+个事件中应该是一个常量。
+4. rotationRate：一个包含表示方向的alpha、beta 和gamma 属性的对象。
+
+&lt;p&gt;x轴加速度：&lt;span id="x"&gt;0&lt;/span&gt;米每二次方秒&lt;/p&gt;  
+&lt;p&gt;y轴加速度：&lt;span id="y"&gt;0&lt;/span&gt;米每二次方秒&lt;/p&gt;  
+&lt;p&gt;z轴加速度：&lt;span id="z"&gt;0&lt;/span&gt;米每二次方秒&lt;/p&gt;  
+&lt;hr /&gt;  
+&lt;p&gt;x轴加速度(考虑重力加速度)：&lt;span id="xg"&gt;0&lt;/span&gt;米每二次方秒&lt;/p&gt;  
+&lt;p&gt;y轴加速度(考虑重力加速度)：&lt;span id="yg"&gt;0&lt;/span&gt;米每二次方秒&lt;/p&gt;  
+&lt;p&gt;z轴加速度(考虑重力加速度)：&lt;span id="zg"&gt;0&lt;/span&gt;米每二次方秒&lt;/p&gt;  
+&lt;hr /&gt;  
+&lt;p&gt;左右旋转速度：&lt;span id="alpha"&gt;0&lt;/span&gt;度每秒&lt;/p&gt;  
+&lt;p&gt;前后旋转速度：&lt;span id="beta"&gt;0&lt;/span&gt;度每秒&lt;/p&gt;  
+&lt;p&gt;扭转速度：&lt;span id="gamma"&gt;0&lt;/span&gt;度每秒&lt;/p&gt;  
+&lt;hr /&gt;  
+&lt;p&gt;上次收到通知的间隔：&lt;span id="interval"&gt;0&lt;/span&gt;毫秒&lt;/p&gt;
+
+eventUtil.bind(window,"devicemotion",function(event){
+	document.getElementById("interval").innerHTML = event.interval;  
+    var acc = event.acceleration;
+    if(acc.x>10)
+    document.getElementById("x").innerHTML = acc.x;          
+    if(acc.y>10)
+    document.getElementById("y").innerHTML = acc.y;  
+    if(acc.z>10)
+    document.getElementById("z").innerHTML = acc.z;  
+
+    var accGravity = event.accelerationIncludingGravity;  
+    if(accGravity.x>10)
+    document.getElementById("xg").innerHTML = accGravity.x;  
+    if(accGravity.y>10)
+    document.getElementById("yg").innerHTML = accGravity.y;  
+    if(accGravity.z>10)
+    document.getElementById("zg").innerHTML = accGravity.z; 
+
+    var rotationRate = event.rotationRate;  
+    if(rotationRate.alpha>10)
+    document.getElementById("alpha").innerHTML = rotationRate.alpha;  
+    if(rotationRate.beta>10)
+    document.getElementById("beta").innerHTML = rotationRate.beta;  
+    if(rotationRate.gamma>10)
+    document.getElementById("gamma").innerHTML = rotationRate.gamma; 
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+		<p>x轴加速度：<span id="x">0</span>米每二次方秒</p>  
+        <p>y轴加速度：<span id="y">0</span>米每二次方秒</p>  
+        <p>z轴加速度：<span id="z">0</span>米每二次方秒</p>  
+        <hr />  
+        <p>x轴加速度(考虑重力加速度)：<span id="xg">0</span>米每二次方秒</p>  
+        <p>y轴加速度(考虑重力加速度)：<span id="yg">0</span>米每二次方秒</p>  
+        <p>z轴加速度(考虑重力加速度)：<span id="zg">0</span>米每二次方秒</p>  
+        <hr />  
+        <p>左右旋转速度：<span id="alpha">0</span>度每秒</p>  
+        <p>前后旋转速度：<span id="beta">0</span>度每秒</p>  
+        <p>扭转速度：<span id="gamma">0</span>度每秒</p>  
+        <hr />  
+        <p>上次收到通知的间隔：<span id="interval">0</span>毫秒</p> 
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	/*function _show(msg){
+		$("#showResult4").html(msg);
+	}*/
+
+	/*eventUtil.bind(window,"devicemotion",function(event){
+		document.getElementById("interval").innerHTML = event.interval;  
+        var acc = event.acceleration;
+        if(acc.x>10)document.getElementById("x").innerHTML = acc.x;          
+        if(acc.y>10)document.getElementById("y").innerHTML = acc.y;  
+        if(acc.z>10)document.getElementById("z").innerHTML = acc.z;  
+        var accGravity = event.accelerationIncludingGravity;  
+        if(accGravity.x>10)document.getElementById("xg").innerHTML = accGravity.x;  
+        if(accGravity.y>10)document.getElementById("yg").innerHTML = accGravity.y;  
+        if(accGravity.z>10)document.getElementById("zg").innerHTML = accGravity.z;  
+        var rotationRate = event.rotationRate;  
+        if(rotationRate.alpha>10)document.getElementById("alpha").innerHTML = rotationRate.alpha;  
+        if(rotationRate.beta>10)document.getElementById("beta").innerHTML = rotationRate.beta;  
+        if(rotationRate.gamma>10)document.getElementById("gamma").innerHTML = rotationRate.gamma; 
+	});*/
+});
+</script>
+
+
+<div class="aTitle">触摸事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. touchstart：当手指触摸屏幕时触发；即使已经有一个手指放在了屏幕上也会触发。
+2. touchmove：当手指在屏幕上滑动时连续地触发。在这个事件发生期间，调用preventDefault()
+可以阻止滚动。
+3. touchend：当手指从屏幕上移开时触发。
+4. touchcancel：当系统停止跟踪触摸时触发。关于此事件的确切触发时间，文档中没有明确说明。??
+上面这几个事件都会冒泡，也都可以取消。
+每个触摸事件的event 对象都提供了在鼠标事件中常见的属性：
+bubbles、cancelable、view、clientX、clientY、screenX、screenY、detail、
+altKey、shiftKey、ctrlKey 和metaKey。
+
+除了常见的DOM属性外，触摸事件还包含下列三个用于跟踪触摸的属性。
+ touches：表示当前跟踪的触摸操作的Touch 对象的数组。
+ targetTouchs：特定于事件目标的Touch 对象的数组。???
+ changeTouches：表示自上次触摸以来发生了什么改变的Touch 对象的数组。???
+每个Touch 对象包含下列属性。
+	clientX：触摸目标在视口中的x 坐标。
+	clientY：触摸目标在视口中的y 坐标。
+	identifier：标识触摸的唯一ID。
+	pageX：触摸目标在页面中的x 坐标。
+	pageY：触摸目标在页面中的y 坐标。
+	screenX：触摸目标在屏幕中的x 坐标。
+	screenY：触摸目标在屏幕中的y 坐标。
+	target：触摸的DOM 节点目标。
+<pre class="error">注意，在touchend 事件发生时，touches集合中就没有任何Touch 对象了，
+因为不存在活动的触摸操作；此时，就必须转而使用changeTouchs集合。</pre>
+		</pre>
+	</div>
+	<div class="aShow" id="showResult5">
+	</div>
+</div>
+<script>
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo('#showResult5');
+	}
+	eventUtil.bind(document.getElementById("showResult5"),"touchstart",function(event){
+		var len = event.touches.length;
+		var points = [];
+		for(var i=0;i<len;i++){
+			points.push("["+event.touches[i].clientX+","+event.touches[i].clientY+"]");
+		}
+		_show("touchstart:"+points);
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"touchmove",function(event){
+		eventUtil.preventDefault(event);
+		//_show("touchmove");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"touchend",function(event){
+		/*var len = event.targetTouchs.length;
+		var points = [];
+		for(var i=0;i<len;i++){
+			points.push("["+event.targetTouchs[i].clientX+","+event.targetTouchs[i].clientY+"]");
+		}
+		_show("touchend:"+points);*/
+		_show("touchend");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"touchcancel",function(event){
+		_show("touchcancel");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"click",function(event){
+		_show("click");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"mouseover",function(event){
+		_show("mouseover");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"mouseenter",function(event){
+		_show("mouseenter");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"mousedown",function(event){
+		_show("mousedown");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"mousedown",function(event){
+		_show("mouseup");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"mouseout",function(event){
+		_show("mouseout");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"mouseleave",function(event){
+		_show("mouseleave");
+	});
+	eventUtil.bind(document.getElementById("showResult5"),"mousemove",function(event){
+		_show("mousemove");
+	});
+});	
+</script>
+
+
+
+<div class="aTitle">手势事件(iOS2.0)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+当两个手指触摸屏幕时就会产生手势，手势通常会改变显示项的大小，或者旋转显示项。
+有三个手势事件，分别介绍如下:
+gesturestart：当一个手指已经按在屏幕上而另一个手指又触摸屏幕时触发。
+gesturechange：当触摸屏幕的任何一个手指的位置发生变化时触发。
+gestureend：当任何一个手指从屏幕上面移开时触发。
+
+与触摸事件一样，每个手势事件的event 对象都包含着标准的鼠标事件属性：bubbles、
+cancelable、view、clientX、clientY、screenX、screenY、detail、altKey、shiftKey、
+ctrlKey 和metaKey。此外，还包含两个额外的属性：rotation 和scale。
+ 1. rotation 属性表示手指变化引起的旋转角度，负值表示逆时针旋转，
+    正值表示顺时针旋转（该值从0 开始）。
+ 2. scale属性表示两个手指间距离的变化情况（例如向内收缩会缩短距离）；
+    这个值从1 开始，并随距离拉大而增长，随距离缩短而减小。
+<pre class="error">触摸事件也会返回rotation 和scale 属性，但这两个属性只会在两个手指与
+屏幕保持接触时才会发生变化。一般来说，使用基于两个手指的手势事件，要比管理
+触摸事件中的所有交互要容易得多。</pre>
+		</pre>
+	</div>
+	<div class="aShow" id="showResult6">
+	</div>
+</div>
+<script>
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo('#showResult6');
+	}
+	eventUtil.bind(document.getElementById("showResult6"),"touchstart",function(event){
+		var len = event.touches.length;
+		var points = [];
+		for(var i=0;i<len;i++){
+			points.push("["+event.touches[i].clientX+","+event.touches[i].clientY+"]");
+		}
+		_show("touchstart:"+points);
+	});
+	eventUtil.bind(document.getElementById("showResult6"),"touchmove",function(event){
+		eventUtil.preventDefault(event);
+		//_show("touchmove");
+	});
+	eventUtil.bind(document.getElementById("showResult6"),"touchend",function(event){
+		/*var len = event.targetTouchs.length;
+		var points = [];
+		for(var i=0;i<len;i++){
+			points.push("["+event.targetTouchs[i].clientX+","+event.targetTouchs[i].clientY+"]");
+		}
+		_show("touchend:"+points);*/
+		_show("touchend");
+	});
+	eventUtil.bind(document.getElementById("showResult6"),"touchcancel",function(event){
+		_show("touchcancel");
+	});
+	eventUtil.bind(document.getElementById("showResult6"),"gesturestart",function(event){
+		_show("gesturestart");
+	});
+	eventUtil.bind(document.getElementById("showResult6"),"gesturechange",function(event){
+		_show("gesturechange");
+	});
+	eventUtil.bind(document.getElementById("showResult6"),"gestureend",function(event){
+		_show("gestureend");
+	});
+	
+});	
+</script>
+
+</body>
+</html>
+
+<script type="text/javascript">
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+};	
+</script>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>严格模式（IE9及以下不支持）</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		try{
+			userName="Zhang San";
+		}catch(error){
+			$("<div class='error'>error.message = "+error.message+"</div>").appendTo($("#showResult1"));
+		}
+	});
+	
+</script>
+<div class="aTitle">禁止全局变量显式声明</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+//在正常模式中，如果一个变量没有声明就赋值，默认是全局变量。
+//严格模式禁止这种用法，全局变量必须显式声明。
+<mark>'use strict';</mark>
+try{
+	<mark>userName="Zhang San";</mark>
+}catch(error){
+	$("&lt;div class='error'&gt;error.message = "+error.message+"&lt;/div&gt;")
+	.appendTo($("#showResult1"));
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		try{
+			var person = {name:"张三",age:23};
+			with(person){
+				age=24;
+			}
+		}catch(error){
+			console.error(error.message);
+		}
+	});
+	
+</script>
+<div class="aTitle">禁止使用with语句</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<mark>'use strict';</mark>
+try{
+	var person = {name:"张三",age:23};
+	<mark>with(person){
+		age=24;
+	}</mark>
+}catch(error){
+	console.error(error.message);
+}
+
+//异常无法捕获,错误信息为：
+<div class="error">Uncaught SyntaxError: Strict mode code may not include a with statement</div>
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult2"> </div>-->
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		try{
+			function add(a,b,a){
+				return a+b+a;
+			}
+		}catch(error){
+			console.error(error.message);
+		}
+	});
+	
+</script>
+<div class="aTitle">函数不能有重名的参数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+$(function(){
+	<mark>'use strict';</mark>
+	try{
+		function add(<mark>a</mark>,b,<mark>a</mark>){
+			return a+b+a;
+		}
+	}catch(error){
+		console.error(error.message);
+	}
+});
+
+//异常无法捕获,错误信息为：
+<div class="error">Uncaught SyntaxError: Duplicate parameter name not allowed in this context</div>
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult3"> </div>-->
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		try{
+			var a = 1;
+		    if(a === 1) {
+		      function foo() {}
+		    }
+		}catch(error){
+			console.error(error.message);
+		}
+	});
+	
+</script>
+<div class="aTitle">函数必须声明在顶层</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<mark>'use strict';</mark>
+try{
+	var a = 1;
+	<mark>if(a === 1) {
+		function foo() {}
+	}</mark>
+}catch(error){
+	console.error(error.message);
+}
+
+//异常无法捕获,火狐浏览器下错误信息为：
+<div class="error">SyntaxError: in strict mode code, functions may be declared only at top level or immediately within another function</div>
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult3"> </div>-->
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		function testThis(){
+			$("<div>this = "+this+"</div>").appendTo($("#showResult3"));
+		}
+
+		testThis();
+
+		testThis.call(this);
+		
+	});
+	
+</script>
+<div class="aTitle">禁止this指向全局对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<mark>'use strict';</mark>
+function testThis(){
+	$("&lt;div&gt;this = "+this+"&lt;/div&gt;").appendTo($("#showResult3"));
+}
+//1. 执行时this=undefined
+testThis();
+//2. 执行时this为全局变量
+testThis.call(this);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3"> </div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		var falg = "1";
+		delete falg;
+	});
+</script>
+<div class="aTitle">禁止删除变量</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<mark>'use strict';</mark>
+var falg = "1";
+<mark>delete falg;</mark>
+
+//错误信息为：
+<div class="error">Uncaught SyntaxError: Delete of an unqualified identifier in strict mode.</div>
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult3"> </div> -->
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		var a = 011;
+	});
+</script>
+<div class="aTitle">不支持8进制</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<mark>'use strict';
+var a = 011;</mark>
+
+//正常模式a的值为9
+//错误信息为：
+<div class="error">Uncaught SyntaxError: Octal literals are not allowed in strict mode.</div>
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult3"> </div> -->
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		'use strict';
+		var a = 1;
+    	eval('var a = 2');
+    	$("<div>a = "+a+"</div>").appendTo($("#showResult4"));
+	});
+</script>
+<div class="aTitle">eval函数拥有自己的作用域</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+正常模式下， eval 函数在哪个作用域下执行就属于哪个作用域，
+例如在全局作用域下执行则属于全局作用域；
+但在 strict 模式下， eval 函数拥有自己的作用域。
+
+<mark>'use strict';</mark>
+var a = 1;
+<mark>eval('var a = 2');</mark>
+$("&lt;div&gt;a = "+a+"&lt;/div&gt;").appendTo($("#showResult4"));
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4"> </div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		"use strict";
+	　　
+	});
+</script>
+<div class="aTitle">arguments对象的限制</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+（1）不允许对arguments赋值
+	"use strict";
+	arguments++; // 语法错误
+　　var obj = { set p(arguments) { } }; // 语法错误
+　　try { } catch (arguments) { } // 语法错误
+　　function arguments() { } // 语法错误
+　　var f = new Function("arguments", "'use strict'; return 17;"); // 语法错误
+
+（2）arguments不再追踪参数的变化
+	function f(a) {
+　　　　a = 2;
+　　　　return [a, arguments[0]];
+　　}
+　　f(1); // 正常模式为[2,2]
+　　function f(a) {
+　　　　"use strict";
+　　　　a = 2;
+　　　　return [a, arguments[0]];
+　　}
+　　f(1); // 严格模式为[2,1]
+（3）禁止使用arguments.callee
+这意味着，无法在匿名函数内部调用自身了。
+	"use strict";
+　　var f = function() { return arguments.callee; };
+　　f(); // 报错
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult4"> </div> -->
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		"use strict";
+		function fun() {
+		  fun.callee;
+		  fun.caller;
+		  fun.arguments;
+		}
+		fun();
+	});
+</script>
+<div class="aTitle">禁止在函数内部调用栈</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+"use strict";
+function fun() {
+  fun.callee;
+  fun.caller;
+  fun.arguments;
+}
+fun();
+
+//错误信息为：
+<div class="error">Uncaught TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context.</div>	　　
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult4"> </div> -->
+</div>
+
+
+</body>
+</html>

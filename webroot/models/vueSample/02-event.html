@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue事件监听</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">事件监听</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1"&gt;
+	&lt;div&gt;{{time}}&lt;/div&gt;
+	&lt;button v-on:click="btnHandle"&gt;获取当前时间&lt;/button&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		time:Date.now()
+	},
+	methods:{
+		btnHandle:function(){
+			this.time=Date.now();
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app1">
+			<div>{{time}}</div>
+			<button v-on:click="btnHandle">获取当前时间</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		time:Date.now()
+	},
+	methods:{
+		btnHandle:function(){
+			this.time=Date.now();
+		}
+	}
+});
+</script>
+
+
+
+<div class="aTitle">内联处理器方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	&lt;div&gt;{{time}}&lt;/div&gt;
+	&lt;button v-on:click="btnHandle('hh:mm:ss')"&gt;获取当前时间&lt;/button&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		time:formatTime()
+	},
+	methods:{
+		btnHandle:function(format){
+			this.time=formatTime(new Date(),format);
+		}
+	}
+});
+
+function formatTime(date, format) {
+	date = date || new Date();
+	format =  format || "yyyy-MM-dd hh:mm:ss";
+    /* 
+     * eg:format="yyyy-MM-dd hh:mm:ss"; 
+     */  
+    var o = {  
+        "M+" : date.getMonth() + 1, // month  
+        "d+" : date.getDate(), // day  
+        "h+" : date.getHours(), // hour  
+        "m+" : date.getMinutes(), // minute  
+        "s+" : date.getSeconds(), // second  
+        "q+" : Math.floor((date.getMonth() + 3) / 3), // quarter  
+        "S" : date.getMilliseconds()  
+        // millisecond  
+    }  
+  
+    if (/(y+)/.test(format)) {  
+        format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4  
+                        - RegExp.$1.length));  
+    }  
+  
+    for (var k in o) {  
+        if (new RegExp("(" + k + ")").test(format)) {  
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1  
+                            ? o[k]  
+                            : ("00" + o[k]).substr(("" + o[k]).length));  
+        }  
+    }
+    return format;  
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app2">
+			<div>{{time}}</div>
+			<button v-on:click="btnHandle('hh:mm:ss')">获取当前时间</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		time:formatTime()
+	},
+	methods:{
+		btnHandle:function(format){
+			this.time=formatTime(new Date(),format);
+		}
+	}
+});
+
+function formatTime(date, format) {
+	date = date || new Date();
+	format =  format || "yyyy-MM-dd hh:mm:ss";
+    /* 
+     * eg:format="yyyy-MM-dd hh:mm:ss"; 
+     */  
+    var o = {  
+        "M+" : date.getMonth() + 1, // month  
+        "d+" : date.getDate(), // day  
+        "h+" : date.getHours(), // hour  
+        "m+" : date.getMinutes(), // minute  
+        "s+" : date.getSeconds(), // second  
+        "q+" : Math.floor((date.getMonth() + 3) / 3), // quarter  
+        "S" : date.getMilliseconds()  
+        // millisecond  
+    }  
+  
+    if (/(y+)/.test(format)) {  
+        format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4  
+                        - RegExp.$1.length));  
+    }  
+  
+    for (var k in o) {  
+        if (new RegExp("(" + k + ")").test(format)) {  
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1  
+                            ? o[k]  
+                            : ("00" + o[k]).substr(("" + o[k]).length));  
+        }  
+    }
+    return format;  
+}
+</script>
+
+
+<style>
+.outer{
+	height:100px;
+	width:200px;
+	background-color:#E5FCFC;
+	cursor: hand;
+}
+
+.inner{
+	height:50px;
+	width:100px;
+	background-color:#FDFCE8;
+	cursor: hand;
+}
+</style>
+<div class="aTitle">传原生event</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+如果需要在内联语句处理器中访问原生 DOM 事件，
+可以用特殊变量 $event 把它传入方法。
+<b>页面：</b>
+&lt;div id="app3"&gt;
+	&lt;div class="outer" @click="outerHandle('outer',$event)"&gt;
+		&lt;div class="inner" @click="innerHandle"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div&gt;父div点击次数：{{outerCount}}&lt;/div&gt;
+	&lt;div&gt;子div点击次数：{{innerCount}}&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		outerCount:0,
+		innerCount:0
+	},
+	methods:{
+		outerHandle:function(type,event){
+			console.log(type);
+			this.outerCount++;
+			event.stopPropagation();
+		},
+		innerHandle:function(event){
+			this.innerCount++;
+			event.stopPropagation();
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app3">
+			<div class="outer" @click="outerHandle('outer',$event)">
+				<div class="inner" @click="innerHandle"></div>
+			</div>
+			<div>父div点击次数：{{outerCount}}</div>
+			<div>子div点击次数：{{innerCount}}</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		outerCount:0,
+		innerCount:0
+	},
+	methods:{
+		outerHandle:function(type,event){
+			console.log(type);
+			this.outerCount++;
+			event.stopPropagation();
+		},
+		innerHandle:function(event){
+			this.innerCount++;
+			event.stopPropagation();
+		}
+	}
+});
+</script>
+
+
+
+<style>
+.middler{
+	display: inline-block;
+	width: 150px;
+	height: 75px;
+	background-color: #FDD8F9;
+}
+</style>
+<div class="aTitle">事件修饰符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Vue.js 为 v-on 提供了 事件修饰符。通过由点(.)表示的指令后缀来调用修饰符。
+.stop
+.prevent
+.capture
+.self
+.once
+<b>页面：</b>
+&lt;div id="app4"&gt;
+	&lt;button @click.once="onceHandler"&gt;只执行一次的事件&lt;/button&gt;
+
+	&lt;form action="01-render.html"&gt;
+		&lt;button @click.prevent="formSubmitHandler"&gt;提交表单阻止默认页面跳转&lt;/button&gt;
+	&lt;/form&gt;
+
+	&lt;div class="outer" @click="outerHandle"&gt;
+		&lt;div class="middler" @click.stop="midHandle"&gt;
+			&lt;div class="inner" @click="innerHandle"&gt;&lt;/div&gt;
+			.stop阻止冒泡事件继续冒泡
+		&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div class="outer" @click.capture="outerHandle"&gt;
+		&lt;div class="middler" @click.capture.stop="midHandle"&gt;
+			&lt;div class="inner" @click.capture="innerHandle"&gt;&lt;/div&gt;
+			.stop阻止捕获事件继续捕获
+		&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div class="outer" @click="outerHandle"&gt;
+		&lt;div class="middler" @click.self="midHandle"&gt;
+			&lt;div class="inner" @click="innerHandle"&gt;&lt;/div&gt;
+			冒泡.self
+		&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div class="outer" @click.capture="outerHandle"&gt;
+		&lt;div class="middler" @click.capture.self="midHandle"&gt;
+			&lt;div class="inner" @click.capture="innerHandle"&gt;&lt;/div&gt;
+			捕获.self
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		
+	},
+	methods:{
+		onceHandler:function(){
+			console.log("只执行一次的事件");
+		},
+		formSubmitHandler:function(){
+			console.log("提交表单");
+		},
+		outerHandle:function(){
+			console.log("触发外层div事件");
+		},
+		midHandle:function(){
+			console.log("触发中间div事件");
+		},
+		innerHandle:function(){
+			console.log("触发内层div事件");
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app4">
+			<button @click.once="onceHandler">只执行一次的事件</button>
+
+			<form action="01-render.html">
+				<button @click.prevent="formSubmitHandler">提交表单阻止默认页面跳转</button>
+			</form>
+
+			<div class="outer" @click="outerHandle">
+				<div class="middler" @click.stop="midHandle">
+					<div class="inner" @click="innerHandle"></div>
+					.stop阻止冒泡事件继续冒泡
+				</div>
+			</div>
+
+			<div class="outer" @click.capture="outerHandle">
+				<div class="middler" @click.capture.stop="midHandle">
+					<div class="inner" @click.capture="innerHandle"></div>
+					.stop阻止捕获事件继续捕获
+				</div>
+			</div>
+
+			<div class="outer" @click="outerHandle">
+				<div class="middler" @click.self="midHandle">
+					<div class="inner" @click="innerHandle"></div>
+					冒泡.self
+				</div>
+			</div>
+
+			<div class="outer" @click.capture="outerHandle">
+				<div class="middler" @click.capture.self="midHandle">
+					<div class="inner" @click.capture="innerHandle"></div>
+					捕获.self
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		
+	},
+	methods:{
+		onceHandler:function(){
+			console.log("只执行一次的事件");
+		},
+		formSubmitHandler:function(){
+			console.log("提交表单");
+		},
+		outerHandle:function(){
+			console.log("触发外层div事件");
+		},
+		midHandle:function(){
+			console.log("触发中间div事件");
+		},
+		innerHandle:function(){
+			console.log("触发内层div事件");
+		}
+	}
+});
+</script>
+
+
+按键修饰符
+<div class="aTitle">按键修饰符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Vue 允许为 v-on 在监听键盘事件时添加按键修饰符，
+.[keyCode]格式，例如：v-on:keyup.13
+
+记住所有的 keyCode 比较困难，所以 Vue 为最常用的按键提供了别名：
+.enter
+.tab
+.delete (捕获 “删除” 和 “退格” 键)
+.esc
+.space
+.up
+.down
+.left
+.right
+2.1.0新增：
+.ctrl
+.alt
+.shift
+.meta
+可以通过全局 config.keyCodes 对象自定义按键修饰符别名。
+
+<b>页面：</b>
+&lt;div id="app5"&gt;
+	&lt;input v-on:keyup.13="submitHandler"
+		placeholder="回车提交"&gt;&lt;br/&gt;
+	&lt;input v-on:keyup.enter="submitHandler"
+		placeholder="回车提交"&gt;&lt;br/&gt;
+	&lt;input v-on:keydown.f1.prevent="submitHandler"
+		placeholder="f1提交"&gt;&lt;br/&gt;
+	&lt;input v-on:keyup.ctrl.65="ctrlAHandler" v-model="input"
+		placeholder="ctrl+a自动输入内容"&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+Vue.config.keyCodes.f1 = 112;//自定义按键别名
+var app5 = new Vue({
+	el:"#app5",
+	data:{
+		input:""
+	},
+	methods:{
+		submitHandler:function(event){
+			console.log("event.keyCode=",event.keyCode);
+			console.log("提交");
+		},
+		ctrlAHandler:function(){
+			console.log("ctrl+a");
+			console.log("event.keyCode=",event.keyCode);
+			this.input="hello";
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app5">
+			<input v-on:keyup.13="submitHandler"
+				placeholder="回车提交"><br/>
+			<input v-on:keyup.enter="submitHandler"
+				placeholder="回车提交"><br/>
+			<input v-on:keydown.f1.prevent="submitHandler"
+				placeholder="f1提交"><br/>
+			<input v-on:keyup.ctrl.65="ctrlAHandler" v-model="input"
+				placeholder="ctrl+a自动输入内容">
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+Vue.config.keyCodes.f1 = 112;//自定义按键别名
+var app5 = new Vue({
+	el:"#app5",
+	data:{
+		input:""
+	},
+	methods:{
+		submitHandler:function(event){
+			console.log("event.keyCode=",event.keyCode);
+			console.log("提交");
+		},
+		ctrlAHandler:function(){
+			console.log("ctrl+a");
+			console.log("event.keyCode=",event.keyCode);
+			this.input="hello";
+		}
+	}
+});
+</script>
+</body>
+</html>

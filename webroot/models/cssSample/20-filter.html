@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>滤镜</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+http://www.jb51.net/css/71829.html
+
+<b>IE 滤镜</b>
+Alpha：设置透明层次. 
+blur：创建高速度移动效果，即模糊效果. 
+Chroma：制作专用颜色透明. 
+DropShadow：创建对象的固定影子. 
+FlipH：创建水平镜像图片. 
+FlipV：创建垂直镜像图片. 
+glow：加光辉在附近对象的边外. 
+gray：把图片灰度化. 
+invert：反色. 
+light：创建光源在对象上. 
+mask：创建透明掩膜在对象上. 
+shadow：创建偏移固定影子. 
+wave：波纹效果. 
+Xray：使对象变的像被x光照射一样.
+
+<b>W3C 滤镜</b>
+grayscale 灰度
+sepia 褐色
+saturate 饱和度
+hue-rotate 色相旋转
+invert 反色
+opacity 透明度
+brightness 亮度
+contrast 对比度
+blur 模糊
+drop-shadow 阴影
+		</pre>
+	</div>
+</div>
+
+
+<style>
+.speech{
+	position: absolute;
+	box-sizing: border-box;
+	width: 300px;
+	min-height: 100px;
+	background-color: #FCE12B;
+	border-radius: 10px;
+	padding: 10px;
+	line-height: 1.5;
+}
+.speech::before{
+	position: absolute;
+	content: "";
+	background-color: #FCE12B;
+	width: 40px;
+	height: 40px;
+	transform: rotate(-45deg);
+	left: 0px;
+	top: 20px;
+	z-index: -1;
+}
+.shadow{
+
+	-webkit-filter: drop-shadow(.05em .05em .3em gray);
+	-moz-filter: drop-shadow(.05em .05em .3em gray);
+	-o-filter: drop-shadow(.05em .05em .3em gray);
+	filter: drop-shadow(.05em .05em .3em gray);
+	/*for ie6,7,8*/
+	filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=5);
+}
+</style>
+<div class="aTitle">使用drop-shadow滤镜实现特殊形状的阴影</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+.speech{
+	position: absolute;
+	box-sizing: border-box;
+	width: 300px;
+	min-height: 100px;
+	background-color: #FCE12B;
+	border-radius: 10px;
+	padding: 10px;
+	line-height: 1.5;
+}
+.speech::before{
+	position: absolute;
+	content: "";
+	background-color: #FCE12B;
+	width: 40px;
+	height: 40px;
+	transform: rotate(-45deg);
+	left: 0px;
+	top: 20px;
+	z-index: -1;
+}
+.shadow{
+	/*for ie6,7,8*/
+	filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=5);
+	-webkit-filter: drop-shadow(.05em .05em .3em gray);
+	-moz-filter: drop-shadow(.05em .05em .3em gray);
+	-o-filter: drop-shadow(.05em .05em .3em gray);
+	filter: drop-shadow(.05em .05em .3em gray);
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="speech shadow">
+		还是水水水水和护手霜护手霜是好事还是说好的好的好得很好的好的好的好的好的话的好的好的
+		</div>
+		
+	</div>
+</div>
+</body>
+</html>

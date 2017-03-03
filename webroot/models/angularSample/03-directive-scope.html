@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS指令-scope</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">自定义指令-scope</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+scope参数是可选的，可以被设置为true或一个对象。默认值是false。
+  1. true：继承父作用域且创建独立作用域；
+  2. false：继承父作用域；
+  3. {}：不继承父作用域且创建独立作用域；
+
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;div my-child-false&gt;
+    ===========my-child-false:
+    &lt;p&gt;parent={{parent}}&lt;/p&gt;
+    &lt;p&gt;childTrue={{childTrue}}&lt;/p&gt;
+    &lt;p&gt;childFalse={{childFalse}}&lt;/p&gt;
+    &lt;p&gt;childIsolate={{childIsolate}}&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div my-child-true&gt;
+    ===========my-child-true:
+    &lt;p&gt;parent={{parent}}&lt;/p&gt;
+    &lt;p&gt;childTrue={{childTrue}}&lt;/p&gt;
+    &lt;p&gt;childFalse={{childFalse}}&lt;/p&gt;
+    &lt;p&gt;childIsolate={{childIsolate}}&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div my-child-isolate="{{childIsolate}}"&gt;
+    ===========my-child-isolate:
+    &lt;p&gt;parent={{parent}}&lt;/p&gt;
+    &lt;p&gt;childTrue={{childTrue}}&lt;/p&gt;
+    &lt;p&gt;childFalse={{childFalse}}&lt;/p&gt;
+    &lt;p&gt;childIsolate={{childIsolate}}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+angular.module("app1",[])
+  .directive('myChildFalse',function(){
+    return {
+      restrict: 'A',
+      scope:false,
+      controller:function($scope){
+        $scope.childFalse="我是父作用域的属性，我被子指令使用了";
+      }
+    };
+  })
+  .directive('myChildTrue',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      controller:function($scope){
+        $scope.childTrue="我是继承作用域的属性";
+      }
+    };
+  })
+  .directive('myChildIsolate',function(){
+    return {
+      restrict: 'A',
+      priority:999,
+      scope:{},
+      transclude:true,
+      template:'&lt;span ng-transclude&gt;&lt;/span&gt;'
+              +'&lt;h3&gt;模板中childIsolate:&lt;/h3&gt;'
+              +'&lt;input type="text" ng-model="childIsolate"/&gt;',
+      controller:function($scope){
+        $scope.childIsolate="我是隔离作用域的属性";
+      }
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.parent="我是父作用域的属性";
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <div my-child-false>
+        ===========my-child-false:
+        <p>parent={{parent}}</p>
+        <p>childTrue={{childTrue}}</p>
+        <p>childFalse={{childFalse}}</p>
+        <p>childIsolate={{childIsolate}}</p>
+      </div>
+      <div my-child-true>
+        ===========my-child-true:
+        <p>parent={{parent}}</p>
+        <p>childTrue={{childTrue}}</p>
+        <p>childFalse={{childFalse}}</p>
+        <p>childIsolate={{childIsolate}}</p>
+      </div>
+      <div my-child-isolate="{{childIsolate}}">
+        ===========my-child-isolate:
+        <p>parent={{parent}}</p>
+        <p>childTrue={{childTrue}}</p>
+        <p>childFalse={{childFalse}}</p>
+        <p>childIsolate={{childIsolate}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app1",[])
+  .directive('myChildFalse',function(){
+    return {
+      restrict: 'A',
+      scope:false,
+      controller:function($scope){
+        $scope.childFalse="我是父作用域的属性，我被子指令使用了";
+      }
+    };
+  })
+  .directive('myChildTrue',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      controller:function($scope){
+        $scope.childTrue="我是继承作用域的属性";
+      }
+    };
+  })
+  .directive('myChildIsolate',function(){
+    return {
+      restrict: 'A',
+      priority:999,
+      scope:{},
+      transclude:true,
+      template:'<span ng-transclude></span>'
+              +'<h3>模板中childIsolate:</h3>'
+              +'<input type="text" ng-model="childIsolate"/>',
+      controller:function($scope){
+        $scope.childIsolate="我是隔离作用域的属性";
+      }
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.parent="我是父作用域的属性";
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+<div class="aTitle">自定义指令-@绑定策略</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+备注：绑定策略“@”：这个绑定策略告诉AngularJS将DOM中some-property属性的值
+复制给新作用域对象中的someProperty属性。
+
+&lt;div id="defApp6"&gt;
+  &lt;div my-directive my-title="个人宣言" 
+       my-content="人的生命就像一篇文章,只有经过多次精心修改,才能不断完善。"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var defApp6 = angular.module("defApp6",[]);
+defApp6.directive('myDirective',function(){
+  return {
+    restrict: 'A',
+    scope:{
+      <mark>myTitle:'@',</mark>
+      <mark>content:'@myContent'</mark>
+    },
+    template:'&lt;h2&gt;{{myTitle}}&lt;/h2&gt;&lt;p&gt;{{content}}&lt;/p&gt;'
+  };
+});
+angular.bootstrap(document.getElementById("defApp6"), ['defApp6']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp6">
+      <div my-directive my-title="个人宣言" 
+           my-content="人的生命就像一篇文章,只有经过多次精心修改,才能不断完善。">
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var defApp6 = angular.module("defApp6",[]);
+defApp6.directive('myDirective',function(){
+  return {
+    restrict: 'A',
+    scope:{
+      myTitle:'@',
+      content:'@myContent'
+    },
+    template:'<h2>{{myTitle}}</h2><p>{{content}}</p>'
+  };
+});
+angular.bootstrap(document.getElementById("defApp6"), ['defApp6']);
+</script>
+
+<div class="aTitle">自定义指令-scope绑定策略</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+1. @
+  可将本地作用域的变量与DOM属性的值进行绑定，
+  即我们通过@得到title属性的值
+2. =
+  可将本地作用域上的属性与父级作用域上的属性进行双向绑定，
+  即我们通过=得到name的引用。可以同值传递和引用传递的理解相结合
+3. &
+  可以对父级作用域进行绑定，以便在其中运行函数，
+  简单说就是绑定函数用的
+&lt;div id="defApp7" ng-controller="defCtrl7"&gt;
+  标题：&lt;input type="text" ng-model="data.title"/&gt;&lt;br/&gt;
+  内容：&lt;input type="text" ng-model="data.content"/&gt;
+  &lt;div my-directive my-title="data.title" 
+       my-content="{{data.content}}"
+       my-say="data.say()"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("defApp7",[])
+  .directive('myDirective',function(){
+    return {
+      restrict: 'A',
+      scope:{
+        title:'=myTitle',
+        content:'@myContent',
+        say:'&mySay'
+      },
+      template:'&lt;h2&gt;{{title}}&lt;/h2&gt;'
+              +'&lt;p&gt;{{content}}&lt;/p&gt;'
+              +'&lt;button ng-click="say()"&gt;宣誓&lt;/button&gt;'
+    };
+  })
+  .controller("defCtrl7",function($scope){
+    $scope.data={title:"个人宣言",content:"人的生命就像一篇文章"};
+    $scope.data.say=function(){
+      alert(this.content);
+    }
+  });
+angular.bootstrap(document.getElementById("defApp7"), ['defApp7']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp7" ng-controller="defCtrl7">
+      标题：<input type="text" ng-model="data.title"/><br/>
+      内容：<input type="text" ng-model="data.content"/>
+      <div my-directive1 my-title="data.title" 
+           my-content="{{data.content}}"
+           my-say="data.say()">
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("defApp7",[])
+  .directive('myDirective1',function(){
+    return {
+      restrict:'A',
+      scope:{
+        title:'=myTitle',
+        content:'@myContent',
+        say:'&mySay'
+      },
+      template:'<h2>{{title}}</h2>'
+        +'<p>{{content}}</p>'
+        +'<button ng-click="say()">宣誓</button>'
+    };
+  })
+  .controller("defCtrl7",function($scope){
+    $scope.data={title:"个人宣言",content:"人的生命就像一篇文章"};
+    $scope.data.say=function(){
+      alert(this.content);
+    }
+  });
+angular.bootstrap(document.getElementById("defApp7"), ['defApp7']);
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>相等和全等</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">相等</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+相等操作符由两个等于号（==）表示，如果两个操作数相等，则返回true。
+而不相等操作符由叹号后跟等于号（!=）表示，如果两个操作数不相等，则返回true。
+这两个操作符都会先转换操作数（通常称为强制转型），然后再比较它们的相等性。
+1. NaN和任何值都不相等，包括它自己（NaN 不等于NaN）;
+2. null 和undefined 是相等的,要比较相等性之前，不能将null 和undefined 转换成其他任何值;
+3. 如果有一个操作数是布尔值，则在比较相等性之前先将其转换为数值:
+   false 转换为0，而true 转换为1；
+4. 如果一个操作数是字符串，另一个操作数是数值，
+   在比较相等性之前先将字符串转换为数值;
+5. 如果一个操作数是对象，另一个操作数不是，则调用对象的valueOf()方法，
+   用得到的基本类型值按照前面的规则进行比较；
+6. 如果两个操作数都是对象，则比较它们是不是同一个对象。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+$('<p>NaN == NaN --> '+(NaN == NaN)+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>null == undefined --> '+(null == undefined)+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>null == 0 --> '+(null == 0)+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>undefined == 0 --> '+(undefined == 0)+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>null == "" --> '+(null == "")+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>undefined == "" --> '+(undefined == "")+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>true == 1 --> '+(true == 1)+' (1==1)</p>')
+	.appendTo($("#showResult1"));
+$('<p>true == 2 --> '+(true == 2)+' (1==2)</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>true == "a" --> '+(true == "a")+' (1==NaN)</p>')
+	.appendTo($("#showResult1"));
+$('<p>true == "1" --> '+(true == "1")+' (1==1)</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>1 == "1" --> '+(1 == "1")+' (1==1)</p>')
+	.appendTo($("#showResult1"));
+$('<p>97 == "a" --> '+(97 == "a")+' (97==NaN)</p>')
+	.appendTo($("#showResult1"));
+
+$('<p> {valueOf:function(){return "a";}}== "a" --> '+({valueOf:function(){return "a";}} == "a")+' </p>')
+	.appendTo($("#showResult1"));
+
+$('<p>{} == {} --> '+({} == {})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p> {valueOf:function(){return "a";}}== {valueOf:function(){return "a";}} --> '+({valueOf:function(){return "a";}} == {valueOf:function(){return "a";}})+' </p>')
+	.appendTo($("#showResult1"));
+
+var obj1={};
+var obj2=obj1;
+$('<p>var obj1={};<br/>var obj2=obj1;<br/> obj1==obj2 --> '+(obj1==obj2)+'</p>')
+	.appendTo($("#showResult1"));
+</script>
+
+<div class="aTitle">全等(===)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+除了在比较之前不转换操作数之外，全等和不全等操作符与相等和不相等操作符没有什么区别。
+它只在两个操作数未经转换就相等的情况下返回true。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+
+<script type="text/javascript">
+$('<p>null === undefined --> '+(null === undefined)+'</p>')
+	.appendTo($("#showResult2"));
+$('<p>"1" === 1 --> '+("1" === 1)+'</p>')
+	.appendTo($("#showResult2"));
+$('<p>"1" === "1" --> '+("1" === "1")+'</p>')
+	.appendTo($("#showResult2"));
+$('<p>var obj1={};<br/>var obj2=obj1;<br/> obj1===obj2 --> '+(obj1===obj2)+'</p>')
+	.appendTo($("#showResult2"));
+</script>
+
+
+</body>
+</html>

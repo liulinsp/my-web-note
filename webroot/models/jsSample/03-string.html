@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript字符串</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css"></link>
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+	$(function(){
+		var str = "http://www.baidu.com/s?wd=java";
+		$('<div>var str = "http://www.baidu.com/s?wd=java";</div>').appendTo($("#showResult1"));
+		$('<div>str.indexOf("http") --> '+str.indexOf("http")+'</div>').appendTo($("#showResult1"));
+		$('<div>str.indexOf(":") --> '+str.indexOf(":")+'</div>').appendTo($("#showResult1"));
+		$('<div>str.indexOf("www") --> '+str.indexOf("www")+'</div>').appendTo($("#showResult1"));
+		$('<div>str.indexOf("taobao") --> '+str.indexOf("taobao")+'</div>').appendTo($("#showResult1"));
+		$('<div>str.indexOf("w",10) --> '+str.indexOf("w",10)+'</div>').appendTo($("#showResult1"));
+
+		var start = str.indexOf("www");
+		var end = str.lastIndexOf("/");
+		$('<div>var start = str.<mark>indexOf</mark>("www");<br/>var end = str.<mark>lastIndexOf</mark>("/");<br/>str.<mark>substring</mark>(start,end) --> '+str.substring(start,end)+'</div>').appendTo($("#showResult1"));
+
+		var strVal = "abcdcba";
+		$('<div>var strVal = "abcdcba";</div>').appendTo($("#showResult1"));
+		$('<div>strVal.indexOf("b",3) --> '+strVal.indexOf("b",3)+'</div>').appendTo($("#showResult1"));
+		$('<div>strVal.lastIndexOf("b",3) --> '+strVal.lastIndexOf("b",3)+'</div>').appendTo($("#showResult1"));
+	});
+	
+</script>
+<div class="aTitle">indexOf() 和 lastIndexOf()方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+indexOf()方法从字符串的开头向后搜索子字符串，
+lastIndexOf()方法是从字符串的末尾向前搜索子字符串。
+
+这两个方法都可以接收可选的第二个参数，
+表示从字符串中的哪个位置开始搜索。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		//1.数字转字符串
+		var num=12;
+		var numStr1=num.toString();
+		var numStr2=String(num);
+		var numStr3=num.toString(8);
+		$('<div>num===12 --> '+(num===12)
+			+'<br/>numStr1==="12" --> '+(numStr1==="12")
+			+'<br/>numStr2==="12" --> '+(numStr2==="12")
+			+'<br/>numStr3 --> '+(numStr3)
+			+'</div>').appendTo($("#showResult2"));
+
+		$('<br/><br/><br/>').appendTo($("#showResult2"));
+
+		//2.字符串转数字
+		var str="28";
+		var num1 = parseInt(str);
+		var num2 = Number(str);
+		var num3 = parseFloat("15.8");
+		var num4 = parseInt("13.9");
+		var num5 = Number("13.9");
+		$('<div>str==="28" --> '+(str==="28")
+			+'<br/>num1===28 --> '+(num1===28)
+			+'<br/>num2===28 --> '+(num2===28)
+			+'<br/>num3===15.8 --> '+(num3===15.8)
+			+'<br/>num4 --> '+(num4)
+			+'<br/>num5 --> '+(num5)
+			+'</div>').appendTo($("#showResult2"));
+	});
+	
+</script>
+<div class="aTitle">字符串与其他类型转换</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+//1.数字转字符串
+var num=12;
+var numStr1=num.toString();
+var numStr2=String(num);
+var numStr3=num.toString(8);//转8进制字符串
+<mark>null 和undefined 没有toString()</mark>
+
+//2.字符串转数字
+var str="28";
+var num1 = parseInt(str);
+var num2 = Number(str);
+var num3 = parseFloat("15.8");
+var num4 = parseInt("13.9");
+var num5 = Number("13.9");
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var str = "1234567890";
+		$('<div>var str = "1234567890";</div>').appendTo($("#showResult4"));
+		$('<div>str.slice(3,7) --> '+str.slice(3,7)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substring(3,7) --> '+str.substring(3,7)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substr(3,7) --> '+str.substr(3,7)+'</div>').appendTo($("#showResult4"));
+		$('<br/>').appendTo($("#showResult4"));
+
+		$('<div>str.slice(7,3) --> '+str.slice(7,3)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substring(7,3) --> '+str.substring(7,3)+'</div>').appendTo($("#showResult4"));
+		$('<br/>').appendTo($("#showResult4"));
+
+		$('<div>str.slice(-7,7) = str.slice(3,7) --> '+str.slice(-7,7)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substring(-7,7) = str.substring(0,7) --> '+str.substring(-7,7)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substr(-7,7) ==str.substr(3,7)[IE8 = str.substr(0,7)] --> '+str.substr(-7,7)+'</div>').appendTo($("#showResult4"));
+		$('<br/>').appendTo($("#showResult4"));
+
+		$('<div>str.slice(3,-3) = str.slice(3,7) --> '+str.slice(3,-3)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substring(3,-3) = str.substring(3,0) --> '+str.substring(3,-3)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substr(3,-3) ==str.substr(3,0) --> '+str.substr(3,-3)+'</div>').appendTo($("#showResult4"));
+		$('<br/>').appendTo($("#showResult4"));
+
+
+		$('<div>str.slice(-7,-3) = str.slice(3,7) --> '+str.slice(-7,-3)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substring(-7,-3) = str.substring(0,0) --> '+str.substring(-7,-3)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substr(-7,-1) ==str.substr(3,0) --> '+str.substr(-7,-1)+'</div>').appendTo($("#showResult4"));
+		$('<br/>').appendTo($("#showResult4"));
+
+		/*$('<div>str.slice(-7,-1) = str.slice(3,9) --> '+str.slice(-7,-1)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substring(-7,-1) = str.substring(0,-1) --> '+str.substring(-7,-1)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substring(-7,9) ==str.substring(0,9) --> '+str.substring(-7,9)+'</div>').appendTo($("#showResult4"));
+		$('<div>str.substr(-7,6) --> '+str.substr(-7,6)+'<br/>（IE）=str.substr(0,6) （谷歌、火狐）=str.substr(3,6)</div>').appendTo($("#showResult4"));
+		$('<div>str.substr(-7) --> '+str.substr(-7)+'<br/>（IE）=str.substr(0) （谷歌、火狐）=str.substr(3)</div>').appendTo($("#showResult4"));*/
+	});
+</script>
+<div class="aTitle">slice,substr和substring的区别</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+注意：sub<mark>s</mark>tring的第二个s是小写
+1. 参数为正数
+ 1) slice和substring的两个参数是起始位置和结束位置(不包括结束位置)；
+说明：如果第一个参数大于第二个参数，即起始位置大于结束位置：
+	slice返回空串；
+	substring将起始位置和结束位置调换后的字符串。
+
+ 2) substr的两个参数是则是起始位置和所要返回的字符串长度；
+
+2. 参数为负数
+当接收的参数是负数时：
+   slice：两个参数都会将它字符串的长度与对应的负数相加，结果作为参数；
+   substring：两个参数都会直接转换为0；
+   substr：第一个参数将它字符串的长度与对应的负数相加，结果作为参数
+           第二个参数由于表示所要返回的字符串长度，如果为负直接转为0
+<span class="error">在IE8中substr有bug,第一个参数为负数时直接转换为0，IE9已修复</span>
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	var rawStr = "abc";
+	var resultStr = rawStr.concat("def");
+	$('<div>var rawStr = "abc";<br/>'
+		+'var resultStr = rawStr.concat("def");<br/>'
+		+'resultStr --> '+resultStr+'<br/>'
+		+'rawStr --> '+rawStr+'<br/>'
+	 +'</div>').appendTo($("#showResult4_1"));	
+});
+</script>
+<div class="aTitle">concat()方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+concat()方法可以接受任意多个参数，
+也就是说可以通过它拼接任意多个字符串。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4_1">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	var str1 = " abc ";
+	$('<div>var str1 = " abc ";<br/>'
+		+'str1.trim() --> "'+(str1.trim?str1.trim():str1)+'"<br/>'
+	 +'</div>').appendTo($("#showResult4_2"));
+	var str2 = "\tabc\t\r\n";
+	$('<div>var str2 = "\\tabc\\t\\r\\n";<br/>'
+		+'str2.trim() --> "'+(str2.trim?str2.trim():str2)+'"<br/>'
+	 +'</div>').appendTo($("#showResult4_2"));
+});
+</script>
+<div class="aTitle">trim()方法【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+创建一个字符串的副本，删除前置及后缀的所有空格，然后返回结果。
+
+支持这个方法的浏览器有IE9+、Firefox 3.5+、Safari 5+、Opera 10.5+和Chrome。
+此外，Firefox 3.5+、Safari 5+和Chrome 8+还支持非标准的trimLeft()和trimRight()方法，
+分别用于删除字符串开头和末尾的空格
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4_2">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var str="a啊b吧c";
+		$('<div>var str="a啊b吧c";</div>').appendTo($("#showResult5"));
+		$('<div>str.charAt(0) --> '+str.charAt(0)+'</div>').appendTo($("#showResult5"));
+		$('<div>str.charAt(1) --> '+str.charAt(1)+'</div>').appendTo($("#showResult5"));
+		$('<div>str.charAt(2) --> '+str.charAt(2)+'</div>').appendTo($("#showResult5"));
+		$('<div>str[0] --> '+str[0]+'</div>').appendTo($("#showResult5"));
+		$('<div>str[1] --> '+str[1]+'</div>').appendTo($("#showResult5"));
+		$('<div>str[2] --> '+str[2]+'</div>').appendTo($("#showResult5"));
+		$('<div>str.charCodeAt(0) --> '+str.charCodeAt(0)+'</div>').appendTo($("#showResult5"));
+		$('<div>str.charCodeAt(1) --> '+str.charCodeAt(1)+'</div>').appendTo($("#showResult5"));
+		$('<div>str.charCodeAt(2) --> '+str.charCodeAt(2)+'</div>').appendTo($("#showResult5"));
+		$('<div>typeof(str.charAt(0)) --> '+typeof(str.charAt(0))+'</div>').appendTo($("#showResult5"));
+		$('<div>typeof(str.charCodeAt(0)) --> '+typeof(str.charCodeAt(0))+'</div>').appendTo($("#showResult5"));
+		$('<div>String.fromCharCode(97,97,99) --> '+String.fromCharCode(97,97,99) +'</div>').appendTo($("#showResult5"));
+		$('<div>String.fromCharCode(21834) --> '+String.fromCharCode(21834)+'</div>').appendTo($("#showResult5"));
+		$('<div>String.fromCharCode(0x554A) --> '+String.fromCharCode(0x554A)+'</div>').appendTo($("#showResult5"));
+		$('<div>html中也可通过十六进制进行表示：&#38;#x554A; --> &#x554A;</div>').appendTo($("#showResult5"));
+		
+	});
+</script>
+<div class="aTitle">charAt()和charCodeAt()和String.fromCharCode()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+charAt()返回指定位置的字符
+charCodeAt()返回指定位置的字符的 Unicode 编码
+fromCharCode()是静态方法，直接通过String类调用该方法，
+              将一系列Unicode值转成字符串
+
+str[0]使用方括号表示法访问个别字符的语法得到了IE8 
+及Firefox、Safari、Chrome 和Opera 所有版本的支持，
+如果是在IE7 及更早版本中使用这种语法，会返回undefined 值。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult5">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		
+		var str1 = "\u65f6\u95f4";
+		$('<div>var str1 = "\\u65f6\\u95f4"; --> '+str1
+			+'</div>').appendTo($("#showResult6"));
+
+		var str2 = "\x26";
+		$('<div>var str2 = "\\x26"; --> '+str2
+			+'</div>').appendTo($("#showResult6"));
+
+	});
+	
+</script>
+<div class="aTitle">unicode转义</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+html中是以 “&#”+“十进制数编码” 的方式进行unicode转义：
+&lt;span&gt;&#38;#26102;&#38;#38388;&lt;/span&gt; --> &lt;span&gt;时间&lt;/span&gt;
+
+javascript中以 “\u”+“4位十六进制编码” 的方式进行unicode转义：
+"\u65f6\u95f4" --> "时间" 
+javascript中以 “\x”+“2位十六进制编码” 的方式进行latin-1转义：
+"\x26" --> "&" 
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult6">
+		<span>&#26102;&#38388;</span>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var txt="Hello World!";
+		$("<div>var txt=\"Hello World!\";</div>").appendTo($("#showResult3"));
+		function show(exe){
+			eval("var res = "+exe);
+			var textDiv = $("<div></div>");
+			textDiv.appendTo($("#showResult3"));
+			textDiv.text(exe+" 结果："+res);
+			$("<div>"+exe+" 效果："+res+"</div>").appendTo($("#showResult3"));
+
+		}
+		show("txt.big()");
+		show("txt.small()");
+		show("txt.bold()");
+		show("txt.italics()");
+		show("txt.blink()");
+		show("txt.fixed()");
+		show("txt.strike()");
+		show("txt.fontcolor('Red')");
+		show("txt.fontsize(6)");
+		show("txt.toLowerCase()");
+		show("txt.toUpperCase()");
+		show("txt.sub()");
+		show("txt.sup()");
+		show("txt.link('http://www.jd.com')");
+	});
+	
+</script>
+<div class="aTitle">字符串添加样式</div>
+<div class="aPane" >
+	<div class="aCode" id="showResult3" style="white-space:nowrap;">
+	应该尽量不使用这些方法，因为它们创建的标记通常无法表达语义
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	
+});	
+</script>
+<div class="aTitle">localeCompare()方法</div>
+<div class="aPane" >
+	<div class="aCode">
+localeCompare()方法比较两个字符串，并返回下列值中的一个：
+ 如果字符串在字母表中应该排在字符串参数之前，
+则返回一个负数（大多数情况下是-1，具体的值要视实现而定）；
+ 如果字符串等于字符串参数，则返回0；
+ 如果字符串在字母表中应该排在字符串参数之后，
+则返回一个正数（大多数情况下是1，具体的值同样要视实现而定）。
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+</body>
+</html>

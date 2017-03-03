@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>transition动画</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<style type="text/css">
+	.color-trans:hover{
+		background-color:#02C95A;
+	}
+	.color-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:background-color 0.5s ease-in;
+		/*-webkit-transition-property: background-color;
+		-webkit-transition-duration: 0.5s;
+		-webkit-transition-timing-function: ease-in;*/
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.color-trans:hover{
+	background-color:#02C95A;
+}
+.color-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:background-color 0.5s ease-in;
+	/*-webkit-transition-property: background-color;
+	-webkit-transition-duration: 0.5s;
+	-webkit-transition-timing-function: ease-in;*/
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="color-trans">颜色渐变</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.mutil-trans:hover{
+		transform: translate(20px,20px);
+		background-color:#02C95A;
+	}
+	.mutil-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:background-color 0.5s ease-in, transform 1s ease-in;
+		/*-webkit-transition:background-color 0.5s ease-in;
+		-webkit-transition:transform 1s ease-in;*/
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.mutil-trans:hover{
+	transform: translate(20px,20px);
+	background-color:#02C95A;
+}
+.mutil-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:background-color 0.5s ease-in, transform 1s ease-in;
+	/*-webkit-transition:background-color 0.5s ease-in;
+	-webkit-transition:transform 1s ease-in;*/
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="mutil-trans">颜色渐变+移位</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.linearfunc-trans:hover{
+		transform: translate(20px,20px);
+	}
+	.linearfunc-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:transform 1s linear;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.linearfunc-trans:hover{
+	transform: translate(20px,20px);
+}
+.linearfunc-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:transform 1s linear;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="linearfunc-trans">线性过渡移位</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.easefunc-trans:hover{
+		transform: translate(20px,20px);
+	}
+	.easefunc-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:transform 1s ease;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.easefunc-trans:hover{
+	transform: translate(20px,20px);
+}
+.easefunc-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:transform 1s ease;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="easefunc-trans">平滑过渡移位</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.easeinfunc-trans:hover{
+		transform: translate(20px,20px);
+	}
+	.easeinfunc-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:transform 1s ease-in;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.easeinfunc-trans:hover{
+	transform: translate(20px,20px);
+}
+.easeinfunc-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:transform 1s ease-in;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="easeinfunc-trans">由慢到快过渡移位</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.easeoutfunc-trans:hover{
+		transform: translate(20px,20px);
+	}
+	.easeoutfunc-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:transform 1s ease-out;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.easeoutfunc-trans:hover{
+	transform: translate(20px,20px);
+}
+.easeoutfunc-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:transform 1s ease-out;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="easeoutfunc-trans">由快到慢过渡移位</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.easeinoutfunc-trans:hover{
+		transform: translate(20px,20px);
+	}
+	.easeinoutfunc-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:transform 1s ease-in-out;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.easeinoutfunc-trans:hover{
+	transform: translate(20px,20px);
+}
+.easeinoutfunc-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:transform 1s ease-in-out;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="easeinoutfunc-trans">由慢到快再到慢过渡移位</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.delay-trans:hover{
+		transform: translate(20px,20px);
+	}
+	.delay-trans{
+		width: 200px;
+		height: 100px;
+		background-color: #0EFD78;
+		
+		-webkit-transition:transform 1s ease;
+		transition-delay: 1s;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.delay-trans:hover{
+	transform: translate(20px,20px);
+}
+.delay-trans{
+	width: 200px;
+	height: 100px;
+	background-color: #0EFD78;
+	
+	-webkit-transition:transform 1s ease;
+	transition-delay: 1s;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="delay-trans">延迟1秒移位</div>
+	</div>
+</div>
+		
+
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript闭包</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<script type="text/javascript">
+	/*function Cycle(){
+		this.PI = 3.14;
+		this.area=function(r){
+			return this.PI*r*r;
+		};
+	}
+	
+	var obj = new Cycle();
+	alert(obj.area(10));*/
+
+	/*function Cycle(r){
+		this.r=r;
+	}
+	Cycle.PI=3.14;
+	Cycle.prototype.area=function(){
+		return Cycle.PI*this.r*this.r;
+	};
+	var obj = new Cycle(10);
+	alert(obj.area());*/
+
+	/*var Cycle = function(){
+		var obj = new Object();
+		obj.PI = 3.14;
+		obj.area = function(r){
+			return this.PI*r*r;
+		};
+		return obj;
+	};
+
+	//var obj = Cycle();
+	var obj = new Cycle();
+	alert(obj.area(10));*/
+	
+	//alert(typeof Cycle.area);
+	/*var Cycle = {
+		PI:3.14,
+		area:function(r){
+			return this.PI*r*r;
+		}
+	};
+
+	alert(Cycle.area(1.0));*/
+
+
+</script>
+<div class="aTitle">闭包的概念</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+闭包：是指有权访问另外一个函数作用域中的变量的函数。
+创建闭包的常见方式就是在一个函数内部创建另外一个函数。
+
+闭包，官方对闭包的解释是：一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。
+闭包的特点：
+　　1. 作为一个函数变量的一个引用，当函数返回时，其处于激活状态。
+　　2. 一个闭包就是当一个函数返回时，一个没有释放资源的栈区。
+
+//第1种写法  
+function Circle(r) {  
+      this.r = r;  
+}  
+Circle.PI = 3.14159;  
+Circle.prototype.area = function() {  
+  return Circle.PI * this.r * this.r;  
+}  
+  
+var c = new Circle(1.0);     
+alert(c.area());
+
+//第2种写法（建议）
+var Circle = function() {  
+   var obj = new Object();  
+   obj.PI = 3.14159;  
+     
+   obj.area = function( r ) {  
+       return this.PI * r * r;  
+   }  
+   return obj;  
+}  
+  
+var c = new Circle();  
+alert( c.area( 1.0 ) ); 
+
+
+//第3种写法  
+var Circle = new Object();  
+Circle.PI = 3.14159;  
+Circle.Area = function( r ) {  
+       return this.PI * r * r;  
+}  
+  
+alert( Circle.Area( 1.0 ) );  
+
+//第4种写法（建议）
+var Circle={  
+   "PI":3.14159,  
+ "area":function(r){  
+          return this.PI * r * r;  
+        }  
+};  
+alert( Circle.area(1.0) );
+
+//第5种写法（不建议）
+var Circle = new Function("this.PI = 3.14159;this.area = function( r ) {return r*r*this.PI;}");  
+alert( (new Circle()).area(1.0) ); 
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+
+
+<div class="aTitle">闭包常见问题</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+作用域链的这种配置机制引出了一个值得注意的副作用，
+即闭包只能取得包含函数中任何变量的最后一个值。
+这种问题常出现在循环中。
+
+&lt;div id="showResult1_1"&gt;
+	&lt;b&gt;错误示例：&lt;/b&gt;
+	&lt;div&gt;对应的英文名称：&lt;span id="enSpan1"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="showResult1_2"&gt;
+	&lt;b&gt;正确示例：&lt;/b&gt;
+	&lt;div&gt;对应的英文名称：&lt;span id="enSpan2"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本:</b>	
+var objs = [{name:"书",en:"book"},
+            {name:"面包",en:"bread"},
+            {name:"苹果",en:"apple"}];    
+//错误示例    
+for(var i in objs){
+	var obj = objs[i];
+	var btn = $("&lt;button&gt;"+obj.name+"&lt;/button&gt;");
+	btn.click(function(){
+		$("#enSpan1").text(obj.en);
+	});
+	btn.appendTo("#showResult1_1");
+}
+
+//正确示例
+for(var i in objs){
+	var obj = objs[i];
+	var btn = $("&lt;button&gt;"+obj.name+"&lt;/button&gt;");
+	btn.click(function(enName){
+		return function(){
+			$("#enSpan2").text(enName);
+		};
+	}(obj.en));
+	btn.appendTo("#showResult1_2");
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+		<div id="showResult1_1">
+			<b>错误示例：</b>
+			<div>对应的英文名称：<span id="enSpan1"></span></div>
+		</div>
+		<div id="showResult1_2">
+			<b>正确示例：</b>
+			<div>对应的英文名称：<span id="enSpan2"></span></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var objs = [{name:"书",en:"book"},
+	            {name:"面包",en:"bread"},
+	            {name:"苹果",en:"apple"}];        
+	for(var i in objs){
+		var obj = objs[i];
+		var btn = $("<button>"+obj.name+"</button>");
+		btn.click(function(){
+			$("#enSpan1").text(obj.en);
+		});
+		btn.appendTo("#showResult1_1");
+	}
+
+
+	for(var i in objs){
+		var obj = objs[i];
+		var btn = $("<button>"+obj.name+"</button>");
+		btn.click(function(enName){
+			return function(){
+				$("#enSpan2").text(enName);
+			};
+		}(obj.en));
+		btn.appendTo("#showResult1_2");
+	}
+});
+</script>
+</body>
+</html>

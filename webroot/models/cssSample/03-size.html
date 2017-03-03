@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>大小相关属性</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+	<div class="home"><a href="../../index.html">首页</a></div>
+
+	<style type="text/css">
+		.outer{
+			border: solid #B5BCBE 1px;
+			background-color: #D8F0FA;
+			margin-top: 20px;
+		}
+
+		.inner{
+			background-color: #FCFBBD;
+			width: 100%;
+			height: 100%;
+		}
+
+		.img-cont{
+			width: 100%;
+			text-align: center;
+		}
+
+		.outer>div{
+			width: 300px;
+			height: 50px;
+			padding: 10px;
+			margin: 20px;
+			background-color: #FDE2F9;
+			border: solid #B5BCBE 5px;
+		}
+
+		/*width、height控制内容区*/
+		.content-box-style{
+			box-sizing: content-box;
+		}
+
+		/*width、height控制内容区、内补丁区和边框区*/
+		.border-box-style{
+			box-sizing: border-box;
+		}
+	</style>
+	<div class="aPane">
+	<div class="aCode">
+		<pre>
+.outer>div{
+	width: 300px;
+	height: 50px;
+	padding: 10px;
+	margin: 20px;
+	background-color: #FDE2F9;
+	border: solid #B5BCBE 5px;
+}
+
+/*width、height控制内容区*/
+.content-box-style{
+	box-sizing: content-box;
+}
+
+/*width、height控制内容区、内补丁区和边框区*/
+.border-box-style{
+	box-sizing: border-box;
+}		
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="outer">
+			<div class="content-box-style">
+				<div class="inner"></div>
+			</div>
+		</div>
+		<div class="img-cont"><img src="content-box.png"></div>
+		<div class="outer">
+			<div class="border-box-style">
+				<div class="inner"></div>
+			</div>
+		</div>
+		<div class="img-cont"><img src="border-box.png"></div>
+	</div>
+</div>
+
+<style type="text/css">
+	/*不能调整大小*/
+	.resize-none-style{
+		resize: none;
+	}
+	/*两个方向都能调整大小*/
+	.resize-both-style{
+		resize: both;
+	}
+	/*横向可调大小*/
+	.resize-horizontal-style{
+		resize: horizontal;
+	}
+	/*纵向可调大小*/
+	.resize-vertical-style{
+		resize: vertical;
+	}
+	/*继承父元素（默认）*/
+	.resize-inherit-style{
+		resize: inherit;
+	}
+
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*不能调整大小*/
+.resize-none-style{
+	resize: none;
+}
+/*两个方向都能调整大小*/
+.resize-both-style{
+	resize: both;
+}
+/*横向可调大小*/
+.resize-horizontal-style{
+	resize: horizontal;
+}
+/*纵向可调大小*/
+.resize-vertical-style{
+	resize: vertical;
+}
+/*继承父元素（默认）*/
+.resize-inherit-style{
+	resize: inherit;
+}
+		</pre>
+	</div>
+	<div class="aShow type1">
+		<textarea class="resize-none-style" placeholder="不能调整大小"></textarea><p/>
+		<textarea class="resize-both-style" placeholder="两个方向都能调整大小"></textarea><p/>
+		<textarea class="resize-horizontal-style" placeholder="横向可调大小"></textarea><p/>
+		<textarea class="resize-vertical-style" placeholder="纵向可调大小"></textarea><p/>
+		<textarea class="resize-inherit-style" placeholder="继承父元素（默认）"></textarea><p/>
+	</div>
+</div>
+
+</body>
+</html>

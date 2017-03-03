@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性[clip]</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+	<div class="home"><a href="../../index.html">首页</a></div>
+<style type="text/css">
+	.ruler{
+		width: 315px;
+		height: 315px;
+		background-image: url(ruler.png);
+		background-repeat: no-repeat;
+		padding-top: 21px;
+		padding-left: 21px;
+	}
+	.line{
+		position: absolute;
+	}
+	
+	.x{
+		margin-top: -305px;
+		height: 314px;
+		border-right: solid #02FC11 1px;
+	}
+	.x1{
+		width: 40px;
+	}
+	.x2{
+		width: 120px;
+	}
+	.x3{
+		width: 160px;
+	}
+	.x4{
+		width: 240px;
+	}
+
+	.y{
+		margin-top: -283px;
+		margin-left: -21px;
+		width: 314px;
+		border-bottom: solid #02FC11 1px;
+	}
+	.y1{
+		height: 40px;
+	}
+	.y2{
+		height: 120px;
+	}
+	.y3{
+		height: 160px;
+	}
+	.y4{
+		height: 240px;
+	}
+
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+显示原图
+		</pre>
+	</div>
+	<div class="aShow">	
+		<div class="ruler">
+			<img class="img-all" src="icons.png" />
+			<div class="line x x1"></div>
+			<div class="line x x2"></div>
+			<div class="line x x3"></div>
+			<div class="line x x4"></div>
+			<div class="line y y1"></div>
+			<div class="line y y2"></div>
+			<div class="line y y3"></div>
+			<div class="line y y4"></div>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	/*显示第一行第一列图标*/
+	.img1-1{
+		position:absolute;
+		margin-top: -40px;
+		margin-left: -40px;
+		clip: rect(40px 120px 120px 40px);
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+<mark>clip:rect矩形剪裁只能作用于position:absolute的元素上</mark>
+/*显示第一行第一列图标*/
+.img1-1{
+	position:absolute;
+	margin-top: -40px;
+	margin-left: -40px;
+	clip: rect(40px 120px 120px 40px);
+}
+		</pre>
+	</div>
+	<div class="aShow">	
+	<img class="img1-1" src="icons.png" />
+	</div>
+</div>
+
+<style type="text/css">
+	/*显示第一行第二列图标*/
+	.img1-2{
+		position:absolute;
+		margin-top: -40px;
+		margin-left: -160px;
+		clip: rect(40px 240px 120px 160px);
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*显示第一行第二列图标*/
+.img1-2{
+	position:absolute;
+	margin-top: -40px;
+	margin-left: -160px;
+	clip: rect(40px 240px 160px 120px);
+}
+		</pre>
+	</div>
+	<div class="aShow">	
+	<img class="img1-2" src="icons.png" />
+	</div>
+</div>
+
+<style type="text/css">
+	/*显示第二行第一列图标*/
+	.img2-1{
+		position:absolute;
+		margin-top: -160px;
+		margin-left: -40px;
+		clip: rect(160px 120px 240px 40px);
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*显示第二行第一列图标*/
+.img2-1{
+	position:absolute;
+	margin-top: -160px;
+	margin-left: -40px;
+	clip: rect(160px 120px 240px 40px);
+}
+		</pre>
+	</div>
+	<div class="aShow">	
+	<img class="img2-1" src="icons.png" />
+	</div>
+</div>
+
+<style type="text/css">
+	/*显示第二行第二列图标*/
+	.img2-2{
+		position:absolute;
+		margin-top: -160px;
+		margin-left: -160px;
+		clip: rect(160px 240px 240px 160px);
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*显示第二行第二列图标*/
+.img2-2{
+	position:absolute;
+	margin-top: -160px;
+	margin-left: -160px;
+	clip: rect(160px 240px 240px 160px);
+}
+		</pre>
+	</div>
+	<div class="aShow">	
+	<img class="img2-2" src="icons.png" />
+	</div>
+</div>
+</body>
+</html>

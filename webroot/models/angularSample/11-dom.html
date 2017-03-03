@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS DOM</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">ng-disabled 指令</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&ltdiv id="app1" ng-controller="ctrl1"&gt
+  &ltbutton <mark>ng-disabled="disSubmit"</mark>&gt提交&lt/button&gt
+  &ltinput type="checkbox" ng-model="disSubmit"&gt不可提交
+&lt/div&gt
+
+<b>脚本:</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  <mark>$scope.disSubmit=true;</mark>
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <button ng-disabled="disSubmit">提交</button>
+      <input type="checkbox" ng-model="disSubmit">不可提交
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.disSubmit=true;
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+<div class="aTitle">ng-show 指令</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&ltdiv id="app2" ng-controller="ctrl2"&gt
+  &ltinput type="checkbox" ng-model="isShow"&gt是否显示
+  &ltp <mark>ng-show="isShow"</mark>&gt能看到我吗？&lt/p&gt
+&lt/div&gt
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  <mark>$scope.isShow=false;</mark>
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <input type="checkbox" ng-model="isShow">是否显示
+      <p ng-show="isShow">能看到我吗？</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.isShow=false;
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+<div class="aTitle">ng-hide 指令</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&ltdiv id="app3" ng-controller="ctrl3"&gt
+  &ltinput type="checkbox" ng-model="isHide"&gt是否隐藏
+  &ltp <mark>ng-hide="isHide"</mark>&gt能看到我吗？&lt/p&gt
+&lt/div&gt
+
+<b>脚本：</b>
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope){
+  <mark>$scope.isHide=false;</mark>
+});
+angular.bootstrap(document.getElementById("app3"), ['app3']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app3" ng-controller="ctrl3">
+      <input type="checkbox" ng-model="isHide">是否隐藏
+      <p ng-hide="isHide">能看到我吗？</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope){
+  $scope.isHide=false;
+});
+angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+</body>
+</html>

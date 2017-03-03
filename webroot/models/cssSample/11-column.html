@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性[column]</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<style type="text/css">
+	.col-style{
+		width: 350px;
+		background-color: #EBF4FC;
+		padding: 10px;
+
+		/*列数目*/
+		column-count: 2;
+		-webkit-column-count: 2;
+		/*各列之间间隙宽度*/
+		column-gap: 30px;
+		-webkit-column-gap: 30px;
+
+		/*列之间分割线宽度*/
+		column-rule-width:3px;
+		-webkit-column-rule-width:3px;
+
+		/*列之间分割线风格*/
+		column-rule-style:outset;
+		-webkit-column-rule-style:outset;
+
+		/*列之间分割线颜色*/
+		column-rule-color:#E0E8EA;
+		-webkit-column-rule-color:#F5F8BF;
+	}
+
+	/*一个元素的宽度跨越多列*/
+	.span-style{
+		line-height: 50px;
+		text-align: center;
+
+		column-span: all;
+		-webkit-column-span: all;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.col-style{
+	width: 350px;
+	background-color: #EBF4FC;
+	padding: 10px;
+
+	/*列数目*/
+	column-count: 2;
+	-webkit-column-count: 2;
+	/*各列之间间隙宽度*/
+	column-gap: 30px;
+	-webkit-column-gap: 30px;
+
+	/*列之间分割线宽度*/
+	column-rule-width:3px;
+	-webkit-column-rule-width:3px;
+
+	/*列之间分割线风格*/
+	column-rule-style:outset;
+	-webkit-column-rule-style:outset;
+
+	/*列之间分割线颜色*/
+	column-rule-color:#E0E8EA;
+	-webkit-column-rule-color:#F5F8BF;
+}
+
+/*一个元素的宽度跨越多列*/
+.span-style{
+	line-height: 50px;
+	text-align: center;
+
+	column-span: all;
+	-webkit-column-span: all;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="col-style">
+			<div class="span-style">Title</div>
+			This module describes multi-column layout in CSS. By using functionality described in this document, style sheets can declare that the content of an element is to be laid out in multiple columns.
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

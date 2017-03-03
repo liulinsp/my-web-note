@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript表单-选择框</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">选择框脚本</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+除了所有表单字段共有的属性和方法，HTMLSelectElement 类型还提供了下列属性和方法。
+1. add(newOption, relOption)：向控件中插入新&lt;option&gt;元素，其位置在相关项（relOption）
+之前。
+2. multiple：布尔值，表示是否允许多项选择；等价于HTML 中的multiple 特性。
+3. options：控件中所有&lt;option&gt;元素的HTMLCollection。
+4. remove(index)：移除给定位置的选项。
+5. selectedIndex：基于0 的选中项的索引，如果没有选中项，则值为-1。对于支持多选的控件，
+只保存选中项中第一项的索引。
+6. size：选择框中可见的行数；等价于HTML 中的size 特性。
+
+选择框的type 属性不是"select-one"，就是"select-multiple"，
+这取决于HTML 代码中有没有multiple 特性。
+
+选择框的value 属性由当前选中项决定，相应规则如下。
+1. 如果没有选中的项，则选择框的value 属性保存空字符串。
+2. 如果有一个选中项，而且该项的value 特性已经在HTML 中指定，则选择框的value 属性等
+于选中项的value 特性。即使value 特性的值是空字符串，也同样遵循此条规则。
+3. 如果有一个选中项，但该项的value 特性在HTML 中未指定，则选择框的value 属性等于该
+项的文本。
+4. 如果有多个选中项，则选择框的value 属性将依据前两条规则取得<mark>第一个选中项</mark>的值。
+
+在DOM 中，每个&lt;option&gt;元素都有一个HTMLOptionElement 对象表示。为便于访问数据，
+HTMLOptionElement 对象添加了下列属性：
+1. index：当前选项在options 集合中的索引。
+2. label：当前选项的标签；等价于HTML 中的label 特性。
+ 【有label时显示label的值，但firefox不支持】
+3. selected：布尔值，表示当前选项是否被选中。将这个属性设置为true 可以选中当前选项。
+4. text：选项的文本。
+5. value：选项的值（等价于HTML 中的value 特性）。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<select id="sel1" style="width:50px">
+			<option value="1" label="壹">一</option>
+			<option value="2" label="贰">二</option>
+		</select>
+		<p>
+			选择框的value值为：<span id="val1"></span>
+		</p>
+		<button id="val1Btn">获取value</button>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+eventUtil.bind(document.getElementById("val1Btn"),"click",
+	function(event){
+		var val1 = document.getElementById("val1");
+		val1.innerHTML = document.getElementById("sel1").value;
+	});
+});
+</script>
+
+
+<div class="aTitle">获得选中选项</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 对于只允许选择一项的选择框，使用选择框的selectedIndex 属性
+var selectedOption = selectbox.options[selectbox.selectedIndex];
+
+2. 在允许多选的选择框中使用选项的selected 属性
+function getSelectedOptions(selectbox){
+	var result = new Array();
+	var option = null;
+	for (var i=0, len=selectbox.options.length; i < len; i++){
+		option = selectbox.options[i];
+		if (option.selected){
+			result.push(option);
+		}
+	}
+	return result;
+}
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2"></div> -->
+</div>
+
+<div class="aTitle">添加选项</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 使用DOM方法
+var newOption = document.createElement("option");
+newOption.appendChild(document.createTextNode("Option text"));
+newOption.setAttribute("value", "Option value");
+selectbox.appendChild(newOption);
+
+2. 使用Option 构造函数来创建新选项
+var newOption = new Option("Option text", "Option value");
+selectbox.appendChild(newOption); //在IE8 及之前版本中有问题
+
+3. 使用选择框的add()方法
+var newOption = new Option("Option text", "Option value");
+selectbox.add(newOption, undefined); //最佳方案
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2"></div> -->
+</div>
+
+
+<div class="aTitle">移除选项</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 使用DOM 的removeChild()方法
+selectbox.removeChild(selectbox.options[0]);
+
+2. 使用选择框的remove()方法
+selectbox.remove(0);
+这种方式也是DOM 出现之前浏览器的遗留机制
+
+3. 将相应选项设置为null
+selectbox.options[0] = null;
+
+function clearSelectbox(selectbox){
+	var len=selectbox.options.length;
+	for(var i=len-1; i >= 0; i--){
+		selectbox.remove(i);
+	}
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+		<select id="delSel1">
+			<option value="red">红色</option>
+			<option value="green">绿色</option>
+			<option value="blue">蓝色</option>
+		</select>
+		<button id="delAllBtn">全部删除</button>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+
+eventUtil.bind(document.getElementById("delAllBtn"), "click", 
+	function(event) {
+		var delSel1 = document.getElementById("delSel1");
+		clearSelectbox(delSel1);
+	});
+
+function clearSelectbox(selectbox){
+	var len=selectbox.options.length;
+	for(var i=len-1; i >= 0; i--){
+		selectbox.remove(i);
+	}
+}
+
+});
+</script>
+
+<style>
+	
+</style>
+<div class="aTitle">移动和重排选项</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 将一个选择框中的选项移动到另一个选择框中
+selectbox2.appendChild(selectbox1.options[0]);
+2. 将选择框中的某一项移动到特定位置
+var optionToMove = selectbox.options[1];
+selectbox.insertBefore(optionToMove, selectbox.options[optionToMove.index-1]);
+
+<span class="error">IE7 存在一个页面重绘问题，有时候会导致使用DOM 方法重排的选项不能马上正确显示。</span>
+
+&lt;div style="display:table-cell;width:100px"&gt;
+	&lt;select id="leftSel" multiple="multiple" style="width:100px"&gt;
+		&lt;option value="red"&gt;红色&lt;/option&gt;
+		&lt;option value="yellow"&gt;黄色&lt;/option&gt;
+		&lt;option value="orange"&gt;橙色&lt;/option&gt;
+	&lt;/select&gt;
+&lt;/div&gt;
+&lt;div style="display:table-cell;width:10px;vertical-align:middle;"&gt;
+	&lt;button id="rightBtn"&gt;&gt;&gt;&lt;/button&gt;
+	&lt;button id="leftBtn"&gt;&lt;&lt;&lt;/button&gt;
+&lt;/div&gt;
+&lt;div style="display:table-cell;width:100px"&gt;
+	&lt;select id="rightSel" multiple="multiple" style="width:100px"&gt;
+		&lt;option value="blue"&gt;蓝色&lt;/option&gt;
+		&lt;option value="green"&gt;绿色&lt;/option&gt;
+		&lt;option value="gray"&gt;灰色&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;button id="upBtn"&gt;上移&lt;/button&gt;
+	&lt;button id="downBtn"&gt;下移&lt;/button&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+function getSelectedOptions(selectbox){
+	var result = new Array();
+	var option = null;
+	for (var i=0, len=selectbox.options.length; i < len; i++){
+		option = selectbox.options[i];
+		if (option.selected){
+			result.push(option);
+		}
+	}
+	return result;
+}
+eventUtil.bind(document.getElementById("rightBtn"),"click",
+	function(event){
+		var leftSel = document.getElementById("leftSel");
+		var rightSel = document.getElementById("rightSel");
+		var selectedOptions = getSelectedOptions(leftSel);
+		for(var i in selectedOptions){
+			rightSel.appendChild(selectedOptions[i]);
+		}
+	});
+
+eventUtil.bind(document.getElementById("leftBtn"),"click",
+	function(event){
+		var rightSel = document.getElementById("rightSel");
+		var leftSel = document.getElementById("leftSel");
+		var selectedOptions = getSelectedOptions(rightSel);
+		for(var i in selectedOptions){
+			leftSel.appendChild(selectedOptions[i]);
+		}
+	});
+eventUtil.bind(document.getElementById("upBtn"),"click",
+	function(event){
+		var rightSel = document.getElementById("rightSel");
+		var selectedOptions = getSelectedOptions(rightSel);
+		if(selectedOptions.length>0&&selectedOptions[0].index>0){
+			for(var i in selectedOptions){
+				var idx = selectedOptions[i].index;
+				rightSel.insertBefore(selectedOptions[i],rightSel.options[idx-1]);
+			}
+		}
+	});
+eventUtil.bind(document.getElementById("downBtn"),"click",
+	function(event){
+		var rightSel = document.getElementById("rightSel");
+		var selectedOptions = getSelectedOptions(rightSel);
+		if(selectedOptions.length>0 && 
+		   selectedOptions[selectedOptions.length-1].index<(rightSel.options.length-1)){
+			var selLen = selectedOptions.length;
+			for(var i=(selLen-1);i>=0;i--){
+				var idx = selectedOptions[i].index;
+				rightSel.insertBefore(rightSel.options[idx+1],selectedOptions[i]);
+			}
+		}
+	});
+});
+		</pre>
+	</div>
+	<div class="aShow" id="showResult4">
+		<div style="display:table-cell;width:100px">
+			<select id="leftSel" multiple="multiple" style="width:100px;height:110px;">
+				<option value="red">红色</option>
+				<option value="yellow">黄色</option>
+				<option value="orange">橙色</option>
+			</select>
+		</div>
+		<div style="display:table-cell;width:10px;vertical-align:middle;">
+			<button id="rightBtn">>></button>
+			<button id="leftBtn"><<</button>
+		</div>
+		<div style="display:table-cell;width:100px;">
+			<select id="rightSel" multiple="multiple" style="width:100px;height:110px;">
+				<option value="blue">蓝色</option>
+				<option value="green">绿色</option>
+				<option value="gray">灰色</option>
+			</select>
+			<button id="upBtn">上移</button>
+			<button id="downBtn">下移</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+function getSelectedOptions(selectbox){
+	var result = new Array();
+	var option = null;
+	for (var i=0, len=selectbox.options.length; i < len; i++){
+		option = selectbox.options[i];
+		if (option.selected){
+			result.push(option);
+		}
+	}
+	return result;
+}
+eventUtil.bind(document.getElementById("rightBtn"),"click",
+	function(event){
+		var leftSel = document.getElementById("leftSel");
+		var rightSel = document.getElementById("rightSel");
+		var selectedOptions = getSelectedOptions(leftSel);
+		for(var i in selectedOptions){
+			rightSel.appendChild(selectedOptions[i]);
+		}
+	});
+
+eventUtil.bind(document.getElementById("leftBtn"),"click",
+	function(event){
+		var rightSel = document.getElementById("rightSel");
+		var leftSel = document.getElementById("leftSel");
+		var selectedOptions = getSelectedOptions(rightSel);
+		for(var i in selectedOptions){
+			leftSel.appendChild(selectedOptions[i]);
+		}
+	});
+eventUtil.bind(document.getElementById("upBtn"),"click",
+	function(event){
+		var rightSel = document.getElementById("rightSel");
+		var selectedOptions = getSelectedOptions(rightSel);
+		if(selectedOptions.length>0&&selectedOptions[0].index>0){
+			for(var i in selectedOptions){
+				var idx = selectedOptions[i].index;
+				rightSel.insertBefore(selectedOptions[i],rightSel.options[idx-1]);
+			}
+		}
+	});
+eventUtil.bind(document.getElementById("downBtn"),"click",
+	function(event){
+		var rightSel = document.getElementById("rightSel");
+		var selectedOptions = getSelectedOptions(rightSel);
+		if(selectedOptions.length>0 && 
+		   selectedOptions[selectedOptions.length-1].index<(rightSel.options.length-1)){
+			var selLen = selectedOptions.length;
+			for(var i=(selLen-1);i>=0;i--){
+				var idx = selectedOptions[i].index;
+				rightSel.insertBefore(rightSel.options[idx+1],selectedOptions[i]);
+			}
+		}
+	});
+});
+</script>
+
+</body>
+</html>
+<script type="text/javascript">
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+};	
+</script>

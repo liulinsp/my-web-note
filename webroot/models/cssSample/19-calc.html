@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>calc计算</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+calc是英文单词calculate(计算)的缩写，是css3的一个新增的功能，用来指定元素的长度。
+比如说，你可以使用calc()给元素的border、margin、pading、font-size和width等属性设置动态值。
+calc()最大的好处就是用在流体布局上，可以通过calc()计算得到元素的宽度。
+
+<b>calc()的运算规则</b>
+calc()使用通用的数学运算规则，但是也提供更智能的功能：
+使用“+”、“-”、“*” 和 “/”四则运算；
+可以使用百分比、px、em、rem等单位；
+可以混合使用各种单位进行计算；
+表达式中有“+”和“-”时，其前后必须要有空格，如"widht: calc(12%+5em)"这种没有空格的写法是错误的；
+表达式中有“*”和“/”时，其前后可以没有空格，但建议留有空格。
+
+<b>浏览器的兼容性</b>
+浏览器对calc()的兼容性还算不错，在IE9+、FF4.0+、Chrome19+、Safari6+都得到较好支持，
+同样需要在其前面加上各浏览器厂商的识别符，不过可惜的是，移动端的浏览器还没仅有
+“firefox for android 14.0”支持，其他的全军覆没
+		</pre>
+	</div>
+</div>
+
+<style>
+.item{
+	box-sizing: border-box;
+	width: 380px;
+	line-height: 1.5em;
+	border: 1px solid #eee;
+	margin: 10px 0px;
+}
+.item>div{
+	font-size: inherit;
+	box-sizing: border-box;
+	display: inline-block;
+	width: -webkit-calc(100% - 1em);
+	width: -moz-calc(100% - 1em);
+	width: -o-calc(100% - 1em);
+	width: calc(100% - 1em);
+	height: 1.5em;
+	line-height: 1.5em;
+	border: 1px solid #aaa;
+	padding: 0px;
+	margin: 0px;
+}
+.x1{
+	font-size: 20px;
+}
+
+.x2{
+	font-size: 35px;
+}
+
+.x3{
+	font-size: 50px;
+}
+</style>
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.item{
+	box-sizing: border-box;
+	width: 380px;
+	line-height: 1.5em;
+	border: 1px solid #eee;
+	margin: 10px 0px;
+}
+.item>div{
+	font-size: inherit;
+	box-sizing: border-box;
+	display: inline-block;
+	width: -webkit-calc(100% - 1em);
+	width: -moz-calc(100% - 1em);
+	width: -o-calc(100% - 1em);
+	width: calc(100% - 1em);
+	height: 1.5em;
+	line-height: 1.5em;
+	border: 1px solid #aaa;
+	padding: 0px;
+	margin: 0px;
+}
+.x1{
+	font-size: 20px;
+}
+
+.x2{
+	font-size: 35px;
+}
+
+.x3{
+	font-size: 50px;
+}
+
+<b>页面：</b>
+&lt;div class="item x1"&gt;&lt;div&gt;一号&lt;/div&gt;〇&lt;/div&gt;
+&lt;div class="item x2"&gt;&lt;div&gt;二号&lt;/div&gt;〇&lt;/div&gt;
+&lt;div class="item x3"&gt;&lt;div&gt;三号&lt;/div&gt;〇&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="item x1"><div>一号</div>〇</div>
+		<div class="item x2"><div>二号</div>〇</div>
+		<div class="item x3"><div>三号</div>〇</div>
+	</div>
+</div>
+
+	
+</body>
+</html>
+

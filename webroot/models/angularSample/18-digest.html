@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS $digest() 关于双向绑定</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle"></div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  {{name}}
+&lt;/div&gt;
+
+<b>示例1：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($rootScope,$scope,$timeout){
+  $scope.name="张三";
+  <mark>setTimeout</mark>(function() {
+    $scope.name="Zhang San";
+    console.log("change to Zhang San");
+  }, 3000);
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+<b>结果：ERROR</b>
+3秒钟后显示："张三"，而不是"Zhang San"
+
+<b>示例2：</b>
+setTimeout(function() {
+  $scope.name="Zhang San";
+  $scope.$digest();
+  //$scope.$apply();
+  console.log("change to Zhang San");
+}, 3000);
+<b>结果：OK</b>
+3秒钟后显示："Zhang San"
+
+<b>示例3：</b>
+$timeout(function() {
+  $scope.name="Zhang San";
+  console.log("change to Zhang San");
+}, 3000);
+<b>结果：OK</b>
+3秒钟后显示："Zhang San"
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      {{name}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($rootScope,$scope,$timeout){
+  $scope.name="张三";
+  setTimeout(function() {
+    $scope.name="Zhang San";
+    console.log("change to Zhang San");
+  }, 3000);
+
+ /* setTimeout(function() {
+    $scope.name="Zhang San";
+    $scope.$digest();
+    //$scope.$apply();
+    console.log("change to Zhang San");
+  }, 3000);*/
+
+  /*$timeout(function() {
+    $scope.name="Zhang San";
+    console.log("change to Zhang San");
+  }, 3000);*/
+
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+</script>
+</body>
+</html>

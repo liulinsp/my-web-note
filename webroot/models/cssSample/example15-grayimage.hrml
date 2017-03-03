@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>灰度图片</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style>
+img{
+	width: 120px;
+	height: 80px;
+}
+.filter-gray{
+	-webkit-filter: sepia(1);
+	-moz-filter: sepia(1);
+	-o-filter: sepia(1);
+	filter: sepia(1);
+	transition: 1s filter, 1s -webkit-filter, 1s -moz-filter, 1s -o-filter;
+}
+.filter-gray2{
+	-webkit-filter: sepia(1) saturate(4);
+	-moz-filter: sepia(1) saturate(4);
+	-o-filter: sepia(1) saturate(4);
+	filter: sepia(1) saturate(4);
+	transition: 1s filter, 1s -webkit-filter, 1s -moz-filter, 1s -o-filter;
+}
+
+.filter-gray3{
+	-webkit-filter: sepia(1) saturate(4) hue-rotate(180deg);
+	-moz-filter: sepia(1) saturate(4) hue-rotate(180deg);
+	-o-filter: sepia(1) saturate(4) hue-rotate(180deg);
+	filter: sepia(1) saturate(4) hue-rotate(180deg);
+	transition: 1s filter, 1s -webkit-filter, 1s -moz-filter, 1s -o-filter;
+}
+
+p>img:hover{
+	-webkit-filter: none;
+	-moz-filter: none;
+	-o-filter: none;
+	filter: none;
+}
+
+</style>
+<div class="aTitle">滤镜实现灰度图片</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.filter-gray{
+	-webkit-filter: sepia(1);
+	-moz-filter: sepia(1);
+	-o-filter: sepia(1);
+	filter: sepia(1);
+	transition: 1s filter, 1s -webkit-filter, 1s -moz-filter, 1s -o-filter;
+}
+.filter-gray2{
+	-webkit-filter: sepia(1) saturate(4);
+	-moz-filter: sepia(1) saturate(4);
+	-o-filter: sepia(1) saturate(4);
+	filter: sepia(1) saturate(4);
+	transition: 1s filter, 1s -webkit-filter, 1s -moz-filter, 1s -o-filter;
+}
+
+.filter-gray3{
+	-webkit-filter: sepia(1) saturate(4) hue-rotate(180deg);
+	-moz-filter: sepia(1) saturate(4) hue-rotate(180deg);
+	-o-filter: sepia(1) saturate(4) hue-rotate(180deg);
+	filter: sepia(1) saturate(4) hue-rotate(180deg);
+	transition: 1s filter, 1s -webkit-filter, 1s -moz-filter, 1s -o-filter;
+}
+
+p>img:hover{
+	-webkit-filter: none;
+	-moz-filter: none;
+	-o-filter: none;
+	filter: none;
+}
+
+<b>页面：</b>
+&lt;p class=""&gt;
+	原图：&lt;br/&gt;
+	&lt;img src="../../img/bk.png"&gt;
+&lt;/p&gt;
+&lt;p&gt;
+	1. 褐色滤镜：filter: sepia(1)&lt;br/&gt;
+	&lt;img class="filter-gray" src="../../img/bk.png"&gt;
+&lt;/p&gt;
+&lt;p&gt;
+	2. 增加饱和度：sepia(1) saturate(4)&lt;br/&gt;
+	&lt;img class="filter-gray2" src="../../img/bk.png"&gt;
+&lt;/p&gt;
+&lt;p&gt;
+	3. 色相旋转：filter: sepia(1) saturate(4) hue-rotate(180deg)&lt;br/&gt;
+	&lt;img class="filter-gray3" src="../../img/bk.png"&gt;
+&lt;/p&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<p class="">
+			原图：<br/>
+			<img src="../../img/bk.png">
+		</p>
+		<p>
+			1. 褐色滤镜：filter: sepia(1)<br/>
+			<img class="filter-gray" src="../../img/bk.png">
+		</p>
+		<p>
+			2. 增加饱和度：sepia(1) saturate(4)<br/>
+			<img class="filter-gray2" src="../../img/bk.png">
+		</p>
+		<p>
+			3. 色相旋转：filter: sepia(1) saturate(4) hue-rotate(180deg)<br/>
+			<img class="filter-gray3" src="../../img/bk.png">
+		</p>
+		
+	</div>
+</div>
+
+
+<style>
+.blend-mode-gray{
+	width: 120px;
+	height: 80px;
+	background-size: cover;
+	background-color: hsl(209, 89%, 63%);
+	background-blend-mode: luminosity;
+	transition: 1s background-color;
+}
+
+.blend-mode-gray:hover {
+	background-color: transparent;
+}	
+</style>
+<div class="aTitle">背景混合模式实现灰度图片</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.blend-mode-gray{
+	width: 120px;
+	height: 80px;
+	background-size: cover;
+	background-color: hsl(209, 89%, 63%);
+	background-blend-mode: luminosity;
+	transition: 1s background-color;
+}
+
+.blend-mode-gray:hover {
+	background-color: transparent;
+}
+
+<b>页面：</b>
+&lt;p&gt;
+	原图：&lt;br/&gt;
+	&lt;img src="../../img/bk.png"&gt;
+&lt;/p&gt;
+&lt;div class="blend-mode-gray" 
+     style="background-image: url(../../img/bk.png);"&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<p>
+			原图：<br/>
+			<img src="../../img/bk.png">
+		</p>
+		<div class="blend-mode-gray" 
+		     style="background-image: url(../../img/bk.png);">
+		</div>
+	</div>
+</div>
+</body>
+</html>

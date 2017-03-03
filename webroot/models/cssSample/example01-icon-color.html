@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>改变图标颜色</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+	.icon {
+	    display: inline-block;
+	    width: 20px; 
+	    height: 20px;
+	}
+	.icon-del {
+	    background: url(delete.png) no-repeat left;
+	}
+	.icon-color-blue{
+	    position: relative;
+	    width: 40px; 
+	    margin-left: -20px;
+	    filter: drop-shadow(rgb(51, 51, 204) 20px 0px);
+	    -webkit-filter: drop-shadow(rgb(51, 51, 204) 20px 0px);/*Chrome*/
+	    filter: Dropshadow(offx=20,offy=0,color=#3333CC);/*IE*/
+	}
+	.icon-container{
+	    display: inline-block;
+	    width: 20px; 
+	    height: 20px;
+	    overflow: hidden;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.icon {
+    display: inline-block;
+    width: 20px; 
+    height: 20px;
+}
+.icon-del {
+    background: url(delete.png) no-repeat left;
+}
+.icon-color-blue{
+	position: relative;
+	width: 40px; 
+	margin-left: -20px;
+    filter: drop-shadow(rgb(51, 51, 204) 20px 0px);
+    -webkit-filter: drop-shadow(rgb(51, 51, 204) 20px 0px);/*Chrome*/
+    filter: Dropshadow(offx=20,offy=0,color=#3333CC);/*IE*/
+}
+.icon-container{
+	display: inline-block;
+    width: 20px; 
+    height: 20px;
+    overflow: hidden;
+}
+
+/*原始icon*/
+&lt;i class="icon icon-del"&gt;&lt;/i&gt;
+
+/*变色的icon*/
+&lt;span class="icon-container"&gt;
+	&lt;i class="icon icon-del icon-color-blue"&gt;&lt;/i&gt;
+&lt;/span&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<i class="icon icon-del"></i>原始icon
+		<br/>
+		<span class="icon-container">
+			<i class="icon icon-del icon-color-blue"></i>
+		</span>变色的icon
+	</div>
+</div>
+</body>
+</html>

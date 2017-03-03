@@ -1,0 +1,38 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- width=device-width :强制让文档与设备的宽度保持1：1；-->
+	<!-- 文档最大的宽度比列是1.0（initial-scale初始刻度值和maximum-scale最大刻度值）；-->
+	<!--user-scalable定义是否可缩放（0为不缩放），使页面固定设备上面的大小。-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- IOS系统中网站开启对web app程序的支持 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 在web app应用下状态条（屏幕顶部条）的颜色；
+    默认值为default（白色），可以定为black（黑色）和black-translucent（灰色半透明）-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!--使设备浏览网页时对数字不启用电话功能（不同设备解释不同，itouch点击数字为存入联系人，iphone为拨打电话），忽略将页面中的数字识别为电话号码。-->
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <script>
+    	function Rem() {
+    	    var docEl = document.documentElement,
+    	            oSize = docEl.clientWidth / 7.5;
+    	    if (oSize > 100) {
+    	        oSize = 100; // 限制rem值 750 / 7.5 =100
+    	    }
+    	    docEl.style.fontSize = oSize + 'px';
+    	}
+    	window.addEventListener('resize', Rem, false);
+    	Rem();
+    </script>
+</head>
+<body style="margin:0px;padding:0px;">
+<div style="width:7.5rem;background-color:#D3D1FF">
+	哈哈哈哈哈哈哈好
+</div>
+
+	
+</body>
+</html>
+
+

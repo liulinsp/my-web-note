@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+</head>
+<body>
+<div class="clear" id="clearEle">AAAA</div>
+</body>
+
+<script type="text/javascript">
+(function(window){
+	var jQuery = function( selector, context ) {
+		return new jQuery.fn.init( selector, context );
+	};
+
+	jQuery.fn = jQuery.prototype = {
+		constructor: jQuery,
+		length: 0
+	};
+
+	var init = jQuery.fn.init = function( selector ) {
+		// HANDLE: $(""), $(null), $(undefined), $(false)
+		if ( !selector ) {
+			return this;
+		}
+
+		if ( typeof selector === "string" ) {//selector是字符串
+			if(selector.indexOf("#")===0){
+				var elem = document.getElementById( selector.substr(1) );
+
+				if ( elem ) {
+					this[ 0 ] = elem;
+					this.length = 1;
+				}
+				return this;
+			}else if(selector.indexOf(".")===0){
+				var elems = document.getElementsByClassName( selector.substr(1) );
+
+				if ( elems && elems.length>0 ) {
+					for(var index in elems){
+						this[index] = elems[index];
+					}
+					this.length = elems.length;
+				}
+				return this;
+			}
+		}else if ( selector.nodeType ) {//selector是DOM节点
+			this[ 0 ] = selector;
+			this.length = 1;
+			return this;
+		} else if ( typeof selector === "function" ) {//selector是方法
+			/*return document.ready !== undefined ?
+				document.ready( selector ) :
+				// Execute immediately if ready is not present
+				selector( jQuery );*/
+		}
+	};
+
+	
+	window.jQuery = window.$ = jQuery;
+
+})(window);
+
+
+
+console.log($(".clear"));
+
+
+	// var reg = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]+))$/;
+	// var match = reg.exec("#zzz");
+	// console.log(match);
+	// console.log("body>div");
+</script>
+</html>

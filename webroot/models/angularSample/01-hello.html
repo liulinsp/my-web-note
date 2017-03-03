@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS简介</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">AngularJS简介</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+AngularJS 通过 ng-directives 扩展了 HTML。
+<b>ng-app</b> 指令定义一个 AngularJS 应用程序。
+<b>ng-model</b> 指令把元素值（比如输入域的值）绑定到应用程序。
+<b>ng-bind</b> 指令把应用程序数据绑定到 HTML 视图。
+<b>ng-init</b> 指令初始化 AngularJS 应用程序变量
+
+当网页加载完毕，AngularJS 自动开启。
+ng-app 指令告诉 AngularJS，&lt;div&gt; 元素是 AngularJS 应用程序 的"所有者"。
+ng-model 指令把输入域的值绑定到应用程序变量 name。
+ng-bind 指令把应用程序变量 name 绑定到某个段落的 innerHTML。
+
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+
+<div class="aTitle">model</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div <mark>ng-app=""</mark>&gt;
+	 &lt;p&gt;名字 : &lt;input type="text" <mark>ng-model="name"</mark>&gt;&lt;/p&gt;
+	 &lt;h1&gt;Hello <mark>{{name}}</mark>&lt;/h1&gt;
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+  	<div id="app0">
+  		 	<p>名字 : <input type="text" ng-model="name"></p>
+  		 	<h1>Hello {{name}}</h1>
+  	</div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app0 = angular.module("app0",[]);
+  angular.bootstrap(document.getElementById("app0"), ['app0']);
+</script>
+
+<div class="aTitle">init和bind</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="" ng-init="firstName='张';lastName='亮'"&gt;
+	&lt;span ng-bind="firstName" style="color:#261A7D"&gt;&lt;/span&gt;
+	&lt;span ng-bind="lastName" style="color:#187F20"&gt;&lt;/span&gt;
+	&lt;h2&gt;{{firstName + "·" + lastName}}&lt;/h2&gt;
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+  	<div id="app2" ng-init="firstName='张';lastName='亮'">
+  		<span ng-bind="firstName" style="color:#261A7D"></span>
+  		<span ng-bind="lastName" style="color:#187F20"></span>
+  		<h2>{{firstName + "·" + lastName}}</h2>
+  	</div>
+  </div>
+</div>
+<script type="text/javascript">
+	var app2 = angular.module("app2",[]);
+  angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+<div class="aTitle">扩展属性</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+HTML5 允许扩展的（自制的）属性，以 data- 开头。
+AngularJS 属性以 ng- 开头，但是您可以使用 data-ng- 来让网页对 HTML5 有效。
+
+&lt;div data-ng-app="" data-ng-init="name='张三'"&gt;
+	姓名：&lt;span data-ng-bind="name"&gt;&lt;/span&gt;
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+	<div data-ng-app="" data-ng-init="name='张三'">
+		姓名：<span data-ng-bind="name"></span>
+	</div>
+  </div>
+</div>
+
+<div class="aTitle">控制器</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+AngularJS 模块（Module） 定义了 AngularJS 应用。
+AngularJS 控制器（Controller） 用于控制 AngularJS 应用。
+ng-app指令定义了应用, ng-controller 定义了控制器。
+
+&lt;div ng-app="app1" ng-controller="ctrl1"&gt;
+	姓名：&lt;input ng-model="name"&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+	$scope.name="张三";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+	<div id="app1" ng-controller="ctrl1">
+		姓名：<input ng-model="name">
+	</div>
+  </div>
+</div>
+<script type="text/javascript">
+	var app1 = angular.module("app1",[]);
+	app1.controller("ctrl1",function($scope){
+		$scope.name="张三";
+	});
+
+  angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+</body>
+</html>

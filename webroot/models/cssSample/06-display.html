@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性[display]</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+	<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+	/*隐藏对象。与visibility属性的hidden值不同，
+	  不为被隐藏的对象保留其物理空间*/
+	.none-style{
+		width: 100px;
+		height:100px;
+		display: none;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*隐藏对象。与visibility属性的hidden值不同，
+	  不为被隐藏的对象保留其物理空间*/
+.none-style{
+	width: 100px;
+	height:100px;
+	<mark>display: none</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="none-style">这个div被隐藏起来了，没有保留物理空间</div>
+		上面有一个display:none的div
+	</div>
+</div>
+
+<style type="text/css">
+	/*隐藏对象。与display属性的hidden值不同，
+	  保留隐藏的对象的物理空间*/
+	.visibility-style{
+		width: 100px;
+		height:100px;
+		visibility: hidden;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*【对比】隐藏对象。与display属性的none值不同，
+	  保留隐藏的对象的物理空间*/
+.visibility-style{
+	width: 100px;
+	height:100px;
+	<mark>visibility: hidden</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="visibility-style">这个div被隐藏起来了，保留了物理空间</div>
+		上面有一个visibility: hidden的div
+	</div>
+</div>
+
+<style type="text/css">
+	/*默认。此元素会被显示为内联元素，元素前后没有换行符*/
+	.inline-style{
+		width: 100px;
+		height:100px;
+		background-color: #F9F9CF;
+		display: inline;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*默认。此元素会被显示为内联元素，元素前后没有换行符*/
+.inline-style{
+	width: 100px;
+	height:100px;
+	background-color: #F9F9CF;
+	<mark>display: inline</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="inline-style">这个div是内联元素</div>
+		上面有一个display: inline的div
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*此元素将显示为块级元素，此元素前后会带有换行符*/
+	.block-style{
+		width: 100px;
+		height:100px;
+		background-color: #F9F9CF;
+		display: block;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*此元素将显示为块级元素，此元素前后会带有换行符*/
+.block-style{
+	width: 100px;
+	height:100px;
+	background-color: #F9F9CF;
+	<mark>display: block</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<span class="block-style">这个span是块元素</span>
+		上面有一个display: block的span
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*行内块元素。（CSS2.1 新增的值）*/
+	.inline-block-style{
+		width: 100px;
+		height:100px;
+		background-color: #F9F9CF;
+		display: inline-block;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*行内块元素。（CSS2.1 新增的值）*/
+.inline-block-style{
+	width: 100px;
+	height:100px;
+	background-color: #F9F9CF;
+	<mark>display: inline-block</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<span class="inline-block-style">这个span是行内块元素</span>
+		上面有一个display: inline-block的span
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*此元素会作为列表显示*/
+	.list-item-style{
+		width: 200px;
+		height: 50px;
+		background-color: #F9F9CF;
+		display: list-item;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*此元素会作为列表显示*/
+.list-item-style{
+	width: 200px;
+	height: 50px;
+	background-color: #F9F9CF;
+	<mark>display: list-item</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<span class="list-item-style">这个span是列表元素</span>
+		<div class="list-item-style">这个div是列表元素</div>
+		上面有一个display: list-item的span和一个display: list-item的div
+	</div>
+</div>
+
+<style type="text/css">
+	/*此元素会作为块级表格来显示（类似 <table>），表格前后带有换行符*/
+	.table-style{
+		width: 200px;
+		height: 50px;
+		background-color: #F9F9CF;
+		display: table;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*此元素会作为块级表格来显示（类似 table标签），
+  表格前后带有换行符*/
+.table-style{
+	width: 200px;
+	height: 50px;
+	background-color: #F9F9CF;
+	<mark>display: table</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="table-style">这个div是表格元素</div>
+		上面有一个display: table的div
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*此元素会作为内联表格来显示（类似 <table>），表格前后没有换行符*/
+	.inline-table-style{
+		width: 200px;
+		height: 50px;
+		background-color: #F9F9CF;
+		display: inline-table;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*此元素会作为内联表格来显示（类似 table标签），
+  表格前后没有换行符*/
+.inline-table-style{
+	width: 200px;
+	height: 50px;
+	background-color: #F9F9CF;
+	<mark>display: inline-table</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="inline-table-style">这个div是内联表格元素</div>
+		上面有一个display: inline-table的div
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*表格*/
+	.table{
+		width: 200px;
+		background-color: #EBEFEF;
+		display: table;
+	}
+	/*表格标题*/
+	.table-caption{
+		text-align: center;
+		font-family: "Microsoft YaHei";
+		font-size: 20;
+		font-weight: bold;
+	}
+	/*表头行*/
+	.table-header-group>div.table-row{
+		background-color: #FBF2F2;
+		width: 100%;
+		text-align: right;
+	}
+	/*表体组*/
+	.table-row-group{
+		border: solid #B5ABAB 1px;
+	}
+	/*表体奇数行*/
+	.table-row:nth-child(odd){
+		background-color: #FAFBDF;
+	}
+	/*表体偶数行*/
+	.table-row:nth-child(even){
+		background-color: #E4FBEB;
+	}
+	/*单元格*/
+	.table-cell{
+		/* 前三行保证文字垂直居中 */
+		display: inline;
+		height: 30px;
+		line-height: 30px;
+
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	/*表尾行*/
+	.table-foot-group>div.table-row{
+		background-color: #6A6868;
+		color: #FDF6F6;
+		width: 100%;
+		text-align: center;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*表格*/
+.table{
+	width: 200px;
+	background-color: #EBEFEF;
+	display: table;
+}
+/*表格标题*/
+.table-caption{
+	text-align: center;
+	font-family: "Microsoft YaHei";
+	font-size: 20;
+	font-weight: bold;
+}
+/*表头行*/
+.table-header-group>div.table-row{
+	background-color: #FBF2F2;
+	width: 100%;
+	text-align: right;
+}
+/*表体组*/
+.table-row-group{
+	border: solid #B5ABAB 1px;
+}
+/*表体奇数行*/
+.table-row:nth-child(odd){
+	background-color: #FAFBDF;
+}
+/*表体偶数行*/
+.table-row:nth-child(even){
+	background-color: #E4FBEB;
+}
+/*单元格*/
+.table-cell{
+	/* 前三行保证文字垂直居中 */
+	display: inline;
+	height: 30px;
+	line-height: 30px;
+
+	padding-left: 5px;
+	padding-right: 5px;
+}
+/*表尾行*/
+.table-foot-group>div.table-row{
+	background-color: #6A6868;
+	color: #FDF6F6;
+	width: 100%;
+	text-align: center;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="table">
+			<div class="table-caption">这里是标题</div>
+			<div class="table-header-group">
+				<div class="table-row">日期：2016-07-11</div>
+			</div>
+			<div class="table-row-group">
+				<div class="table-row">
+					<div class="table-cell">1</div>
+					<div class="table-cell">张三</div>
+					<div class="table-cell">是是</div>
+				</div>
+				<div class="table-row">
+					<div class="table-cell">2</div>
+					<div class="table-cell">李四</div>
+					<div class="table-cell">顶顶</div>
+				</div>
+				<div class="table-row">
+					<div class="table-cell">3</div>
+					<div class="table-cell">王五</div>
+					<div class="table-cell">鹅鹅</div>
+				</div>
+				<div class="table-row">
+					<div class="table-cell">4</div>
+					<div class="table-cell">赵六</div>
+					<div class="table-cell">啊啊</div>
+				</div>
+				<div class="table-foot-group">
+				<div class="table-row">第1页</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- <style type="text/css">
+
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+1. If the run-in box contains a block box, the run-in box becomes a block box.
+2. If a sibling block box (that does not float and is not absolutely positioned) follows the run-in box, 
+the run-in box becomes the first inline box of the block box.
+   A run-in cannot run in to a block that already starts with a run-in or that itself is a run-in.
+3. Otherwise, the run-in box becomes a block box.
+		</pre>
+	</div>
+	<div class="aShow">
+		run-in
+	</div>
+</div> -->
+
+</body>
+</html>

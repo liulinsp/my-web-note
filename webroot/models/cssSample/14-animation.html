@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>animation动画</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<style type="text/css">
+	@-webkit-keyframes fadeInRotate {
+	  0% {
+	    opacity: 0;
+	    -webkit-transform: translate(-50px) rotate(-60deg);
+	  }
+	  100% {
+	    opacity: 1;
+	  }
+	}
+
+	.fadein-img{
+		border-radius: 50em;
+		-webkit-animation-name: "fadeInRotate";
+		-webkit-animation-duration: 2s;
+		-webkit-animation-iteration-count: 1;
+		/*-webkit-animation: "fadeInRotate" 2s 1;*/
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+@-webkit-keyframes fadeInRotate {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-50px) rotate(-60deg);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadein-img{
+	border-radius: 50em;
+	-webkit-animation-name: "fadeInRotate";
+	-webkit-animation-duration: 2s;
+	-webkit-animation-iteration-count: 1;
+	/*-webkit-animation: "fadeInRotate" 2s 1;*/
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<img class="fadein-img" src="border-box.png">
+	</div>
+</div>
+
+
+
+<style>
+@keyframes typing {
+	from { width: 0 }
+}
+@keyframes caret {
+	50% { border-right-color: transparent; }
+}
+.typing{
+	font-size:20px;
+	width:300px;/* font-size:20px*15(个字) */
+	white-space: nowrap;
+	overflow: hidden;
+	border-right: .05em solid;
+	animation: typing 8s steps(15),
+	           caret 1s steps(1) infinite;
+}
+</style>
+<div class="aPane">
+	<div class="aCode">
+	<pre>
+<b>样式：</b>
+@keyframes typing {
+	from { width: 0 }
+}
+@keyframes caret {
+	50% { border-right-color: transparent; }
+}
+.typing{
+	font-size:20px;
+	width:300px;/* font-size:20px*15(个字) */
+	white-space: nowrap;
+	overflow: hidden;
+	border-right: .05em solid;
+	animation: typing 8s steps(15),
+	           caret 1s steps(1) infinite;
+}
+
+<b>页面：</b>
+&lt;div class="typing"&gt;你好，请立即到第三会议室开会！&lt;/div&gt;
+
+	</pre>
+	</div>
+	<div class="aShow">
+		<div class="typing">你好，请立即到第三会议室开会！</div>
+	</div>
+</div>
+
+</body>
+</html>

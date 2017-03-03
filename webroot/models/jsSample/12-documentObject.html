@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DOM文档对象模型</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">nodeType、nodeName、nodeValue</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. nodeType</b>
+每个节点都有一个nodeType 属性，用于表明节点的类型。
+节点类型由在Node 类型中定义的下列12 个数值常量来表示，
+任何节点类型必居其一：
+Node.ELEMENT_NODE(1)；
+Node.ATTRIBUTE_NODE(2)；
+Node.TEXT_NODE(3)；
+Node.CDATA_SECTION_NODE(4)；
+Node.ENTITY_REFERENCE_NODE(5)；
+Node.ENTITY_NODE(6)；
+Node.PROCESSING_INSTRUCTION_NODE(7)；
+Node.COMMENT_NODE(8)；
+Node.DOCUMENT_NODE(9)；
+Node.DOCUMENT_TYPE_NODE(10)；
+Node.DOCUMENT_FRAGMENT_NODE(11)；
+Node.NOTATION_NODE(12)。
+
+<table style="width:500px">
+<tr>
+<th colspan="2">节点类型</th>
+<th>描述</th>
+<th>子节点</th>
+</tr>
+
+<tr>
+<td style="width:5%;">1</td>
+<td style="width:25%;">Element</td>
+<td style="width:35%;">代表元素</td>
+<td>Element, Text, Comment, ProcessingInstruction, 
+CDATASection, EntityReference</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Attr</td>
+<td>代表属性</td>
+<td>Text, EntityReference</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Text</td>
+<td>代表元素或属性中的文本内容。</td>
+<td>None</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>CDATASection</td>
+<td>代表文档中的 CDATA 部分
+（不会由解析器解析的文本）。</td>
+<td>None</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>EntityReference</td>
+<td>代表实体引用。</td>
+<td>Element, ProcessingInstruction, Comment, 
+Text, CDATASection, EntityReference</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Entity</td>
+<td>代表实体。</td>
+<td>Element, ProcessingInstruction, Comment,
+ Text, CDATASection, EntityReference</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>ProcessingInstruction</td>
+<td>代表处理指令。</td>
+<td>None</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>Comment</td>
+<td>代表注释。</td>
+<td>None</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>Document</td>
+<td>代表整个文档（DOM 树的根节点）。</td>
+<td>Element, ProcessingInstruction, 
+Comment, DocumentType</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>DocumentType</td>
+<td>向为文档定义的实体提供接口</td>
+<td>None</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>DocumentFragment</td>
+<td>代表轻量级的 Document 对象，
+能够容纳文档的某个部分</td>
+<td>Element, ProcessingInstruction, Comment, 
+Text, CDATASection, EntityReference</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>Notation</td>
+<td>代表 DTD 中声明的符号。</td>
+<td>None</td>
+</tr>
+</table>
+
+if (someNode.nodeType == Node.ELEMENT_NODE){ //在IE 中无效
+	alert("Node is an element.");
+}
+
+if (someNode.nodeType == 1){ //适用于所有浏览器
+	alert("Node is an element.");
+}
+
+
+<b>2. nodeName、nodeValue</b>
+<table>
+<tr>
+<th colspan="2">节点类型</th>
+<th>nodeName 返回</th>
+<th>nodeValue 返回</th>
+</tr>
+
+<tr>
+<td style="width:5%;">1</td>
+<td style="width:25%;">Element</td>
+<td style="width:35%;">元素名</td>
+<td>null</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Attr</td>
+<td>属性名称</td>
+<td>属性值</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Text</td>
+<td>#text</td>
+<td>节点的内容</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>CDATASection</td>
+<td>#cdata-section</td>
+<td>节点的内容</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>EntityReference</td>
+<td>实体引用名称</td>
+<td>null</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Entity</td>
+<td>实体名称</td>
+<td>null</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>ProcessingInstruction</td>
+<td>target</td>
+<td>节点的内容</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>Comment</td>
+<td>#comment</td>
+<td>注释文本</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>Document</td>
+<td>#document</td>
+<td>null</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>DocumentType</td>
+<td>文档类型名称</td>
+<td>null</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>DocumentFragment</td>
+<td>#document 片段</td>
+<td>null</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>Notation</td>
+<td>符号名称</td>
+<td>null</td>
+</tr> 
+</table>
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1"></div> -->
+</div>
+
+<div class="aTitle">节点关系属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. childNodes 返回节点的子节点集合（NodeList 对象）；
+2. parentNode 返回指定节点的父节点（Node 对象）；
+3. firstChild 返回指定节点的首个子节点（Node 对象）；
+4. nextSibling 返回指定节点之后紧跟并且在相同的树层级中的节点（Node 对象）；
+5. previousSibling 返回指定节点的前一个并且在同一树层级中的节点；
+6. ownerDocument 指向表示整个文档的文档节点。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+<div class="aTitle">childNodes</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+NodeList 中的节点——可以通过方括号，也可以使用item()方法。
+&lt;div id="parentDiv"&gt;
+	&lt;p&gt;节点1&lt;/p&gt;
+	&lt;p&gt;节点2&lt;/p&gt;
+&lt;/div&gt;
+
+function convertToArray(nodes){
+	var array = null;
+	try {
+		array = Array.prototype.slice.call(nodes, 0); //针对非IE 浏览器
+	} catch (ex) {
+		array = new Array();
+		for (var i=0, len=nodes.length; i < len; i++){
+			array.push(nodes[i]);
+		}
+	}
+	return array;
+}
+
+<pre class="error">由于IE8 及更早版本将NodeList实现为一个COM 对象，
+而我们不能像使用JScript 对象那样使用这种对象，
+因此执行Array.prototype.slice.call()方法会导致错误。</pre>
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	  <div id="parentDiv">
+	  	<p>节点1</p>	
+		<p>节点2</p>
+	  </div>
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult1");
+}
+
+function convertToArray(nodes){
+	var array = null;
+	try {
+		array = Array.prototype.slice.call(nodes, 0); //针对非IE 浏览器
+	} catch (ex) {
+		array = new Array();
+		for (var i=0, len=nodes.length; i < len; i++){
+			array.push(nodes[i]);
+		}
+	}
+	return array;
+}
+
+var parent = document.getElementById("parentDiv");
+var children = parent.childNodes;
+_show('var parent = document.getElementById("parentDiv");'+
+	'<br/>var children = parent.childNodes;');
+_show("children.length --> "+children.length);
+
+for(var i=0; i<children.length; i++){
+	_show("children["+i+"].nodeName --> "+children[i].nodeName+
+		"<br/>children.item("+i+").innerText --> "+children.item(i).innerText);
+}
+
+_show('--------------------------------------------');
+var nodesCopy = convertToArray(children);
+_show('var nodesCopy = convertToArray(children);');
+_show("children.length -->"+children.length);
+_show("nodesCopy.length -->"+nodesCopy.length);
+
+parent.removeChild(nodesCopy[1]);
+_show('parent.removeChild(nodesCopy[1]);');
+
+_show("children.length --> "+children.length);
+_show("nodesCopy.length --> "+nodesCopy.length);
+});
+</script>
+
+
+
+<div class="aTitle">操作节点</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. parentNode.appendChild(newChildNode) 
+	向节点添加最后一个子节点
+2. parentNode.insertBefore(newChildnode,existChildnode) 
+	在指定的已有子节点之前插入新的子节点
+3. parentNode.replaceChild(newChildnode,oldChildnode)
+	用新节点替换某个子节点
+4. parentNode.removeChild(childNode)
+	删除指定节点，并返回删除节点的Node对象
+5. node.cloneNode(deep)
+	创建节点的拷贝，并返回该副本，如果需要克隆所有后代，
+	把 deep 参数设置 true，否则设置为 false。
+<pre class="error">1. IE9 之前的版本不会克隆空白text节点。
+2. cloneNode()方法不会复制添加到DOM 节点中的JavaScript 属性，例如事件处
+理程序等。这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切
+都不会复制。IE 在此存在一个bug，即它会复制事件处理程序，所以我们建议在复制
+之前最好先移除事件处理程序。
+</pre>
+6. node.normalize() 方法移除空的文本节点，并连接相邻的文本节点
+
+
+&lt;div id="node21"&gt;
+	&lt;button onclick="dosome()"&gt;克隆后我还有点击事件&lt;/button&gt;
+	&lt;button class="bindClass"&gt;克隆后我的点击事件没有了&lt;/button&gt;
+&lt;/div&gt;
+
+<b>脚本:</b>
+//设置第二个按钮的点击事件
+var btns = document.getElementsByClassName("bindClass");
+for(var i in btns){
+	btns[i].onclick=dosome;
+}
+
+var node21 = document.getElementById("node21");
+var node21copy = node21.cloneNode(true);
+document.getElementById("showResult2").appendChild(node21copy);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+		<div id="node21">
+			<button onclick="dosome()">克隆后我还有点击事件</button>
+			<button class="bindClass">克隆后我的点击事件没有了</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+//设置第二个按钮的点击事件
+var btns = document.getElementsByClassName("bindClass");
+for(var i in btns){
+	btns[i].onclick=dosome;
+}
+
+var node21 = document.getElementById("node21");
+var node21copy = node21.cloneNode(true);
+document.getElementById("showResult2").appendChild(node21copy);
+});
+
+function dosome(){
+	alert("dosome");
+}
+</script>
+
+
+<div class="aTitle">document</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. document 对象是HTMLDocument（继承自Document 类型）的一个实例，表示整个HTML 页面。
+
+2. document.documentElement 属性
+通过document.documentElement则能更快捷、更直接地访问&lt;html&gt;元素。
+var html = document.documentElement; //取得对&lt;html&gt;的引用
+alert(html === document.childNodes[0]); //true
+alert(html === document.firstChild); //true
+
+3. document.body 属性
+通过document.body则能更快捷、更直接地访问&lt;body&gt;元素。
+var body = document.body; //取得对&lt;body&gt;的引用
+
+4. document.doctype 属性
+Document 另一个可能的子节点是DocumentType。
+通常将&lt;!DOCTYPE&gt;标签看成一个与文档其他部分不同的实体，
+可以通过document.doctype 属性（在浏览器中是document.doctype）来访问它的信息。
+<span class="error">由于浏览器对document.doctype 的支持不一致，因此这个属性的用处很有限。</span>
+
+5. document.title属性
+document.title属性包含着&lt;title&gt;元素中的文本——显示在浏览器窗口的标题栏或标签页上。
+通过这个属性可以取得当前页面的标题，也可以修改当前页面的标题并反映在浏览器的标题栏中。
+<span class="error">修改title 属性的值不会改变&lt;title&gt;元素</span>
+var originalTitle = document.title; //取得文档标题
+
+6. document.URL属性
+document.URL属性包含页面完整的URL（即地址栏中显示的URL）
+document.URL属性不可修改。
+
+7. document.domain属性
+document.domain 属性中只包含页面的域名。
+document.domain属性可修改，但由于安全方面的限制，也并非可以给domain 设置任何值。
+
+由于跨域安全限制， 来自不同子域的页面无法通过JavaScript 通信。而通过将每个页面的
+document.domain 设置为相同的值，这些页面就可以互相访问对方包含的JavaScript 对象了。例：
+//假设页面来自p2p.wrox.com 域
+document.domain = "wrox.com"; // 成功
+document.domain = "nczonline.net"; // 出错！
+
+浏览器对domain 属性还有一个限制，即如果域名一开始是“松散的”（loose），那么不能将它再设
+置为“紧绷的”（tight）。换句话说，在将document.domain 设置为"wrox.com"之后，就不能再将其
+设置回"p2p.wrox.com"，否则将会导致错误。例：
+//假设页面来自于p2p.wrox.com 域
+document.domain = "wrox.com"; //松散的（成功）
+document.domain = "p2p.wrox.com"; //紧绷的（出错！）
+
+8. document.referrer 属性
+包含来源页面的URL，如果通过浏览器输入地址方法打开页面属性值为空字符串
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="">
+	</div> -->
+</div>
+
+<div class="aTitle">查找元素</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. document.getElementById()</b>
+1) IE7 及较低版本不区分ID 的大小写，因此"myDiv"和"mydiv"会被当作相同的元素ID。
+2) 如果页面中多个元素的ID 值相同，getElementById()只返回文档中第一次出现的元素。
+3) IE bug:
+   IE7 及较低版本 name 特性与给定ID 匹配的表单元素
+   （&lt;input&gt;、&lt;textarea&gt;、&lt;button&gt;及&lt;select&gt;）也会被该方法返回。
+4) getElementById()是只有document才有的方法。
+   var parentNode = document.getElementById("myDiv");
+   var img = parentNode.getElementById("myImg");//报错
+
+<b>2. getElementsByTagName()</b>
+1) 根据标签名称返回一个HTMLCollection对象。
+2) 与NodeList 对象类似，可以使用方括号语法或item()方法来访问HTMLCollection 对象中的项。
+var images = document.getElementsByTagName("img");
+alert(images.length); //输出图像的数量
+alert(images[0].src); //输出第一个图像元素的src 特性
+aler t(images.item(0).src); //输出第一个图像元素的 src 特性
+3) HTMLCollection 对象还有一个方法，叫做namedItem()，
+使用这个方法可以通过元素的name特性取得集合中的项。【IE8及以下不支持】
+&lt;img src="myimage.gif" name="myImage"&gt;
+脚本：
+var images = document.getElementsByTagName("img");
+var myImage = images.namedItem("myImage");
+	或者
+var myImage = images["myImage"];
+4) 要想取得文档中的所有元素，可以向getElementsByTagName()中传入"*"。
+var allElements = document.getElementsByTagName("*");
+5) 可以在父节点使用getElementsByTagName()方法
+var parentNode = document.getElementById("myDiv");
+var imgs = parentNode.getElementsByTagName("img");//OK,不报错
+
+<b>3.document.getElementsByName()</b>
+1) getElementsByName()是只有document才有的方法，会返回带有给定name 特性的所有元素。
+2) 与getElementsByTagName()类似，getElementsByName()方法也会返回一个HTMLCollectioin。
+但是，对于这里的单选按钮来说，namedItem()方法则只会取得第一项（因为每一项的name 特性都相同）。
+
+<b>4.getElementsByClassName()[IE8及以下不支持]</b>
+1) 方法接收一个参数，即一个包含一或多个类名的字符串（类名的先后顺序不重要）
+返回带有指定类的所有元素的NodeList。
+var nodes = doucment.getElementsByClassName("myClass1 myClass2");
+2) 可以在父节点使用getElementsByTagName()方法
+var parentNode = document.getElementById("myDiv");
+var nodes = parentNode.getElementsByClassName("myClass");//OK,不报错
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="myDiv">
+	<img src="" class="img1 img2">
+	<img src=""  class="img2">
+	<img src=""  name="img3">
+	<p name="p1">
+		<img id="img11" name="img11">
+	</p>
+	<p></p>
+	</div> -->
+</div>
+<script>
+/*var node =  document.getElementById("myDiv");
+//console.log(node);
+alert(node.getElementsByClassName("img1 img2"));*/
+</script>
+
+
+<div class="aTitle">document的特殊集合</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+document 对象还有一些特殊的集合。这些集合都是HTMLCollection 对象，
+为访问文档常用的部分提供了快捷方式：
+1. document.anchors，包含文档中所有带name 特性的&lt;a&gt;元素；
+2. document.applets，包含文档中所有的&lt;applet&gt;元素，因为不再推荐使用&lt;applet&gt;元素，
+所以这个集合已经不建议使用了；
+3. document.forms，包含文档中所有的&lt;form&gt;元素，与document.getElementsByTagName("form")
+得到的结果相同；
+4. document.images，包含文档中所有的&lt;img&gt;元素，与document.getElementsByTagName
+("img")得到的结果相同；
+5. document.links，包含文档中所有带href 特性的&lt;a&gt;元素。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+
+<div class="aTitle">document的write()、writeln()、open()和close()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 在页面加载过程中调用document.write()，输出的内容会<mark>追加</mark>在当前代码段后面。
+通过此方式可动态加载脚本：
+&lt;script type="text/javascript"&gt;
+	document.write('&lt;script type="text/javascript" src="file.js"&gt;&lt;\/script&gt;');
+&lt;/script&gt;
+
+2. 如果在文档加载结束后再调用document.write()，那么输出的内容将会<mark>重写</mark>整个页面。
+&lt;script type="text/javascript"&gt;
+window.onload=function(){
+	document.open();
+	document.write('&lt;script type="text/javascript" src="file.js"&gt;&lt;\/script&gt;');
+	document.write("&lt;div&gt;页面被重写了&lt;/div&gt;");
+	document.close();
+};
+&lt;/script&gt;
+
+<pre class="error">严格型XHTML 文档不支持文档写入。对于那些按照application/xml+xhtml
+内容类型提供的页面，这两个方法也同样无效。</pre>
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+
+<div class="aTitle">Element</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+所有HTML元素都由HTMLElement 类型及其子类表示，不是直接通过Element类型表示。
+每个HTML元素中都存在的下列标准特性：
+1) id，元素在文档中的唯一标识符。
+2) title，有关元素的附加说明信息，一般通过工具提示条显示出来。
+3) lang，元素内容的语言代码，很少使用。
+4) dir，语言的方向，值为"ltr"（left-to-right，从左至右）
+  或"rtl"（right-to-left，从右至左），也很少使用。
+5) className，与元素的class 特性对应，即为元素指定的CSS类。没有将这个属性命名为class，
+  是因为class 是ECMAScript 的保留字。
+<b>示例：</b>
+ &lt;div id="myDiv" class="bd" title="Body text" lang="en" dir="ltr"&gt;&lt;/div&gt;
+var div = document.getElementById("myDiv");
+alert(div.id); //"myDiv""
+alert(div.className); //"bd"
+alert(div.title); //"Body text"
+alert(div.lang); //"en"
+alert(div.dir); //"ltr"
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+<div class="aTitle">Element特性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 每个元素都有一或多个特性，这些特性的用途是给出相应元素或其内容的附加信息。操作特性的
+DOM方法主要有三个，分别是getAttribute()、setAttribute()和removeAttribute()。
+
+2. 传递给getAttribute()的特性名与实际的特性名相同。因此要想得到class 特性值，应
+该传入"class"而不是"className"，后者只有在通过对象属性访问特性时才用。
+
+3. 特性的名称是不区分大小写的，即"ID"和"id"代表的都是同一个特性。
+
+4. 通过getAttribute()方法也可以取得自定义特性（即标准HTML 语言中没有的特性）的值。
+
+5. 根据HTML5 规范，自定义特性应该加上data-前缀以便验证。
+
+6. 只有公认的（非自定义的）特性才会以属性的形式添加到DOM对象中，但IE 却会为自定义特性也创建属性。
+&lt;div id="myDiv" align="left" my_special_attribute="hello!"&gt;&lt;/div&gt;
+alert(div.id); //"myDiv"（非自定义）
+alert(div.my_special_attribute); //undefined（自定义，IE 除外）
+alert(div.align); //"left"（非自定义）
+
+7. 有两类特殊的特性，它们虽然有对应的属性名，但属性的值与通过getAttribute()返回的值并不相同。
+  1) style
+  在通过getAttribute()访问时，返回的style 特性值中包含的是CSS 文本，
+  而通过属性来访问它则会返回一个对象。
+  2) onclick
+  如果通过getAttribute()访问，则会返回相应代码的字符串。
+  而在访问onclick 属性时，则会返回一个JavaScript 函数
+<pre class="error">IE bug: 在IE7 及以前版本中，getAttribute("style")返回一个对象(应该返回字符串)，
+而getAttribute("onclick")返回一个函数(应该返回字符串)。
+同样，setAttribute()也存在一些异常行为。通过这个方法设置class 和style 特性，
+没有任何效果，而使用这个方法设置事件处理程序特性时也一样
+【IE8 已经修复了这个bug】
+IE6 及以前版本不支持removeAttribute()。</pre>
+
+8. attributes属性
+Element 类型是使用attributes 属性的唯一一个DOM 节点类型。
+attributes 属性中包含一个NamedNodeMap对象。
+NamedNodeMap 对象拥有下列方法：
+	1) getNamedItem(name)：返回nodeName 属性等于name 的节点；
+	2) removeNamedItem(name)：从列表中移除nodeName 属性等于name 的节点；
+	3) setNamedItem(node)：向列表中添加节点，以节点的nodeName 属性为索引；
+	4) item(pos)：返回位于数字pos 位置处的节点。
+
+<span class="error">IE7 及更早的版本会返回HTML 元素中所有可能的特性，包括没有指定的特性。</span>
+解决方案：
+每个特性节点都有一个名为specified 的属性，这个属性的值如果为true，
+则意味着要么是在HTML 中指定了相应特性，要么是通过setAttribute()方法设置了该特性。
+在IE 中，所有未设置过的特性的该属性值都为false。
+function outputAttributes(element){
+	var pairs = new Array(),
+	attrName,
+	attrValue,
+	i,
+	len;
+	for (i=0, len=element.attributes.length; i < len; i++){
+		attrName = element.attributes[i].nodeName;
+		attrValue = element.attributes[i].nodeValue;
+		if (<mark>element.attributes[i].specified</mark>) {
+			pairs.push(attrName + "=\"" + attrValue + "\"");
+		}
+	}
+	return pairs.join(" ");
+}
+
+9. 创建元素
+使用document.createElement()方法可以创建新元素。这个方法只接受一个参数，即要创建元
+素的标签名。这个标签名在HTML 文档中不区分大小写，而在XML（包括XHTML）文档中，则是区
+分大小写的。
+要把新元素添加到文档树，可以使用appendChild()、insertBefore()或replaceChild()方法。
+var div = document.createElement("div");
+
+<pre class="error">IE7 及更早版本bug:
+1) 不能设置动态创建的&lt;iframe&gt;元素的name 特性。
+2) 不能通过表单的reset()方法重设动态创建的&lt;input&gt;元素。
+3) 动态创建的type 特性值为"reset"的&lt;buttou&gt;元素重设不了表单。
+4) 动态创建的一批name 相同的单选按钮彼此毫无关系。
+为了解决以上bug,在IE 中可以以另一种方式使用createElement()，即为这个方法传入完整的元素标签，
+也可以包含属性，如下面的例子所示:
+var div = document.createElement('&lt;div id="myNewDiv" class="box"&gt;&lt;/div &gt;');</pre>
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+<div class="aTitle">Text</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 可以通过nodeValue 属性或data 属性访问Text 节点中包含的文本，这两个属性中包含的值相
+同。对nodeValue 的修改也会通过data 反映出来，反之亦然。使用下列方法可以操作节点中的文本。
+ 1) appendData(text)：将text 添加到节点的末尾。
+ 2) deleteData(offset, count)：从offset 指定的位置开始删除count 个字符。
+ 3) insertData(offset, text)：在offset 指定的位置插入text。
+ 4) replaceData(offset, count, text)：用text 替换从offset 指定的位置开始到offset+
+count 为止处的文本。
+ 5) splitText(offset)：从offset 指定的位置将当前文本节点分成两个文本节点。
+ 6) substringData(offset, count)：提取从offset 指定的位置开始到offset+count 为止
+处的字符串。
+
+2. 可以使用document.createTextNode()创建新文本节点。
+示例：创建一个&lt;div&gt;元素并向其中添加一条消息
+var element = document.createElement("div");
+element.className = "message";
+var textNode = document.createTextNode("Hello world!");
+element.appendChild(textNode);
+document.body.appendChild(element);
+
+3. 合并文本节点
+调用normalize()方法，则会将所有相邻的同胞文本节点合并成一个节点。
+
+4. 分割文本节点
+splitText() 这个方法会将一个文本节点分成两个文本节点，即按照指定的位置分割nodeValue 值。
+原来的文本节点将包含从开始到指定位置之前的内容，新文本节点将包含剩下的文本。
+分割后父节点增加了新文本节点作为子节点。
+
+textNode --> "Hello world!"
+var newNode = textNode.splitText(5);
+textNode --> "Hello"
+newNode --> " world!"
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+<div class="aTitle">Comment</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. Comment 类型与Text 类型继承自相同的基类，因此它拥有除splitText()之外的所有字符串操
+作方法。与Text 类型相似，也可以通过nodeValue 或data 属性来取得注释的内容。
+2. document.createComment()并为其传递注释文本也可以创建注释节点。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+
+<div class="aTitle">DocumentFragment</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. DOM 规定文档片段（document fragment）是一种“轻量级”的文档，
+可以包含和控制节点，但不会像完整的文档那样占用额外的资源。
+var fragment = document.createDocumentFragment();
+2. 不能把文档片段直接添加到文档中，但可以将它作为一个“仓库”来使用，
+即可以在里面保存将来可能会添加到文档中的节点。
+
+3. 父元素appendChild()并传入文档片段，将文档片段的所有子节点添加到父元素中。
+此时，文档片段的所有子节点都被删除并转移到了父节点元素中。
+
+var parent = document.getElementById("testfragment");
+var fragment = document.createDocumentFragment();
+for(var i=0;i<3;i++){
+	var child = document.createElement("div");
+	var textNode = document.createTextNode("片段子节点"+i);
+	child.appendChild(textNode);
+	fragment.appendChild(child);
+}
+parent.appendChild(fragment);
+		</pre>
+	</div>
+	<div class="aShow note" id="testfragment">
+	测试文档片段:	
+	</div>
+</div>
+<script>
+$(function(){
+var parent = document.getElementById("testfragment");
+var fragment = document.createDocumentFragment();
+for(var i=0;i<3;i++){
+	var child = document.createElement("div");
+	var textNode = document.createTextNode("片段子节点"+i);
+	child.appendChild(textNode);
+	fragment.appendChild(child);
+}
+parent.appendChild(fragment);
+});
+</script>
+
+
+<div class="aTitle">操作表格</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>为&lt;table&gt;元素添加的属性和方法如下：</b>
+caption：保存着对&lt;caption&gt;元素（如果有）的指针。
+tBodies：是一个&lt;tbody&gt;元素的HTMLCollection。
+tFoot：保存着对&lt;tfoot&gt;元素（如果有）的指针。
+tHead：保存着对&lt;thead&gt;元素（如果有）的指针。
+rows：是一个表格中所有行的HTMLCollection。
+createTHead()：创建&lt;thead&gt;元素，将其放到表格中，返回引用。
+createTFoot()：创建&lt;tfoot&gt;元素，将其放到表格中，返回引用。
+createCaption()：创建&lt;caption&gt;元素，将其放到表格中，返回引用。
+deleteTHead()：删除&lt;thead&gt;元素。
+deleteTFoot()：删除&lt;tfoot&gt;元素。
+deleteCaption()：删除&lt;caption&gt;元素。
+deleteRow(pos)：删除指定位置的行。
+insertRow(pos)：向rows 集合中的指定位置插入一行。
+
+<b>为&lt;tbody&gt;元素添加的属性和方法如下：</b>
+rows：保存着&lt;tbody&gt;元素中行的HTMLCollection。
+deleteRow(pos)：删除指定位置的行。
+insertRow(pos)：向rows 集合中的指定位置插入一行，返回对新插入行的引用。
+
+<b>为&lt;tr&gt;元素添加的属性和方法如下。</b>
+cells：保存着&lt;tr&gt;元素中单元格的HTMLCollection。
+deleteCell(pos)：删除指定位置的单元格。
+insertCell(pos)：向cells 集合中的指定位置插入一个单元格，返回对新插入单元格的引用。
+
+<b>示例：</b>
+//创建table
+var table = document.createElement("table");
+table.border = 1;
+table.width = "100%";
+//创建tbody
+var tbody = document.createElement("tbody");
+table.appendChild(tbody);
+//创建第一行
+tbody.insertRow(0);
+tbody.rows[0].insertCell(0);
+tbody.rows[0].cells[0].appendChild(document.createTextNode("Cell 1,1"));
+tbody.rows[0].insertCell(1);
+tbody.rows[0].cells[1].appendChild(document.createTextNode("Cell 2,1"));
+//创建第二行
+tbody.insertRow(1);
+tbody.rows[1].insertCell(0);
+tbody.rows[1].cells[0].appendChild(document.createTextNode("Cell 1,2"));
+tbody.rows[1].insertCell(1);
+tbody.rows[1].cells[1].appendChild(document.createTextNode("Cell 2,2"));
+//将表格添加到文档主体中
+document.getElementById("tableShow").appendChild(table);
+		</pre>
+	</div>
+	<div class="aShow note" id="tableShow">
+	
+	</div>
+</div>
+<script>
+//创建table
+var table = document.createElement("table");
+table.border = 1;
+table.width = "100%";
+//创建tbody
+var tbody = document.createElement("tbody");
+table.appendChild(tbody);
+//创建第一行
+tbody.insertRow(0);
+tbody.rows[0].insertCell(0);
+tbody.rows[0].cells[0].appendChild(document.createTextNode("Cell 1,1"));
+tbody.rows[0].insertCell(1);
+tbody.rows[0].cells[1].appendChild(document.createTextNode("Cell 2,1"));
+//创建第二行
+tbody.insertRow(1);
+tbody.rows[1].insertCell(0);
+tbody.rows[1].cells[0].appendChild(document.createTextNode("Cell 1,2"));
+tbody.rows[1].insertCell(1);
+tbody.rows[1].cells[1].appendChild(document.createTextNode("Cell 2,2"));
+//将表格添加到文档主体中
+document.getElementById("tableShow").appendChild(table);	
+</script>
+</body>
+</html>

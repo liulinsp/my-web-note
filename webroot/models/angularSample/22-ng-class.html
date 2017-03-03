@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ng-class</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+  .height-light{
+    background-color: yellow;
+  }
+</style>
+<div class="aTitle">1. 对象key/value处理</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+used==true并且vip==true的用户才高亮显示
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;div ng-repeat="u in users" 
+       <mark>ng-class="{'height-light':u.used&&u.vip}"</mark>&gt;
+    {{u.name}}[used:{{u.used}},vip:{{u.vip}}]
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("app1",[])
+  .controller("ctrl1",function($scope){
+    $scope.users=[{name:"正在使用的VIP用户",used:true,vip:true},
+                  {name:"已停用的VIP用户",used:false,vip:true},
+                  {name:"正在使用的普通用户",used:true,vip:false}];
+  });
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+<b>样式：</b>
+.height-light{
+  background-color: yellow;
+}
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <div ng-repeat="u in users" 
+           ng-class="{'height-light':u.used&&u.vip}">
+        {{u.name}}[used:{{u.used}},vip:{{u.vip}}]
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app1",[])
+  .controller("ctrl1",function($scope){
+    $scope.users=[{name:"正在使用的VIP用户",used:true,vip:true},
+                  {name:"已停用的VIP用户",used:false,vip:true},
+                  {name:"正在使用的普通用户",used:true,vip:false}];
+  });
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+</script>
+
+
+<style type="text/css">
+  .vip{
+    background-color: yellow;
+  }
+  .normal{
+    background-color: gray;
+  }
+</style>
+<div class="aTitle">2. 字符串数组形式</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app2" ng-controller="ctrl2"&gt;
+  &lt;div ng-repeat="u in users" 
+       <mark>ng-class="{true:'vip',false:'normal'}[u.vip]"</mark>&gt;
+    {{u.name}}[vip:{{u.vip}}]
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("app2",[])
+  .controller("ctrl2",function($scope){
+    $scope.users=[{name:"正在使用的VIP用户",vip:true},
+                  {name:"已停用的VIP用户",vip:true},
+                  {name:"正在使用的普通用户",vip:false}];
+  });
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+<b>样式：</b>
+.vip{
+  background-color: yellow;
+}
+.normal{
+  background-color: gray;
+}
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <div ng-repeat="u in users" 
+           ng-class="{true:'vip',false:'normal'}[u.vip]">
+        {{u.name}}[vip:{{u.vip}}]
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app2",[])
+  .controller("ctrl2",function($scope){
+    $scope.users=[{name:"正在使用的VIP用户",vip:true},
+                  {name:"已停用的VIP用户",vip:true},
+                  {name:"正在使用的普通用户",vip:false}];
+  });
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+</script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript原型链</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+
+	$(function(){
+		function A(name){  
+		      this.name = name;  
+		}  
+
+		var a1 = new A("aa1");  
+		var a2 = new A("aa2"); 
+		A.prototype.PI=3.14; 
+
+		var a3 = new a1.constructor("AA3");
+
+		$('<div> a1.PI --> '+( a1.PI )+' </div>').appendTo($("#showResult1"));
+		$('<div> a2.PI --> '+( a2.PI )+' </div>').appendTo($("#showResult1"));
+		$('<div> a3.PI --> '+( a3.PI )+' </div>').appendTo($("#showResult1"));
+		$('<div> A.prototype.constructor===A --> '+( A.prototype.constructor===A )+' </div>').appendTo($("#showResult1"));
+		$('<div> a1.constructor===A --> '+( a1.constructor===A )+' </div>').appendTo($("#showResult1"));
+		$('<div> a2.constructor===A --> '+( a2.constructor===A )+' </div>').appendTo($("#showResult1"));
+		$('<div> a3.constructor===A --> '+( a3.constructor===A )+' </div>').appendTo($("#showResult1"));
+	
+	});	
+</script>
+<div class="aTitle">原型链</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Prototype:每一个函数都包含一个prototype属性，这个属性指向的是一个对象的引用；
+而对已每一个函数（类）的实例都会从prototype属性指向的对象上继承属性，
+换句话说通过同一个函数创建的所有对象都继承一个相同的对象。
+
+ 通过new 关键字和构造函数创建的对象的原型，就是构造函数的prototype指向的那个对象
+
+function A(name){  
+    this.name = name;  
+}  
+
+var a1 = new A("aa1");  
+var a2 = new A("aa2"); 
+A.prototype.PI=3.14; 
+
+var a3 = new a1.constructor("AA3");
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult1_1");
+	}
+
+	function Person(){}
+	Person.prototype.legs=2;
+
+	function Man(){}
+	Man.prototype = Person.prototype;
+
+	var p1 = new Person();
+	var man1 = new Man();
+	_show("p1.legs --> "+p1.legs);
+	_show("man1.legs --> "+man1.legs);
+	_show("Person.prototype.isPrototypeOf(p1) --> "+Person.prototype.isPrototypeOf(p1));
+	_show("Person.prototype.isPrototypeOf(man1) --> "+Person.prototype.isPrototypeOf(man1));
+});
+</script>
+<div class="aTitle">原型对象方法：isPrototypeOf()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function Person(){}
+Person.prototype.legs=2;
+
+function Man(){}
+Man.prototype = Person.prototype;
+
+var p1 = new Person();
+var man1 = new Man();
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1_1">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult1_2");
+	}
+
+	function Person(){}
+	Person.prototype.legs=2;
+
+	var p1 = new Person();
+	_show("p1.legs --> "+p1.legs);
+	_show("Object.getPrototypeOf(p1)===Person.prototype --> "+(Object.getPrototypeOf(p1)===Person.prototype));
+	_show("Object.getPrototypeOf(p1).legs --> "+Object.getPrototypeOf(p1).legs);
+});
+</script>
+<div class="aTitle">Object.getPrototypeOf()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function Person(){}
+Person.prototype.legs=2;
+
+var p1 = new Person();
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1_2">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult1_3");
+	}
+
+	function Person(){}
+	Person.prototype.legs=2;
+
+
+	var p1 = new Person();
+	p1.name="张三";
+	_show('p1.name --> '+p1.name);
+	_show('p1.legs --> '+p1.legs);
+	_show('p1.hasOwnProperty("name") --> '+p1.hasOwnProperty("name"));
+	_show('p1.hasOwnProperty("legs") --> '+p1.hasOwnProperty("legs"));
+	_show('Person.prototype.hasOwnProperty("legs") --> '+Person.prototype.hasOwnProperty("legs"));
+	
+});
+</script>
+<div class="aTitle">obj.hasOwnProperty()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+使用hasOwnProperty()方法可以检测一个属性是存在于实例中，还是存在于原型中。
+function Person(){}
+Person.prototype.legs=2;
+
+var p1 = new Person();
+p1.name="张三";
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1_3">
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult1_4");
+	}
+
+	function Person(){}
+	Person.prototype.legs=2;
+
+
+	var p1 = new Person();
+	p1.name="张三";
+
+	function hasPrototypeProperty(obj, name){
+		return !obj.hasOwnProperty(name) && (name in obj);
+	}
+	_show('p1.name --> '+p1.name);
+	_show('p1.legs --> '+p1.legs);
+	_show('"name" in p1 --> '+("name" in p1));
+	_show('"legs" in p1 --> '+("legs" in p1));
+	_show('hasPrototypeProperty(p1,"name") --> '+hasPrototypeProperty(p1,"name"));
+	_show('hasPrototypeProperty(p1,"legs") --> '+hasPrototypeProperty(p1,"legs"));
+
+	_show('--------------for in----------------');
+	for (var prop in p1){
+		_show(prop+" in p1");
+	}
+	
+});
+</script>
+<div class="aTitle">原型与in 操作符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+有两种方式使用in 操作符：
+ 1. 单独使用和在for-in 循环中使用。
+ 	在使用for-in 循环时，返回的是所有能够通过对象访问的、可枚举的属性，
+ 	其中既包括存在于实例中的属性，也包括存在于原型中的属性。
+
+ 	屏蔽了原型中不可枚举属性（即将[[Enumerable]]标记为false 的属性）
+ 	的实例属性也会在for-in 循环中返回，因为根据规定，
+ 	所有开发人员定义的属性都是可枚举的——只有在IE8 及更早版本中例外。
+ 2. 在单独使用时，in 操作符会在通过对象能够访问给定属性时返回true，
+    无论该属性存在于实例中还是原型中。
+
+
+
+function Person(){}
+Person.prototype.legs=2;
+
+var p1 = new Person();
+p1.name="张三";
+
+//判断是否原型中属性
+function hasPrototypeProperty(obj, name){
+	return !obj.hasOwnProperty(name) && (name in obj);
+}
+
+---------------------------
+for (var prop in p1){
+	_show(prop+" in p1");
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1_4">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult1_5");
+	}
+
+	function Person(){}
+	Person.prototype.legs=2;
+	Object.defineProperty(Person.prototype,"skin",{
+		enumerable:false,
+		value:"yellow"
+	});
+
+	var p1 = new Person();
+	p1.name="张三";
+	Object.defineProperty(p1,"weight",{
+		enumerable:false,
+		value:"63kg"
+	});
+
+	_show("Object.getOwnPropertyNames(p1) --> "+Object.getOwnPropertyNames(p1));
+	_show("Object.getOwnPropertyNames(Person.prototype) --> "+Object.getOwnPropertyNames(Person.prototype));
+	_show("Object.keys(p1) --> "+Object.keys(p1));
+	_show("Object.keys(Person.prototype) --> "+Object.keys(Person.prototype));
+	
+});
+</script>
+<div class="aTitle">Object.keys()【ECMAScript 5】和Object.getOwnPropertyNames()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. Object.keys():
+接收一个对象作为参数，返回一个包含所有<mark>可枚举属性</mark>的字符串数组。
+2. Object.getOwnPropertyNames():
+接收一个对象作为参数, 返回一个包含所有属性，无论它是否可枚举。
+
+function Person(){}
+Person.prototype.legs=2;
+Object.defineProperty(Person.prototype,"skin",{
+	enumerable:false,
+	value:"yellow"
+});
+
+var p1 = new Person();
+p1.name="张三";
+Object.defineProperty(p1,"weight",{
+	enumerable:false,
+	value:"63kg"
+});
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1_5">
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	$(function(){
+		//1. 父
+		function Student(props) {
+		    this.name = props.name || 'Unnamed';
+		}
+
+		Student.prototype.hello = function () {
+		    return 'Hello, ' + this.name + '!';
+		};
+
+		//2. 子
+		function PrimaryStudent(props) {
+		    // 调用Student构造函数，绑定this变量:
+		    Student.call(this, props);
+		    this.grade = props.grade || 1;
+		}
+
+		// 空函数F:
+		function F() {
+		}
+
+		// 把F的原型指向Student.prototype:
+		F.prototype = Student.prototype;
+
+		// 把PrimaryStudent的原型指向一个新的F对象，F对象的原型正好指向Student.prototype:
+		PrimaryStudent.prototype = new F();
+
+		// 把PrimaryStudent原型的构造函数修复为PrimaryStudent:
+		PrimaryStudent.prototype.constructor = PrimaryStudent;
+
+		//3. 继续在PrimaryStudent原型（就是new F()对象）上定义方法：
+		PrimaryStudent.prototype.getGrade = function () {
+		    return this.grade;
+		};
+
+		//4. 试一下给父增加一个方法
+		Student.prototype.getName = function () {
+		    return this.name;
+		};
+
+		//5. new对象
+		var xiaoming = new PrimaryStudent({name:"小明",grade:3});
+
+		$('<div> xiaoming.name --> '+( xiaoming.name)+' </div>').appendTo($("#showResult2"));
+		$('<div> xiaoming.grade --> '+( xiaoming.grade)+' </div>').appendTo($("#showResult2"));
+		$('<div> xiaoming.hello() --> '+( xiaoming.hello())+' </div>').appendTo($("#showResult2"));
+		$('<div> xiaoming.getGrade() --> '+( xiaoming.getGrade())+' </div>').appendTo($("#showResult2"));
+		$('<div> xiaoming.getName() --> '+( xiaoming.getName())+' </div>').appendTo($("#showResult2"));
+	});	
+</script>
+<div class="aTitle">使用原型链实现继承</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+//1. 父
+function Student(props) {
+    this.name = props.name || 'Unnamed';
+}
+
+Student.prototype.hello = function () {
+    return 'Hello, ' + this.name + '!';
+};
+
+//2. 子
+function PrimaryStudent(props) {
+    // 调用Student构造函数，绑定this变量:
+    Student.call(this, props);
+    this.grade = props.grade || 1;
+}
+
+// 空函数F:
+function F() {
+}
+
+// 把F的原型指向Student.prototype:
+F.prototype = Student.prototype;
+
+// 把PrimaryStudent的原型指向一个新的F对象，F对象的原型正好指向Student.prototype:
+PrimaryStudent.prototype = new F();
+
+// 把PrimaryStudent原型的构造函数修复为PrimaryStudent:
+PrimaryStudent.prototype.constructor = PrimaryStudent;
+
+//3. 继续在PrimaryStudent原型（就是new F()对象）上定义方法：
+PrimaryStudent.prototype.getGrade = function () {
+    return this.grade;
+};
+
+//4. 试一下给父增加一个方法
+Student.prototype.getName = function () {
+    return this.name;
+};
+
+//5. new对象
+var xiaoming = new PrimaryStudent({name:"小明",grade:3});
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+	$(function(){
+		//1. 父
+		function Student(props) {
+		    this.name = props.name || 'Unnamed';
+		}
+
+		Student.prototype.hello = function () {
+		    return 'Hello, ' + this.name + '!';
+		};
+
+		//2. 子
+		function PrimaryStudent(props) {
+		    // 调用Student构造函数，绑定this变量:
+		    Student.call(this, props);
+		    this.grade = props.grade || 1;
+		}
+
+		//3. 继承方法
+		function inherits(Child, Parent) {
+		    var F = function () {};
+		    F.prototype = Parent.prototype;
+		    Child.prototype = new F();
+		    Child.prototype.constructor = Child;
+		}
+
+		inherits(PrimaryStudent, Student);
+
+		// 4. 继续在PrimaryStudent原型（就是new F()对象）上定义方法：
+		PrimaryStudent.prototype.getGrade = function () {
+		    return this.grade;
+		};
+
+		// 5. 试一下给父增加一个方法
+		Student.prototype.getName = function () {
+		    return this.name;
+		};
+
+		// 6. new对象
+		var xiaoming = new PrimaryStudent({name:"小明",grade:3});
+
+		$('<div> xiaoming.name --> '+( xiaoming.name)+' </div>').appendTo($("#showResult3"));
+		$('<div> xiaoming.grade --> '+( xiaoming.grade)+' </div>').appendTo($("#showResult3"));
+		$('<div> xiaoming.hello() --> '+( xiaoming.hello())+' </div>').appendTo($("#showResult3"));
+		$('<div> xiaoming.getGrade() --> '+( xiaoming.getGrade())+' </div>').appendTo($("#showResult3"));
+		$('<div> xiaoming.getName() --> '+( xiaoming.getName())+' </div>').appendTo($("#showResult3"));
+	});	
+</script>
+<div class="aTitle">继承方法封装</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+//1. 父
+function Student(props) {
+    this.name = props.name || 'Unnamed';
+}
+
+Student.prototype.hello = function () {
+    return 'Hello, ' + this.name + '!';
+};
+
+//2. 子
+function PrimaryStudent(props) {
+    // 调用Student构造函数，绑定this变量:
+    Student.call(this, props);
+    this.grade = props.grade || 1;
+}
+
+//3. 继承方法
+function inherits(Child, Parent) {
+    var F = function () {};
+    F.prototype = Parent.prototype;
+    Child.prototype = new F();
+    Child.prototype.constructor = Child;
+}
+
+inherits(PrimaryStudent, Student);
+
+// 4. 继续在PrimaryStudent原型（就是new F()对象）上定义方法：
+PrimaryStudent.prototype.getGrade = function () {
+    return this.grade;
+};
+
+// 5. 试一下给父增加一个方法
+Student.prototype.getName = function () {
+    return this.name;
+};
+
+// 6. new对象
+var xiaoming = new PrimaryStudent({name:"小明",grade:3});
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+	</div>
+</div>
+</body>
+</html>

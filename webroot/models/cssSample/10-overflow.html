@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性[overflow]</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<style type="text/css">
+	/*div不显示滚动条，对溢出内容不做处理，内容可能会超出容器*/
+	.visible-style{
+		width: 100px;
+		height: 80px;
+		border: solid #E7CECE 1px;
+		overflow: visible;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*默认：div不显示滚动条，对溢出内容不做处理，
+	内容可能会超出容器*/
+.visible-style{
+	width: 100px;
+	height: 80px;
+	border: solid #E7CECE 1px;
+	<mark>overflow: visible</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="visible-style">div不显示滚动条，对溢出内容不做处理，内容可能会超出容器</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*纵向和横向都显示滚动条*/
+	.scroll-style{
+		width: 200px;
+		height: 100px;
+		border: solid #E7CECE 1px;
+		overflow: scroll;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*纵向和横向都显示滚动条*/
+.scroll-style{
+	width: 200px;
+	height: 100px;
+	border: solid #E7CECE 1px;
+	<mark>overflow: scroll</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="scroll-style">div纵向和横向都显示滚动条</div>
+	</div>
+</div>
+
+<style type="text/css">
+	/*纵向显示滚动条*/
+	.scroll-y-style{
+		width: 200px;
+		height: 100px;
+		border: solid #E7CECE 1px;
+		overflow-y: scroll;
+	}
+
+	
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*纵向显示滚动条*/
+.scroll-y-style{
+	width: 200px;
+	height: 100px;
+	border: solid #E7CECE 1px;
+	<mark>overflow-y: scroll</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="scroll-y-style">div纵向显示滚动条</div>
+	</div>
+</div>
+
+<style type="text/css">
+	/*当内容没有溢出容器时不出现滚动条，
+	当内容溢出容器时出现滚动条，按需出现滚动条*/
+	.auto-style{
+		width: 200px;
+		height: 100px;
+		border: solid #E7CECE 1px;
+		overflow: auto;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*当内容没有溢出容器时不出现滚动条，
+当内容溢出容器时出现滚动条，按需出现滚动条*/
+.auto-style{
+	width: 200px;
+	height: 100px;
+	border: solid #E7CECE 1px;
+	<mark>overflow: auto</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="auto-style">div根据内容自动显示滚动条:内容没有溢出的情况</div><br/>
+		<div class="auto-style">div根据内容自动显示滚动条:内容溢出的情况<br/>a<br/>b<br/>c<br/>d<br/>e<br/>f<br/>g</div>
+	</div>
+</div>
+
+<style type="text/css">
+	/*隐藏滚动条*/
+	.hidden-style{
+		overflow: hidden;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*隐藏滚动条*/
+.hidden-style{
+	<mark>overflow: hidden</mark>;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<textarea rows="3" placeholder="textarea默认overflow-y:auto"></textarea><br/>
+		<textarea rows="3" class="hidden-style" placeholder="textarea设为overflow-y:hidden"></textarea>
+	</div>
+</div>
+</body>
+</html>

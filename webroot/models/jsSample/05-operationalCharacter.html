@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript运算符</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+	$(function(){
+		//逗号运算符常用于声明多个变量
+		var iNum1 = 1, iNum = 2, iNum3 = 3;
+
+		//逗号运算符在for循环中
+		for(var i=0,j=10 ; i<j ; i++,j--){
+			console.log("i=",i);
+			console.log("j=",j);
+		}
+
+		//逗号运算符还可以用于赋值
+		var num = (1,2,3,4,5);//num值为5
+		console.log("num=", num);
+
+		//例题
+		var i, j, k;
+		for (i=0, j=0; i<10, j<6; i++, j++) {
+		  k = i+j;
+		}
+		console.log("k=",k);
+		//k的值为10
+
+		//运用逗号运算符交换变量
+		var a = "a", b = "b";
+		a = [b][(b = a, 0)];
+		//a = [b, b = a][0];
+		console.log("a=", a);
+		console.log("b=", b);
+		//a = [b][b = a, 0];
+
+	});
+	
+</script>
+<div class="aTitle">逗号运算符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+逗号操作符 对它的每个操作对象求值（从左至右），然后返回最后一个操作对象的值。
+
+//1.逗号运算符常用于声明多个变量
+var iNum1 = 1, iNum = 2, iNum3 = 3;
+
+//2.逗号运算符在for循环中
+for(var i=0,j=10 ; i < j ; i++,j--){
+	
+}
+
+//3.逗号运算符还可以用于赋值
+var num = (1,2,3,4,5);//num值为5
+
+//4.例题
+var i, j, k;
+for (i=0, j=0; i < 10, j < 6; i++, j++) {
+  k = i+j;
+}
+最后k的值为10
+
+//5.运用逗号运算符交换变量
+var a = "a", b = "b";
+a = [b][(b = a, 0)];
+//a = [b, b = a][0];
+
+//6. 简化代码
+if(x){
+  foo();
+  return bar();
+}
+else{
+  return 1;
+}
+
+简化为：return x ? (foo(), bar()) : 1;
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+
+<script type="text/javascript">
+	$(function(){
+
+	});
+	
+</script>
+<div class="aTitle">void运算符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+void运算符的作用是:计算表达式expr,并返回undefined。
+
+1. 链接中用void(0)代替undefined
+
+2.IE中返回值问题
+javascript:window.open("http://www.whitehouse.gov/") 
+会替换掉当前页面的内容,显示[object]
+
+javascript:void window.open("http://www.whitehouse.gov/") 
+不会改变当前页面的内容.
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<a href="javascript:undefined">href="javascript:undefined" 不跳转</a><br>
+		<a href="javascript:void 0">href="javascript:void 0" 不跳转</a><br>
+		<a href="javascript:window.open('http://www.jd.com')">javascript:window.open('http://www.jd.com')</a>
+		<a href="javascript:void window.open('http://www.jd.com')">javascript:void window.open('http://www.jd.com')</a>
+	</div>
+</div>
+</body>
+</html>

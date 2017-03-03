@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS作用域</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">全局作用域</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+$scope 是一个 JavaScript 对象，带有属性和方法，
+  这些属性和方法可以在视图和控制器中使用。
+
+$rootScope 可作用于整个应用中。
+  是各个 controller 中 scope 的桥梁。
+  用 rootscope 定义的值，可以在各个 controller 中使用。
+
+&lt;div ng-app="app1" &gt;
+  &lt;div ng-controller="ctrl1" style="background-color:#C6FCD7"&gt;
+    &lt;li ng-repeat="x in names"&gt;{{country+'-'+city+'-'+x}}&lt;/li&gt;
+  &lt;/div&gt;
+  &lt;div ng-controller="ctrl2" style="background-color:#FCB3EB"&gt;
+    &lt;li ng-repeat="x in names"&gt;{{country+'-'+city+'-'+x}}&lt;/li&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope, $rootScope){
+  $scope.names=["张三","李四","王五"];
+  $scope.city="北京";
+  $rootScope.country = "中国";
+});
+app1.controller("ctrl2",function($scope, $rootScope){
+  $scope.names=["赵佳","刘丽","杨洋"];
+  $scope.city="天津";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div ng-app="app1" >
+      <div ng-controller="ctrl1" style="background-color:#C6FCD7">
+        <li ng-repeat="x in names">{{country+'-'+city+'-'+x}}</li>
+      </div>
+      <div ng-controller="ctrl2" style="background-color:#FCB3EB">
+        <li ng-repeat="x in names">{{country+'-'+city+'-'+x}}</li>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app1 = angular.module("app1",[]);
+  app1.controller("ctrl1",function($scope, $rootScope){
+    $scope.names=["张三","李四","王五"];
+    $scope.city="北京";
+    $rootScope.country = "中国";
+  });
+  app1.controller("ctrl2",function($scope, $rootScope){
+    $scope.names=["赵佳","刘丽","杨洋"];
+    $scope.city="天津";
+    //$rootScope.country="China";
+  });
+</script>
+
+</body>
+</html>

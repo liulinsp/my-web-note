@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>css</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+  .class1{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+  }
+</style>
+<div class="aTitle">.css( propertyName )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.css( propertyName )</b> 
+获取匹配元素集合中的第一个元素的样式属性的值
+propertyName 类型: String,一个css属性名。
+
+.class1{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #BEF9D3;
+}
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1">
+    <div class="class1"></div>
+  </div>
+</div>
+<script type="text/javascript">
+$('<div>$(".class1").css("background-color"); --></br>'+$(".class1").css("background-color")+'</div>').appendTo('#showResult1');
+$('<div>$(".class1").css("backgroundColor"); --></br>'+$(".class1").css("backgroundColor")+'</div>').appendTo('#showResult1');
+$('<div>$(".class1").css("display"); --></br>'+$(".class1").css("display")+'</div>').appendTo('#showResult1');
+$('<div>$(".class1").css("width"); --></br>'+$(".class1").css("width")+'</div>').appendTo('#showResult1');
+$('<div>$(".class1").css("box-sizing"); --></br>'+$(".class1").css("box-sizing")+'</div>').appendTo('#showResult1');
+</script>
+
+<div class="aTitle">.css( propertyNames )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.css( propertyNames )</b> 
+获取匹配元素集合中的第一个元素的样式属性的值
+propertyNames
+类型: Array
+一个或多个CSS属性组成的一个数组
+
+.class1{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #BEF9D3;
+}
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult2">
+    <div class="class1"></div>
+  </div>
+</div>
+<script type="text/javascript">
+var cssResult = $(".class1").css(["background-color","color"]);
+$('<div>var cssResult = $(".class1").css(["background-color","color"]);</br>'+
+  'cssResult["background-color"] --> '+cssResult["background-color"]+
+  '</br>cssResult.color --> '+ cssResult.color+
+  '</div>').appendTo('#showResult2');
+
+</script>
+
+
+<style type="text/css">
+  div.class2{
+    display: inline-block;
+    background-color: #D9D8FC;
+    width: 30px;
+    height: 20px;
+  }
+</style>
+<div class="aTitle">.css( propertyName, value )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.css( propertyName, value )</b> 
+设置每个匹配元素的CSS属性。
+propertyName
+类型: String
+一个CSS属性名
+value
+类型: String, Number
+设置这个CSS属性的值
+
+<b>样式：</b>
+div.class2{
+  display: inline-block;
+  background-color: #D9D8FC;
+  width: 30px;
+  height: 20px;
+}
+
+<b>脚本：</b>
+$(".class2").css("border","solid 1px red");
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult3">
+    <div class="class2"></div>
+  </div>
+</div>
+<script type="text/javascript">
+$(".class2").css("border","solid 1px red");
+</script>
+
+<style type="text/css">
+  div.class3{
+    display: inline-block;
+    background-color: #FCD8F8;
+    width: 40px;
+    height: 20px;
+  }
+</style>
+<div class="aTitle">.css( properties )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.css( properties )
+properties 类型: PlainObject
+一个 属性-值 配对的对象
+<b>样式：</b>
+div.class3{
+  display: inline-block;
+  background-color: #FCD8F8;
+  width: 40px;
+  height: 20px;
+}
+<b>脚本：</b>
+$(".class3").css({
+  'border-style': 'solid',
+  'border-color': '#FC88FD',
+  'border-width': '2px'
+});
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult3">
+    <div class="class3"></div>
+  </div>
+</div>
+<script type="text/javascript">
+$(".class3").css({
+  'border-style': 'solid',
+  'border-color': '#FC88FD',
+  'border-width': '2px'
+});
+</script>
+
+<style type="text/css">
+  div.class4{
+    display: inline-block;
+    background-color: #CA486D;
+    width: 50px;
+    height: 20px;
+  }
+</style>
+<div class="aTitle">.css( propertyName, function(index, value) )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.css( propertyName, function(index, value) )</b>
+propertyName
+类型: String
+一个CSS属性名
+
+function(index, value)
+类型: Function()
+一个返回设置值的函数。this 是当前元素。
+接收index 参数表示元素在匹配集合中的索引位置
+和html 参数表示元素上原来的 HTML 内容。
+<b>样式：</b>
+div.class4{
+  display: inline-block;
+  background-color: #CA486D;
+  width: 50px;
+  height: 20px;
+}
+<b>脚本：</b>
+$(".aShow>div").css("border-radius",function(index,value){
+  if($(this).hasClass('class4')){
+    return "10px";
+  }else{
+    return "0px";
+  }
+});
+    </pre>
+  </div>
+  <div class="aShow note">
+    <div class="class4"></div>
+  </div>
+</div>
+<script type="text/javascript">
+$(".aShow>div").css("border-radius",function(index,value){
+  if($(this).hasClass('class4')){
+    return "10px";
+  }else{
+    return "0px";
+  }
+});
+</script>
+</body>
+</html>

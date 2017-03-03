@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>折角效果背景</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.corner-45deg{
+	width: 300px;
+	height: 200px;
+	box-sizing: border-box;
+	padding: 2.5em;
+	line-height: 1.5;
+	color: #F8F6FD;
+	font-weight: 700;
+	
+	background: #58a;/*回退样式*/
+	background: linear-gradient(-135deg, transparent 50%, rgba(0,0,0,.4) 0)
+                no-repeat 100% 0 / 2.828em 2.828em,
+	linear-gradient(-135deg, transparent, transparent 2em, #58a 0);
+}
+</style>
+<div class="aTitle">45度折角</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.corner-45deg{
+	width: 300px;
+	height: 200px;
+	box-sizing: border-box;
+	padding: 2.5em;
+	line-height: 1.5;
+	color: #F8F6FD;
+	font-weight: 700;
+	
+	background: #58a;/*回退样式*/
+	background: linear-gradient(-135deg, transparent 50%, rgba(0,0,0,.4) 0)
+                no-repeat 100% 0 / 2.828em 2.828em,
+	linear-gradient(-135deg, transparent, transparent 2em, #58a 0);
+}
+
+<b>页面：</b>
+&lt;div class="corner-45deg"&gt;XXXXXXX&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="corner-45deg">计算机是蒋介石及技术登记的极大降低觉得叫基督教的基督教京东到家就简单觉得叫的</div>
+	</div>
+</div>
+
+
+
+
+<style>
+.corner-30deg{
+	width: 300px;
+	height: 200px;
+	box-sizing: border-box;
+	padding: 2.5em;
+	line-height: 1.5;
+	color: #F8F6FD;
+	font-weight: 700;
+	
+	position: relative;
+	background: #58a;/*回退样式*/
+	background: linear-gradient(-150deg, 
+		transparent, transparent 2em, #58a 0);
+
+	border-radius: .5em;
+}
+.corner-30deg::before{
+	position: absolute;
+	content: "";
+	width: 2.3em;/* 2em*2/1.732 */
+	height: 4em;/* 2em*2 */
+	top: 0;
+	right: 1.7em;/* 4em-(width:2em*2/1.732)*/
+	background: linear-gradient(to left bottom,
+		transparent, transparent 50%, 
+		rgba(0,0,0,.2) 0, rgba(0,0,0,.4));
+	transform: rotate(-30deg); 
+	transform-origin:top left;
+	
+	border-bottom-left-radius: inherit;
+	box-shadow: -.2em .2em .3em -.1em rgba(0,0,0,.15);
+}
+</style>
+<div class="aTitle">30度折角</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.corner-30deg{
+	width: 300px;
+	height: 200px;
+	box-sizing: border-box;
+	padding: 2.5em;
+	line-height: 1.5;
+	color: #F8F6FD;
+	font-weight: 700;
+	
+	position: relative;
+	background: #58a;/*回退样式*/
+	background: linear-gradient(-150deg, 
+		transparent, transparent 2em, #58a 0);
+
+	border-radius: .5em;
+}
+.corner-30deg::before{
+	position: absolute;
+	content: "";
+	width: 2.3em;/* 2em*2/1.732 */
+	height: 4em;/* 2em*2 */
+	top: 0;
+	right: 1.7em;/* 4em-(width:2em*2/1.732)*/
+	background: linear-gradient(to left bottom,
+		transparent, transparent 50%, 
+		rgba(0,0,0,.2) 0, rgba(0,0,0,.4));
+	transform: rotate(-30deg); 
+	transform-origin:top left;
+	
+	border-bottom-left-radius: inherit;
+	box-shadow: -.2em .2em .3em -.1em rgba(0,0,0,.15);
+}
+
+<b>页面：</b>
+&lt;div class="corner-30deg"&gt;XXXXXXX&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="corner-30deg">To see all the command line options run lessc without parameters or see Usage..</div>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript表单序列化</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">表单序列化</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+&lt;form action="29-from-serialize.html" method="get" class="note"&gt;
+	&lt;div&gt;
+		&lt;li&gt;&lt;input type="radio" name="color" value="red"&gt;红&lt;/li&gt;
+		&lt;li&gt;&lt;input type="radio" name="color" value="green"&gt;绿&lt;/li&gt;
+		&lt;li&gt;&lt;input type="radio" name="color" value="blue" checked="checked"&gt;蓝&lt;/li&gt;
+	&lt;/div&gt;
+    &lt;div&gt;
+		&lt;input type="checkbox" name="ismarried" checked="checked"&gt;已婚
+		&lt;span class="error"&gt;只发送勾选的复选框和单选按钮&lt;/span&gt;
+		&ismarried=on
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;select name="country"&gt;
+            &lt;option value="China"&gt;中国&lt;/option&gt;
+            &lt;option value="America"&gt;美国&lt;/option&gt;
+            &lt;option value="England" selected="selected"&gt;英国&lt;/option&gt;
+        &lt;/select&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;select name="mulCountry" multiple="multiple"&gt;
+            &lt;option value="China" selected="selected"&gt;中国&lt;/option&gt;
+            &lt;option value="America" selected="selected"&gt;美国&lt;/option&gt;
+            &lt;option value="England"&gt;英国&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;span class="error"&gt;多选选择框中的每个选中的值单独一个条目&lt;/span&gt;
+        &mulCountry=China&mulCountry=America
+	&lt;/div&gt;
+	&lt;div&gt;
+		姓名：&lt;input type="text" name="username" value="张三"&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		单位：&lt;input type="text" name="company" value="ICP" disabled="disabled"&gt;
+		&lt;span class="error"&gt;不发送禁用的表单字段&lt;/span&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		头像：&lt;input type="file" name="photo"&gt;&lt;br/&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+    	&lt;button name="resetBtn" type="reset"&gt;重置&lt;/button&gt;
+    	&lt;span class="error"&gt;不发送type 为"reset"和"button"的按钮。&lt;/span&gt;&lt;br/&gt;
+    	&lt;input type="image" name="imageBtn" src="../../img/submit.png"&gt;
+    	imageBtn.x=13&imageBtn.y=8&lt;br/&gt;
+        &lt;button id="serializeBtn" name="serializeBtn"&gt;序列化&lt;/button&gt;&lt;br/&gt;	
+        &lt;button id="submitBtn" name="submitBtn" value="submitVal"&gt;提交&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+
+function serialize(form){        
+    var parts = [],
+        field = null,
+        i,
+        len,
+        j,
+        optLen,
+        option,
+        optValue;
+    
+    for (i=0, len=form.elements.length; i < len; i++){
+        field = form.elements[i];
+    
+        switch(field.type){
+            case "select-one":
+            case "select-multiple":
+            
+                if (field.name.length){
+                    for (j=0, optLen = field.options.length; j < optLen; j++){
+                        option = field.options[j];
+                        if (option.selected){
+                            optValue = "";
+                            if (option.hasAttribute){
+                                optValue = (option.hasAttribute("value") ? 
+                                            option.value : option.text);
+                            } else {
+                                optValue = (option.attributes["value"].specified ? 
+                                            option.value : option.text);
+                            }
+                            parts.push(encodeURIComponent(field.name) + "=" + 
+                                       encodeURIComponent(optValue));
+                        }
+                    }
+                }
+                break;
+                
+            case undefined:     //fieldset
+            case "file":        //file input
+            case "submit":      //submit button
+            case "reset":       //reset button
+            case "button":      //custom button
+                break;
+                
+            case "radio":       //radio button
+            case "checkbox":    //checkbox
+                if (!field.checked){
+                    break;
+                }
+                /* falls through */
+                            
+            default:
+                //don't include form fields without names
+                if (field.name.length){
+                    parts.push(encodeURIComponent(field.name) + "=" + 
+                               encodeURIComponent(field.value));
+                }
+        }
+    }        
+    return parts.join("&");
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+		<form action="29-from-serialize.html" method="get" class="note">
+			<div>
+				<li><input type="radio" name="color" value="red">红</li>
+				<li><input type="radio" name="color" value="green">绿</li>
+				<li><input type="radio" name="color" value="blue" checked="checked">蓝</li>
+	    	</div>
+	        <div>
+				<input type="checkbox" name="ismarried" checked="checked">已婚
+				<span class="error">只发送勾选的复选框和单选按钮</span>
+				&ismarried=on
+	    	</div>
+	    	<div>
+	    		<select name="country">
+                    <option value="China">中国</option>
+                    <option value="America">美国</option>
+                    <option value="England" selected="selected">英国</option>
+                </select>
+	    	</div>
+	    	<div>
+	    		<select name="mulCountry" multiple="multiple">
+                    <option value="China" selected="selected">中国</option>
+                    <option value="America" selected="selected">美国</option>
+                    <option value="England">英国</option>
+                </select>
+                <span class="error">多选选择框中的每个选中的值单独一个条目</span>
+                &mulCountry=China&mulCountry=America
+	    	</div>
+	    	<div>
+	    		姓名：<input type="text" name="username" value="张三">
+	    	</div>
+	    	<div>
+	    		单位：<input type="text" name="company" value="ICP" disabled="disabled">
+	    		<span class="error">不发送禁用的表单字段</span>
+	    	</div>
+	    	<div>
+	    		头像：<input type="file" name="photo"><br/>
+	    	</div>
+	    	<div>
+		    	<button name="resetBtn" type="reset">重置</button>
+		    	<span class="error">不发送type 为"reset"和"button"的按钮。</span><br/>
+
+		    	<input type="image" name="imageBtn" src="../../img/submit.png">
+		    	imageBtn.x=13&imageBtn.y=8<br/>
+
+		        <button id="serializeBtn" name="serializeBtn">序列化</button><br/>	
+		        
+		        <button id="submitBtn" name="submitBtn" value="submitVal">提交</button>
+	        </div>
+		</form>
+		<p></p>
+		提交：
+		<div style="width:300px; word-wrap: break-word;">
+		color=blue&ismarried=on&country=England&mulCountry=China&mulCountry=America&username=张三&photo=8Sxj23W11.jpg&submitBtn=submitVal
+		</div>
+		<p></p>
+		序列化：
+		<div id="serializeShow" style="width:300px; word-wrap: break-word;">
+			
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function serialize(form){        
+    var parts = [],
+        field = null,
+        i,
+        len,
+        j,
+        optLen,
+        option,
+        optValue;
+    
+    for (i=0, len=form.elements.length; i < len; i++){
+        field = form.elements[i];
+    
+        switch(field.type){
+            case "select-one":
+            case "select-multiple":
+            
+                if (field.name.length){
+                    for (j=0, optLen = field.options.length; j < optLen; j++){
+                        option = field.options[j];
+                        if (option.selected){
+                            optValue = "";
+                            if (option.hasAttribute){
+                                optValue = (option.hasAttribute("value") ? 
+                                	        option.value : option.text);
+                            } else {
+                                optValue = (option.attributes["value"].specified ? 
+                                	        option.value : option.text);
+                            }
+                            parts.push(encodeURIComponent(field.name) + "=" + 
+                            	       encodeURIComponent(optValue));
+                        }
+                    }
+                }
+                break;
+                
+            case undefined:     //fieldset
+            case "file":        //file input
+            case "submit":      //submit button
+            case "reset":       //reset button
+            case "button":      //custom button
+                break;
+                
+            case "radio":       //radio button
+            case "checkbox":    //checkbox
+                if (!field.checked){
+                    break;
+                }
+                /* falls through */
+                            
+            default:
+                //don't include form fields without names
+                if (field.name.length){
+                    parts.push(encodeURIComponent(field.name) + "=" + 
+                    	       encodeURIComponent(field.value));
+                }
+        }
+    }        
+    return parts.join("&");
+}
+
+
+$(function(){
+	var btn = document.getElementById("serializeBtn");
+	eventUtil.bind(btn, "click", function(event){
+	    var form = document.forms[0];
+	    document.getElementById("serializeShow").innerHTML=serialize(form);
+
+	    event = eventUtil.getEvent(event);
+	    eventUtil.preventDefault(event);
+	});
+});
+</script>
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+};	
+</script>

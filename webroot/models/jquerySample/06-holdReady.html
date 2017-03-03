@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>holdReady</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">jQuery.holdReady()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>jQuery.holdReady( hold )</b>
+hold 类型: Boolean
+指示是否暂停或恢复被请求的ready事件
+
+在$.holdReady()方法允许调用者延迟jQuery的ready事件。
+这种先进的功能，通常会被用来允许在 ready 事件发生之前，
+动态加载其它的 JavaScript，例如 jQuery 插件，即使 DOM 可能已经准备就绪。
+该方法必须在文档早期被调用，例如，在 <head> 中加载完 jQuery 脚本之后，
+立刻调用该方法。如果在 ready 事件已经被调用后再调用该方法，将不会起作用。
+
+$.holdReady(true);
+/*$.getScript("hold.js", function() {
+    jQuery.holdReady(false);
+});*/
+window.setTimeout(function() {
+  $.holdReady(false);
+}, 5000);
+      
+$(function(){
+  $('&lt;div&gt;jQuery的ready事件，已执行&lt;/div&gt;').appendTo($("#showResult1"));
+});
+
+$('&lt;div&gt;这不是jQuery的ready事件，已执行&lt;/div&gt;').appendTo($("#showResult1"));
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1">
+  </div>
+</div>
+<script type="text/javascript">
+$.holdReady(true);
+/*$.getScript("hold.js", function() {
+    jQuery.holdReady(false);
+});*/
+window.setTimeout(function() {
+  $.holdReady(false);
+}, 5000);
+
+$(function(){
+  $('<div>jQuery的ready事件，已执行</div>').appendTo($("#showResult1"));
+});
+
+$('<div>这不是jQuery的ready事件，已执行</div>').appendTo($("#showResult1"));
+</script>
+
+
+
+</body>
+</html>

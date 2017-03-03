@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript对象</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">Object</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Object 的每个实例都具有下列属性和方法。
+ constructor：保存着用于创建当前对象的函数。对于前面的例子而言，构造函数（constructor）
+就是Object()。
+ hasOwnProperty(propertyName)：用于检查给定的属性在当前对象实例中（而不是在实例
+的原型中）是否存在。其中，作为参数的属性名（propertyName）必须以字符串形式指定（例
+如：o.hasOwnProperty("name")）。
+ isPrototypeOf(object)：用于检查传入的对象是否是传入对象的原型。
+ propertyIsEnumerable(propertyName)：用于检查给定的属性是否能够使用for-in 语句
+来枚举。与hasOwnProperty()方法一样，作为参数的属性名必须以字符
+串形式指定。
+ toLocaleString()：返回对象的字符串表示，该字符串与执行环境的地区对应。
+ toString()：返回对象的字符串表示。
+ valueOf()：返回对象的字符串、数值或布尔值表示。通常与toString()方法的返回值
+相同。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult0">
+	</div>
+</div>
+<script type="text/javascript">
+//待以后再试
+function A(){
+	this.type="AAA";
+}
+
+function B(){
+	this.state="BB";
+}
+
+
+var a = new A();
+a.name="aaa";
+
+B.prototype = a;
+var b = new B();
+b.name="bbb";
+
+console.log("a=",a);
+console.log("a.constructor=",a.constructor);
+console.log("A.prototype=",A.prototype);
+console.log("B.prototype=",B.prototype);
+console.log('a.hasOwnProperty("name")=',a.hasOwnProperty("name"));
+console.log('a.hasOwnProperty("type")=',a.hasOwnProperty("type"));
+console.log('b.type=',b.type);
+console.log('b.prototype=',b.prototype);
+//console.log('b.isPrototypeOf(a)=',b.isPrototypeOf(a));
+</script>
+
+
+<script type="text/javascript">
+	$(function(){
+		function Person(name,age){
+			this.name = name;
+			this.age = age;
+			this.toString = function(){
+				return "Person[name:"+this.name+",age:"+this.age+"]";
+			};
+		}
+
+		var zhang = new Person("Zhang San", 15);
+		$('<div> zhang --> '+zhang+' </div>').appendTo($("#showResult1"));
+	});	
+</script>
+<div class="aTitle">构造函数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+//构造函数
+function Person(name,age){
+	this.name = name;
+	this.age = age;
+	this.toString = function(){
+		return "name:"+this.name+",age:"+this.age;
+	};
+}
+
+var zhang = new Person("Zhang San", 15);
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		function Person(name,age){
+			this.name = name||"佚名";
+			this.age = age||0;
+			this.toString = function(){
+				return "Person[name:"+this.name+",age:"+this.age+"]";
+			};
+		}
+
+		var zhang = new Person();
+		$('<div> zhang --> '+zhang+' </div>').appendTo($("#showResult2"));
+	});	
+</script>
+<div class="aTitle">构造函数设置默认值</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function Person(name,age){
+	<mark>this.name = name||"佚名";</mark>//设置默认值“佚名”
+	<mark>this.age = age||0;</mark>//设置默认值：0
+	this.toString = function(){
+		return "Person[name:"+this.name+",age:"+this.age+"]";
+	};
+}
+
+var zhang = new Person();
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		function Person(props){
+			props = props||{};
+			this.name = props.name||"佚名";//设置默认值“佚名”
+			this.age = props.age||0;//设置默认值：0
+			this.toString = function(){
+				return "Person[name:"+this.name+",age:"+this.age+"]";
+			};
+		}
+
+		var zhang = new Person();
+		$('<div> zhang --> '+zhang+' </div>').appendTo($("#showResult3"));
+	});
+</script>
+<div class="aTitle">构造函数对象参数默认值</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+function Person(props){
+	<mark>props = props||{};</mark>
+	this.name = props.name||"佚名";//设置默认值“佚名”
+	this.age = props.age||0;//设置默认值：0
+	this.toString = function(){
+		return "Person[name:"+this.name+",age:"+this.age+"]";
+	};
+}
+
+var zhang = new Person();
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+	</div>
+</div>
+
+</body>
+</html>

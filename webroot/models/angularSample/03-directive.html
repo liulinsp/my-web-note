@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS指令</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">内置指令</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>ng-app 指令</b>
+ng-app 指令定义了 AngularJS 应用程序的 根元素。
+ng-app 指令在网页加载完毕时会自动引导（自动初始化）应用程序。
+稍后您将学习到 ng-app 如何通过一个值（比如 ng-app="myModule"）连接到代码模块。
+
+<b>ng-init 指令</b>
+ng-init 指令为 AngularJS 应用程序定义了 初始值。
+通常情况下，不使用 ng-init。您将使用一个控制器或模块来代替它。
+稍后您将学习更多有关控制器和模块的知识。
+
+<b>ng-model 指令</b>
+ng-model 指令 绑定 HTML 元素 到应用程序数据。
+ng-model 指令也可以：
+  为应用程序数据提供类型验证（number、email、required）。
+  为应用程序数据提供状态（invalid、dirty、touched、error）。
+  为 HTML 元素提供 CSS 类。
+  绑定 HTML 元素到 HTML 表单。
+
+<b>ng-repeat 指令</b>
+ng-repeat 指令对于集合中（数组中）的每个项会 克隆一次 HTML 元素。
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+<div class="aTitle">自定义指令-directive(限制使用)</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+restrict （string）限制使用
+该属性用于定义指令以什么形式被使用，这是一个可选参数，默认值为 EA。 
+也就是元素（E）、属性（A）、类（C）、注释（M）
+1. E（元素）
+&lt;my-directive&gt;&lt;/my-directive&gt;
+
+2. A（属性，默认值）
+&lt;div my-directive="expression"&gt;&lt;/div&gt;
+
+3. C（类名）
+&lt;div class="my-directive:expression;"&gt;&lt;/div&gt;
+
+4. M（注释）
+&lt;--directive:my-directive expression--&gt;
+    </pre>
+  </div>
+  <!-- <div class="aShow">
+  </div> -->
+</div>
+
+
+<div class="aTitle">自定义指令-directive(限制使用)-元素</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="defApp1"&gt;
+  <mark>&lt;element-directive&gt;&lt;/element-directive&gt;</mark>
+&lt;/div&gt;
+
+<b>脚本：</b>
+var defApp1 = angular.module("defApp1",[]);
+defApp1.directive(<mark>'elementDirective'</mark>,function(){
+  return {
+    restrict: <mark>'E'</mark>,
+    template:'&lt;h2&gt;标签&lt;/h2&gt;',
+    replace:true
+  };
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp1">
+      <element-directive></element-directive>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var defApp1 = angular.module("defApp1",[]);
+  defApp1.directive('elementDirective',function(){
+    return {
+      restrict: 'E',
+      template:'<h2>标签</h2>',
+      replace:true
+    };
+  });
+  angular.bootstrap(document.getElementById("defApp1"), ['defApp1']);
+</script>
+
+<div class="aTitle">自定义指令-directive(限制使用)-属性</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="defApp2"&gt;
+  &lt;div attr-directive=""&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var defApp2 = angular.module("defApp2",[]);
+defApp2.directive('attrDirective',function(){
+  return {
+    restrict: 'A',
+    template:'&lt;h2&gt;属性&lt;/h2&gt;'
+  };
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp2">
+      <div attr-directive=""></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var defApp2 = angular.module("defApp2",[]);
+  defApp2.directive('attrDirective',function(){
+    return {
+      restrict: 'A',
+      template:'<h2>属性</h2>'
+    };
+  });
+  angular.bootstrap(document.getElementById("defApp2"), ['defApp2']);
+</script>
+
+
+<div class="aTitle">自定义指令-directive(限制使用)-类名</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="defApp3"&gt;
+   &lt;div class="class-directive"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var defApp3 = angular.module("defApp3",[]);
+defApp3.directive('classDirective',function(){
+  return {
+    restrict: 'C',
+    template:'&lt;h2&gt;类名&lt;/h2&gt;'
+  };
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp3">
+      <div class="class-directive"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var defApp3 = angular.module("defApp3",[]);
+  defApp3.directive('classDirective',function(){
+    return {
+      restrict: 'C',
+      template:'<h2>类名</h2>'
+    };
+  });
+  angular.bootstrap(document.getElementById("defApp3"), ['defApp3']);
+</script>
+
+<div class="aTitle">自定义指令-directive(限制使用)-注释</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>注意：我们需要在该实例添加 replace 属性，否则评论是不可见的。</b>
+&lt;div ng-app="defApp4"&gt;
+&lt;!-- directive: my-directive --&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var defApp4 = angular.module("defApp4",[]);
+defApp4.directive('myDirective',function(){
+  return {
+    restrict: 'M',
+    template:'&lt;h2&gt;注释&lt;/h2&gt;',
+    <mark>replace:true</mark>
+  };
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp4">
+      <!-- directive: my-directive -->
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var defApp4 = angular.module("defApp4",[]);
+  defApp4.directive('myDirective',function(){
+    return {
+      restrict: 'M',
+      template:'<h2>注释</h2>',
+      replace:true
+    };
+  });
+  angular.bootstrap(document.getElementById("defApp4"), ['defApp4']);
+</script>
+
+<div class="aTitle">自定义指令-replace(替换) </div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+以“自定义指令-directive(限制使用)-元素”为例：
+
+<b>&lt;element-directive&gt;&lt;/element-directive&gt;
+
+template:'&lt;h2&gt;标签&lt;/h2&gt;'</b>
+
+replace为true时，输出:
+&lt;h2&gt;标签&lt;/h2&gt;
+
+replace为false时，输出:
+&lt;element-directive&gt;&lt;h2&gt;标签&lt;/h2&gt;&lt;/element-directive&gt;
+    </pre>
+  </div>
+  <!-- <div class="aShow">
+  </div> -->
+</div>
+
+<div class="aTitle">自定义指令-transclude(嵌入)</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&ltdiv id="defApp5"&gt
+  &ltmy-directive&gt原始内容&lt/my-directive&gt
+&lt/div&gt
+
+<b>脚本：</b>
+var defApp5 = angular.module("defApp5",[]);
+defApp5.directive('myDirective',function(){
+  return {
+    restrict: 'E',
+    template:'&lth2&gt&ltspan ng-transclude&gt&lt/span&gt&lt/h2&gt',
+    transclude:true
+  };
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp5">
+      <my-directive>原始内容</my-directive>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var defApp5 = angular.module("defApp5",[]);
+  defApp5.directive('myDirective',function(){
+    return {
+      restrict: 'E',
+      template:'<h2><span ng-transclude></span></h2>',
+      transclude:true
+    };
+  });
+  angular.bootstrap(document.getElementById("defApp5"), ['defApp5']);
+</script>
+
+
+<div class="aTitle">自定义指令-scope</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+备注：绑定策略“@”：这个绑定策略告诉AngularJS将DOM中some-property属性的值
+复制给新作用域对象中的someProperty属性。
+
+&lt;div id="defApp6"&gt;
+  &lt;div my-directive my-title="个人宣言" 
+       my-content="人的生命就像一篇文章,只有经过多次精心修改,才能不断完善。"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var defApp6 = angular.module("defApp6",[]);
+defApp6.directive('myDirective',function(){
+  return {
+    restrict: 'A',
+    scope:{
+      <mark>myTitle:'@',</mark>
+      <mark>content:'@myContent'</mark>
+    },
+    template:'&lt;h2&gt;{{myTitle}}&lt;/h2&gt;&lt;p&gt;{{content}}&lt;/p&gt;'
+  };
+});
+angular.bootstrap(document.getElementById("defApp6"), ['defApp6']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp6">
+      <div my-directive my-title="个人宣言" 
+           my-content="人的生命就像一篇文章,只有经过多次精心修改,才能不断完善。">
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var defApp6 = angular.module("defApp6",[]);
+defApp6.directive('myDirective',function(){
+  return {
+    restrict: 'A',
+    scope:{
+      myTitle:'@',
+      content:'@myContent'
+    },
+    template:'<h2>{{myTitle}}</h2><p>{{content}}</p>'
+  };
+});
+angular.bootstrap(document.getElementById("defApp6"), ['defApp6']);
+</script>
+
+<div class="aTitle">自定义指令-scope绑定策略</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+1. @
+  可将本地作用域的变量与DOM属性的值进行绑定，
+  即我们通过@得到title属性的值
+2. =
+  可将本地作用域上的属性与父级作用域上的属性进行双向绑定，
+  即我们通过=得到name的引用。可以同值传递和引用传递的理解相结合
+3. &
+  可以对父级作用域进行绑定，以便在其中运行函数，
+  简单说就是绑定函数用的
+&lt;div id="defApp7" ng-controller="defCtrl7"&gt;
+  标题：&lt;input type="text" ng-model="data.title"/&gt;&lt;br/&gt;
+  内容：&lt;input type="text" ng-model="data.content"/&gt;
+  &lt;div my-directive my-title="data.title" 
+       my-content="{{data.content}}"
+       my-say="data.say()"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("defApp7",[])
+  .directive('myDirective',function(){
+    return {
+      restrict: 'A',
+      scope:{
+        title:'=myTitle',
+        content:'@myContent',
+        say:'&mySay'
+      },
+      template:'<h2>{{title}}</h2><p>{{content}}</p><button ng-click="say()">宣誓</button>'
+    };
+  })
+  .controller("defCtrl7",function($scope){
+    $scope.data={title:"个人宣言",content:"人的生命就像一篇文章"};
+    $scope.data.say=function(){
+      alert(this.content);
+    }
+  });
+angular.bootstrap(document.getElementById("defApp7"), ['defApp7']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="defApp7" ng-controller="defCtrl7">
+      标题：<input type="text" ng-model="data.title"/><br/>
+      内容：<input type="text" ng-model="data.content"/>
+      <div my-directive my-title="data.title" 
+           my-content="{{data.content}}"
+           my-say="data.say()">
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("defApp7",[])
+  .directive('myDirective',function(){
+    return {
+      restrict: 'A',
+      scope:{
+        title:'=myTitle',
+        content:'@myContent',
+        say:'&mySay'
+      },
+      template:'<h2>{{title}}</h2><p>{{content}}</p><button ng-click="say()">宣誓</button>'
+    };
+  })
+  .controller("defCtrl7",function($scope){
+    $scope.data={title:"个人宣言",content:"人的生命就像一篇文章"};
+    $scope.data.say=function(){
+      alert(this.content);
+    }
+  });
+angular.bootstrap(document.getElementById("defApp7"), ['defApp7']);
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DOM2和DOM3</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">特性检测</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var supportsDOM2Core = document.implementation.hasFeature("Core", "2.0");
+var supportsDOM3Core = document.implementation.hasFeature("Core", "3.0");
+var supportsDOM2HTML = document.implementation.hasFeature("HTML", "2.0");
+var supportsDOM2Views = document.implementation.hasFeature("Views", "2.0");
+var supportsDOM2XML = document.implementation.hasFeature("XML", "2.0");
+<b>参数：</b>
+1. feature	
+特性名，用于判断哪个支持被测试。特性不区分大小写。
+下面的表中列出了 2 级 DOM 标准支持的有效特性名的集合。
+2. version	(firefox此参数必需)
+版本号，用于判断哪个支持被测试，或者为 null。
+如果该特性的所有版本都被支持，则为空串（""）。
+在 2 级 DOM 标准中，支持的版本号是 1.0 和 2.0。
+
+<b>返回值:</b>
+如果当前实现完全支持指定特性的指定版本，返回值为 true，
+否则为 false。如果没有指定版本号，而且实现完全支持指定
+特性的所有版本，该方法也返回 true。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$('<div>'+msg+'</div>').appendTo("#showResult1");
+	}
+
+	_show('document.implementation.hasFeature("Core", "2.0") --> '+
+		document.implementation.hasFeature("Core", "2.0"));
+	_show('document.implementation.hasFeature("Core", "3.0") --> '+
+		document.implementation.hasFeature("Core", "3.0"));
+	_show('document.implementation.hasFeature("HTML","2.0") --> '+
+		document.implementation.hasFeature("HTML","2.0"));
+	_show('document.implementation.hasFeature("Views", "2.0") --> '+
+		document.implementation.hasFeature("Views", "2.0"));
+	_show('document.implementation.hasFeature("CSS3", "3.0") --> '+
+		document.implementation.hasFeature("CSS3", "3.0"));
+});
+</script>
+
+</body>
+</html>

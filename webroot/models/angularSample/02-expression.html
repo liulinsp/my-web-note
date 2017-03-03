@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS表达式</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">数字</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="" ng-init="quantity=100;unitPrice=12"&gt;
+数量：&lt;span ng-bind="quantity"&gt;&lt;/span&gt;&lt;br/&gt;
+单价：&lt;span ng-bind="unitPrice"&gt;&lt;/span&gt;&lt;br/&gt;
+金额1：&lt;span ng-bind="quantity*unitPrice"&gt;&lt;/span&gt;&lt;br/&gt;
+金额2：{{quantity*unitPrice}}
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-init="quantity=100;unitPrice=12">
+      数量：<span ng-bind="quantity"></span><br/>
+      单价：<span ng-bind="unitPrice"></span><br/>
+      金额1：<span ng-bind="quantity*unitPrice"></span><br/>
+      金额2：{{quantity*unitPrice}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app1 = angular.module("app1",[]);
+  angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+<div class="aTitle">字符串</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="" ng-init="firstName='张';lastName='三'"&gt;
+姓名1：&lt;span ng-bind="firstName+' '+lastName"&gt;&lt;/span&gt;&lt;br/&gt;
+姓名2：{{firstName+' '+lastName}}
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-init="firstName='张';lastName='三'">
+      姓名1：<span ng-bind="firstName+' '+lastName"></span><br/>
+      姓名2：{{firstName+' '+lastName}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app2 = angular.module("app2",[]);
+  angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+
+<div class="aTitle">对象</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="" ng-init="person={name:'张三',age:28}"&gt;
+姓名：&lt;span ng-bind="person.name"&gt;&lt;/span&gt;&lt;br/&gt;
+年龄：{{person.age}}
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app3" ng-init="person={name:'张三',age:28}">
+      姓名：<span ng-bind="person.name"></span><br/>
+      年龄：{{person.age}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app3 = angular.module("app3",[]);
+  angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+
+<div class="aTitle">数组</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="" ng-init="points=[12,14,16,18]"&gt;
+第一个：&lt;span ng-bind="points[0]"&gt;&lt;/span&gt;&lt;br/&gt;
+第二个：{{points[1]}}
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app4" ng-init="points=[12,14,16,18]">
+      第一个：<span ng-bind="points[0]"></span><br/>
+      第二个：{{points[1]}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app4 = angular.module("app4",[]);
+  angular.bootstrap(document.getElementById("app4"), ['app4']);
+</script>
+
+<div class="aTitle">遍历</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="" ng-init="points=[12,14,16,18]"&gt;
+  &lt;li ng-repeat="x in points"&gt;{{x}}&lt;/li&gt;
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app5" ng-init="points=[12,14,16,18]">
+      <li ng-repeat="x in points">{{x}}</li>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app5 = angular.module("app5",[]);
+  angular.bootstrap(document.getElementById("app5"), ['app5']);
+</script>
+</body>
+</html>

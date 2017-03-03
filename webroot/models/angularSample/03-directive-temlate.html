@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS指令-template</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">返回字符串示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app2"&gt;
+  &lt;span my-icon&gt;这里会换成图片&lt;/span&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("app2",[])
+  .directive('myIcon',function(){
+    return {
+      restrict: 'A',
+      replace:true,
+      template:"&lt;img src='../../img/arrow_cur_l.png'/&gt;"
+    };
+  });
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2">
+      <span my-icon>这里会换成图片</span>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app2",[])
+  .directive('myIcon',function(){
+    return {
+      restrict: 'A',
+      replace:true,
+      template:"<img src='../../img/arrow_cur_l.png'/>"
+    };
+  });
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+
+<div class="aTitle">返回函数示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;span my-input="user.name"&gt;&lt;/span&gt;
+  {{user.name}}
+&lt;/div&gt;
+
+angular.module("app1",[])
+  .directive('myInput',function(){
+    return {
+      restrict: 'A',
+      replace:true,
+      template:function(element,attr){
+        return "&lt;input type='text' ng-model='"+attr.myInput+"' /&gt;";
+      }
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.user={name:"张三"};
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <span my-input="user.name"></span>
+      {{user.name}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app1",[])
+  .directive('myInput',function(){
+    return {
+      restrict: 'A',
+      replace:true,
+      template:function(element,attr){
+        return "<input type='text' ng-model='"+attr.myInput+"' />";
+      }
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.user={name:"张三"};
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+
+<div class="aTitle">templateUrl</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+templateUrl是可选的参数，可以是以下类型：
+  1. 一个代表外部HTML文件路径的字符串；
+  2. 一个可以接受两个参数的函数，参数为tElement和tAttrs，
+      并返回一个外部HTML文件路径的字符串。
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+</body>
+</html>

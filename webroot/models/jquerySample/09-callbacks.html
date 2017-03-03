@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery回调对象</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">callbacks.add( callbacks )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+回调列表中添加一个回调或回调的集合。
+<b>callbacks.add( callbacks )</b>
+callbacks
+类型: Function, Array
+一个函数，或者一个函数数组，用来添加到回调列表。
+
+<b>脚本：</b>
+var callbacks = $.Callbacks();
+<mark>callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数，value='+value+'&lt;/div&gt;').appendTo('#showResult1');
+});</mark>
+callbacks.fire("myInit");
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数，value='+value+'</div>').appendTo('#showResult1');
+});
+callbacks.fire("myInit");
+</script>
+
+<div class="aTitle">callbacks.disable() 和 callbacks.disabled()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>callbacks.disable()</b>
+禁用回调列表中的回调
+
+<b>callbacks.disabled()</b>
+回调列表是否已被禁用
+
+<b>脚本：</b>
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数，value='+value+'&lt;/div&gt;').appendTo('#showResult2');
+});
+$('&lt;div&gt;callbacks.disabled() --&gt; '+callbacks.disabled()+'&lt;/div&gt;').appendTo('#showResult2');
+callbacks.fire("beforeDisable");
+<mark>callbacks.disable();</mark>
+callbacks.fire("afterDisable");
+$('&lt;div&gt;callbacks.disabled() --&gt; '+callbacks.disabled()+'&lt;/div&gt;').appendTo('#showResult2');
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult2">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数，value='+value+'</div>').appendTo('#showResult2');
+});
+$('<div>callbacks.disabled() --> '+callbacks.disabled()+'</div>').appendTo('#showResult2');
+callbacks.fire("beforeDisable");
+callbacks.disable();
+callbacks.fire("afterDisable");
+$('<div>callbacks.disabled() --> '+callbacks.disabled()+'</div>').appendTo('#showResult2');
+</script>
+
+
+<div class="aTitle">callbacks.empty()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>callbacks.empty()</b>
+从列表中删除所有的回调
+
+<b>脚本：</b>
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数，value='+value+'&lt;/div&gt;').appendTo('#showResult3');
+});
+callbacks.fire("beforeEmpty");
+<mark>callbacks.empty();</mark>
+callbacks.fire("afterEmpty");
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult3">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数，value='+value+'</div>').appendTo('#showResult3');
+});
+callbacks.fire("beforeEmpty");
+callbacks.empty();
+callbacks.fire("afterEmpty");
+</script>
+
+
+<div class="aTitle">callbacks.fire( arguments )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>callbacks.fire( arguments )</b>
+传入指定的参数调用所有的回调
+arguments 类型: Anything
+这个参数或参数列表传回给回调列表。
+
+<b>脚本：</b>
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数，value='+value+'&lt;/div&gt;').appendTo('#showResult4');
+});
+callbacks.add(function(value,name){
+  $('&lt;div&gt;调用新增的回调函数，value='+value+', name='+name+'&lt;/div&gt;').appendTo('#showResult4');
+});
+callbacks.fire("call","Tom");
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult4">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数，value='+value+'</div>').appendTo('#showResult4');
+});
+callbacks.add(function(value,name){
+  $('<div>调用新增的回调函数，value='+value+', name='+name+'</div>').appendTo('#showResult4');
+});
+callbacks.fire("call","Tom");
+
+</script>
+
+
+
+<div class="aTitle">callbacks.fireWith( [context ] [, args ] )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>callbacks.fireWith( [context ] [, args ] )</b>
+context:
+该列表中的回调被触发的上下文引用
+
+args:
+一个参数或参数列表传回给回调列表。
+
+<b>脚本：</b>
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数，value='+value+'&lt;/div&gt;').appendTo(<mark>this</mark>);
+});
+callbacks.add(function(value,name){
+  $('&lt;div&gt;调用新增的回调函数，value='+value+', name='+name+'&lt;/div&gt;').appendTo(<mark>this</mark>);
+});
+<mark>callbacks.fireWith($("#showResult5"),["call","Tom"]);</mark>
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult5">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  console.log(this.prop('outerHTML'));
+  $('<div>调用新增的回调函数，value='+value+'</div>').appendTo(this);
+});
+callbacks.add(function(value,name){
+  console.log(this.prop('outerHTML'));
+  $('<div>调用新增的回调函数，value='+value+', name='+name+'</div>').appendTo(this);
+});
+callbacks.fireWith($("#showResult5"),["call","Tom"]);
+
+</script>
+
+
+<div class="aTitle">callbacks.fired()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>callbacks.fired()</b>
+确定回调是否已经调用过。
+
+<b>脚本：</b>
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  console.log(this.prop('outerHTML'));
+  $('&lt;div&gt;调用新增的回调函数，value='+value+'&lt;/div&gt;').appendTo(this);
+});
+
+$('&lt;div&gt;callbacks.isFired() --&gt; '+
+  callbacks.fired()+'&lt;/div&gt;').appendTo("#showResult6");
+
+callbacks.fireWith($("#showResult6"),["call"]);
+
+$('&lt;div&gt;callbacks.isFired() --&gt; '+
+  callbacks.fired()+'&lt;/div&gt;').appendTo("#showResult6");
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult6">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks();
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数，value='+value+'</div>').appendTo(this);
+});
+
+$('<div>callbacks.isFired() --> '+callbacks.fired()+'</div>').appendTo("#showResult6");
+callbacks.fireWith($("#showResult6"),["call"]);
+$('<div>callbacks.isFired() --> '+callbacks.fired()+'</div>').appendTo("#showResult6");
+</script>
+
+
+
+<div class="aTitle">callbacks.lock()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>callbacks.lock()</b>
+锁定回调列表的当前状态。
+
+<b>脚本：</b>
+var callbacks = $.Callbacks(<mark>"memory"</mark>);
+callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数1，value='+value+'&lt;/div&gt;').appendTo("#showResult7");
+});
+
+callbacks.fire("beforeLock");
+
+callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数2，value='+value+'&lt;/div&gt;').appendTo("#showResult7");
+});
+
+$('&lt;div&gt;callbacks.locked(); --&gt; '+callbacks.locked()+'&lt;/div&gt;').appendTo("#showResult7");
+
+<mark>callbacks.lock();</mark>
+
+callbacks.add(function(value){
+  $('&lt;div&gt;调用新增的回调函数3，value='+value+'&lt;/div&gt;').appendTo("#showResult7");
+});
+
+callbacks.fire("afterLock");
+
+$('&lt;div&gt;callbacks.locked(); --&gt; '+callbacks.locked()+'&lt;/div&gt;').appendTo("#showResult7");
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult7">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks("memory");
+$('<div>add 回调函数1</div>').appendTo("#showResult7");
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数1，value='+value+'</div>').appendTo("#showResult7");
+});
+
+$('<div>callbacks.fire("beforeLock");</div>').appendTo("#showResult7");
+callbacks.fire("beforeLock");
+
+$('<div>add 回调函数2</div>').appendTo("#showResult7");
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数2，value='+value+'</div>').appendTo("#showResult7");
+});
+
+$('<div>callbacks.locked(); --> '+callbacks.locked()+'</div>').appendTo("#showResult7");
+
+$('<div>callbacks.lock();</div>').appendTo("#showResult7");
+callbacks.lock();
+
+$('<div>add 回调函数3</div>').appendTo("#showResult7");
+callbacks.add(function(value){
+  $('<div>调用新增的回调函数3，value='+value+'</div>').appendTo("#showResult7");
+});
+
+$('<div>callbacks.fire("afterLock");</div>').appendTo("#showResult7");
+callbacks.fire("afterLock");
+
+$('<div>callbacks.locked(); --> '+callbacks.locked()+'</div>').appendTo("#showResult7");
+</script>
+
+
+
+<div class="aTitle">callbacks.remove()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>callbacks.remove()</b>
+从回调列表中的删除一个回调。
+
+<b>脚本：</b>
+var callbacks = $.Callbacks();
+var fun1 = function(value){
+  $('&lt;div&gt;调用新增的回调函数1，value='+value+'&lt;/div&gt;').appendTo("#showResult8");
+}
+var fun2 = function(value){
+  $('&lt;div&gt;调用新增的回调函数2，value='+value+'&lt;/div&gt;').appendTo("#showResult8");
+}
+
+callbacks.add(fun1);
+callbacks.add(fun2);
+
+callbacks.fire("beforeRemove");
+
+<mark>callbacks.remove(fun2);</mark>
+
+callbacks.fire("afterRemove fun2");
+
+<b>脚本：</b>
+
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult8">
+  </div>
+</div>
+<script type="text/javascript">
+var callbacks = $.Callbacks();
+var fun1 = function(value){
+  $('<div>调用新增的回调函数1，value='+value+'</div>').appendTo("#showResult8");
+}
+var fun2 = function(value){
+  $('<div>调用新增的回调函数2，value='+value+'</div>').appendTo("#showResult8");
+}
+
+callbacks.add(fun1);
+callbacks.add(fun2);
+
+callbacks.fire("beforeRemove");
+
+callbacks.remove(fun2);
+
+callbacks.fire("afterRemove fun2");
+
+
+</script>
+
+</body>
+</html>

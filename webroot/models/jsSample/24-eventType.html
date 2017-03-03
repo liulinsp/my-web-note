@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript事件类型</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">UI事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+UI 事件指的是那些不一定与用户操作有关的事件。
+1. DOMActivate：表示元素已经被用户操作（通过鼠标或键盘）激活。这个事件在DOM3 级事
+件中被废弃，但Firefox 2+和Chrome 支持它。考虑到不同浏览器实现的差异，不建议使用这个
+事件。
+
+2. load：当页面完全加载后在window 上面触发，当所有框架都加载完毕时在框架集上面触发，
+当图像加载完毕时在&lt;img&gt;元素上面触发，或者当嵌入的内容加载完毕时在&lt;object&gt;元素上面
+触发。
+	1) window上触发load事件：
+	window.onload=function(){
+		...
+	};
+	2) document.body上触发load事件：
+	document.body.onload=function(){
+		...
+	};
+	3) img上触发load事件：
+	var image = document.createElement("img");//或var image = new Image();
+	image.onload=function(event){
+		...
+	}
+	document.getElementById("showResult1").appendChild(image);
+	image.src = "http://xc.yixin.com/imgs/header/logo.png";
+<pre class="error">根据“DOM2 级事件”规范，应该在document 而非window 上面触发load 事
+件。但是，所有浏览器都在window 上面实现了该事件，以确保向后兼容。
+
+&lt;img&gt;元素设置src 属性后就会加载图片，即时该元素没有添加到文档中；
+与图像不同，只有在设置了&lt;script&gt;元素的src 属性并将该元素添加到文档后，才会开始下
+载JavaScript 文件。</pre>
+3. unload：当页面完全卸载后在window 上面触发，当所有框架都卸载后在框架集上面触发，或
+者当嵌入的内容卸载完毕后在&lt;object&gt;元素上面触发。
+  unload事件主要用于清除引用，以避免内存泄漏。
+<pre class="error">无论使用哪种方式，都要小心编写onunload 事件处理程序中的代码。既然unload 事件是在一切
+都被卸载之后才触发，那么在页面加载后存在的那些对象，此时就不一定存在了。此时，操作DOM节
+点或者元素的样式就会导致错误。</pre>
+4. abort：在用户停止下载过程时，如果嵌入的内容没有加载完，则在&lt;object&gt;元素上面触发。
+
+5. error：当发生JavaScript 错误时在window 上面触发，当无法加载图像时在&lt;img&gt;元素上面触
+发，当无法加载嵌入内容时在&lt;object&gt;元素上面触发，或者当有一或多个框架无法加载时在框
+架集上面触发。第17 章将继续讨论这个事件。
+//当图片不存在时显示默认图片
+&lt;img src="sys/user/9XzHeWoMPKIFBDqP.png" onerror="javascript:this.src='img/user.jpg';" /&gt;
+
+6. select：当用户选择文本框（&lt;input&gt;或&lt;texterea&gt;）中的一或多个字符时触发。第14 章将
+继续讨论这个事件。
+
+7. resize：当窗口或框架的大小变化时在window 或框架上面触发。
+
+8. scroll：当用户滚动带滚动条的元素中的内容时，在该元素上面触发。&lt;body&gt;元素中包含所加
+载页面的滚动条。 
+
+除了DOMActivate 之外，其他事件在DOM2 级事件中都归为HTML 事件（DOMActivate 在DOM2
+级中仍然属于UI 事件）。要确定浏览器是否支持DOM2 级事件规定的HTML 事件，可以使用如下代码：
+var isSupported = document.implementation.hasFeature("HTMLEvents", "2.0");
+
+要确定浏览器是否支持“DOM3 级事件”定义的事件，可以使用如下代码：
+var isSupported = document.implementation.hasFeature("UIEvent", "3.0");
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1"></div> -->
+</div>
+
+
+<div class="aTitle">焦点事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+焦点事件会在页面元素获得或失去焦点时触发。利用这些事件并与document.hasFocus()方法及
+document.activeElement 属性配合，可以知晓用户在页面上的行踪。有以下6 个焦点事件。
+1. blur：在元素失去焦点时触发。这个事件不会冒泡；所有浏览器都支持它。
+2. focus：在元素获得焦点时触发。这个事件不会冒泡；所有浏览器都支持它。
+3. focusin：在元素获得焦点时触发。这个事件与HTML 事件focus 等价，但它冒泡。
+   支持这个事件的浏览器有IE5.5+、Safari 5.1+、Opera 11.5+和Chrome。<span class="error">firefox不支持</span>
+4. focusout：在元素失去焦点时触发。这个事件是HTML 事件blur 的通用版本。
+   支持这个事件的浏览器有IE5.5+、Safari 5.1+、Opera 11.5+和Chrome。<span class="error">firefox不支持</span>
+5. DOMFocusIn：在元素获得焦点时触发。这个事件与HTML 事件focus 等价，但它冒泡。
+   只有Opera 支持这个事件。DOM3 级事件废弃了DOMFocusIn，选择了focusin。
+6. DOMFocusOut：在元素失去焦点时触发。这个事件是HTML 事件blur 的通用版本。
+   只有Opera支持这个事件。DOM3 级事件废弃了DOMFocusOut，选择了focusout。
+
+要确定浏览器是否支持这些事件，可以使用如下代码：
+var isSupported = document.implementation.hasFeature("FocusEvent", "3.0");//【不好用】
+<span class="error">IE8：isSupported=false,但是支持；firefox：isSupported=true,但是不支持 </span>
+		</pre>
+	</div>
+	<div class="aShow note" id="focusShow">
+		<div id="focusDiv">
+			<input id="focusIpt" type="text">
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#focusShow");
+	}
+	var input = document.getElementById('focusIpt');
+	eventUtil.bind(input,"blur",function(){
+		_show("input blur");
+	});
+	eventUtil.bind(input,"focus",function(){
+		_show("input focus");
+	});
+	eventUtil.bind(input,"focusin",function(){
+		_show("input focusin");
+	});
+	eventUtil.bind(input,"focusout",function(){
+		_show("input focusout");
+	});
+
+	var div = document.getElementById('focusDiv');
+	eventUtil.bind(div,"focusin",function(){
+		_show("div focusin");
+	});
+	eventUtil.bind(div,"focusout",function(){
+		_show("div focusout");
+	});
+	
+});
+</script>
+
+
+
+<div class="aTitle">鼠标事件1</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+DOM3 级事件中定义了9 个鼠标事件，如下：
+1. click：在用户单击主鼠标按钮（一般是左边的按钮）或者按下回车键时触发。这一点对确保
+易访问性很重要，意味着onclick 事件处理程序既可以通过键盘也可以通过鼠标执行。
+2. dblclick：在用户双击主鼠标按钮（一般是左边的按钮）时触发。从技术上说，这个事件并不
+是DOM2 级事件规范中规定的，但鉴于它得到了广泛支持，所以DOM3 级事件将其纳入了标准。
+3. mousedown：在用户按下了任意鼠标按钮时触发。不能通过键盘触发这个事件。
+4. mouseenter：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件<mark>不冒泡</mark>，而且
+在光标移动到后代元素上不会触发。DOM2 级事件并没有定义这个事件，但DOM3 级事件将它
+纳入了规范。IE、Firefox 9+和Opera 支持这个事件。
+5. mouseleave：在位于元素上方的鼠标光标移动到元素范围之外时触发。这个事件<mark>不冒泡</mark>，而且
+在光标移动到后代元素上不会触发。DOM2 级事件并没有定义这个事件，但DOM3 级事件将它
+纳入了规范。IE、Firefox 9+和Opera 支持这个事件。
+6. mousemove：当鼠标指针在元素内部移动时重复地触发。不能通过键盘触发这个事件。
+7. mouseout：在鼠标指针位于一个元素上方，然后用户将其移入另一个元素时触发。又移入的另
+一个元素可能位于前一个元素的外部，也可能是这个元素的子元素。不能通过键盘触发这个事件。
+8. mouseover：在鼠标指针位于一个元素外部，然后用户将其首次移入另一个元素边界之内时触
+发。不能通过键盘触发这个事件。
+9. mouseup：在用户释放鼠标按钮时触发。不能通过键盘触发这个事件。
+
+<b>IE bug</b>
+dblclick触发的顺序始终如下：
+(1) mousedown
+(2) mouseup
+(3) click
+(4) mousedown
+(5) mouseup
+(6) click
+(7) dblclick
+IE8 及之前版本中的实现有一个小bug，
+因此在双击事件中，会跳过第二个mousedown 和click事件，其顺序如下：
+(1) mousedown
+(2) mouseup
+(3) click
+(4) mouseup
+(5) dblclick
+
+<b>浏览器检测</b>
+使用以下代码可以检测浏览器是否支持以上DOM2 级事件（除dbclick、mouseenter 和
+mouseleave 之外）：
+var isSupported = document.implementation.hasFeature("MouseEvents", "2.0");
+要检测浏览器是否支持上面的所有事件，可以使用以下代码：
+var isSupported = document.implementation.hasFeature("MouseEvent", "3.0")
+
+<b>位置</b>
+1. 客户区坐标位置（即在视口坐标位置）
+clientX 和clientY
+
+2. 页面坐标位置
+pageX 和 pageY
+<span class="error">IE8 及更早版本不支持事件对象上的页面坐标不过使用客户区坐标和滚动信息可以计算出来。</span>
+var pageX=event.pageX,
+	pageY = event.pageY;
+if (pageX === undefined){
+	pageX = event.clientX + (document.body.scrollLeft ||
+			document.documentElement.scrollLeft);
+}
+if (pageY === undefined){
+	pageY = event.clientY + (document.body.scrollTop ||
+			document.documentElement.scrollTop);
+}
+
+3. 屏幕坐标位置
+screenX 和 screenY
+
+<b>修改键</b>
+在按下鼠标时键盘上的某些键的状态也可以影响到所要采取的操作。这些修改键就是
+Shift、Ctrl、Alt 和Meta（在Windows 键盘中是Windows 键，在苹果机中是Cmd 键），
+DOM 为此规定了4 个属性，表示这些修改键的状态：shiftKey、ctrlKey、altKey 和metaKey。
+这些属性中包含的都是布尔值，如果相应的键被按下了，则值为true，否则值为false。
+<pre class="error">IE9、Firefox、Safari、Chrome 和Opera 都支持这4 个键。
+IE8 及之前版本不支持metaKey 属性。【实际测试Chrome和Firefox也没有捕获Meta键】</pre>
+
+<b>相关元素</b>
+在发生mouseover 和mouserout事件时，都会涉及把鼠标指针从一个元素的边界之内
+移动到另一个元素的边界之内。
+例如：鼠标从div1移入div2, 触发了div1的mouseout事件，事件的相关元素为div2;
+      同时还触发了div2的mouseover事件，事件的相关元素为div1。
+
+DOM通过event 对象的relatedTarget 属性提供了相关元素的信息。这个属性只对于mouseover
+和mouseout 事件才包含值；对于其他事件，这个属性的值是null。
+IE8及之前版本不支持relatedTarget属性，但提供了保存着同样信息的不同属性。
+在mouseover 事件触发时，IE 的fromElement 属性中保存了相关元素；
+在mouseout 事件触发时，IE 的toElement 属性中保存着相关元素。
+
+var eventUtil = {
+	...
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	...
+};
+
+<b>鼠标按钮</b>
+对于mousedown 和mouseup 事件来说，则在其event 对象存在一个button 属性，
+表示按下或释放的按钮。
+
+DOM的button 属性可能有如下3 个值：
+	0 表示主鼠标按钮，
+	1 表示中间的鼠标按钮（鼠标滚轮按钮），
+	2 表示次鼠标按钮。
+在常规的设置中，主鼠标按钮就是鼠标左键，而次鼠标按钮就是鼠标右键。
+
+IE8 及之前版本也提供了button 属性，但这个属性的值与DOM 的button 属性有很大差异。
+	0：表示没有按下按钮。
+	1：表示按下了主鼠标按钮。
+	2：表示按下了次鼠标按钮。
+	3：表示同时按下了主、次鼠标按钮。
+	4：表示按下了中间的鼠标按钮。
+	5：表示同时按下了主鼠标按钮和中间的鼠标按钮。
+	6：表示同时按下了次鼠标按钮和中间的鼠标按钮。
+	7：表示同时按下了三个鼠标按钮。
+<pre class="error">在使用onmouseup 事件处理程序时，button 的值表示释放的是哪个按钮。
+此外，如果不是按下或释放了主鼠标按钮，Opera 不会触发mouseup 或mousedown
+事件。</pre>
+由于单独使用能力检测无法确定差异（两种模型有同名的button 属性），因此必须另辟蹊径。
+我们知道，支持DOM 版鼠标事件的浏览器可以通过hasFearture()方法来检测。
+var eventUtil = {
+	...
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	...
+};
+
+//阻止右键默认事件
+eventUtil.bind(innerDiv,"contextmenu",function(event){
+	eventUtil.preventDefault(event);
+	eventUtil.stopPropagation(event);
+});
+
+<b>更多的事件信息</b>
+1. event.detail 属性【DOM2 级事件】
+表示在给定位置上发生了多少次单击
+
+2. IE特有鼠标事件信息
+1) altLeft：布尔值，表示是否按下了Alt 键。
+   如果altLeft 的值为true，则altKey 的值也为true。
+2) ctrlLeft：布尔值，表示是否按下了Ctrl 键。
+   如果ctrlLeft 的值为true，则ctrlKey 的值也为true。
+3) offsetX：光标相对于目标元素边界的x 坐标。
+4) offsetY：光标相对于目标元素边界的y 坐标。
+5) shiftLeft：布尔值，表示是否按下了Shift 键。
+   如果shiftLeft 的值为true，则shiftKey的值也为true。
+		</pre>
+	</div>
+	<div class="aShow note" id="mouseShow">
+	    位置信息：
+		<div id="positionDiv" style="height:70px;"></div>
+		修改键：
+		<div id="keyDiv" style="height:30px;"></div>
+		<div id="outerDiv" style="width:100px;height:100px;background-color:#FDE5E5">
+			进行鼠标操作吧
+			<div id="innerDiv" style="width:50px;height:50px;background-color:#E5E8FC"></div>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	var i=0;
+	function _show(msg){
+		$("<div>"+msg+"</div>").insertAfter("#outerDiv");
+	}
+	var outerDiv = document.getElementById('outerDiv');
+	eventUtil.bind(outerDiv,"click",function(event){
+		_show(++i+"outerDiv click");
+		var keyDiv = document.getElementById("keyDiv");
+		keyDiv.innerHTML="";
+		if(event.shiftKey){
+			keyDiv.innerHTML="按下shift键";
+		}else if(event.ctrlKey){
+			keyDiv.innerHTML="按下ctrl键";
+		}else if(event.altKey){
+			keyDiv.innerHTML="按下alt键";
+		}else if(event.metaKey){
+			keyDiv.innerHTML="按下meta键";
+		}
+	});
+	eventUtil.bind(outerDiv,"dblclick",function(){
+		_show(++i+"outerDiv dblclick");
+	});
+	eventUtil.bind(outerDiv,"mousedown",function(){
+		_show(++i+"outerDiv mousedown");
+	});
+	eventUtil.bind(outerDiv,"mouseup",function(){
+		_show(++i+"outerDiv mouseup");
+	});
+	eventUtil.bind(outerDiv,"mouseenter",function(){
+		_show(++i+"outerDiv mouseenter");
+	});
+	eventUtil.bind(outerDiv,"mouseleave",function(){
+		_show(++i+"outerDiv mouseleave");
+	});
+	eventUtil.bind(outerDiv,"mousemove",function(event){
+		//	_show(++i+"outerDiv mousemove");
+		var pageX=event.pageX,
+			pageY = event.pageY;
+		if (pageX === undefined){
+			pageX = event.clientX + (document.body.scrollLeft ||
+					document.documentElement.scrollLeft);
+		}
+		if (pageY === undefined){
+			pageY = event.clientY + (document.body.scrollTop ||
+					document.documentElement.scrollTop);
+		}
+		var info="clientX="+event.clientX+", clientY="+event.clientY+
+				 "<br/>pageX="+pageX+", pageY="+pageY+
+				 "<br/>screenX="+event.screenX+", screenY="+event.screenY;
+
+		document.getElementById("positionDiv").innerHTML=info;
+	});
+	eventUtil.bind(outerDiv,"mouseout",function(){
+		_show(++i+"outerDiv mouseout");
+	});
+	eventUtil.bind(outerDiv,"mouseover",function(){
+		_show(++i+"outerDiv mouseover");
+	});
+	
+
+	var innerDiv = document.getElementById('innerDiv');
+	eventUtil.bind(innerDiv,"click",function(event){
+		_show(++i+"innerDiv click");
+	});
+	eventUtil.bind(innerDiv,"dblclick",function(){
+		_show(++i+"innerDiv dblclick");
+	});
+	eventUtil.bind(innerDiv,"mousedown",function(event){
+		_show(++i+"innerDiv mousedown [button="+eventUtil.getButton(event)+"]");
+	});
+	eventUtil.bind(innerDiv,"mouseup",function(event){
+		_show(++i+"innerDiv mouseup [button="+eventUtil.getButton(event)+"]");
+	});
+	eventUtil.bind(innerDiv,"contextmenu",function(event){//阻止右键默认事件
+		eventUtil.preventDefault(event);
+		eventUtil.stopPropagation(event);
+	});
+	eventUtil.bind(innerDiv,"mouseenter",function(){
+		_show(++i+"innerDiv mouseenter");
+	});
+	eventUtil.bind(innerDiv,"mouseleave",function(){
+		_show(++i+"innerDiv mouseleave");
+	});
+	//eventUtil.bind(innerDiv,"mousemove",function(){
+	//	_show(++i+"innerDiv mousemove");
+	//});
+	eventUtil.bind(innerDiv,"mouseout",function(event){
+		//_show(++i+"innerDiv mouseout");
+		var relatedTarget = eventUtil.getRelatedTarget(event);
+		_show((++i)+"innerDiv mouseout [relatedTarget="+relatedTarget.id+"]");
+		//eventUtil.stopPropagation(event);//阻止冒泡
+	});
+	eventUtil.bind(innerDiv,"mouseover",function(event){
+		//_show(++i+"innerDiv mouseover");
+		var relatedTarget = eventUtil.getRelatedTarget(event);
+		_show((++i)+"innerDiv mouseover [relatedTarget="+relatedTarget.id+"]");
+		//eventUtil.stopPropagation(event);//阻止冒泡
+	});
+
+});	
+</script>
+
+
+<div class="aTitle">鼠标事件2-滚轮事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. IE 6.0 首先实现了mousewheel【HTML 5】 事件。
+   此后，Opera、Chrome 和Safari 也都实现了这个事件。
+2. 这个事件可以在任何元素上面触发，
+   最终会冒泡到document（IE8）
+   或window（IE9、Opera、Chrome 及Safari）对象。
+3. event.wheelDelta属性：
+当用户向上滚动鼠标滚轮时，wheelDelta 是120 的倍数；
+当用户向下滚动鼠标滚轮时，wheelDelta 是-120 的倍数。
+<span class="error">在Opera 9.5 之前的版本中，wheelDelta 值的正负号是颠倒的。</span>
+4. Firefox的差异
+Firefox 支持一个名为DOMMouseScroll 的类似事件，也是在鼠标滚轮滚动时触发。
+而有关鼠标滚轮的信息则保存在detail 属性中，当向上滚动鼠标滚轮时，
+这个属性的值是-3 的倍数，当向下滚动鼠标滚轮时，这个属性的值是3 的倍数。
+
+eventUtil.bind(window, "mousewheel", function(event){
+	event = eventUtil.getEvent(event);
+	alert(eventUtil.getWheelDelta(event));
+});
+//支持Firefox
+eventUtil.bind(window, "DOMMouseScroll", function(event){
+	event = eventUtil.getEvent(event);
+	alert(eventUtil.getWheelDelta(event));
+});
+
+var eventUtil = {
+	...
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+	...
+}
+		</pre>
+	</div>
+	<div class="aShow" id="wheelShow"></div>
+</div>
+<script>
+$(function(){
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#wheelShow");
+}
+eventUtil.bind(window/*IE8只能冒泡到document*/, "mousewheel", function(event){
+	event = eventUtil.getEvent(event);
+	var msg = "mousewheel wheelDelta="+eventUtil.getWheelDelta(event);
+	//window.console?console.log(msg)
+	//              :alert(msg);
+	_show("mousewheel wheelDelta="+eventUtil.getWheelDelta(event));//IE下会阻止页面滚动
+});
+//支持Firefox
+eventUtil.bind(window, "DOMMouseScroll", function(event){
+	event = eventUtil.getEvent(event);
+	_show("DOMMouseScroll wheelDelta="+eventUtil.getWheelDelta(event));
+});
+
+});
+</script>
+
+
+<div class="aTitle">键盘与文本事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+用户在使用键盘时会触发键盘事件。“DOM2 级事件”最初规定了键盘事件，但在最终定稿之前又
+删除了相应的内容。结果，对键盘事件的支持主要遵循的是DOM0 级。
+
+“DOM3 级事件”为键盘事件制定了规范，IE9 率先完全实现了该规范。其他浏览器也在着手实现这
+一标准，但仍然有很多遗留的问题。
+
+DOM0 级有3 个键盘事件：
+1. keydown：当用户按下键盘上的任意键时触发，而且如果按住不放的话，会重复触发此事件。
+2. keypress：当用户按下键盘上的字符键时触发，而且如果按住不放的话，会重复触发此事件。
+   1）按下Esc 键也会触发这个事件。
+   2）Safari 3.1 之前的版本也会在用户按下非字符键时触发keypress事件。
+3. keyup：当用户释放键盘上的键时触发。
+
+<b>textInput</b>
+“DOM3级事件”规范中引入了一个新事件:textInput。
+根据规范，当用户在可编辑区域中输入字符时，就会触发这个事件。
+它的event 对象中还包含一个data 属性，这个属性的值就是用户输入的字符（而非字符编码）。
+目前只有IE9,Chrome,Safari支持。
+
+区别：
+1.任何可以获得焦点的元素都可以触发kepress事件，但只有可编辑区域才能触发textInput事件
+2.textInput事件只会在用户按下能够输入实际字符的键时才会被触发，
+  而keypress事件则在按下那些能够影响文本显示的键时也会触发（例如退格键）。
+
+在用户按了一下键盘上的字符键时，首先会触发keydown 事件，然后紧跟着是keypress 事件，
+最后会触发keyup 事件。其中，keydown 和keypress 都是在文本框发生变化之前被触发的；而keyup
+事件则是在文本框已经发生变化之后被触发的。如果用户按下了一个字符键不放，就会重复触发
+keydown 和keypress 事件，直到用户松开该键为止。
+
+<b>键码</b>
+1. event.keyCode
+   键码通过event.keyCode属性获取。
+   keyup、keydown事件中keyCode为键码值。
+   keypress 事件中keyCode为字符的ASCII 编码。
+2. event.charCode【DOM3中不再包含】
+IE9、Firefox、Chrome 和Safari 的event 对象都支持一个charCode 属性，这个属性只有在发生
+keypress 事件时才包含值，而且这个值是按下的那个键所代表字符的ASCII 编码。
+
+<b>DOM3 级变化</b>
+DOM3增加了两个新属性(不建议用)：
+1. key 属性是为了取代keyCode 而新增的，它的值是一个字符串。
+在按下某个字符键时，key的值就是相应的文本字符（如“k”或“M”）；
+在按下非字符键时， key 的值是相应键的名（如“Shift”或“Down”）。
+2. char 属性在按下字符键时的行为与key 相同，但在按下非字符键时值为null。
+<span class="error">IE9 支持key 属性，但不支持char 属性。</span>
+<span class="error">Safari 5 和Chrome 支持名为keyIdentifier 的属性，在按下非字符键（例如Shift）的情况下与key 的值相同。</span>
+<span class="error">对于字符键，keyIdentifier 返回一个格式类似“U+0000”的字符串，表示Unicode 值。</span>
+3. event.location 的属性，表示按下了什么位置上的键：【不建议用】
+	0 表示默认键盘，1 表示左侧位置（例如左位的Alt 键），
+	2 表示右侧位置（例如右侧的Shift 键），
+	3 表示数字小键盘，
+	4 表示移动设备键盘（也就是虚拟键盘），
+	5 表示手柄（如任天堂Wii 控制器）
+IE9 支持这个属性。Safari 和Chrome 支持名为keyLocation 的等价属性。
+var loc = event.location || event.keyLocation;
+
+4. event.getModifierState()方法
+表示要检测的修改键。参数为字符串，即Shift、Control、AltGraph 或Meta 的字符串。
+如果指定的修改键是活动的（也就是处于被按下的状态），这个方法返回true，否则返回false。
+var isShift = event.getModifierState("Shift");
+
+<b>屏蔽快捷键示例：</b>
+eventUtil.bind(keyInput,"keydown",function(event) {
+	//屏蔽ctrl+V
+	if(event.ctrlKey && event.keyCode===86){
+		eventUtil.preventDefault(event);
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="keyShow">
+		输入框屏蔽了ctrl+V快捷键:<br/>
+		<input id="keyInput" type="text">
+	</div>
+</div>
+<script>
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#keyShow");
+	}
+	var keyInput = document.getElementById("keyInput");
+	eventUtil.bind(keyInput,"keydown",function(event) {
+		_show("keydown");
+		_show("keydown event.keyCode="+event.keyCode);
+		_show("keydown event.charCode="+event.charCode);
+		_show("keydown event.key="+event.key);
+		_show("keydown event.keyIdentifier="+event.keyIdentifier);
+		//屏蔽ctrl+V
+		if(event.ctrlKey && event.keyCode===86){
+			window.console&&console.log("ctrl+V");
+			eventUtil.preventDefault(event);
+		}
+	});
+	eventUtil.bind(keyInput,"keypress",function(event) {
+		_show("keypress");
+		_show("keypress event.keyCode="+event.keyCode);
+		_show("keypress event.charCode="+event.charCode);
+		_show("keypress event.key="+event.key);
+		_show("keypress event.keyIdentifier="+event.keyIdentifier);
+	});
+	eventUtil.bind(keyInput,"keyup",function(event) {
+		var info = "";
+		if(event.shiftKey){
+			info="[按下shift键]";
+		}else if(event.ctrlKey){
+			info="[按下ctrl键]";
+		}else if(event.altKey){
+			info="[按下alt键]";
+		}else if(event.metaKey){
+			info="[按下meta键]";
+		}
+		window.console&&console.log("keyup"+info);
+		_show("keyup event.keyCode="+event.keyCode);
+		_show("keyup event.charCode="+event.charCode);
+		_show("keyup event.key="+event.key+
+			"<br/>event.keyIdentifier="+event.keyIdentifier);
+		//var loc = event.location || event.keyLocation;
+		_show("keyup event.location="+event.location
+			  +"<br/>event.keyLocation="+event.keyLocation);
+		_show("event.getModifierState('Shift')="+(event.getModifierState&&event.getModifierState("Shift")));
+		
+	});
+
+	eventUtil.bind(keyInput,"textInput",function(event) {
+		event = eventUtil.getEvent(event);
+		var target = eventUtil.getTarget(event);
+		window.console&&console.log("textInput: target.value="+target.value);
+		window.console&&console.log("textInput: event=",event);
+		_show("textInput: target.value="+target.value);
+	});
+	
+});	
+</script>
+
+
+<div class="aTitle">DOM变动事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+DOM2 级定义了如下变动事件。
+1. DOMSubtreeModified：
+  在DOM 结构中发生任何变化时触发。
+  这个事件在其他任何事件触发后都会触发。
+2. DOMNodeInserted：
+  在一个节点作为子节点被插入到另一个节点中时触发。
+3. DOMNodeRemoved：
+  在节点从其父节点中被移除时触发。
+4. DOMNodeInsertedIntoDocument：
+  在一个节点被直接插入文档或通过子树间接插入文档之后触发。
+  这个事件在DOMNodeInserted 之后触发。
+5. DOMNodeRemovedFromDocument：
+  在一个节点被直接从文档中移除或通过子树间接从文档中移
+  除之前触发。这个事件在DOMNodeRemoved 之后触发。
+6. DOMAttrModified：
+  在特性被修改之后触发。
+7. DOMCharacterDataModified：
+  在文本节点的值发生变化时触发。
+
+IE8 及更早版本不支持任何变动事件。
+<table border="1" cellspacing="0">
+	<tr><td>事 件</td><td>Opera 9+</td><td>Firefox 3+</td><td>Safari 3+及Chrome</td><td>IE9+</td></tr>
+	<tr><td>DOMSubtreeModified</td><td>×</td><td>支持</td><td>支持</td><td>支持</td></tr>
+	<tr><td>DOMNodeInserted</td><td>支持</td><td>支持</td><td>支持</td><td>支持</td></tr>
+	<tr><td>DOMNodeRemoved</td><td>支持</td><td>支持</td><td>支持</td><td>支持</td></tr>
+</table>
+
+&lt;div id="parentDiv" style="width:100px;height:100px;background-color:#FDE5E5"&gt;
+	&lt;p id="childDiv1"&gt;第一段&lt;/p&gt;
+	&lt;p id="childDiv2"&gt;第二段&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;
+	&lt;button id="delBtn1"&gt;删除第一段&lt;/button&gt;&lt;br/&gt;
+	&lt;button id="addBtn"&gt;新增第三段&lt;/button&gt;&lt;br/&gt;
+	&lt;button id="modifyBtn"&gt;修改第二段文本&lt;/button&gt;&lt;br/&gt;
+	&lt;button id="modifyAttrBtn"&gt;修改第二段属性&lt;/button&gt;
+&lt;/p&gt;
+
+<b>脚本：</b>
+//1. 删除第一段按钮绑定事件
+eventUtil.bind(document.getElementById("delBtn1"),"click",
+	function(){
+		var child1 = document.getElementById("childDiv1");
+		if(child1){
+			child1.parentNode.removeChild(child1);
+		}
+	});
+//parentDiv监听节点删除事件
+eventUtil.bind(document.getElementById("parentDiv"),"DOMNodeRemoved",
+	function(event){
+		console.log("parentDiv 监听到 DOMNodeRemoved 事件, "+
+					"删除节点target="+event.target.id);
+	});
+//childDiv1监听节点被删除事件【不冒泡】
+eventUtil.bind(document.getElementById("childDiv1"),"DOMNodeRemovedFromDocument",
+	function(event){
+		console.log("childDiv1 监听到 DOMNodeRemovedFromDocument 事件,"+
+					"删除节点target="+event.target.id);
+	});
+
+//2. 新增第三段按钮绑定事件
+eventUtil.bind(document.getElementById("addBtn"),"click",
+	function(){
+		var child3 = document.getElementById("childDiv3");
+		if(!child3){
+			child3 = document.createElement("p");
+			child3.id="childDiv3";
+			child3.innerHTML="第三段";
+
+			//childDiv3监听节点新增事件【不冒泡】
+			eventUtil.bind(child3,"DOMNodeInsertedIntoDocument",
+				function(event){
+					console.log("childDiv3 监听到 DOMNodeInsertedIntoDocument 事件,"+
+								"新增节点target="+event.target.id);
+				});
+
+			document.getElementById("parentDiv").appendChild(child3);
+		}
+		
+	});
+//parentDiv监听节点新增事件
+eventUtil.bind(document.getElementById("parentDiv"),"DOMNodeInserted",
+	function(event){
+		console.log("parentDiv 监听到 DOMNodeInserted 事件, "+
+					"新增节点target="+event.target.id);
+	});
+
+
+//3. 修改第二段按钮绑定事件
+eventUtil.bind(document.getElementById("modifyBtn"),"click",
+	function(){
+		var child2 = document.getElementById("childDiv2");
+		child2.innerHTML=child2.innerHTML+"!";
+	});
+
+//childDiv2监听子树修改事件
+eventUtil.bind(document.getElementById("childDiv2"),"DOMSubtreeModified",
+	function(event){
+		console.log("childDiv2 监听到 DOMSubtreeModified 事件, "+
+					"子树改动target="+event.target.id);
+	});
+//parentDiv监听子树修改事件
+eventUtil.bind(document.getElementById("parentDiv"),"DOMSubtreeModified",
+	function(event){
+		console.log("parentDiv 监听到 DOMSubtreeModified 事件, "+
+					"子树改动target="+event.target.id);
+	});
+
+//4. 修改第二段属性按钮绑定事件
+eventUtil.bind(document.getElementById("modifyAttrBtn"),"click",
+	function(){
+		var child2 = document.getElementById("childDiv2");
+		child2.setAttribute("name","p2");
+	});
+//childDiv2监听属性修改事件【Safari及Chrome不支持】
+eventUtil.bind(document.getElementById("childDiv2"),"DOMAttrModified",
+	function(event){
+		console.log("childDiv2 监听到 DOMAttrModified 事件, "+
+					"特性修改target="+event.target.id);
+	});
+		</pre>
+	</div>
+	<div class="aShow" id="mutationShow">
+		<div id="parentDiv" style="width:100px;height:100px;background-color:#FDE5E5">
+			<p id="childDiv1">第一段</p>
+			<p id="childDiv2">第二段</p>
+		</div>
+		<p>
+			<button id="delBtn1">删除第一段</button><br/>
+			<button id="addBtn">新增第三段</button><br/>
+			<button id="modifyBtn">修改第二段文本</button><br/>
+			<button id="modifyAttrBtn">修改第二段属性</button>
+		</p>
+	</div>
+</div>
+<script>
+$(function(){
+function _show(msg){
+	$("<div>"+"</div>")
+}
+//1. 删除第一段按钮绑定事件
+eventUtil.bind(document.getElementById("delBtn1"),"click",
+	function(){
+		var child1 = document.getElementById("childDiv1");
+		if(child1){
+			child1.parentNode.removeChild(child1);
+		}
+	});
+//parentDiv监听节点删除事件
+eventUtil.bind(document.getElementById("parentDiv"),"DOMNodeRemoved",
+	function(event){
+		console.log("parentDiv 监听到 DOMNodeRemoved 事件, 删除节点target="+event.target.id);
+	});
+//childDiv1监听节点被删除事件
+eventUtil.bind(document.getElementById("childDiv1"),"DOMNodeRemovedFromDocument",
+	function(event){
+		console.log("childDiv1 监听到 DOMNodeRemovedFromDocument 事件, 删除节点target="+event.target.id);
+	});
+
+//2. 新增第三段按钮绑定事件
+eventUtil.bind(document.getElementById("addBtn"),"click",
+	function(){
+		var child3 = document.getElementById("childDiv3");
+		if(!child3){
+			child3 = document.createElement("p");
+			child3.id="childDiv3";
+			child3.innerHTML="第三段";
+
+			//childDiv3监听节点新增事件
+			eventUtil.bind(child3,"DOMNodeInsertedIntoDocument",
+				function(event){
+					console.log("childDiv3 监听到 DOMNodeInsertedIntoDocument 事件, 新增节点target="+event.target.id);
+				});
+
+			document.getElementById("parentDiv").appendChild(child3);
+		}
+		
+	});
+//parentDiv监听节点新增事件
+eventUtil.bind(document.getElementById("parentDiv"),"DOMNodeInserted",
+	function(event){
+		console.log("parentDiv 监听到 DOMNodeInserted 事件, 新增节点target="+event.target.id);
+	});
+
+
+//3. 修改第二段按钮绑定事件
+eventUtil.bind(document.getElementById("modifyBtn"),"click",
+	function(){
+		var child2 = document.getElementById("childDiv2");
+		child2.innerHTML=child2.innerHTML+"!";
+	});
+
+//childDiv2监听子树修改事件
+eventUtil.bind(document.getElementById("childDiv2"),"DOMSubtreeModified",
+	function(event){
+		console.log("childDiv2 监听到 DOMSubtreeModified 事件, 子树改动target="+event.target.id);
+	});
+//parentDiv监听子树修改事件
+eventUtil.bind(document.getElementById("parentDiv"),"DOMSubtreeModified",
+	function(event){
+		console.log("parentDiv 监听到 DOMSubtreeModified 事件, 子树改动target="+event.target.id);
+	});
+
+//4. 修改第二段属性按钮绑定事件
+eventUtil.bind(document.getElementById("modifyAttrBtn"),"click",
+	function(){
+		var child2 = document.getElementById("childDiv2");
+		child2.setAttribute("name","p2");
+	});
+//childDiv2监听属性修改事件【Safari及Chrome不支持】
+eventUtil.bind(document.getElementById("childDiv2"),"DOMAttrModified",
+	function(event){
+		console.log("childDiv2 监听到 DOMAttrModified 事件, 特性修改target="+event.target.id);
+	});
+
+});
+</script>
+
+</body>
+</html>
+<script>
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+};
+
+var client = function(){
+
+    //rendering engines
+    var engine = {            
+        ie: 0,
+        gecko: 0,
+        webkit: 0,
+        khtml: 0,
+        opera: 0,
+
+        //complete version
+        ver: null  
+    };
+    
+    //browsers
+    var browser = {
+        
+        //browsers
+        ie: 0,
+        firefox: 0,
+        safari: 0,
+        konq: 0,
+        opera: 0,
+        chrome: 0,
+
+        //specific version
+        ver: null
+    };
+
+    
+    //platform/device/OS
+    var system = {
+        win: false,
+        mac: false,
+        x11: false,
+        
+        //mobile devices
+        iphone: false,
+        ipod: false,
+        ipad: false,
+        ios: false,
+        android: false,
+        nokiaN: false,
+        winMobile: false,
+        
+        //game systems
+        wii: false,
+        ps: false 
+    };    
+
+    //detect rendering engines/browsers
+    var ua = navigator.userAgent;    
+    if (window.opera){
+        engine.ver = browser.ver = window.opera.version();
+        engine.opera = browser.opera = parseFloat(engine.ver);
+    } else if (/AppleWebKit\/(\S+)/.test(ua)){
+        engine.ver = RegExp["$1"];
+        engine.webkit = parseFloat(engine.ver);
+        
+        //figure out if it's Chrome or Safari
+        if (/Chrome\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.chrome = parseFloat(browser.ver);
+        } else if (/Version\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.safari = parseFloat(browser.ver);
+        } else {
+            //approximate version
+            var safariVersion = 1;
+            if (engine.webkit < 100){
+                safariVersion = 1;
+            } else if (engine.webkit < 312){
+                safariVersion = 1.2;
+            } else if (engine.webkit < 412){
+                safariVersion = 1.3;
+            } else {
+                safariVersion = 2;
+            }   
+            
+            browser.safari = browser.ver = safariVersion;        
+        }
+    } else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)){
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.khtml = browser.konq = parseFloat(engine.ver);
+    } else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){    
+        engine.ver = RegExp["$1"];
+        engine.gecko = parseFloat(engine.ver);
+        
+        //determine if it's Firefox
+        if (/Firefox\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.firefox = parseFloat(browser.ver);
+        }
+    } else if (/MSIE ([^;]+)/.test(ua)){    
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.ie = browser.ie = parseFloat(engine.ver);
+    }
+    
+    //detect browsers
+    browser.ie = engine.ie;
+    browser.opera = engine.opera;
+    
+
+    //detect platform
+    var p = navigator.platform;
+    system.win = p.indexOf("Win") == 0;
+    system.mac = p.indexOf("Mac") == 0;
+    system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+
+    //detect windows operating systems
+    if (system.win){
+        if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
+            if (RegExp["$1"] == "NT"){
+                switch(RegExp["$2"]){
+                    case "5.0":
+                        system.win = "2000";
+                        break;
+                    case "5.1":
+                        system.win = "XP";
+                        break;
+                    case "6.0":
+                        system.win = "Vista";
+                        break;
+                    case "6.1":
+                        system.win = "7";
+                        break;
+                    default:
+                        system.win = "NT";
+                        break;                
+                }                            
+            } else if (RegExp["$1"] == "9x"){
+                system.win = "ME";
+            } else {
+                system.win = RegExp["$1"];
+            }
+        }
+    }
+    
+    //mobile devices
+    system.iphone = ua.indexOf("iPhone") > -1;
+    system.ipod = ua.indexOf("iPod") > -1;
+    system.ipad = ua.indexOf("iPad") > -1;
+    system.nokiaN = ua.indexOf("NokiaN") > -1;
+    
+    //windows mobile
+    if (system.win == "CE"){
+        system.winMobile = system.win;
+    } else if (system.win == "Ph"){
+        if(/Windows Phone OS (\d+.\d+)/.test(ua)){;
+            system.win = "Phone";
+            system.winMobile = parseFloat(RegExp["$1"]);
+        }
+    }
+    
+    
+    //determine iOS version
+    if (system.mac && ua.indexOf("Mobile") > -1){
+        if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)){
+            system.ios = parseFloat(RegExp.$1.replace("_", "."));
+        } else {
+            system.ios = 2;  //can't really detect - so guess
+        }
+    }
+    
+    //determine Android version
+    if (/Android (\d+\.\d+)/.test(ua)){
+        system.android = parseFloat(RegExp.$1);
+    }
+    
+    //gaming systems
+    system.wii = ua.indexOf("Wii") > -1;
+    system.ps = /playstation/i.test(ua);
+    
+    //return it
+    return {
+        engine:     engine,
+        browser:    browser,
+        system:     system        
+    };
+
+}();
+/*document.body.onload=function(){
+	alert("body onload");
+};
+window.onload=function(){
+	alert("window onload");
+};*/
+/*setTimeout(function() {
+	//var image = document.createElement("img");
+	var image = new Image();
+	eventUtil.bind(image,"load",function(event){
+		alert('load img');
+		alert(event.type);
+	})
+	//document.getElementById("showResult1").appendChild(image);
+	image.src = "http://xc.yixin.com/imgs/header/logo.png";
+}, 3000);*/
+</script>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS 选择框</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">简单示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app1" ng-controller="ctrl1"&gt;
+  &lt;select ng-model="selectedClass" ng-options="x for x in classes"&gt;&lt;/select&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.classes=["宅男","剁手党","高品质"];
+  $scope.selectedClass="高品质";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <select ng-model="selectedClass" ng-options="x for x in classes"></select>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.classes=["宅男","剁手党","高品质"];
+  $scope.selectedClass="高品质";
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+<div class="aTitle">ng-options方式含value示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app4" ng-controller="ctrl4"&gt;
+    &lt;select name="tag" ng-model="tag" ng-options="<mark>x.val</mark> as <mark>x.name</mark> for x in tags"&gt;
+    &lt;/select&gt;
+&lt;/div&gt;
+
+脚本：
+var app4 = angular.module("app4",[]);
+app4.controller("ctrl4",function($scope){
+  $scope.tags=[{<mark>val</mark>:"01",<mark>name</mark>:"宅男"},{val:"02",name:"剁手党"},{val:"03",name:"高品质"}];
+  $scope.tag="03";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app4" ng-controller="ctrl4">
+        <select name="tag" ng-model="tag" ng-options="x.val as x.name for x in tags">
+        </select>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app4 = angular.module("app4",[]);
+app4.controller("ctrl4",function($scope){
+  $scope.tags=[{val:"01",name:"宅男"},{val:"02",name:"剁手党"},{val:"03",name:"高品质"}];
+  $scope.tag="03";
+});
+angular.bootstrap(document.getElementById("app4"), ['app4']);
+</script>
+
+<div class="aTitle">ng-repeat方式含value示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app2" ng-controller="ctrl2"&gt;
+    &lt;select name="tag" ng-model="tag" &gt;
+      &lt;option value=""&gt;请选择&lt;/option&gt;
+      &lt;option ng-repeat="x in tags" value="{{x.val}}"&gt;{{x.name}}&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.tags=[{val:"01",name:"宅男"},{val:"02",name:"剁手党"},{val:"03",name:"高品质"}];
+  $scope.tag="03";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+        <select name="tag" ng-model="tag" >
+          <option value="">请选择</option>
+          <option ng-repeat="x in tags" value="{{x.val}}">{{x.name}}</option>
+        </select>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.tags=[{val:"01",name:"宅男"},{val:"02",name:"剁手党"},{val:"03",name:"高品质"}];
+  $scope.tag="03";
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+<div class="aTitle">ng-repeat方式多选示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app3" ng-controller="ctrl3"&gt;
+    &lt;select name="tag" ng-model="tag" multiple="multiple"&gt;
+      &lt;option value=""&gt;请选择&lt;/option&gt;
+      &lt;option ng-repeat="x in tags" value="{{x.val}}"&gt;{{x.name}}&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;p&gt;您选择的是：&lt;li ng-repeat="x in tag"&gt;{{x}}&lt;/li&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope){
+  $scope.tags=[{val:"01",name:"宅男"},{val:"02",name:"剁手党"},{val:"03",name:"高品质"}];
+  $scope.tag=["01","03"];
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app3" ng-controller="ctrl3">
+        <select name="tag" ng-model="tag" multiple="multiple">
+          <option value="">请选择</option>
+          <option ng-repeat="x in tags" value="{{x.val}}">{{x.name}}</option>
+        </select>
+        <p>您选择的是：<li ng-repeat="x in tag">{{x}}</li></p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope){
+  $scope.tags=[{val:"01",name:"宅男"},{val:"02",name:"剁手党"},{val:"03",name:"高品质"}];
+  $scope.tag=["01","03"];
+});
+angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+
+
+<div class="aTitle">ng-options方式分组示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app5" ng-controller="ctrl5"&gt;
+    &lt;select name="tag" ng-model="tag" ng-options="x.val as x.name group by x.province for x in tags"&gt;
+    &lt;/select&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app5 = angular.module("app5",[]);
+app5.controller("ctrl5",function($scope){
+  $scope.tags=[{val:"1301",name:"石家庄",province:"河北"},
+               {val:"1401",name:"济南",province:"山东"},
+               {val:"1302",name:"保定",province:"河北"},
+               {val:"1402",name:"青岛",province:"山东"}];
+  $scope.tag="1402";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div ng-app="app5" ng-controller="ctrl5">
+        <select name="tag" ng-model="tag" ng-options="x.val as x.name group by x.province for x in tags">
+        </select>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app5 = angular.module("app5",[]);
+app5.controller("ctrl5",function($scope){
+  $scope.tags=[{val:"1301",name:"石家庄",province:"河北"},
+               {val:"1401",name:"济南",province:"山东"},
+               {val:"1302",name:"保定",province:"河北"},
+               {val:"1402",name:"青岛",province:"山东"}];
+  $scope.tag="1402";
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>图片边框</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style>
+.img-border{
+	width: 200px;
+	height: 150px;
+	border-width: 10px;
+	border-style: solid;/*如果没有此属性firefox不显示边框*/
+	border-color: #cacaca;
+	-webkit-border-image: url(../../img/dot.png)30 30 round;
+	-moz-border-image: url(../../img/dot.png)30 30 round;
+	-o-border-image: url(../../img/dot.png)30 30 round;
+	border-image: url(../../img/dot.png)30 30 round;
+}
+</style>
+
+<div class="aTitle">border-image实现图片边框【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.img-border{
+	width: 200px;
+	height: 150px;
+	border-width: 10px;
+	border-style: solid;/*如果没有此属性firefox不显示边框*/
+	-webkit-border-image: url(../../img/dot.png)30 30 round;
+	-moz-border-image: url(../../img/dot.png)30 30 round;
+	-o-border-image: url(../../img/dot.png)30 30 round;
+	border-image: url(../../img/dot.png)30 30 round;
+}
+
+<b>页面：</b>
+&lt;div class="img-border"&gt;&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="img-border"></div>
+	</div>
+</div>
+
+
+<style>
+.imgbg-border{
+	width: 200px;
+	height: 150px;	
+	border: 20px solid transparent;
+	/*前面的背景图会覆盖在后面的背景图之上*/
+	background: linear-gradient(white, white),
+				url(../../img/stone-border.jpg);
+	background-size: cover;
+	background-clip: padding-box, border-box;
+	background-origin: border-box;	
+}
+</style>
+<div class="aTitle">两层背景图片方式实现图片边框【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.imgbg-border{
+	width: 200px;
+	height: 150px;	
+	border: 20px solid transparent;
+	/*前面的背景图会覆盖在后面的背景图之上*/
+	/*background: linear-gradient(white, white),
+				url(../../img/stone-border.jpg);
+	background-size: cover;
+	background-clip: padding-box, border-box;
+	background-origin: border-box;*/
+
+	/*简写*/
+	background:linear-gradient(white, white) padding-box,
+				url(stone-art.jpg) border-box 0 / cover;		
+}
+
+<b>页面：</b>
+&lt;div class="imgbg-border"&gt;&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="imgbg-border"></div>
+	</div>
+</div>
+
+
+
+<style>
+.letter-border{
+	width: 360px;
+	height: 180px;
+	border: .8em solid transparent;
+	background: linear-gradient(#fff,#fff) padding-box,
+				repeating-linear-gradient(-45deg,
+					transparent 0,transparent 1em,
+					#FD0303 0,#FD0303 2em,
+					transparent 0,transparent 3em,
+					#150383 0,#150383 4em) border-box;
+	box-shadow: 0 0 5px 1px rgba(9,9,9,.6)
+}	
+</style>
+<div class="aTitle">信封样式的边框【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.letter-border{
+	width: 360px;
+	height: 180px;
+	border: .8em solid transparent;
+	background: linear-gradient(#fff,#fff) padding-box,
+				repeating-linear-gradient(-45deg,
+					transparent 0,transparent 1em,
+					#FD0303 0,#FD0303 2em,
+					transparent 0,transparent 3em,
+					#150383 0,#150383 4em) border-box;
+	box-shadow: 0 0 5px 1px rgba(9,9,9,.6)
+}
+
+<b>页面：</b>
+&lt;div class="letter-border"&gt;&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="letter-border"></div>
+	</div>
+</div>
+
+
+<style>
+@keyframes ants {
+	100% {background-position: 20px 20px}
+}
+.animation-border{
+	width: 260px;
+	height: 180px;
+	border: 1px solid transparent;
+	background: linear-gradient(#fff,#fff) padding-box,
+				repeating-linear-gradient(-45deg,
+					transparent 0,transparent 25%,
+					#000 0,#000 50%) border-box 0 / 14.14px 14.14px;
+	background-position: 0 0;
+	animation: ants 1s linear infinite;
+}	
+</style>
+<div class="aTitle">动态虚线边框【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+@keyframes ants {
+	100% {background-position: 20px 20px}
+}
+.animation-border{
+	width: 260px;
+	height: 180px;
+	border: 1px solid transparent;
+	background: linear-gradient(#fff,#fff) padding-box,
+				repeating-linear-gradient(-45deg,
+					transparent 0,transparent 25%,
+					#000 0,#000 50%) border-box 0 / 14.14px 14.14px;
+	background-position: 0 0;
+	animation: ants 1s linear infinite;
+}
+
+<b>页面：</b>
+&lt;div class="animation-border"&gt;&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="animation-border"></div>
+	</div>
+</div>
+</body>
+</html>

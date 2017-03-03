@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue计算属性</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">计算属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1"&gt;
+	{{reverseMessage}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		message:"123456789"
+	},
+	computed:{
+		reverseMessage:function(){
+			return this.message.split('').reverse().join('');
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app1">
+			{{reverseMessage}}
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		message:"123456789"
+	},
+	computed:{
+		reverseMessage:function(){
+			return this.message.split('').reverse().join('');
+		}
+	}
+});
+</script>
+
+
+<div class="aTitle">计算属性set、get</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	&lt;h3&gt;账号：{{account}}&lt;/h3&gt;
+	&lt;h3&gt;后缀：{{suffix}}&lt;/h3&gt;
+	&lt;input type="text" v-model="email"&gt;
+	&lt;h3&gt;邮箱：{{email}}&lt;/h3&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		account:"linliu",
+		suffix:"sina.com"
+	},
+	computed:{
+		email:{
+			set:function(newVal){
+				var valArray = newVal.split("@");
+				if(valArray.length>0){
+					this.account=valArray[0];
+				}else{
+					this.account="";
+				}
+
+				if(valArray.length>1){
+					this.suffix=valArray[1];
+				}else{
+					this.suffix="";
+				}
+			},
+			get:function(){
+				if(this.suffix!=""){
+					return this.account+"@"+this.suffix;
+				}else{
+					return this.account;
+				}
+			}
+		}
+	}
+});
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app2">
+			<h3>账号：{{account}}</h3>
+			<h3>后缀：{{suffix}}</h3>
+			<input type="text" v-model="email">
+			<h3>邮箱：{{email}}</h3>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		account:"linliu",
+		suffix:"sina.com"
+	},
+	computed:{
+		email:{
+			set:function(newVal){
+				var valArray = newVal.split("@");
+				if(valArray.length>0){
+					this.account=valArray[0];
+				}else{
+					this.account="";
+				}
+
+				if(valArray.length>1){
+					this.suffix=valArray[1];
+				}else{
+					this.suffix="";
+				}
+			},
+			get:function(){
+				if(this.suffix!=""){
+					return this.account+"@"+this.suffix;
+				}else{
+					return this.account;
+				}
+			}
+		}
+	}
+});
+</script>
+</body>
+</html>

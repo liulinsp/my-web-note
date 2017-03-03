@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue slot</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">单个slot</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1"&gt;
+	&lt;my-msg&gt;
+		请不要使用IE浏览器！
+	&lt;/my-msg&gt;
+
+	&lt;my-msg&gt;&lt;/my-msg&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+Vue.component("my-msg",{
+	template: '&lt;div&gt;\
+		&lt;h3&gt;警告&lt;/h3&gt;\
+		&lt;slot&gt;出现异常！&lt;/slot&gt;\
+		&lt;/div&gt;'
+});
+
+var app1 = new Vue({
+	el:"#app1"
+});
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app1">
+		<my-msg>
+			请不要使用IE浏览器！
+		</my-msg>
+
+		<my-msg></my-msg>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+Vue.component("my-msg",{
+	template: '<div>\
+		<h3>警告</h3>\
+		<slot>出现异常！</slot>\
+		</div>'
+});
+
+var app1 = new Vue({
+	el:"#app1"
+});
+</script>
+
+
+
+<div class="aTitle">具名slot</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+  &lt;div id="app2"&gt;
+	&lt;my-info&gt;
+		&lt;h3 slot="name"&gt;李研&lt;/h3&gt;
+		&lt;h3 slot="age"&gt;32岁&lt;/h3&gt;
+		白独公司创始人、董事长兼首席执行官，全面负责白独公司的战略规划和运营管理。
+	&lt;/my-info&gt;
+  &lt;/div&gt;
+
+<b>脚本：</b>
+Vue.component("my-info",{
+	template: '&lt;div&gt;\
+		&lt;h2&gt;个人简介&lt;/h2&gt;\
+		&lt;slot name="name"&gt;佚名&lt;/slot&gt;\
+		&lt;slot name="age"&gt;-&lt;/slot&gt;\
+		&lt;slot&gt;无&lt;/slot&gt;\
+		&lt;/div&gt;'
+});
+
+var app2 = new Vue({
+	el:"#app2"
+});
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app2">
+		<my-info>
+			<h3 slot="name">李研</h3>
+			<h3 slot="age">32岁</h3>
+			白独公司创始人、董事长兼首席执行官，全面负责白独公司的战略规划和运营管理。
+		</my-info>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+Vue.component("my-info",{
+	template: '<div>\
+		<h2>个人简介</h2>\
+		<slot name="name">佚名</slot>\
+		<slot name="age">-</slot>\
+		<slot>无</slot>\
+		</div>'
+});
+
+var app2 = new Vue({
+	el:"#app2"
+});
+</script>
+
+
+<div class="aTitle">作用域插槽</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+  &lt;div id="app3"&gt;
+	&lt;my-list v-bind:items="productList"&gt;
+		&lt;template slot="product" <mark>scope="props"</mark>&gt;
+			&lt;li&gt;<mark>{{props.title}}</mark> [ <mark>{{props.price}}</mark>元 ]&lt;/li&gt;
+		&lt;/template&gt;
+	&lt;/my-list&gt;
+  &lt;/div&gt;
+
+<b>脚本：</b>
+Vue.component("my-list",{
+	props:["items"],
+	data:function(){
+		return {inneritems:this.items}
+	},
+	template: '&lt;ul&gt;\
+		&lt;slot name="product"\
+		      v-for="item in inneritems"\
+		      <mark>v-bind:title</mark>="item.title"\
+		      <mark>v-bind:price</mark>="item.price"&gt;\
+		&lt;/slot&gt;\
+	&lt;/ul&gt;'
+});
+
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		productList:[{title:"冠生园蜂蜜900g",price:30.00},
+		             {title:"宁夏中宁枸杞250g*2袋",price:36.90},
+		             {title:"鲁花5S压榨一级花生油 4L",price:105.90}]
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app3">
+		<my-list v-bind:items="productList">
+			<template slot="product" scope="props">
+				<li>{{props.title}} [ {{props.price}}元 ]</li>
+			</template>
+		</my-list>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+Vue.component("my-list",{
+	props:["items"],
+	data:function(){
+		return {inneritems:this.items}
+	},
+	template: '<ul>\
+		<slot name="product"\
+		      v-for="item in inneritems"\
+		      v-bind:title="item.title"\
+		      v-bind:price="item.price">\
+		</slot>\
+	</ul>'
+});
+
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		productList:[{title:"冠生园蜂蜜900g",price:30.00},
+		             {title:"宁夏中宁枸杞250g*2袋",price:36.90},
+		             {title:"鲁花5S压榨一级花生油 4L",price:105.90}]
+	}
+});
+</script>
+</body>
+</html>

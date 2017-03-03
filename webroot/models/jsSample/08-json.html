@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JSON</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<script type="text/javascript">
+	$(function(){
+		var zhang = {name:"张三",age:18,isMan:true,parents:["张文","李华"]};
+		var str = JSON.stringify(zhang);
+		$('<div> str --> '+str+' </div>').appendTo($("#showResult1"));
+	});	
+</script>
+<div class="aTitle">对象序列化成JSON格式的字符串</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+JSON.stringify(value [, replacer] [, space]) 
+value：是必须要的字段。就是你输入的对象，比如数组啊，类啊等等。
+replacer：这个是可选的。它又分为2种方式，一种是方法，第二种是数组。
+space：很好理解，用什么来做分隔符的。 
+
+var zhang = {name:"张三",age:18,isMan:true,parents:["张文","李华"]};
+var str = JSON.stringify(zhang);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var zhang = {name:"Zhang San",age:18,isMan:true,parents:["Zhang Wen","Li Hua"]};
+		function convert(key, value) {
+		    if (typeof value === 'string') {
+		        return value.toUpperCase();
+		    }
+		    return value;
+		}
+		var str = JSON.stringify(zhang,convert);
+		$('<div> str --> '+str+' </div>').appendTo($("#showResult2"));
+	});	
+</script>
+<div class="aTitle">对象序列化成JSON格式的字符串-replacer(方法)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var zhang = {name:"Zhang San",age:18,isMan:true,
+			 parents:["Zhang Wen","Li Hua"]};
+function convert(key, value) {
+    if (typeof value === 'string') {
+        return value.toUpperCase();
+    }
+    return value;
+}
+var str = JSON.stringify(zhang,convert);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var zhang = {name:"Zhang San",age:18,isMan:true,parents:["Zhang Wen","Li Hua"]};
+		var str = JSON.stringify(zhang,["name","parents"]);
+		$('<div> str --> '+str+' </div>').appendTo($("#showResult6"));
+	});	
+</script>
+<div class="aTitle">对象序列化成JSON格式的字符串-replacer(数组)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var zhang = {name:"Zhang San",age:18,isMan:true,parents:["Zhang Wen","Li Hua"]};
+var str = JSON.stringify(zhang,["name","parents"]);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult6">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var zhang = {name:"Zhang San",age:18,isMan:true,parents:["Zhang Wen","Li Hua"]};
+		//var str = JSON.stringify(zhang,null,"	");
+		var str = JSON.stringify(zhang,null,"\t");
+		$('<div> str --> <textarea rows="9" style="width:100%">'+str+' </textarea></div>').appendTo($("#showResult3"));
+	});	
+</script>
+<div class="aTitle">对象序列化成JSON格式的字符串-space</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var zhang = {name:"Zhang San",age:18,isMan:true,
+			 parents:["Zhang Wen","Li Hua"]};
+//var str = JSON.stringify(zhang,null,"	");
+var str = JSON.stringify(zhang,null,"\t");
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var zhang = {name:"Zhang San",age:18,isMan:true,
+		parents:["Zhang Wen","Li Hua"],
+		toJSON:function(){
+			return{
+				NAME:this.name,
+				AGE:this.age
+			};
+		}};
+		//var str = JSON.stringify(zhang,null,"	");
+		var str = JSON.stringify(zhang,null,"\t");
+		$('<div> str --> <textarea rows="4" style="width:100%">'+str+' </textarea></div>').appendTo($("#showResult4"));
+	});	
+</script>
+<div class="aTitle">对象序列化成JSON格式的字符串-toJSON()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var zhang = {name:"Zhang San",age:18,isMan:true,
+			 parents:["Zhang Wen","Li Hua"]};
+//var str = JSON.stringify(zhang,null,"	");
+var str = JSON.stringify(zhang,null,"\t");
+		</pre>
+	</div>
+	<div class="aShow" id="showResult4">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var str='{"name":"Zhang San","age":18,"isMan":true,"parents":["Zhang Wen","Li Hua"]}';
+		var zhang = JSON.parse(str);
+		$('<div> zhang.name --> '+zhang.name +
+			'<br/>zhang.age --> '+zhang.age +
+			'<br/>zhang.isMan --> '+zhang.isMan +
+			'<br/>zhang.parents --> '+zhang.parents +
+			'</div>').appendTo($("#showResult5"));
+	});	
+</script>
+<div class="aTitle">反序列化</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+JSON.parse(text[, reviver])
+text:必需， 一个有效的 JSON 字符串。
+reviver: 可选，一个转换结果的函数， 将为对象的每个成员调用此函数。
+
+var str='{"name":"Zhang San","age":18,"isMan":true,
+		  "parents":["Zhang Wen","Li Hua"]}';
+var zhang = JSON.parse(str);
+		</pre>
+	</div>
+	<div class="aShow" id="showResult5">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var str='{"name":"Zhang San","age":18,"isMan":true,"parents":["Zhang Wen","Li Hua"]}';
+		function convert(key, value) {
+		    if (typeof value === 'string') {
+		        return value.toUpperCase();
+		    }
+		    return value;
+		}
+		var zhang = JSON.parse(str,convert);
+		$('<div> zhang.name --> '+zhang.name +
+			'<br/>zhang.age --> '+zhang.age +
+			'<br/>zhang.isMan --> '+zhang.isMan +
+			'<br/>zhang.parents --> '+zhang.parents +
+			'</div>').appendTo($("#showResult7"));
+	});	
+</script>
+<div class="aTitle">反序列化reviver</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var str='{"name":"Zhang San","age":18,"isMan":true,
+         "parents":["Zhang Wen","Li Hua"]}';
+function convert(key, value) {
+    if (typeof value === 'string') {
+        return value.toUpperCase();
+    }
+    return value;
+}
+var zhang = JSON.parse(str,convert);
+		</pre>
+	</div>
+	<div class="aShow" id="showResult7">
+	</div>
+</div>
+
+</body>
+</html>

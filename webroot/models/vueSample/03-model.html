@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue双向数据绑定</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">双向数据绑定</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1" class="note"&gt;
+	&lt;div&gt;
+		{{message}}&lt;br/&gt;
+		&lt;input type="text" v-model="message"/&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;input type="radio" value="men" v-model="sex"&gt;男 
+		&lt;input type="radio" value="women" v-model="sex"&gt;女
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;input type="checkbox" v-model="isVIP"&gt;是否VIP
+	&lt;/div&gt;
+	&lt;div&gt;
+		城市
+		&lt;select name="city" v-model="city"&gt;
+			&lt;option value=""&gt;请选择&lt;/option&gt;
+			&lt;option v-for="item in citys" :value="item.code"&gt;{{item.name}}&lt;/option&gt;
+		&lt;/select&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		标签：
+		&lt;select name="tag" v-model="tag" multiple="multiple"&gt;
+			&lt;option v-for="item in tags" :value="item.code"&gt;{{item.name}}&lt;/option&gt;
+		&lt;/select&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		message:"hello world!",
+
+		sex:"women",
+
+		isVIP:true,
+
+		citys:[{code:11,name:"北京"},{code:12,name:"天津"},{code:31,name:"上海"}],
+		city:12,
+
+		tags:[{code:1,name:"鲜肉"},{code:2,name:"绅士"},{code:3,name:"大叔"}],
+		tag:[2,3]
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app1" class="note">
+			<div>
+				{{message}}<br/>
+				<input type="text" v-model="message"/>
+			</div>
+			<div>
+				<input type="radio" value="men" v-model="sex">男 
+				<input type="radio" value="women" v-model="sex">女
+			</div>
+			<div>
+				<input type="checkbox" v-model="isVIP">是否VIP
+			</div>
+			<div>
+				城市
+				<select name="city" v-model="city">
+					<option value="">请选择</option>
+					<option v-for="item in citys" :value="item.code">{{item.name}}</option>
+				</select>
+			</div>
+			<div>
+				标签：
+				<select name="tag" v-model="tag" multiple="multiple">
+					<option v-for="item in tags" :value="item.code">{{item.name}}</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		message:"hello world!",
+
+		sex:"women",
+
+		isVIP:true,
+
+		citys:[{code:11,name:"北京"},{code:12,name:"天津"},{code:31,name:"上海"}],
+		city:12,
+
+		tags:[{code:1,name:"鲜肉"},{code:2,name:"绅士"},{code:3,name:"大叔"}],
+		tag:[2,3]
+	}
+});
+</script>
+
+
+<div class="aTitle">绑定 value</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2" class="note"&gt;
+	&lt;div&gt;
+		&lt;input type="radio" :value="men" v-model="sex"&gt;男 
+		&lt;input type="radio" :value="women" v-model="sex"&gt;女
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;input type="checkbox" :true-value="vip" :false-value="normal" v-model="isVIP"&gt;是否VIP
+	&lt;/div&gt;
+	&lt;div&gt;
+		城市
+		&lt;select name="city" v-model="city"&gt;
+			&lt;option value=""&gt;请选择&lt;/option&gt;
+			&lt;option v-for="item in citys" :value="item"&gt;{{item.name}}&lt;/option&gt;
+		&lt;/select&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		标签：
+		&lt;select name="tag" v-model="tag" multiple="multiple"&gt;
+			&lt;option v-for="item in tags" :value="item"&gt;{{item.name}}&lt;/option&gt;
+		&lt;/select&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		men:{code:1,name:"men",title:"男"},
+		women:{code:2,name:"women",title:"女"},
+		sex:{code:2,name:"women",title:"女"},
+
+		vip:{tag:"vip",discount:0.5},
+		normal:{tag:"normal",discount:0.8},
+		isVIP:{tag:"vip",discount:0.5},
+
+		citys:[{code:11,name:"北京"},{code:12,name:"天津"},{code:31,name:"上海"}],
+		city:{code:12,name:"天津"},
+
+		tags:[{code:1,name:"鲜肉"},{code:2,name:"绅士"},{code:3,name:"大叔"}],
+		tag:[{code:2,name:"绅士"},{code:3,name:"大叔"}]
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app2" class="note">
+			<div>
+				<input type="radio" :value="men" v-model="sex">男 
+				<input type="radio" :value="women" v-model="sex">女
+			</div>
+			<div>
+				<input type="checkbox" :true-value="vip" :false-value="normal" v-model="isVIP">是否VIP
+			</div>
+			<div>
+				城市
+				<select name="city" v-model="city">
+					<option value="">请选择</option>
+					<option v-for="item in citys" :value="item">{{item.name}}</option>
+				</select>
+			</div>
+			<div>
+				标签：
+				<select name="tag" v-model="tag" multiple="multiple">
+					<option v-for="item in tags" :value="item">{{item.name}}</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		men:{code:1,name:"men",title:"男"},
+		women:{code:2,name:"women",title:"女"},
+		sex:{code:2,name:"women",title:"女"},
+
+		vip:{tag:"vip",discount:0.5},
+		normal:{tag:"normal",discount:0.8},
+		isVIP:{tag:"vip",discount:0.5},
+
+		citys:[{code:11,name:"北京"},{code:12,name:"天津"},{code:31,name:"上海"}],
+		city:{code:12,name:"天津"},
+
+		tags:[{code:1,name:"鲜肉"},{code:2,name:"绅士"},{code:3,name:"大叔"}],
+		tag:[{code:2,name:"绅士"},{code:3,name:"大叔"}]
+	}
+});
+</script>
+
+
+<div class="aTitle">修饰符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. v-model.lazy
+在默认情况下， v-model 在 input 事件中同步输入框的值与数据 ，
+但可以添加一个修饰符 lazy ，从而转变为在 change 事件中同步
+
+2. v-model.number
+将用户的输入值转为 Number 类型
+
+3. v-model.trim
+自动过滤用户输入的首尾空格
+
+<b>页面：</b>
+&lt;div id="app3" class="note"&gt;
+	&lt;div&gt;
+		&lt;h3&gt;{{message}}&lt;/h3&gt;
+		&lt;input type="text" v-model.lazy="message"&gt;
+	&lt;/div&gt;
+	
+	&lt;div&gt;
+		&lt;h3&gt;体重：{{weight*2}} 斤&lt;/h3&gt;
+		体重（公斤）：&lt;input type="text" v-model.number="weight"&gt;
+	&lt;/div&gt;
+	
+	&lt;div&gt;
+		&lt;h3&gt;您好，[{{name}}]&lt;/h3&gt;
+		姓名：&lt;input type="text" v-model.trim="name"&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+
+
+<b>脚本：</b>
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		message:"hello world",
+		weight:48.5,
+		name:"琳"
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app3" class="note">
+			<div>
+				<h3>{{message}}</h3>
+				<input type="text" v-model.lazy="message">
+			</div>
+			
+			<div>
+				<h3>体重：{{weight*2}} 斤</h3>
+				体重（公斤）：<input type="text" v-model.number="weight">
+			</div>
+			
+			<div>
+				<h3>您好，[{{name}}]</h3>
+				姓名：<input type="text" v-model.trim="name">
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		message:"hello world",
+		weight:48.5,
+		name:"琳"
+	}
+});
+</script>
+</body>
+</html>

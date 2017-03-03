@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript事件类型（扩展）</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+<script type="text/javascript">
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+};
+</script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<style>
+.menu-content{
+	position:fixed;
+	display:none;
+	width:100px;
+	min-height:40px;
+	background-color:#FBFBD5;
+	border: 1px solid #D1D1D1;
+}
+
+.menu-content>li{
+	list-style:none;
+	padding: 5px;
+	cursor: pointer;
+}
+</style>
+<div class="aTitle">contextmenu 右键菜单事件【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+&lt;div id="rightClickDiv" style="width:150px;height:100px;border: 1px solid #D1D1D1;"&gt;点击右键&lt;/div&gt;
+&lt;div id="menuDiv" class="menu-content"&gt;
+	&lt;li style="background-color:#FCD5D7"&gt;红色&lt;/li&gt;
+	&lt;li style="background-color:#DEFDDA"&gt;绿色&lt;/li&gt;
+	&lt;li style="background-color:#D0D2FA"&gt;蓝色&lt;/li&gt;
+&lt;/div&gt;	
+
+<b>样式：</b>
+.menu-content{
+	position:fixed;
+	display:none;
+	width:100px;
+	min-height:40px;
+	background-color:#FBFBD5;
+	border: 1px solid #D1D1D1;
+}
+
+.menu-content>li{
+	list-style:none;
+	padding: 5px;
+	cursor: pointer;
+}
+
+<b>脚本：</b>
+eventUtil.bind(document.getElementById("rightClickDiv"), "contextmenu", 
+	function(event) {
+		event = eventUtil.getEvent(event);
+		eventUtil.preventDefault(event);//阻止默认处理事件
+		var menu = document.getElementById("menuDiv");
+		menu.style.display="block";
+		menu.style.left = event.clientX + "px";
+		menu.style.top = event.clientY + "px";
+	});
+
+eventUtil.bind(document,"click",function(event){
+	document.getElementById("menuDiv").style.display="none";
+});
+
+eventUtil.bind(document.getElementById("menuDiv"), "click", 
+	function(event) {
+		var target = eventUtil.getTarget(event);
+		if(target.tagName.toLowerCase() =="li"){
+			var rightClickDiv = document.getElementById("rightClickDiv");
+			rightClickDiv.style.backgroundColor = target.style.backgroundColor;
+		}
+	});
+});
+		</pre>
+	</div>
+	<div class="aShow" id="">
+		<div id="rightClickDiv" style="width:150px;height:100px;border: 1px solid #D1D1D1;">点击右键</div>
+		<div id="menuDiv" class="menu-content">
+			<li style="background-color:#FCD5D7">红色</li>
+			<li style="background-color:#DEFDDA">绿色</li>
+			<li style="background-color:#D0D2FA">蓝色</li>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+eventUtil.bind(document.getElementById("rightClickDiv"), "contextmenu", 
+	function(event) {
+		event = eventUtil.getEvent(event);
+		eventUtil.preventDefault(event);//阻止默认处理事件
+		var menu = document.getElementById("menuDiv");
+		menu.style.display="block";
+		menu.style.left = event.clientX + "px";
+		menu.style.top = event.clientY + "px";
+	});
+eventUtil.bind(document,"click",function(event){
+	document.getElementById("menuDiv").style.display="none";
+});
+
+eventUtil.bind(document.getElementById("menuDiv"), "click", 
+	function(event) {
+		var target = eventUtil.getTarget(event);
+		if(target.tagName.toLowerCase() =="li"){
+			var rightClickDiv = document.getElementById("rightClickDiv");
+			rightClickDiv.style.backgroundColor = target.style.backgroundColor;
+		}
+	});
+
+});
+</script>
+
+<div class="aTitle">beforeunload离开当前页面事件【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window 对象上的beforeunload 事件，是为了让开发人员有可能在页面卸载前阻止这一操作。
+这个事件会在浏览器卸载页面之前触发，可以通过它来取消卸载并继续使用原有页面。
+但是，不能彻底取消这个事件，因为那就相当于让用户无法离开当前页面了。
+为此，这个事件的意图是将控制权交给用户。显示的消息会告知用户页面行将被卸载
+（正因为如此才会显示这个消息），询问用户是否真的要关闭页面，还是希望继续留下来。
+【Opera 11 及之前的版本不支持beforeunload 事件。】
+eventUtil.bind(window,"beforeunload",function(event){
+	event = eventUtil.getEvent(event);
+	var message = "页面内容有修改，确定要离开？";
+	event.returnValue = message;
+	return message;
+});
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+<script>
+$(function(){
+
+eventUtil.bind(window,"beforeunload",function(event){
+	event = eventUtil.getEvent(event);
+	var message = "呜呜呜~~~页面内容还没有保存！";
+	event.returnValue = message;
+	return message;
+});
+
+});
+</script>
+
+
+<div class="aTitle">DOMContentLoaded 和 onreadystatechange【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>DOMContentLoaded</b>
+window 的load 事件会在页面中的一切都加载完毕时触发，但这个过程可能会因为要
+加载的外部资源过多而颇费周折。而DOMContentLoaded 事件则在形成完整的DOM 树之后就会触发，
+不理会图像、JavaScript 文件、CSS 文件或其他资源是否已经下载完毕。与load 事件不同，
+DOMContentLoaded 支持在页面下载的早期添加事件处理程序，这也就意味着用户能够尽早地与页面
+进行交互。
+
+IE9+、Firefox、Chrome、Safari 3.1+和Opera 9+都支持DOMContentLoaded 事件，通常这个事件
+既可以添加事件处理程序，也可以执行其他DOM 操作。这个事件始终都会在load 事件之前触发。
+
+<b>readystatechange</b>
+IE 为DOM文档中的某些部分提供了readystatechange 事件。这个事件的目的是提供与文档或
+元素的加载状态有关的信息，但这个事件的行为有时候也很难预料。支持readystatechange 事件的
+每个对象都有一个readyState 属性，可能包含下列5 个值中的一个。
+1. uninitialized（未初始化）：对象存在但尚未初始化。
+2. loading（正在加载）：对象正在加载数据。
+3. loaded（加载完毕）：对象加载数据完成。
+4. interactive（交互）：可以操作对象了，但还没有完全加载。
+5. complete（完成）：对象已经加载完毕。
+
+并非所有对象都会经历readyState 的这几个阶段。换句话说，如果某个阶段不适用某个对象，
+则该对象完全可能跳过该阶段；并没有规定哪个阶段适用于哪个对象。
+
+在与load 事件一起使用时，无法预测两个事件触发的先后顺序。在包含较多或较大的外部资源的
+页面中，会在load 事件触发之前先进入交互阶段；而在包含较少或较小的外部资源的页面中，则很难
+说readystatechange 事件会发生在load 事件前面。
+
+让问题变得更复杂的是，交互阶段可能会早于也可能会晚于完成阶段出现，无法确保顺序。在包含
+较多外部资源的页面中，交互阶段更有可能早于完成阶段出现；而在页面中包含较少外部资源的情况下，
+完成阶段先于交互阶段出现的可能性更大。因此，为了尽可能抢到先机，有必要同时检测交互和完成阶
+段。
+<pre class='error'>虽然使用readystatechange 可以十分近似地模拟DOMContentLoaded 事件，
+但它们本质上还是不同的。在不同页面中，load 事件与readystatechange 事件并
+不能保证以相同的顺序触发。</pre>
+
+if ( document.addEventListener ) {
+	document.addEventListener( "DOMContentLoaded", function() {
+		document.removeEventListener( "DOMContentLoaded", arguments.callee, false );
+		alert("DOMContentLoaded");
+	}, false );
+
+	window.addEventListener( "load", function(){alert("load");}, false );
+} else if ( document.attachEvent ) {//IE
+	document.attachEvent( "onreadystatechange", function() {
+		if ( document.readyState === "interactive"|| document.readyState === "complete" ) {
+			document.detachEvent( "onreadystatechange", arguments.callee );
+			alert("onreadystatechange");
+		}
+	});
+
+	window.attachEvent( "onload", function(){alert("load");} );
+}
+
+&lt;script&gt;（在IE 和Opera 中）和&lt;link&gt;（仅IE 中）元素也会触发readystatechange
+事件，可以用来确定外部的JavaScript 和CSS 文件是否已经加载完成。与在其他浏览器中一样，除非把
+动态创建的元素添加到页面中， 否则浏览器不会开始下载外部资源。基于元素触发的
+readystatechange 事件也存在同样的问题， 即readyState 属性无论等于"loaded" 还是
+"complete"都可以表示资源已经可用。有时候，readyState 会停在"loaded"阶段而永远不会“完成”；
+有时候，又会跳过"loaded"阶段而直接“完成”。
+eventUtil.bind(window, "load", function(){
+	var script = document.createElement("script");
+	eventUtil.bind(script, "readystatechange", function(event){
+	event = eventUtil.getEvent(event);
+	var target = eventUtil.getTarget(event);
+	if (<mark>target.readyState == "loaded" || target.readyState == "complete"</mark>){
+		eventUtil.unbind(target, "readystatechange", arguments. callee);
+		alert("Script Loaded");
+	}
+	});
+	script.src = "example.js";
+	document.body.appendChild(script);
+});
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
+<script>
+if ( document.addEventListener ) {
+	document.addEventListener( "DOMContentLoaded", function() {
+		document.removeEventListener( "DOMContentLoaded", arguments.callee, false );
+		alert("DOMContentLoaded");
+	}, false );
+
+	window.addEventListener( "load", function(){alert("load");}, false );
+} else if ( document.attachEvent ) {//IE
+	document.attachEvent( "onreadystatechange", function() {
+		if ( document.readyState === "interactive"|| document.readyState === "complete" ) {
+			document.detachEvent( "onreadystatechange", arguments.callee );
+			alert("onreadystatechange");
+		}
+	});
+
+	window.attachEvent( "onload", function(){alert("load");} );
+}
+</script>
+
+<div class="aTitle">pageshow 和pagehide事件【HTML5】????</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Firefox 和Opera 有一个特性，名叫“往返缓存”（back-forward cache，或bfcache），可以在用户使
+用浏览器的“后退”和“前进”按钮时加快页面的转换速度。这个缓存中不仅保存着页面数据，还保存
+了DOM 和JavaScript 的状态；实际上是将整个页面都保存在了内存里。如果页面位于bfcache 中，那么
+再次打开该页面时就不会触发load 事件。
+
+<b>pageshow</b>
+pageshow，这个事件在页面显示时触发，无论该页面是否来自bfcache。在重新加载的页面中，
+pageshow 会在load 事件触发后触发；而对于bfcache 中的页面，pageshow 会在页面状
+态完全恢复的那一刻触发。
+
+pageshow 事件的event 对象还包含一个名为persisted 的布尔值属性。
+如果页面被保存在了bfcache 中，则这个属性的值为true；否则，这个属性的值为false。
+
+<b>pagehide</b>
+pagehide 事件，该事件会在浏览器卸载页面的时候触发，而且是在unload 事件之前触发。
+与pageshow 事件一样，pagehide 在document 上面触发，但其事件处理程序必须要添加到window 对象。
+在第一次触发pagehide 时，persisted 就会变成true（除非页面不会被保存在bfcache 中）
+
+支持pageshow 和pagehide 事件的浏览器有Firefox、Safari 5+、Chrome 和Opera。
+IE9 及之前版本不支持这两个事件。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+<script>
+var times=0;
+eventUtil.bind(window,"pageshow",function(event){
+	times++;
+	event = eventUtil.getEvent(event);
+	console.log("event.persisted",event.persisted);
+	console.log("times=",times);
+});
+</script>
+
+
+<div class="aTitle">hashchange【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+HTML5 新增了hashchange 事件，以便在URL 的参数列表（及URL 中“#”号后面的所有字符串）
+发生变化时通知开发人员。之所以新增这个事件，是因为在Ajax 应用中，开发人员经常要利用URL 参
+数列表来保存状态或导航信息。
+
+eventUtil.bind(window,"hashchange",function(event){
+	event = eventUtil.getEvent(event);
+	alert(window.location.hash);
+	alert("Old URL: " + event.oldURL + "\nNew URL: " + event.newURL);
+});
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+<script>
+var isSupported = ("onhashchange" in window) && (document.documentMode ===
+					undefined || document.documentMode > 7);
+alert("isSupported = "+isSupported);
+
+eventUtil.bind(window,"hashchange",function(event){
+	event = eventUtil.getEvent(event);
+	alert(window.location.hash);
+	alert("Old URL: " + event.oldURL + "\nNew URL: " + event.newURL);
+});
+</script>
+
+</body>
+</html>

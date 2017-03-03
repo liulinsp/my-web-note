@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS指令-require</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle"></div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+  require参数可以被设置为字符串或数组，
+字符串代表另外一个指令的名字。require会将
+控制器注入到其值所指定的指令中，并作为当前
+指令的链接函数的第四个参数。
+
+require参数的值可以用下面的前缀进行修饰，
+这会改变查找控制器时的行为：
+1. ?
+  如果在当前指令中没有找到所需要的控制器，
+会将null作为传给link函数的第四个参数。
+2. ^
+  如果添加了^前缀，指令会在上游的指令链中
+查找require参数所指定的控制器。
+3. ?^
+  将前面两个选项的行为组合起来，我们可选择
+地加载需要的指令并在父指令链中进行查找。
+4. 没有前缀
+  如果没有前缀，指令将会在自身所提供的控制器
+中进行查找，如果没有找到任何控制器（或 具有
+指定名字的指令）就抛出一个错误。
+
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;div my-show="total"&gt;&lt;/div&gt;
+  &lt;div my-show="total" my-fixed="3"&gt;&lt;/div&gt;
+  &lt;div my-show="total" my-sign="￥"&gt;&lt;/div&gt;
+  &lt;div my-show="total" my-sign="$" my-fixed="2"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+angular.module("app1",[])
+  .directive('myShow',function($parse){
+    return {
+      restrict: 'A',
+      scope:true,
+      template:"{{content}}",
+      priority:100,
+      controller:function($scope,$element,$attrs){
+        this.filters=[];
+        this.addMyParse=function(fun){
+          this.filters.push(fun);
+        };
+      },
+      link:function($scope,$element,$attrs,ctrl){
+        $scope.content = $parse($attrs.myShow)($scope);
+        for(var i in ctrl.filters){
+          $scope.content = ctrl.filters[i]($scope.content);
+        }
+      }
+    };
+  })
+  //小数点位数
+  .directive('myFixed',function($parse){
+    return {
+      restrict: 'A',
+      require:'myShow',
+      priority:10,
+      link:function($scope,$element,$attrs,$myShowController){
+        $myShowController.addMyParse(function(val){
+          var digits = $attrs.myFixed;
+          var times = Math.pow(10,digits);
+          var result = Math.round(val*times)/times;
+          return result;
+        });
+      }
+    };
+  })
+  //币符
+  .directive('mySign',function($parse){
+    return {
+      restrict: 'A',
+      require:'myShow',
+      priority:20,
+      link:function($scope,$element,$attrs,$myShowController){
+        $myShowController.addMyParse(function(val){
+          return $attrs.mySign+val;
+        });
+      }
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.total=123.567878;
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <div my-show="total"></div>
+      <div my-show="total" my-fixed="3"></div>
+      <div my-show="total" my-sign="￥"></div>
+      <div my-show="total" my-sign="$" my-fixed="2"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app1",[])
+  .directive('myShow',function($parse){
+    return {
+      restrict: 'A',
+      scope:true,
+      template:"{{content}}",
+      priority:100,
+      controller:function($scope,$element,$attrs){
+        this.filters=[];
+        this.addMyParse=function(fun){
+          this.filters.push(fun);
+        };
+      },
+      link:function($scope,$element,$attrs,ctrl){
+        $scope.content = $parse($attrs.myShow)($scope);
+        for(var i in ctrl.filters){
+          $scope.content = ctrl.filters[i]($scope.content);
+        }
+      }
+    };
+  })
+  //小数点位数
+  .directive('myFixed',function($parse){
+    return {
+      restrict: 'A',
+      require:'myShow',
+      priority:10,
+      link:function($scope,$element,$attrs,$myShowController){
+        $myShowController.addMyParse(function(val){
+          var digits = $attrs.myFixed;
+          var times = Math.pow(10,digits);
+          var result = Math.round(val*times)/times;
+          return result;
+        });
+      }
+    };
+  })
+  //币符
+  .directive('mySign',function($parse){
+    return {
+      restrict: 'A',
+      require:'myShow',
+      priority:20,
+      link:function($scope,$element,$attrs,$myShowController){
+        $myShowController.addMyParse(function(val){
+          return $attrs.mySign+val;
+        });
+      }
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.total=123.567878;
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+
+</script>
+
+
+
+</body>
+</html>

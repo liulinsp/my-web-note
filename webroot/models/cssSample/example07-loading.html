@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>加载中动画（不支持IE9以下）</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style type="text/css">
+.simple-loading{
+	position: fixed;
+	width: 20px;
+	height: 20px;
+	left: 50%;
+	top: 30%;
+	margin-left: -11px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #29d #29d transparent transparent;
+	z-index: 999;
+	
+
+	/*圆角*/
+	-webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+
+    -webkit-animation: rotate-360 400ms linear infinite;
+	-moz-animation: rotate-360 400ms linear infinite;
+	-ms-animation: rotate-360 400ms linear infinite;
+	-o-animation: rotate-360 400ms linear infinite;
+	animation: rotate-360 400ms linear infinite;
+}
+
+.loading-con {
+    position: fixed;
+    width: 96px;
+    height: 96px;
+    left: 50%;
+    top: 50%;
+    margin-top: -45px;
+    margin-left: -45px;
+    z-index: 999;
+}
+.loading-circle{
+	width: 80px;
+	height: 80px;
+	border-style: solid;
+	border-width: 8px;
+	border-color: #FA7A7A #F7F5A6 #8DFD98 #A096F7;
+
+	/*圆角*/
+	-webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+
+    -webkit-animation: rotate-360 1000ms linear infinite;
+	-moz-animation: rotate-360 1000ms linear infinite;
+	-ms-animation: rotate-360 1000ms linear infinite;
+	-o-animation: rotate-360 1000ms linear infinite;
+	animation: rotate-360 1000ms linear infinite;
+}
+
+.loading-con img{
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	top: 8px;
+	left: 8px;
+
+	/*圆角*/
+	-webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}
+
+@-webkit-keyframes rotate-360 { /* Safari 和 Chrome */
+  0% { transform: rotate(0deg); -webkit-transform: rotate(0deg);}
+  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes rotate-360 { /* Firefox */
+  0% { transform: rotate(0deg); -moz-transform: rotate(0deg);}
+  100% { transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+@-o-keyframes rotate-360 { /* Opera */
+  0% { transform: rotate(0deg); -o-transform: rotate(0deg);}
+  100% { transform: rotate(360deg); -o-transform: rotate(360deg);}
+}
+@keyframes rotate-360{
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+</style>
+
+<div class="simple-loading"></div>
+
+<div class="loading-con">
+		<div class="loading-circle"></div>
+		<img src="head.jpg" title="jquery api" alt="jquery api">
+</div>	
+
+
+<div class="aTitle">简单加载动画</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.simple-loading{
+	position: fixed;
+	width: 20px;
+	height: 20px;
+	left: 50%;
+	top: 30%;
+	margin-left: -11px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #29d #29d transparent transparent;
+	z-index: 999;	
+
+	/*圆角*/
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-o-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+
+	-webkit-animation: rotate-360 400ms linear infinite;
+	-moz-animation: rotate-360 400ms linear infinite;
+	-ms-animation: rotate-360 400ms linear infinite;
+	-o-animation: rotate-360 400ms linear infinite;
+	animation: rotate-360 400ms linear infinite;
+}
+
+@-webkit-keyframes rotate-360 { /* Safari 和 Chrome */
+	0% { transform: rotate(0deg); -webkit-transform: rotate(0deg);}
+	100% { transform: rotate(360deg); -webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes rotate-360 { /* Firefox */
+	0% { transform: rotate(0deg); -moz-transform: rotate(0deg);}
+	100% { transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+@-o-keyframes rotate-360 { /* Opera */
+	0% { transform: rotate(0deg); -o-transform: rotate(0deg);}
+	100% { transform: rotate(360deg); -o-transform: rotate(360deg);}
+}
+@keyframes rotate-360{
+	0% { transform: rotate(0deg);}
+	100% { transform: rotate(360deg);}
+}
+
+&lt;div class="simple-loading"&gt;&lt;/div&gt;
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+<div class="aTitle">带头像的加载动画</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.loading-con {
+    position: fixed;
+    width: 96px;
+    height: 96px;
+    left: 50%;
+    top: 50%;
+    margin-top: -45px;
+    margin-left: -45px;
+    z-index: 999;
+}
+.loading-circle{
+	width: 80px;
+	height: 80px;
+	border-style: solid;
+	border-width: 8px;
+	border-color: #FA7A7A #F7F5A6 #8DFD98 #A096F7;
+
+	/*圆角*/
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-o-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+
+	-webkit-animation: rotate-360 1000ms linear infinite;
+	-moz-animation: rotate-360 1000ms linear infinite;
+	-ms-animation: rotate-360 1000ms linear infinite;
+	-o-animation: rotate-360 1000ms linear infinite;
+	animation: rotate-360 1000ms linear infinite;
+}
+
+.loading-con img{
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	top: 8px;
+	left: 8px;
+
+	/*圆角*/
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-o-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+}
+
+@-webkit-keyframes rotate-360 { /* Safari 和 Chrome */
+	0% { transform: rotate(0deg); -webkit-transform: rotate(0deg);}
+	100% { transform: rotate(360deg); -webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes rotate-360 { /* Firefox */
+	0% { transform: rotate(0deg); -moz-transform: rotate(0deg);}
+	100% { transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+@-o-keyframes rotate-360 { /* Opera */
+	0% { transform: rotate(0deg); -o-transform: rotate(0deg);}
+	100% { transform: rotate(360deg); -o-transform: rotate(360deg);}
+}
+@keyframes rotate-360{
+	0% { transform: rotate(0deg);}
+	100% { transform: rotate(360deg);}
+}
+
+
+&lt;div class="loading-con"&gt;
+	&lt;div class="loading-circle"&gt;&lt;/div&gt;
+	&lt;img src="head.jpg" title="jquery api" alt="jquery api"&gt;
+&lt;/div&gt;
+    </pre>
+  </div>
+  <!-- <div class="aShow"></div> -->
+</div>
+
+
+
+</body>
+</html>

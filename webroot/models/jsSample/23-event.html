@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript事件</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+function showUser(userId,userName,btn,event){
+	btn.innerHTML="重新显示";
+	var userDiv = document.getElementById("userDiv");
+	userDiv.innerHTML="用户编码："+userId+", <br/>用户姓名："+userName+
+					  ", <br/>点击位置：("+event.clientX+","+event.clientY+")";
+}
+</script>
+<div class="aTitle">HTML中onclick属性指定事件处理程序</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+onclick处理程序的作用域：
+this
+event
+with域：button
+with域：form
+with域：document
+全局作用域：window
+
+&lt;form method="post" action="23-event.html"&gt;
+	&lt;p&gt;用户编码：&lt;input name="userid" type="text" value="123"&gt;&lt;/p&gt;
+	&lt;p&gt;用户姓名：&lt;input name="username" type="text" value="张三"&gt;&lt;/p&gt;
+	&lt;button type="button" onclick="showUser(userid.value,username.value,this,event)"&gt;显示&lt;/button&gt;
+	&lt;div id="userDiv"&gt;&lt;/div&gt;
+&lt;/form&gt;
+
+function showUser(userId,userName,btn,event){
+	btn.innerHTML="重新显示";
+	var userDiv = document.getElementById("userDiv");
+	userDiv.innerHTML="用户编码："+userId+", &lt;br/&gt;用户姓名："+userName+
+					  ", &lt;br/&gt;点击位置：("+event.clientX+","+event.clientY+")";
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="">
+		<form method="post" action="23-event.html">
+			<p>用户编码：<input name="userid" type="text" value="123"></p>
+			<p>用户姓名：<input name="username" type="text" value="张三"></p>
+			<button type="button" onclick="showUser(userid.value,username.value,this,event)">显示</button>
+			<div id="userDiv"></div>
+		</form>
+	</div>
+</div>
+
+
+<div class="aTitle">DOM0 级事件处理程序</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+btn.onclick = function(event){...}//设置处理事件
+btn.onclick = null; //删除事件处理程序
+
+return返回值实际上是对window.event.returnvalue进行设置。
+（IE8及以下不支持）
+而该值决定了当前操作是否继续。
+当返回的是true时，将继续操作。
+当返回是false时，将中断操作。
+（返回undefined也会继续操作）
+
+&lt;input type="checkbox" id="mycheck1"&gt;返回false&lt;br/&gt;
+&lt;input type="checkbox" id="mycheck2"&gt;返回true&lt;br/&gt;
+&lt;input type="checkbox" id="mycheck3"&gt;返回undefined
+
+<b>脚本：</b>
+document.getElementById("mycheck1").onclick=function(event){
+	window.console&&console.log("mycheck1");
+	event = event||window.event;//兼容IE
+	event.returnValue = false;//兼容IE
+	return false;
+};
+document.getElementById("mycheck2").onclick=function(event){
+	event = event||window.event;//兼容IE
+	event.returnValue = true;//兼容IE
+	window.console&&console.log("mycheck2");
+	return true;
+};
+document.getElementById("mycheck3").onclick=function(event){
+	event = event||window.event;//兼容IE
+	window.console&&console.log("mycheck3");
+};
+		</pre>
+	</div>
+	<div class="aShow note" id="">
+		<input type="checkbox" id="mycheck1">返回false，阻止了后续的操作，没有变为选中状态<br/>
+		<input type="checkbox" id="mycheck2">返回true，继续后续操作<br/>
+		<input type="checkbox" id="mycheck3">返回undefined，继续后续操作
+	</div>
+</div>
+
+<script type="text/javascript">
+document.getElementById("mycheck1").onclick=function(event){
+	window.console&&console.log("mycheck1");
+	event = event||window.event;//兼容IE
+	event.returnValue = false;//兼容IE
+	return false;
+};
+document.getElementById("mycheck2").onclick=function(event){
+	event = event||window.event;//兼容IE
+	event.returnValue = true;//兼容IE
+	window.console&&console.log("mycheck2");
+	return true;
+};
+document.getElementById("mycheck3").onclick=function(event){
+	event = event||window.event;//兼容IE
+	window.console&&console.log("mycheck3");
+};
+</script>
+
+
+<div class="aTitle">DOM2 级事件处理程序(IE8及以下不支持)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+“DOM2级事件”规定的事件流包括三个阶段：
+  1. 事件捕获阶段（IE没有事件捕获阶段）
+  2. 处于目标阶段
+  3. 事件冒泡阶段
+
+“DOM2级事件”定义了两个方法，用于处理指定和删除事件处理程序的操作：
+addEventListener()和removeEventListener()。
+<span class="error">IE8不支持DOM2级事件，用attachEvent()和detachEvent()实现，只支持事件冒泡。</span>
+
+所有DOM节点中都包含这两个方法，并且它们都接受3 个参数：
+要处理的事件名、作为事件处理程序的函数和一个布尔值。
+
+最后这个布尔值参数如果是true，表示在捕获阶段调用事件处理程序；
+如果是false，表示在冒泡阶段调用事件处理程序。
+
+使用DOM2 级方法添加事件处理程序的主要好处是可以添加多个事件处理程序。
+<span class="error">IE9、Firefox、Safari、Chrome 和Opera 支持DOM2 级事件处理程序。</span>
+
+&lt;div id="colorDiv" 
+       style="width:100px;height:60px;background-color:blue"&gt;点我&lt;/div&gt;
+&lt;button id="bindBtn"&gt;绑定事件&lt;/button&gt;
+&lt;button id="unbindBtn"&gt;解绑事件&lt;/button&gt;
+
+<b>脚本:</b>
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+function toogleCloor(event){
+	var srcEle = event.target||event.srcElement;
+	if(srcEle.style.backgroundColor=="red"){
+		srcEle.style.backgroundColor="blue";
+	}else{
+		srcEle.style.backgroundColor="red";
+	}
+}
+
+eventUtil.bind(document.getElementById("bindBtn"),
+	"click",
+	function(){
+		eventUtil.bind(document.getElementById("colorDiv"),
+			"click",toogleCloor);
+	});
+
+eventUtil.bind(document.getElementById("unbindBtn"),
+	"click",
+	function(){
+		eventUtil.unbind(document.getElementById("colorDiv"),
+			"click",toogleCloor);
+	});
+		</pre>
+	</div>
+	<div class="aShow note" id="">
+		<div id="colorDiv" style="width:100px;height:60px;background-color:blue">点我</div>
+		<button id="bindBtn">绑定事件</button>
+		<button id="unbindBtn">解绑事件</button>
+	</div>
+</div>
+
+<script type="text/javascript">
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+function toogleCloor(event){
+	var ele = event.currentTarget||event.srcElement;
+	if(ele.style.backgroundColor=="red"){
+		ele.style.backgroundColor="blue";
+	}else{
+		ele.style.backgroundColor="red";
+	}
+}
+
+eventUtil.bind(document.getElementById("bindBtn"),
+	"click",
+	function(){
+		eventUtil.bind(document.getElementById("colorDiv"),
+			"click",toogleCloor);
+	});
+
+eventUtil.bind(document.getElementById("unbindBtn"),
+	"click",
+	function(){
+		eventUtil.unbind(document.getElementById("colorDiv"),
+			"click",toogleCloor);
+	});
+</script>
+
+
+<div class="aTitle">事件对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>DOM中的event 对象</b>
+1. bubbles
+   Boolean 只读 表明事件是否冒泡
+2. cancelable 
+   Boolean 只读 表明是否可以取消事件的默认行为
+3. currentTarget
+   Element 只读 其事件处理程序当前正在处理事件的那个元素
+4. defaultPrevented 
+   Boolean 只读 
+   为true 表示已经调用了preventDefault()（DOM3级事件中新增）
+5. detail
+   Integer 只读 与事件相关的细节信息
+6. eventPhase
+   Integer 只读 调用事件处理程序的阶段：
+   1表示捕获阶段，2表示“处于目标”，3表示冒泡阶段
+7. preventDefault()
+   Function 只读 取消事件的默认行为。
+   如果cancelable是true，则可以使用这个方法
+8. stopImmediatePropagation() 
+   Function 只读 
+   取消事件的进一步捕获或冒泡，同时阻止任何事件处理程序被调用
+   （DOM3级事件中新增）
+9. stopPropagation() 
+   Function 只读 取消事件的进一步捕获或冒泡。
+   如果bubbles为true，则可以使用这个方法
+10.target 
+   Element 只读 事件的目标
+11.trusted 
+   Boolean 只读 
+   为true表示事件是浏览器生成的。
+   为false表示事件是由开发人员通过JavaScript 创建的
+  （DOM3级事件中新增）
+12.type 
+   String 只读 被触发的事件的类型
+13.view 
+   AbstractView 只读 
+   与事件关联的抽象视图。等同于发生事件的window对象
+
+<b>IE中的event 对象</b>
+1. cancelBubble
+   Boolean 读/写 
+   默认值为false，但将其设置为true就可以取消事件冒泡
+   （与DOM中的stopPropagation()方法的作用相同）
+2. returnValue
+   Boolean 读/写 
+   默认值为true，但将其设置为false就可以取消事件的默认行为
+   （与DOM中的preventDefault()方法的作用相同）
+3. srcElement
+   Element 只读 
+   事件的目标（与DOM中的target属性相同）
+4. type
+   String 只读 被触发的事件的类型
+
+<b>示例：</b>
+2. 阻止浏览器默认行为
+if(event.preventDefault) {
+	event.preventDefault();//支持firefox、Chrome,不支持IE8
+}else{
+	event.returnValue = false;//支持IE8、Chrome,不支持friefox
+}
+
+3.阻止事件冒泡
+if(event.stopPropagation){
+	event.stopPropagation();
+}else{
+	event.cancelBubble = true;//支持IE(Chrome、firefox也提供支持)
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		1. 查看事件的target、currentTarget、srcElement
+		<div id="eventShow" class="note">
+			<div id="parentDiv" style="width:100px;height:100px;background-color:#E3DCFA;">
+				<div id="childDiv" style="width:50px;height:50px;background-color:#FDFDD8;">childDiv</div>
+				parentDiv
+			</div>
+		</div>
+		
+		2. 阻止浏览器默认行为
+		<p>
+			<input id="checkIpt" type="checkbox"><br/>
+			<a id="baiduLink" href="www.baidu.com">打开百度</a>
+		</p>
+
+		3. 阻止事件冒泡
+		<div id="bubbleDiv" class="note">
+			<div id="parentDiv2" style="width:100px;height:100px;background-color:#E3DCFA;">
+				<div id="childDiv2" style="width:50px;height:50px;background-color:#FDFDD8;">点我</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script type="text/javascript">
+function _show(msg,toEle){
+	toEle = toEle||"#eventShow"
+	$("<div>"+msg+"</div>").appendTo(toEle);
+}
+//1. 查看事件的target、currentTarget、srcElement
+function eventHandler(event,bindEleId){
+	_show("触发了"+bindEleId+"绑定的事件"
+		+"<br/>event.target="+(event.target&&event.target.id)
+		+"<br/>event.currentTarget="+(event.currentTarget&&event.currentTarget.id)
+		+"<br/>event.srcElement="+(event.srcElement&&event.srcElement.id)+"【IE中，类似target】");
+}
+eventUtil.bind(document.getElementById("parentDiv"),
+	"click",function(event){
+		eventHandler(event,"parentDiv");
+	});	
+eventUtil.bind(document.getElementById("childDiv"),
+	"click",function(event){
+		//event.stopPropagation();
+		eventHandler(event,"childDiv");
+	});	
+// end 1.
+
+// 2. 阻止浏览器默认行为
+function stopDefault(event){
+	//阻止浏览器默认行为
+	if(event.preventDefault) {
+		event.preventDefault();//支持firefox、Chrome,不支持IE8
+	}else{
+		event.returnValue = false;//支持IE8、Chrome,不支持friefox
+	}
+}
+eventUtil.bind(document.getElementById("checkIpt"),
+	"click",stopDefault);
+eventUtil.bind(document.getElementById("baiduLink"),
+	"click",stopDefault);
+//end 2.
+
+//3. 阻止事件冒泡
+function eventHandler2(event,bindEleId){
+	_show("触发了"+bindEleId+"绑定的事件","#bubbleDiv");
+}
+eventUtil.bind(document.getElementById("parentDiv2"),
+	"click",function(event){
+		eventHandler2(event,"parentDiv");
+	});	
+eventUtil.bind(document.getElementById("childDiv2"),
+	"click",function(event){
+		if(event.stopPropagation){
+			event.stopPropagation();
+		}else{
+			event.cancelBubble = true;//支持IE(Chrome、firefox也提供支持)
+		}
+		eventHandler2(event,"childDiv");
+	});	
+//end 3.
+</script>
+
+</body>
+</html>

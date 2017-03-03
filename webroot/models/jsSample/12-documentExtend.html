@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DOM扩展</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">Selectors API（选择符API）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Selectors API是由W3C 发起制定的一个标准，致力于让浏览器原生支持CSS 查询。
+所有实现这一功能的JavaScript 库都会写一个基础的CSS 解析器，然后再使用已
+有的DOM 方法查询文档并找到匹配的节点。尽管库开发人员在不知疲倦地改进这一
+过程的性能，但到头来都只能通过运行JavaScript 代码来完成查询操作。而把这个
+功能变成原生API 之后，解析和树查询操作可以在浏览器内部通过编译后的代码来
+完成，极大地改善了性能。
+
+目前已完全支持Selectors API Level 1的浏览器有
+IE 8+、Firefox 3.5+、Safari 3.1+、Chrome 和Opera 10+。
+
+1. querySelector()
+   参数为CSS 选择符，返回与该模式匹配的第一个元素，
+如果没有找到匹配的元素，返回null。
+2. querySelectorAll()
+	参数为CSS 选择符，但返回的是所有匹配的元素而不仅仅是一个元素。
+这个方法返回的是一个NodeList 的实例。
+3. matchesSelector()【Selectors API Level 2 规范】
+	参数为CSS 选择符，如果调用元素与该选择符匹配，返回true；否则，返回false。
+IE 9+通过msMatchesSelector()支持该方法，
+Firefox 3.6+通过mozMatchesSelector()支持该方法，
+Safari 5+和Chrome 通过webkitMatchesSelector()支持该方法
+
+&lt;div id="baseNode"&gt;
+	&lt;p&gt;第1个&lt;/p&gt;
+	&lt;p&gt;第2个&lt;/p&gt;
+	&lt;p&gt;第3个&lt;/p&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+function matchesSelector(element, selector){
+	if (element.matchesSelector){
+		return element.matchesSelector(selector);
+	} else if (element.msMatchesSelector){
+		return element.msMatchesSelector(selector);
+	} else if (element.mozMatchesSelector){
+		return element.mozMatchesSelector(selector);
+	} else if (element.webkitMatchesSelector){
+		return element.webkitMatchesSelector(selector);
+	} else {
+		throw new Error("Not supported.");
+	}
+}
+var node = document.getElementById("baseNode");
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+		<div id="baseNode">
+			<p>第1个</p>
+			<p>第2个</p>
+			<p>第3个</p>
+		</div>
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		var ele = $("<div></div>");
+		ele.text(msg);
+		ele.appendTo("#showResult1");
+	}
+
+	function matchesSelector(element, selector){
+		if (element.matchesSelector){
+			return element.matchesSelector(selector);
+		} else if (element.msMatchesSelector){
+			return element.msMatchesSelector(selector);
+		} else if (element.mozMatchesSelector){
+			return element.mozMatchesSelector(selector);
+		} else if (element.webkitMatchesSelector){
+			return element.webkitMatchesSelector(selector);
+		} else {
+			//throw new Error("Not supported.");
+		}
+	}
+	var node = document.getElementById("baseNode");
+	var all = node.querySelectorAll("p");
+	_show('node.querySelector("p") --> '+node.querySelector("p").outerHTML);
+	_show('node.querySelectorAll("p")[1] --> '+node.querySelectorAll("p")[1].outerHTML);
+	_show('matchesSelector(node,"#baseNode") --> '+matchesSelector(node,"#baseNode"));
+	_show('matchesSelector(node,"p") --> '+matchesSelector(node,"p"));
+});
+</script>
+
+
+
+<div class="aTitle">Element Traversal API（元素遍历API）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+对于元素间的空格，IE9 及之前版本不会返回文本节点，而其他所有浏览器都会返回文本节点。
+这样，就导致了在使用childNodes 和firstChild 等属性时的行为不一致。为了弥补这一差异，
+而同时又保持DOM规范不变，Element Traversal 规范新定义了一组属性。
+
+支持Element Traversal 规范的浏览器有:
+IE 9+、Firefox 3.5+、Safari 4+、Chrome 和Opera 10+
+
+Element Traversal API 为DOM元素添加了以下5 个属性。
+. childElementCount：返回子元素（不包括文本节点和注释）的个数。
+. firstElementChild：指向第一个子元素；firstChild 的元素版。
+. lastElementChild：指向最后一个子元素；lastChild 的元素版。
+. previousElementSibling：指向前一个同辈元素；previousSibling 的元素版。
+. nextElementSibling：指向后一个同辈元素；nextSibling 的元素版。
+
+children属性是HTMLCollection 的实例，只包含元素中同样还是元素的子节点。
+除此之外,children 属性与childNodes 没有什么区别，即在元素只包含元素子节点时，
+这两个属性的值相同。
+支持children 属性的浏览器有IE5、Firefox 3.5、Safari 2（但有bug）、
+Safari 3（完全支持）、Opera8和Chrome（所有版本）。IE8 及更早版本的
+children 属性中也会包含注释节点，但IE9 之后的版本则只返回元素节点。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+		<div id="travNode">
+			<p>第1个</p>
+			<p>第2个</p>
+			<!-- 这是注释 -->
+			<p>第3个</p>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		var ele = $("<div></div>");
+		ele.text(msg);
+		ele.appendTo("#showResult2");
+	}
+
+	var node = document.querySelector("#travNode");
+	_show('var node = document.querySelector("#travNode");');
+	_show('node.children.length --> '+node.children.length+'（IE8=4,其他=3）');
+	_show('node.firstElementChild --> '+(node.firstElementChild&&node.firstElementChild.outerHTML)+'（IE8不支持）');
+	_show('node.lastElementChild --> '+(node.lastElementChild&&node.lastElementChild.outerHTML)+'（IE8不支持）');
+	_show('node.lastElementChild.previousElementSibling --> '+(node.lastElementChild&&node.lastElementChild.previousElementSibling.outerHTML)+'（IE8不支持）');
+	_show('node.firstElementChild.nextElementSibling --> '+(node.firstElementChild&&node.firstElementChild.nextElementSibling.outerHTML)+'（IE8不支持）');
+});
+</script>
+
+
+<div class="aTitle">焦点管理【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. document.activeElement 属性
+这个属性始终会引用DOM 中当前获得了焦点的元素。
+2. document.hasFocus()方法
+这个方法用于确定文档是否获得了焦点
+
+这两个属性的浏览器的包括IE 4+、Firefox 3+、Safari 4+、Chrome 和Opera 8+。
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult3">
+		<input id="myInput1" type="text"/>
+		<input id="myInput2" type="text"/>
+	</div> -->
+</div>
+
+<div class="aTitle">getElementsByClassName()【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+getElementsByClassName()方法接收一个参数，即一个包含一或多个类名的字符串，
+返回带有指定类的所有元素的NodeList。传入多个类名时，类名的先后顺序不重要。
+var allCurrentUsernames = document.getElementsByClassName("username current");
+
+支持getElementsByClassName()方法的浏览器有IE 9+、Firefox 3+、Safari 3.1+、Chrome 和
+Opera 9.5+。
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id=""></div> -->
+</div>
+
+<div class="aTitle">classList 属性【HTML5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+在操作类名时，需要通过className 属性添加、删除和替换类名。
+因为className 中是一个字符串，所以即使只修改字符串一部分，
+也必须每次都设置整个字符串的值。
+
+classList 属性可以方便的进行上述操作，classList是新集合类型DOMTokenList 的实例。
+	1. add(value)：将给定的字符串值添加到列表中。如果值已经存在，就不添加了。
+	2. contains(value)：表示列表中是否存在给定的值，如果存在则返回true，否则返回false。
+	3. remove(value)：从列表中删除给定的字符串。
+	4. toggle(value)：如果列表中已经存在给定的值，删除它；如果列表中没有给定的值，添加它。
+
+&lt;div id="myClass" class="error"&gt;
+	谁改了我的class
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow note" id="classListShow">
+		<div id="myClass" class="error">
+			谁改了我的class
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	function _show(msg){
+		var ele = $("<div></div>");
+		ele.text(msg);
+		ele.appendTo("#classListShow");
+	}
+	
+	var ele = document.getElementById("myClass");
+	if(typeof ele.classList ==="undefined"){
+		return;
+	}
+	_show('var ele = document.getElementById("myClass");');
+	_show("ele.classList --> "+ele.classList);
+	ele.classList.add("note");
+	_show('ele.classList.add("note");');
+	_show("ele.classList --> "+ele.classList);
+	ele.classList.remove("error");
+	_show('ele.classList.remove("error");');
+	_show("ele.classList --> "+ele.classList);
+	ele.classList.toggle("error");
+	_show('ele.classList.toggle("error");');
+	_show("ele.classList --> "+ele.classList);
+	ele.classList.toggle("error");
+	_show('ele.classList.toggle("error");');
+	_show("ele.classList --> "+ele.classList);
+	_show('ele.classList.contains("error") --> '+ele.classList.contains("error"));
+});
+</script>
+
+
+<div class="aTitle">HTMLDocument在HTML5 中的扩展</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. document.readyState属性
+IE4 最早为document 对象引入了readyState 属性。然后，
+其他浏览器也都陆续添加这个属性，
+最终HTML5 把这个属性纳入了标准当中。
+Document 的readyState 属性有两个可能的值
+	loading，正在加载文档；
+	complete，已经加载完文档。
+
+2. document.compatMode 的属性
+在标准模式下，document.compatMode 的值等于"CSS1Compat"，
+而在混杂模式下，document.compatMode 的值等于"BackCompat"。
+实现这个属性的浏览器有IE、Firefox、Safari 3.1+、Opera 和Chrome。
+
+3. document.head 属性
+var head = document.head || document.getElementsByTagName("head")[0];
+
+4. document.charset属性
+charset 属性表示文档中实际使用的字符集，也可以用来指定新字符集。
+默认情况下，这个属性的值为"UTF-16"，但可以通过&lt;meta&lt;元素、
+响应头部或直接设置charset 属性修改这个值。
+
+另一个属性是defaultCharset，表示根据默认浏览器及操作系统的设置，
+当前文档默认的字符集应该是什么。如果文档没有使用默认的字符集，
+那charset 和defaultCharset 属性的值可能会不一样。
+
+支持document.charset 属性的浏览器有IE 、Firefox 、Safari 、Opera 和Chrome 。
+支持document.defaultCharset 属性的浏览器有IE、Safari 和Chrome。
+
+5.自定义数据属性（data-XXX属性）
+HTML5 规定可以为元素添加非标准的属性，但要添加前缀data-，
+目的是为元素提供与渲染无关的信息，或者提供语义信息。
+可以通过元素的dataset 属性来访问自定义属性的值。
+只有Chrome 8+ Firefox(Gecko) 6.0+ Internet Explorer 11+ Opera 11.10+ Safari 6+浏览器支持
+&lt;div id="userDiv" data-userid="12345" data-user-name="赵嘉楠"&gt;&lt;/div&gt;
+userDiv.dataset.userid
+userDiv.dataset.userName
+
+6. innerHTML和outerHTML
+&lt;div id="userDiv" data-userid="12345" dat在大多数浏览器中，
+通过innerHTML 插入&lt;script&gt;元素并不会执行其中的脚本。
+不支持innerHTML 的元素有：&lt;col&gt;、&lt;colgroup&gt;、&lt;frameset&gt;、&lt;head&gt;、&lt;html&gt;、
+&lt;style&gt;、&lt;table&gt;、&lt;tbody&gt;、&lt;thead&gt;、&lt;tfoot&gt;和&lt;tr&gt;。
+此外，在IE8 及更早版本中，&lt;title&gt;元素也没有innerHTML 属性。a-user-name="赵嘉楠"&gt;&lt;/div&gt;
+
+在使用innerHTML、outerHTML 属性时，容易导致内存溢出问题，
+最好先手工删除要被替换的元素的所有事件处理程序和JavaScript 对象属性。
+
+7. insertAdjacentHTML()方法
+插入位置和要插入的HTML 文本。第一个参数必须是下列值之一：
+	"beforebegin"，在当前元素之前插入一个紧邻的同辈元素；
+	"afterbegin"，在当前元素之下插入一个新的子元素或在第一个子元素之前再插入新的子元素；
+	"beforeend"，在当前元素之下插入一个新的子元素或在最后一个子元素之后再插入新的子元素；
+	"afterend"，在当前元素之后插入一个紧邻的同辈元素。
+
+//作为前一个同辈元素插入
+element.insertAdjacentHTML("beforebegin", "&lt;p&gt;Hello world!&lt;/p&gt;");
+//作为第一个子元素插入
+element.insertAdjacentHTML("afterbegin", "&lt;p&gt;Hello world!&lt;/p&gt;");
+//作为最后一个子元素插入
+element.insertAdjacentHTML("beforeend", "&lt;p&gt;Hello world!&lt;/p&gt;");
+//作为后一个同辈元素插入
+element.insertAdjacentHTML("afterend", "&lt;p&gt;Hello world!&lt;/p&gt;");
+支持insertAdjacentHTML()方法的浏览器有IE、Firefox 8+、Safari、Opera 和Chrome。
+
+8. scrollIntoView()方法
+scrollIntoView()可以在所有HTML 元素上调用，通过滚动浏览器窗口或某个容器元素，调用
+元素就可以出现在视口中。如果给这个方法传入true 作为参数，或者不传入任何参数，那么窗口滚动
+之后会让调用元素的顶部与视口顶部尽可能平齐。如果传入false 作为参数，调用元素会尽可能全部
+出现在视口中，（可能的话，调用元素的底部会与视口顶部平齐。
+		</pre>
+	</div>
+	<div class="aShow note" id="resultShow1">
+		<div id="userDiv" data-userid="12345" data-user-name="赵嘉楠"></div>
+	</div>
+</div>
+<script>
+function _show(msg){
+	var ele = $("<div></div>");
+	ele.text(msg);
+	ele.appendTo("#resultShow1");
+
+}
+$(function(){
+	_show("加载完成后状态document.readyState = "+document.readyState+"(IE=complete,其他=interactive)");
+
+	_show("兼容性document.compatMode = "+document.compatMode);
+
+	var userDiv = document.getElementById("userDiv");
+	_show("var userDiv = document.getElementById('userDiv');"
+		+"\nuserDiv.dataset.userid --> "+(userDiv.dataset&&userDiv.dataset.userid)
+		+"\nuserDiv.dataset.userName --> "+(userDiv.dataset&&userDiv.dataset.userName));
+	userDiv.innerHTML = '<b>用户信息</b>';
+	//_show("userDiv.innerHTML = '<b>用户信息</b>'");
+	userDiv.insertAdjacentHTML('beforebegin','<p>beforebegin</p>');
+	userDiv.insertAdjacentHTML('afterbegin','<p>afterbegin</p>');
+	userDiv.insertAdjacentHTML('beforeend','<p>beforeend</p>');
+	userDiv.insertAdjacentHTML('afterend','<p>afterend</p>');
+
+	userDiv.scrollIntoView(true);
+});
+_show("加载中状态document.readyState = "+document.readyState+"(IE=interactive,其他=loading)");
+</script>
+
+<div class="aTitle">非标准功能</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 【IE】头部信息X-UA-Compatible设置IE兼容模式
+要强制浏览器以某种模式渲染页面，可以使用HTTP 头部信息X-UA-Compatible，
+或通过等价的&lt;meta&gt;标签来设置：
+&lt;meta http-equiv="X-UA-Compatible" content="IE=IEVersion"&gt;
+通过document.documentMode 属性可以知道给定页面使用的是什么文档模式,
+这个属性是IE8中新增的。
+
+2. 【IE】contains()
+IE 率先引入了contains()方法，以便不通过在DOM文档树中查找即可获得这个信息。
+调用contains()方法的应该是祖先节点，也就是搜索开始的节点，这个方法接收一个
+参数，即要检测的后代节点。如果被检测的节点是后代节点，该方法返回true；否则，
+返回false。
+<b>通用的contains 函数:</b>
+function contains(refNode, otherNode){
+	if (typeof refNode.contains == "function" &&
+		(!client.engine.webkit || client.engine.webkit >= 522)){
+		return refNode.contains(otherNode);
+	} else if (typeof refNode.compareDocumentPosition == "function"){
+		return !!(refNode.compareDocumentPosition(otherNode) & 16);
+	} else {
+		var node = otherNode.parentNode;
+		do {
+			if (node === refNode){
+				return true;
+			} else {
+				node = node.parentNode;
+			}
+		} while (node !== null);
+		return false;
+	}
+}
+支持contains()方法的浏览器有IE、Firefox 9+、Safari、Opera 和Chrome。
+
+3. compareDocumentPosition()
+compareDocumentPosition() 这个方法用于确定两个节点间的关系，
+返回一个表示该关系的位掩码（ bitmask）：
+掩码 节点关系
+1 		无关（给定的节点不在当前文档中）
+2 		居前（给定的节点在DOM树中位于参考节点之前）
+4 		居后（给定的节点在DOM树中位于参考节点之后）
+8 		包含（给定的节点是参考节点的祖先）
+16 		被包含（给定的节点是参考节点的后代）
+
+支持这个方法的浏览器有IE9+、Firefox、Safari、Opera 9.5+和Chrome。
+
+4. innerText属性和outerText属性
+支持innerText 属性的浏览器包括IE4+、Safari 3+、Opera 8+和Chrome。
+Firefox 虽然不支持innerText，但支持作用类似的textContent 属性。
+支持textContent 属性的浏览器还有IE9+、Safari 3+、Opera 10+和Chrome。
+<b>通用的函数：</b>
+function getInnerText(element){
+	return (typeof element.textContent == "string") ?
+	element.textContent : element.innerText;
+}
+function setInnerText(element, text){
+	if (typeof element.textContent == "string"){
+		element.textContent = text;
+	} else {
+		element.innerText = text;
+	}
+}
+
+实际上，innerText 与textContent 返回的内容并不完全一样。比如，
+innerText 会忽略行内的样式和脚本，而textContent 则会像返回
+其他文本一样返回行内的样式和脚本代码。
+
+5. 为纳入HTML5的滚动方法
+ 1) scrollIntoViewIfNeeded(alignCenter)：只在当前元素在视口中不可见的情况下，才滚
+动浏览器窗口或容器元素，最终让它可见。如果当前元素在视口中可见，这个方法什么也不做。
+如果将可选的alignCenter 参数设置为true，则表示尽量将元素显示在视口中部（垂直方向）。
+Safari 和Chrome 实现了这个方法。
+ 2) scrollByLines(lineCount)：将元素的内容滚动指定的行高，lineCount 值可以是正值，
+也可以是负值。Safari 和Chrome 实现了这个方法。
+ 3) scrollByPages(pageCount)：将元素的内容滚动指定的页面高度，具体高度由元素的高度决
+定。Safari 和Chrome 实现了这个方法。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+		<div id="domDiv">文档</div>
+	</div>
+</div>
+<script>
+
+$(function(){
+	function _show(msg){
+		var ele = $("<div></div>");
+		ele.html(msg);
+		ele.appendTo("#showResult3");
+	}
+
+	_show("IE文档模式document.documentMode = "+document.documentMode);
+	var showDiv = document.getElementById("showResult3");
+	var domDiv = document.getElementById("domDiv");
+	_show('var showDiv = document.getElementById("showResult3");<br/>'
+		+'var domDiv = document.getElementById("domDiv");<br/>'
+		+'showDiv.contains(domDiv) = '+showDiv.contains(domDiv));
+	
+	if(showDiv.compareDocumentPosition){
+	_show('domDiv是否位于showDiv以后 ： <br/>'+
+		' !!(showDiv.compareDocumentPosition(domDiv)&4) --> '+
+		(!!(showDiv.compareDocumentPosition(domDiv)&4)));
+	_show('domDiv是否showDiv的子孙元素 ： <br/>'+
+		' !!(showDiv.compareDocumentPosition(domDiv)&16) --> '+
+		(!!(showDiv.compareDocumentPosition(domDiv)&16)));
+	}
+
+	_show("domDiv.innerText --> "+domDiv.innerText+
+		"<br/>domDiv.textContent --> "+domDiv.textContent+"(firefox)");
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>typeof和instanceof</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">typeof</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+typeof 操作符是确定一个变量是字符串、数值、布尔值，还是undefined 的最佳工具。
+但在检测引用类型的值时，使用instanceof 操作符。
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+$('<p> typeof 123 --> '+(typeof 123)+'</p>').appendTo($("#showResult1"));
+$('<p> typeof NaN --> '+(typeof NaN)+'</p>').appendTo($("#showResult1"));
+$('<p> typeof "abc" --> '+(typeof "abc")+'</p>').appendTo($("#showResult1"));
+$('<p> typeof false --> '+(typeof false)+'</p>').appendTo($("#showResult1"));
+$('<p> typeof undefined --> '+(typeof undefined)+'</p>').appendTo($("#showResult1"));
+$('<p> typeof null --> '+(typeof null)+'</p>').appendTo($("#showResult1"));
+$('<p> typeof {} --> '+(typeof {})+'</p>').appendTo($("#showResult1"));
+$('<p> typeof [1,2,3] --> '+(typeof [1,2,3])+'</p>').appendTo($("#showResult1"));
+$('<p> typeof function(){} --> '+(typeof function(){})+'</p>').appendTo($("#showResult1"));
+</script>
+
+<div class="aTitle">instanceof</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+所有引用类型的值都是Object 的实例。
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+
+<script type="text/javascript">
+$('<p> 123 instanceof Number --> '+(123 instanceof Number)+'</p>').appendTo($("#showResult2"));
+var num = new Number(123);
+$('<p> var num = new Number(123); <br/>num instanceof Number --> '+(num instanceof Number)+'</p>').appendTo($("#showResult2"));
+$('<p> "abc" instanceof String --> '+("abc" instanceof String)+'</p>').appendTo($("#showResult2"));
+var str = new String("abc");
+$('<p> var str = new String("abc");<br/> str instanceof String --> '+(str instanceof String)+'</p>').appendTo($("#showResult2"));
+$('<p> false instanceof Boolean --> '+(false instanceof Boolean)+'</p>').appendTo($("#showResult2"));
+var result = new Boolean(true);
+$('<p> var result = new Boolean(true);<br/> result instanceof Boolean --> '+(result instanceof Boolean)+'</p>').appendTo($("#showResult2"));
+$('<p> undefined instanceof Object --> '+(undefined instanceof Object)+'</p>').appendTo($("#showResult2"));
+$('<p> null instanceof Object --> '+(null instanceof Object)+'</p>').appendTo($("#showResult2"));
+$('<p> {} instanceof Object --> '+({} instanceof Object)+'</p>').appendTo($("#showResult2"));
+$('<p> [1,2,3] instanceof Object --> '+([1,2,3] instanceof Object)+'</p>').appendTo($("#showResult2"));
+$('<p> [1,2,3] instanceof Array --> '+([1,2,3] instanceof Array)+'</p>').appendTo($("#showResult2"));
+$('<p> function(){} instanceof Object --> '+(function(){} instanceof Object)+'</p>').appendTo($("#showResult2"));
+$('<p> function(){} instanceof Function --> '+(function(){} instanceof Function)+'</p>').appendTo($("#showResult2"));
+
+
+</script>
+</body>
+</html>

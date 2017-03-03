@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性[clip-path]【IE11都不支持】</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+	<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.triangle{
+	width: 100px;
+	height: 100px;
+	background: url(../../img/bk.png);
+	-webkit-clip-path: polygon(0 0,100% 0, 50% 100%);
+}
+</style>
+<div class="aTitle">多变形剪裁</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.triangle{
+	width: 100px;
+	height: 100px;
+	background: url(../../img/bk.png);
+	-webkit-clip-path: polygon(0 0,100% 0, 50% 100%);
+}
+
+<b>页面：</b>
+&lt;div class="triangle"&gt;&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="triangle"></div>
+	</div>
+</div>
+
+
+<style>
+.change{
+	width: 100px;
+	height: 100px;
+	background: url(../../img/bk.png);
+	-webkit-clip-path: polygon(0 0,100% 0, 50% 100%);
+	transition: -webkit-clip-path 1s ease-out;
+}
+.change:hover{
+	-webkit-clip-path: polygon(0 0,100% 0, 0 100%);
+}
+</style>
+<div class="aTitle">图形动态变换</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.change{
+	width: 100px;
+	height: 100px;
+	background: url(../../img/bk.png);
+	-webkit-clip-path: polygon(0 0,100% 0, 50% 100%);
+	transition: -webkit-clip-path 1s ease-out;
+}
+.change:hover{
+	-webkit-clip-path: polygon(0 0,100% 0, 0 100%);
+}
+
+<b>页面：</b>
+&lt;div class="change"&gt;&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="change"></div>
+	</div>
+</div>
+</body>
+</html>

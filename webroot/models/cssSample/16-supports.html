@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>支持判断</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style>
+h1 { color: gray; }
+@supports (text-shadow: 0 0 .1em gray) {
+	h1 {
+		color: transparent;
+		text-shadow: 0 0 .1em gray;
+	}
+}
+</style>
+
+
+<div class="aTitle">支持判断</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+h1 { color: gray; }
+<mark>@supports (text-shadow: 0 0 .1em gray) {</mark>
+	h1 {
+		color: transparent;
+		text-shadow: 0 0 .1em gray;
+	}
+<mark>}</mark>
+
+<b>页面：</b>
+&lt;h1&gt;欢迎光临！&lt;/h1&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<h1>欢迎光临！</h1>
+	</div>
+</div>
+
+
+</body>
+</html>

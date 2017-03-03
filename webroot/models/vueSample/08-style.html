@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue绑定内联样式</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">对象语法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1"&gt;
+	&lt;div v-bind:style="curStyle"&gt;你好，{{curUser.name}}&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		curUser:{name:"琳",isVIP:true}
+	},
+	computed:{
+		curStyle:function(){
+			if(this.curUser.isVIP){
+				return {
+					color:"red"
+				};
+			}else{
+				return {
+					color:"gray"
+				};
+			}
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app1">
+			<div v-bind:style="curStyle">你好，{{curUser.name}}</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		curUser:{name:"琳",isVIP:true}
+	},
+	computed:{
+		curStyle:function(){
+			if(this.curUser.isVIP){
+				return {
+					color:"red"
+				};
+			}else{
+				return {
+					color:"gray"
+				};
+			}
+		}
+	}
+});
+</script>
+
+
+
+<div class="aTitle">数组语法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	&lt;div v-bind:style="[fontStyles,borderStyles]"&gt;你好!&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		fontStyles:{
+			color:"red",
+			fontSize:"20px",
+			fontWeight:700
+		},
+		borderStyles:{
+			borderWidth:"2px",
+			borderColor:"red",
+			borderStyle:"solid"
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app2">
+			<div v-bind:style="[fontStyles,borderStyles]">你好!</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		fontStyles:{
+			color:"red",
+			fontSize:"20px",
+			fontWeight:700
+		},
+		borderStyles:{
+			borderWidth:"2px",
+			borderColor:"red",
+			borderStyle:"solid"
+		}
+	}
+});
+</script>
+</body>
+</html>

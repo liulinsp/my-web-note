@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue组件</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">全局注册组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1"&gt;
+	&lt;my-hello/&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+Vue.component('my-hello', {
+  template: '&lt;h3&gt;你好，琳&lt;/h3&gt;'
+});
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app1">
+			<my-hello/>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+Vue.component('my-hello', {
+  template: '<h3>你好，琳</h3>'
+});
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		
+	}
+});
+</script>
+
+
+<div class="aTitle">局部注册组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	&lt;my-welcome&gt;&lt;/my-welcome&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+	},
+	components:{
+		'my-welcome':{
+			template: '&lt;h3&gt;你好，琳&lt;/h3&gt;'
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app2">
+			<my-welcome></my-welcome>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+	},
+	components:{
+		'my-welcome':{
+			template: '<h3>你好，琳</h3>'
+		}
+	}
+});
+</script>
+
+<div class="aTitle">字面量语法-vs-动态语法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 字面量语法
+&lt;!-- 传递了一个字符串"1" --&gt;
+&lt;comp some-prop="1"&gt;&lt;/comp&gt;
+
+2. 动态语法
+&lt;!-- 传递实际的数字 --&gt;
+&lt;comp v-bind:some-prop="1"&gt;&lt;/comp&gt;
+
+<b>页面：</b>
+&lt;div id="app3"&gt;
+    &lt;!--val是字面量法，user是动态语法 --&gt;
+	&lt;my-welcome val="你好" v-bind:user="curUser"&gt;&lt;/my-welcome&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		curUser:{name:"琳"}
+	},
+	components:{
+		'my-welcome':{
+			props: ['val','user'],
+			template: '&lt;h3&gt;{{val}},{{user.name}}&lt;/h3&gt;'
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app3">
+		    <!--val是字面量法，user是动态语法 -->
+			<my-welcome val="你好" v-bind:user="curUser"></my-welcome>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		curUser:{name:"琳"}
+	},
+	components:{
+		'my-welcome':{
+			props: ['val','user'],
+			template: '<h3>{{val}},{{user.name}}</h3>'
+		}
+	}
+});
+</script>
+
+
+
+<div class="aTitle">Prop 验证</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+组件可以为 props 指定验证要求。如果未指定验证要求，Vue 会发出警告。
+<b>页面：</b>
+&lt;div id="app4"&gt;
+    &lt;my-product tag="加湿器" :price="price" description="超大容量"&gt;&lt;/my-product&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+Vue.component("my-product",{
+	props:{
+		tag:{
+			type:String,
+			default: "未命名"
+		},
+		price:{
+			type:Number,
+			required: true
+		},
+		description:String
+	},
+	template:"&lt;div&gt;{{tag}} : {{price}}元 [{{description}}]&lt;/div&gt;"
+});
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		price:108
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app4">
+		    <my-product tag="加湿器" :price="price" description="超大容量"></my-product>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+Vue.component("my-product",{
+	props:{
+		tag:{
+			type:String,
+			default: "未命名"
+		},
+		price:{
+			type:Number,
+			required: true
+		},
+		description:String
+	},
+	template:"<div>{{tag}} : {{price}}元 [{{description}}]</div>"
+});
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		price:108
+	}
+});
+</script>
+
+
+
+<div class="aTitle">动态组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app5"&gt;
+    &lt;div&gt;&lt;input type="radio" v-model="sex" value="man"&gt; 男&lt;/div&gt;
+    &lt;div&gt;&lt;input type="radio" v-model="sex" value="woman"&gt; 女&lt;/div&gt;
+    &lt;component <mark>v-bind:is="sex"</mark>&gt;&lt;/component&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app5 = new Vue({
+	el:"#app5",
+	data:{
+		sex:"man"
+	},
+	components:{
+		'man':{template:"&lt;h2&gt;先生，您好！&lt;/h2&gt;"},
+		'woman':{template:"&lt;h2&gt;女士，您好！&lt;/h2&gt;"}
+	}
+});
+
+<pre class="error">如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染。
+为此可以添加一个 keep-alive 指令参数：
+&lt;keep-alive&gt;
+  &lt;component :is="currentView"&gt;
+    &lt;!-- 非活动组件将被缓存！ --&gt;
+  &lt;/component&gt;
+&lt;/keep-alive&gt;</pre>
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app5">
+		    <div><input type="radio" v-model="sex" value="man"> 男</div>
+		    <div><input type="radio" v-model="sex" value="woman"> 女</div>
+		    <component v-bind:is="sex"></component>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app5 = new Vue({
+	el:"#app5",
+	data:{
+		sex:"man"
+	},
+	components:{
+		'man':{template:"<h2>先生，您好！</h2>"},
+		'woman':{template:"<h2>女士，您好！</h2>"}
+	}
+});
+</script>
+
+
+
+
+<div class="aTitle">子组件索引</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app6"&gt;
+    &lt;input <mark>ref="nameInput"</mark> type="text" v-model="name"&gt;
+    &lt;button @click="btnHandler"&gt;获得姓名&lt;/button&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app6 = new Vue({
+	el:"#app6",
+	data:{
+		name:"张三"
+	},
+	methods:{
+		btnHandler:function(){
+			alert(<mark>this.$refs.nameInput</mark>.value);
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app6">
+		    <input ref="nameInput" type="text" v-model="name">
+		    <button @click="btnHandler">获得姓名</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app6 = new Vue({
+	el:"#app6",
+	data:{
+		name:"张三"
+	},
+	methods:{
+		btnHandler:function(){
+			alert(this.$refs.nameInput.value);
+		}
+	}
+});
+</script>
+</body>
+</html>

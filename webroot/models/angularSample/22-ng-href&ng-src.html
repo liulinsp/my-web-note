@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ng-href 和 ng-src</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">ng-href</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;p&gt;
+    &lt;a href="{{data.myHref}}"&gt;{{data.title}}&lt;/a&gt;
+    (超链接在myHref初始前是可点的)
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;a ng-href="{{data.myHref}}"&gt;{{data.title}}&lt;/a&gt;
+    (超链接在myHref初始前是不可点的)
+  &lt;/p&gt;
+&lt;/div&gt;
+
+<b>脚本:</b>
+angular.module("app1",[])
+  .controller("ctrl1",function($scope,$timeout){
+    $scope.data={title:"未设置myHref"}
+    $timeout(function(){
+      $scope.data.myHref="http://www.baidu.com";
+      $scope.data.title="已设置myHref";
+    },5000);
+  });
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <p>
+        <a href="{{data.myHref}}">{{data.title}}</a>
+        (超链接在myHref初始前是可点的)
+      </p>
+      <p>
+        <a ng-href="{{data.myHref}}">{{data.title}}</a>
+        (超链接在myHref初始前是不可点的)
+      </p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app1",[])
+  .controller("ctrl1",function($scope,$timeout){
+    $scope.data={title:"未设置myHref"}
+    $timeout(function(){
+      $scope.data.myHref="http://www.baidu.com";
+      $scope.data.title="已设置myHref";
+    },5000);
+  });
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+</script>
+
+
+<div class="aTitle">ng-src</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app2" ng-controller="ctrl2"&gt;
+  {{data.title}}
+  &lt;p&gt;
+    &lt;img src="{{data.mySrc}}" 
+         style="width:50px;height:50px"/&gt;(使用src)
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;img ng-src="{{data.mySrc}}" 
+         style="width:50px;height:50px"/&gt;(使用ng-src)
+  &lt;/p&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("app2",[])
+  .controller("ctrl2",function($scope,$timeout){
+    $scope.data={title:"未设置mySrc"}
+    $timeout(function(){
+      $scope.data.mySrc="http://img.baidu.com/hi/jx2/j_0028.gif";
+      $scope.data.title="已设置mySrc";
+    },5000);
+  });
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      {{data.title}}
+      <p>
+        <img src="{{data.mySrc}}" 
+             style="width:50px;height:50px"/>(使用src)
+      </p>
+      <p>
+        <img ng-src="{{data.mySrc}}" 
+             style="width:50px;height:50px"/>(使用ng-src)
+      </p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app2",[])
+  .controller("ctrl2",function($scope,$timeout){
+    $scope.data={title:"未设置mySrc"}
+    $timeout(function(){
+      $scope.data.mySrc="http://img.baidu.com/hi/jx2/j_0028.gif";
+      $scope.data.title="已设置mySrc";
+    },5000);
+  });
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+</script>
+
+</body>
+</html>

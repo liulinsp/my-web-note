@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ngModelController ng-model指令中所定义的controller</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">$parsers 和 $formatters</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+在Angular应用中，ng-model指令时不可缺少的一个部分，
+  它用来将视图绑定到数据，是双向绑定魔法中重要的一环。
+ngModelController则是ng-model指令中所定义的controller。
+这个controller包含了一些用于数据绑定，验证，CSS更新，
+  以及数值格式化和解析的服务。
+
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  如果输入的是数字，数字四舍五入并与model中数据同步；
+  否则，model中数据设为undefined&lt;br/&gt;
+  &lt;form name="form1"&gt;
+    &lt;input type="text" name="total" ng-model="data.total" ensure-number/&gt;
+    &lt;span ng-show="form1.total.$dirty && form1.total.$error.ensureNumber"&gt;请输入数字&lt;/span&gt;
+    &lt;p&gt;data.total={{data.total}}&lt;/p&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+<b>脚本：</b>
+angular.module('app1', [])
+.directive('ensureNumber', function($http) {
+  return {
+    require: '?ngModel',
+    link: function(scope, ele, attrs, ngModelController) {
+      if(!ngModelController){return;}
+      
+      //重新输入后调用
+      ngModelController.$parsers.unshift(function(viewValue){
+        console.log("parsers");
+        if(""!=viewValue && /^[0-9]+(.[0-9]*)?$/.test(viewValue)){
+          ngModelController.$setValidity('ensureNumber', true);
+          var num = Number(viewValue);
+          return num.toFixed(2);
+        }else{
+          ngModelController.$setValidity('ensureNumber', false);
+          return undefined;
+        }
+      });
+
+      //初始化时调用
+      ngModelController.$formatters.unshift(function(viewValue) {
+        console.log("formatters");
+        if(""!=viewValue && /^[0-9]+(.[0-9]*)?$/.test(viewValue)){
+          var num = Number(viewValue);
+          return num.toFixed(2);
+        }
+      });
+    }
+  };
+})
+.controller("ctrl1",function($scope){
+  $scope.data={total:125.6898};
+});
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      如果输入的是数字，数字四舍五入并与model中数据同步；
+      否则，model中数据设为undefined<br/>
+      <form name="form1">
+        <input type="text" name="total" ng-model="data.total" ensure-number/>
+        <span ng-show="form1.total.$dirty && form1.total.$error.ensureNumber">请输入数字</span>
+        <p>data.total={{data.total}}</p>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module('app1', [])
+.directive('ensureNumber', function($http) {
+  return {
+    require: '?ngModel',
+    link: function(scope, ele, attrs, ngModelController) {
+      if(!ngModelController){return;}
+      
+      //重新输入后调用
+      ngModelController.$parsers.unshift(function(viewValue){
+        console.log("parsers");
+        if(""!=viewValue && /^[0-9]+(.[0-9]*)?$/.test(viewValue)){
+          ngModelController.$setValidity('ensureNumber', true);
+          var num = Number(viewValue);
+          return num.toFixed(2);
+        }else{
+          ngModelController.$setValidity('ensureNumber', false);
+          return undefined;
+        }
+      });
+
+      //初始化时调用
+      ngModelController.$formatters.unshift(function(viewValue) {
+        console.log("formatters");
+        if(""!=viewValue && /^[0-9]+(.[0-9]*)?$/.test(viewValue)){
+          var num = Number(viewValue);
+          return num.toFixed(2);
+        }
+      });
+    }
+  };
+})
+.controller("ctrl1",function($scope){
+  $scope.data={total:125.6898};
+});
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>svg格式图片</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.eight-edge{
+	width: 200px;
+	height: 150px;
+	border: 15px solid transparent;
+	border-image: url(../../img/8edge.svg) 10 10;
+}
+</style>
+<div class="aTitle">使用svg文件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.eight-edge{
+	width: 200px;
+	height: 150px;
+	border: 15px solid transparent;
+	border-image: url(../../img/8edge.svg) 10 10;
+}
+
+<b>页面：</b>
+&lt;div class="eight-edge"&gt;&lt;/div&gt;
+&lt;p&gt;原图:&lt;/p&gt;
+&lt;img src="../../img/8edge.svg"&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="eight-edge"></div>
+		<p>原图:</p>
+		<img src="../../img/8edge.svg">
+	</div>
+</div>
+
+
+
+<style>
+.eight-edge-css{
+	width: 200px;
+	height: 150px;
+	border: 15px solid transparent;
+	border-image: 1 url('data:image/svg+xml,\
+	 <svg xmlns="http://www.w3.org/2000/svg"\
+	      width="3" height="3" fill="%23007fff">\
+	 	  <polygon points="0,1 1,0 2,0 3,1 3,2 2,3 1,3 0,2"/>\
+	 </svg>');
+}
+</style>
+<div class="aTitle">css中定义svg</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.eight-edge-css{
+	width: 200px;
+	height: 150px;
+	border: 15px solid transparent;
+	border-image: 1 url('data:image/svg+xml,\
+	 &lt;svg xmlns="http://www.w3.org/2000/svg"\
+	      width="3" height="3" fill="<mark>%23</mark>007fff"&gt;\
+	 	  &lt;polygon points="0,1 1,0 2,0 3,1 3,2 2,3 1,3 0,2"/&gt;\
+	 &lt;/svg&gt;');
+}
+
+用“%23”替换了“#”，否则firefox有问题
+
+<b>页面：</b>
+&lt;div class="eight-edge-css"&gt;&lt;/div&gt;
+
+&lt;p&gt;原图:&lt;/p&gt;
+&lt;svg xmlns="http://www.w3.org/2000/svg" 
+    width="3" height="3" fill="#007fff"&gt;
+	&lt;polygon points="0,1 1,0 2,0 3,1 3,2 2,3 1,3 0,2"/&gt;
+&lt;/svg&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="eight-edge-css"></div>
+
+		<p>原图:</p>
+		<svg xmlns="http://www.w3.org/2000/svg" 
+		     width="3" height="3" fill="#007fff">
+			<polygon points="0,1 1,0 2,0 3,1 3,2 2,3 1,3 0,2"/>
+		</svg>
+	</div>
+</div>
+
+
+
+<style>
+.circle1>circle {
+	fill: yellowgreen;
+	stroke: #655;
+	stroke-width: 30;
+}
+
+.circle2>circle {
+	fill: yellowgreen;
+	stroke: #655;
+	stroke-width: 30;
+	stroke-dasharray: 20 10;
+}
+
+.circle3{
+	background-color: #655;
+	border-radius: 50%;
+	transform: rotate(-90deg);
+}
+.circle3>circle {
+	fill: transparent;
+	stroke: yellowgreen;
+	stroke-width: 45;
+	stroke-dasharray:42.41 98.96;/*30%*/
+	/*stroke-dasharray: 2*3.14159*22.5*0.3 2*3.14159*22.5*0.7;*/
+}
+
+</style>
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.circle1>circle {
+	fill: yellowgreen;
+	stroke: #655;
+	stroke-width: 30;
+}
+
+.circle2>circle {
+	fill: yellowgreen;
+	stroke: #655;
+	stroke-width: 30;
+	stroke-dasharray: 20 10;
+}
+
+.circle3{
+	background-color: #655;
+	border-radius: 50%;
+	transform: rotate(-90deg);
+}
+.circle3>circle {
+	fill: transparent;
+	stroke: yellowgreen;
+	stroke-width: 45;
+	stroke-dasharray:42.41 98.96;/*30%*/
+	/*stroke-dasharray: 2*3.14159*22.5*0.3 2*3.14159*22.5*0.7;*/
+}
+<b>页面：</b>
+&lt;svg class="circle1" width="90" height="90"&gt;
+	&lt;circle r="30" cx="45" cy="45"&gt;&lt;/circle&gt;
+&lt;/svg&gt;
+
+&lt;svg class="circle2" width="90" height="90"&gt;
+	&lt;circle r="30" cx="45" cy="45"&gt;&lt;/circle&gt;
+&lt;/svg&gt;
+
+&lt;svg class="circle3" width="90" height="90"&gt;
+	&lt;circle r="22.5" cx="45" cy="45"&gt;&lt;/circle&gt;
+&lt;/svg&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<svg class="circle1" width="90" height="90">
+			<circle r="30" cx="45" cy="45"></circle>
+		</svg>
+
+		<svg class="circle2" width="90" height="90">
+			<circle r="30" cx="45" cy="45"></circle>
+		</svg>
+
+		<svg class="circle3" width="90" height="90">
+			<circle r="22.5" cx="45" cy="45"></circle>
+		</svg>
+	</div>
+</div>
+
+
+
+
+<div class="aTitle">svg中图形参数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>矩形 - rect元素</b>
+这个元素有6个控制位置和形状的属性，分别是：
+x：矩形左上角的坐标(用户坐标系)的x值。
+y：矩形左上角的坐标(用户坐标系)的y值。
+width：矩形宽度。
+height：矩形高度。
+rx：实现圆角效果时，圆角沿x轴的半径。
+ry：实现圆角效果时，圆角沿y轴的半径。
+比如上面例子中，实现了圆角效果，你也可以通过设置rx,ry为不同的值实现椭圆角效果。
+
+<b>圆 - circle元素</b>
+这个元素的属性很简单，主要是定义圆心和半径：
+r：圆的半径。
+cx：圆心坐标x值。
+cy：圆心坐标y值。
+
+<b>椭圆 - ellipse元素</b>
+这个是更加通用的圆形元素，你可以分别控制半长轴和半短轴的长度，来实现不同的椭圆，
+很容易想到，当两个半轴相等时，就是正圆形了。
+rx：半长轴(x半径)。
+ry：半短轴(y半径)。
+cx：圆心坐标x值。
+cy：圆心坐标y值。
+
+<b>直线 - line元素</b>
+直线需要定义起点与终点即可：
+x1：起点x坐标。
+y1：起点y坐标。
+x2：终点x坐标。
+y2：终点y坐标。
+
+<b>折线 - polyline元素</b>
+折线主要是要定义每条线段的端点即可，所以只需要一个点的集合作为参数：
+points：一系列的用空格，逗号，换行符等分隔开的点。每个点必须有2个数字：x值和y值。
+所以下面3个点 (0,0), (1,1)和(2,2)可以写成："0 0, 1 1, 2 2"。
+
+<b>多边形 - polygon元素</b>
+这个元素就是比polyline元素多做一步，把最后一个点和第一个点连起来，形成闭合图形。
+参数是一样的。
+points：一系列的用空格，逗号，换行符等分隔开的点。每个点必须有2个数字：x值和y值。
+所以下面3个点 (0,0), (1,1)和(2,2)可以写成："0 0, 1 1, 2 2"。
+
+<b>路径 - path元素</b>
+这个是最通用，最强力的元素了；使用这个元素你可以实现任何其他的图形，不仅包括上面这些基本形状，
+也可以实现像贝塞尔曲线那样的复杂形状；此外，使用path可以实现平滑的过渡线段，
+虽然也可以使用polyline来实现这种效果，但是需要提供的点很多，而且放大了效果也不好。
+这个元素控制位置和形状的只有一个参数：
+d：一系列绘制指令和绘制参数(点)组合成。
+绘制指令分为绝对坐标指令和相对坐标指令两种，这两种指令使用的字母是一样的，就是大小写不一样，
+绝对指令使用大写字母，坐标也是绝对坐标；相对指令使用对应的小写字母，点的坐标表示的都是偏移量。
+		</pre>
+	</div>
+</div>
+	
+</body>
+</html>
+

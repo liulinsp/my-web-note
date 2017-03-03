@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>结构性伪类选择器</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+	<style type="text/css">
+		:root{
+			background: #F5FBFB;
+		}
+		.block{
+			width: 600px;
+			margin-top: 30px;
+			margin-left: 100px;
+		}
+
+	</style>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+	<!-- 第一个和最后一个的样式 -->
+	<style type="text/css">
+		ul>li{
+			background: #DDF9E5;
+			list-style: none;/*去掉前面默认的圆点*/
+			padding: 5px 10px 5px 10px;
+			border-style: solid;
+			border-color: #E0E7E7;
+			border-width: 1px;
+			width:300px;
+		}
+
+		/*前面增加对勾图标*/
+		ul>li:before{
+			content: url("gou.png") " ";
+		}
+
+		/*第一个的样式*/
+		ul.first-last>li:first-child{
+			border-top-color: #C4D2D2;
+			border-bottom-width: 0px;
+		}
+
+		/*第二个的样式*/
+		ul.first-last>li:nth-child(2){
+			border-top: dashed;
+			border-top-color: #C4D2D2;
+			border-top-width: 1px;
+			border-bottom-width: 0px;
+		}
+
+		/*最后一个的样式*/
+		ul.first-last>li:last-child{
+			border-top: dashed;
+			border-top-color: #C4D2D2;
+			border-top-width: 1px;
+			border-bottom-color: #C4D2D2;
+		}
+	</style>
+	<div class="aPane">
+	<div class="aCode">
+		<pre>
+ul>li{
+	background: #DDF9E5;
+	list-style: none;/*去掉前面默认的圆点*/
+	padding: 5px 10px 5px 10px;
+	border-style: solid;
+	border-color: #E0E7E7;
+	border-width: 1px;
+	width:300px;
+}
+
+/*前面增加对勾图标*/
+ul>li:before{
+	content: url("gou.png") " ";
+}
+
+/*第一个的样式*/
+ul.first-last>li:first-child{
+	border-top-color: #C4D2D2;
+	border-bottom-width: 0px;
+}
+
+/*第二个的样式*/
+ul.first-last>li:nth-child(2){
+	border-top: dashed;
+	border-top-color: #C4D2D2;
+	border-top-width: 1px;
+	border-bottom-width: 0px;
+}
+
+/*最后一个的样式*/
+ul.first-last>li:last-child{
+	border-top: dashed;
+	border-top-color: #C4D2D2;
+	border-top-width: 1px;
+	border-bottom-color: #C4D2D2;
+}		
+		</pre>
+	</div>
+	<div class="aShow">
+		<ul class="first-last">
+			<li>第一个元素 :frist-child</li>
+			<li>第二个元素 :nth-child(2)</li>
+			<li>最后一个元素 :last-child</li>
+		</ul>
+	</div>
+</div>
+
+
+
+
+<style type="text/css">
+	/*奇数行样式*/
+	ul.odd-even>li:nth-child(odd){
+		background-color: #DDF3FB;
+	}
+
+	/*偶数行样式*/
+	ul.odd-even>li:nth-child(even){
+		background-color: #F2F9D2;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*奇数行样式*/
+ul.odd-even>li:nth-child(odd){
+	background-color: #DDF3FB;
+}
+
+/*偶数行样式*/
+ul.odd-even>li:nth-child(even){
+	background-color: #F2F9D2;
+}	
+		</pre>
+	</div>
+	<div class="aShow">
+		<ul class="odd-even">
+			<li>奇数元素 :nth-child(odd)</li>
+			<li>偶数元素 :nth-child(even)</li>
+			<li>奇数元素 :nth-child(odd)</li>
+			<li>偶数元素 :nth-child(even)</li>
+		</ul>
+	</div>
+</div>
+
+
+<style type="text/css">
+	/* 唯一元素 */
+	ul.only>li:only-child{
+		background-color: #F5F9FB;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/* 唯一元素 */
+ul.only>li:only-child{
+	background-color: #F5F9FB;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<ul class="only">
+			<li>唯一子元素 :only-child</li>
+		</ul>
+	</div>
+</div>
+
+
+<style type="text/css">
+	div.nthtype{
+		widht:500px;
+		padding: 20px 10px 20px 40px;
+	}
+	div.nthtype>div{
+		height:20px;
+		border-style: solid;
+		border-width: 1px;
+	}
+	/*第一个同类元素*/
+	div.nthtype>span:first-of-type{
+		background-color:#F6C3EE;
+	}
+
+	/*第二个同类元素*/
+	div.nthtype>span:nth-of-type(2){
+		background-color:#D18FC7;
+	}
+
+	/*最后一个同类元素*/
+	div.nthtype>span:last-of-type{
+		background-color:#9A558F;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*第一个同类元素*/
+div.nthtype>span:first-of-type{
+	background-color:#F6C3EE;
+}
+
+/*第二个同类元素*/
+div.nthtype>span:nth-of-type(2){
+	background-color:#D18FC7;
+}
+
+/*最后一个同类元素*/
+div.nthtype>span:last-of-type{
+	background-color:#9A558F;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="nthtype">
+			<span>第一个span元素 :first-of-type</span>
+			<div>div元素</div>
+			<span>第二个span元素 :nth-of-type(2)</span>
+			<div>div元素</div>
+			<span>最后一个span元素 :last-of-type</span>
+			<div>div元素</div>
+		</div>
+	</div>
+</div>
+
+
+
+	<style type="text/css">
+		/*普通ul样式*/
+		div.empty-style>ul{
+			height: 20px;
+			width: 300px;
+			border-style: solid;
+			border-width: 1px;
+		}
+		/*ul内容为空样式*/
+		div.empty-style>ul:empty{
+			border-style: dashed;
+		}
+	</style>
+	<div class="aPane">
+		<div class="aCode">
+			<pre>
+/*普通ul样式*/
+div.empty-style>ul{
+	height: 20px;
+	width: 300px;
+	border-style: solid;
+	border-width: 1px;
+}
+/*ul内容为空样式*/
+div.empty-style>ul:empty{
+	border-style: dashed;
+}	
+			</pre>
+		</div>
+		<div class="aShow">
+			<div class="empty-style">
+				ul内有空格
+				<ul> </ul>
+				<p/>
+				ul内容为空
+				<ul></ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

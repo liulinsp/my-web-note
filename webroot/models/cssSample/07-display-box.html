@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性-盒布局[display:box]</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<!-- 参考文档 https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/ -->
+</head>
+<body>
+	<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+	.flex-container{
+		width: 100px;
+		height: 100px;
+		background-color: #EFEAEA;
+
+		display: box;
+		display: -webkit-box;
+	}
+	.container-orient-horizontal{
+		/*box-orient:inline-axis也是沿水平方向排列*/
+		box-orient:horizontal;
+		-webkit-box-orient:horizontal;
+	}
+	.flex-item:nth-child(1){
+		background-color: #FBE5E5;
+		box-flex: 1;
+		-webkit-box-flex: 1;
+	}
+	.flex-item:nth-child(2){
+		background-color: #FCBCBC;
+		box-flex: 2;
+		-webkit-box-flex: 2;
+	}
+	.flex-item:nth-child(3){
+		background-color: #FC9191;
+		box-flex: 3;
+		-webkit-box-flex: 3;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.flex-container{
+	width: 100px;
+	height: 100px;
+	background-color: #EFEAEA;
+
+	display: box;
+	display: -webkit-box;
+}
+.container-orient-horizontal{
+	/*box-orient:inline-axis也是沿水平方向排列*/
+	<mark>box-orient:horizontal;
+	-webkit-box-orient:horizontal;</mark>
+}
+.flex-item:nth-child(1){
+	background-color: #FBE5E5;
+	<mark>box-flex: 1;
+	-webkit-box-flex: 1;</mark>
+}
+.flex-item:nth-child(2){
+	background-color: #FCBCBC;
+	<mark>box-flex: 2;
+	-webkit-box-flex: 2;</mark>
+}
+.flex-item:nth-child(3){
+	background-color: #FC9191;
+	<mark>box-flex: 3;
+	-webkit-box-flex: 3;</mark>
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="flex-container container-orient-horizontal">
+			<div class="flex-item"></div>
+			<div class="flex-item"></div>
+			<div class="flex-item"></div>
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	.container-orient-vertical{
+		/*box-orient: block-axis也是沿垂直方向排列*/
+		box-orient: vertical;
+		-webkit-box-orient: vertical;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.container-orient-vertical{
+	/*box-orient: block-axis也是沿垂直方向排列*/
+	<mark>box-orient: vertical;
+	-webkit-box-orient: vertical;</mark>
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="flex-container container-orient-vertical">
+			<div class="flex-item"></div>
+			<div class="flex-item"></div>
+			<div class="flex-item"></div>
+		</div>
+	</div>
+</div>	
+
+
+<style type="text/css">
+	.container-direction{
+		/*垂直方向*/
+		box-orient: vertical;
+		-webkit-box-orient: vertical ;
+		/*反方向*/
+		box-direction: reverse;
+		-webkit-box-direction: reverse;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.container-direction{
+	/*垂直方向*/
+	box-orient: vertical;
+	-webkit-box-orient: vertical ;
+	/*反方向*/
+	<mark>box-direction: reverse;
+	-webkit-box-direction: reverse;</mark>
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="flex-container container-direction">
+			<div class="flex-item"></div>
+			<div class="flex-item"></div>
+			<div class="flex-item"></div>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.box-align{
+		width: 300px;
+		margin: 0px 0px 10px 0px; 
+		box-orient: horizontal;
+		-webkit-box-orient: horizontal ;
+	}
+
+	.flex-item1{
+		background-color: #CAFBD6;
+		font-size: 20px;
+		width: 50px;
+		height: 40px;
+	}
+	.flex-item2{
+		background-color: #A1FCB6;
+		font-size: 25px;
+		width: 50px;
+		height: 60px;
+	}
+	.flex-item3{
+		background-color: #57FC7E;
+		font-size: 30px;
+		width: 50px;
+		height: 80px;
+	}
+
+	.align-start{
+		box-align:start;
+		-webkit-box-align:start;
+	}
+
+	.align-end{
+		box-align:end;
+		-webkit-box-align:end;
+	}
+
+	.align-center{
+		box-align:center;
+		-webkit-box-align:center;
+	}
+
+	.align-baseline{
+		box-align:baseline;
+		-webkit-box-align:baseline;
+	}
+
+	.align-stretch{
+		box-align:stretch;
+		-webkit-box-align:stretch;
+	}
+	.align-stretch>div{
+		height: auto;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.box-align{
+	width: 300px;
+	margin: 0px 0px 10px 0px; 
+	box-orient: horizontal;
+	-webkit-box-orient: horizontal ;
+}
+
+.flex-item1{
+	background-color: #CAFBD6;
+	font-size: 20px;
+	width: 50px;
+	height: 40px;
+}
+.flex-item2{
+	background-color: #A1FCB6;
+	font-size: 25px;
+	width: 50px;
+	height: 60px;
+}
+.flex-item3{
+	background-color: #57FC7E;
+	font-size: 30px;
+	width: 50px;
+	height: 80px;
+}
+
+<mark>.align-start{
+	box-align:start;
+	-webkit-box-align:start;
+}
+.align-end{
+	box-align:end;
+	-webkit-box-align:end;
+}
+.align-center{
+		box-align:center;
+		-webkit-box-align:center;
+	}
+.align-baseline{
+	box-align:baseline;
+	-webkit-box-align:baseline;
+}
+.align-stretch{
+	box-align:stretch;
+	-webkit-box-align:stretch;
+}
+.align-stretch>div{
+	height: auto;
+}</mark>
+		</pre>
+	</div>
+	<div class="aShow">
+		box-align:start
+		<div class="flex-container box-align align-start">
+			<div class="flex-item1">aaa</div>
+			<div class="flex-item2">bbb</div>
+			<div class="flex-item3">ccc</div>
+		</div>
+
+		box-align:end
+		<div class="flex-container box-align align-end">
+			<div class="flex-item1">aaa</div>
+			<div class="flex-item2">bbb</div>
+			<div class="flex-item3">ccc</div>
+		</div>
+
+		box-align:center
+		<div class="flex-container box-align align-center">
+			<div class="flex-item1">aaa</div>
+			<div class="flex-item2">bbb</div>
+			<div class="flex-item3">ccc</div>
+		</div>
+
+		box-align:baseline
+		<div class="flex-container box-align align-baseline">
+			<div class="flex-item1">aaa</div>
+			<div class="flex-item2">bbb</div>
+			<div class="flex-item3">ccc</div>
+		</div>
+
+		box-align:stretch(默认)
+		<div class="flex-container box-align align-stretch">
+			<div class="flex-item1">aaa</div>
+			<div class="flex-item2">bbb</div>
+			<div class="flex-item3">ccc</div>
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	.box-pack{
+		width: 300px;
+		margin: 0px 0px 10px 0px; 
+		box-orient: horizontal;
+		-webkit-box-orient: horizontal ;
+	}
+
+	.pack-start{
+		box-pack:start;
+		-webkit-box-pack:start;
+	}
+
+	.pack-end{
+		box-pack:end;
+		-webkit-box-pack:end;
+	}
+
+	.pack-center{
+		box-pack:center;
+		-webkit-box-pack:center;
+	}
+
+	.pack-justify{
+		box-pack:justify;
+		-webkit-box-pack:justify;
+	}
+
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.box-pack{
+	width: 300px;
+	margin: 0px 0px 10px 0px; 
+	box-orient: horizontal;
+	-webkit-box-orient: horizontal ;
+}
+
+.pack-start{
+	box-pack:start;
+	-webkit-box-pack:start;
+}
+
+.pack-end{
+	box-pack:end;
+	-webkit-box-pack:end;
+}
+
+.pack-center{
+	box-pack:center;
+	-webkit-box-pack:center;
+}
+
+.pack-justify{
+	box-pack:justify;
+	-webkit-box-pack:justify;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		box-pack:start（默认）
+		<div class="flex-container box-pack pack-start">
+			<div class="flex-item1"></div>
+			<div class="flex-item2"></div>
+			<div class="flex-item3"></div>
+		</div>
+
+		box-pack:end
+		<div class="flex-container box-pack pack-end">
+			<div class="flex-item1"></div>
+			<div class="flex-item2"></div>
+			<div class="flex-item3"></div>
+		</div>
+
+		box-pack:center
+		<div class="flex-container box-pack pack-center">
+			<div class="flex-item1"></div>
+			<div class="flex-item2"></div>
+			<div class="flex-item3"></div>
+		</div>
+
+		box-pack:justify
+		<div class="flex-container box-pack pack-justify">
+			<div class="flex-item1"></div>
+			<div class="flex-item2"></div>
+			<div class="flex-item3"></div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

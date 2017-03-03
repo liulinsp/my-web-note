@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS事件</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">ng-click 指令</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&ltdiv id="app1" ng-controller="ctrl1"&gt
+  &ltbutton <mark>ng-click="count=count+1"</mark>&gt点我&lt/button&gt
+  您共点击了{{count}}次
+&lt/div&gt
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.count=0;
+});
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <button ng-click="count=count+1">点我</button>
+      您共点击了{{count}}次
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.count=0;
+});
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+</script>
+
+<div class="aTitle">ng-click 指令 toggle</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&ltdiv id="app2" ng-controller="ctrl2"&gt
+  &ltbutton ng-click="toggle()"&gt点我&lt/button&gt
+  &ltp ng-show="isShow"&gt你能看到我吗？&lt/p&gt
+&lt/div&gt
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.isShow=true;
+  $scope.toggle=function(){
+    $scope.isShow = !$scope.isShow;
+  }
+});
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <button ng-click="toggle()">点我</button>
+      <p ng-show="isShow">你能看到我吗？</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.isShow=true;
+  $scope.toggle=function(){
+    $scope.isShow = !$scope.isShow;
+  }
+});
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+</script>
+
+</body>
+</html>

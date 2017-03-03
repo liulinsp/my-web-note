@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript富文本编辑器</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">iframe设置designMode【不好用】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+IE 最早引入的这一功能,Opera、Safari、Chrome 和Firefox 都已经支持这一功能。？？？
+
+可以给iframe 指定一个非常简单的HTML 页面作为其内容来源。例如：
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Blank Page for Rich Text Editing&lt;/title&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;iframe name="richedit" style="height:200px;width:200px;" 
+           src="30-editor-iframe.html"&gt;&lt;/iframe&gt;
+
+<b>脚本：</b>
+frames["richedit"].document.designMode = "on";
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+		<iframe id="richedit" name="richedit" style="height:200px;width:200px;" src="30-editor-iframe.html"></iframe>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	//frames["richedit"].document.designMode = "on";
+});
+</script>
+
+
+
+<div class="aTitle">使用contenteditable属性【推荐】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+这个属性也是由IE 最早实现的。
+可以把contenteditable 属性应用给页面中的任何元素，
+然后用户立即就可以编辑该元素。
+
+&lt;div contenteditable&gt;
+	这里可编辑
+&lt;/div&gt;
+
+contenteditable 属性有三个可能的值："true"表示打开、"false"表示关闭，"inherit"表示
+从父元素那里继承（因为可以在contenteditable 元素中创建或删除元素）。支持contenteditable
+属性的元素有IE、Firefox、Chrome、Safari 和Opera。在移动设备上，支持contenteditable 属性的
+浏览器有iOS 5+中的Safari 和Android 3+中的WebKit。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<div contenteditable>
+			这里可编辑
+		</div>
+	</div>
+</div>
+
+
+<div class="aTitle">操作富文本</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+当文档对象被转换为设计模式的时候（选中，设置contentEditable等），
+文档对象提供了一个execCommand方法，通过给这这个方法传递参数命令可以操作可编辑区域的内容。
+这个方法的命令大多数是对文档选中区域的操作 (如bold, italics等), 
+也可以插入一个元素(如增加一个a链接) 或者修改一个完整行 (如缩进)。
+当元素被设置了contentEditable，通过执行execCommand 方法可以对当前活动元素进行很多操作。
+
+<b>语法:</b>
+bool = document.execCommand(aCommandName, aShowDefaultUI, aValueArgument)
+<b>返回值:</b>
+一个 Boolean ，如果是 false 则表示操作不被支持或未被启用。
+<b>参数：</b>
+1. aCommandName
+一个 DOMString ，命令的名称。可用命令列表请参阅 命令 。
+2. aShowDefaultUI
+一个 Boolean 是否展示用户界面，一般为 false。Mozilla 没有实现。
+3. aValueArgument
+一些命令需要一些额外的参数值（如insertimage需要提供这个image的url）。默认为null。
+
+参考：
+https://developer.mozilla.org/zh-CN/docs/Web/API/Document/execCommand
+
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+
+
+
+<div class="aTitle">富文本选区</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+在富文本编辑器中，使用框架（iframe）的getSelection()方法，可以确定实际选择的文本。
+这个方法是window 对象和document 对象的属性，调用它会返回一个表示当前选择文本的Selection
+对象。每个Selection 对象都有下列属性。
+ anchorNode：选区起点所在的节点。
+ anchorOffset：在到达选区起点位置之前跳过的anchorNode 中的字符数量。
+ focusNode：选区终点所在的节点。
+ focusOffset：focusNode 中包含在选区之内的字符数量。
+ isCollapsed：布尔值，表示选区的起点和终点是否重合。
+ rangeCount：选区中包含的DOM 范围的数量。
+
+Selection 对象的这些属性并没有包含多少有用的信息。好在，该对象的下列方法提供了更多信
+息，并且支持对选区的操作。
+ addRange(range)：将指定的DOM 范围添加到选区中。
+ collapse(node, offset)：将选区折叠到指定节点中的相应的文本偏移位置。
+ collapseToEnd()：将选区折叠到终点位置。
+ collapseToStart()：将选区折叠到起点位置。
+ containsNode(node)：确定指定的节点是否包含在选区中。
+ deleteFromDocument()：从文档中删除选区中的文本，与document.execCommand("delete",
+false, null)命令的结果相同。
+ extend(node, offset)：通过将focusNode 和focusOffset 移动到指定的值来扩展选区。
+ getRangeAt(index)：返回索引对应的选区中的DOM范围。
+ removeAllRanges()：从选区中移除所有DOM 范围。实际上，这样会移除选区，因为选区中
+至少要有一个范围。
+ reomveRange(range)：从选区中移除指定的DOM 范围。
+ selectAllChildren(node)：清除选区并选择指定节点的所有子节点。
+ toString()：返回选区所包含的文本内容。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+
+
+<div class="aTitle">示例</div>
+<div class="aPane">
+	<div class="aCode">
+		<div id="myeditor" style="width:300px;height:200px"></div>
+		<pre class="note">
+	(function(){
+		var EastEditor = function(id){
+			this.id = id;
+		};
+
+		EastEditor.hanlders={
+			surround:function(event,tag){
+				var target = eventUtil.getTarget(event);
+				var editorId = target.getAttribute("data-editor-id");
+				if(client.browser.ie&gt;0&&client.browser.ie&lt;9){
+					var range = frames[editorId].document.selection.createRange();
+					console.log("range",range)
+					try{
+						range.pasteHTML("&lt;"+tag+"&gt; " + range.htmlText +"&lt;/"+tag+"&gt;");
+					}catch(e){}
+				}else{
+					var selection = frames[editorId].contentDocument.getSelection();
+					var range = selection.getRangeAt(0);
+					try{
+						range.surroundContents(domUtil.create(tag));
+					}catch(e){}
+				}
+			},
+			align:function(event,textAlign){
+				var target = eventUtil.getTarget(event);
+				var editorId = target.getAttribute("data-editor-id");
+				if(client.browser.ie&gt;0&&client.browser.ie&lt;9){
+					var range = frames[editorId].document.selection.createRange();
+					range.parentElement().style.textAlign=textAlign;
+				}else{
+					var selection = frames[editorId].contentDocument.getSelection();
+					selection.focusNode.parentNode.style.textAlign=textAlign;
+				}
+			}
+		};
+		EastEditor.createNum=0;
+		EastEditor.createEditor=function(nodeId,content){
+			
+			var editorId="",
+				html="",
+				attr={},
+				newIframe=null,
+				editor=null,
+				menuDiv=null,
+				bMenu=null,//加粗按钮
+				iMenu=null,//斜体按钮
+				centerMenu=null,//居中按钮
+				leftMenu=null,//左对齐按钮
+				rightMenu=null;//右对齐按钮
+
+			editorId = "editor"+(++EastEditor.createNum);
+			editor = new EastEditor(editorId);
+
+			menuDiv = domUtil.create("div", null, document.getElementById(nodeId));
+			bMenu = domUtil.create("input",{type:"button",value:"加粗","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(bMenu,"click",function(event){
+				event = eventUtil.getEvent(event);
+				EastEditor.hanlders.surround(event,"b");	
+			});
+
+			iMenu = domUtil.create("input",{type:"button",value:"斜体","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(iMenu,"click",function(event){
+				EastEditor.hanlders.surround(event,"i");
+			});
+
+			centerMenu = domUtil.create("input",{type:"button",value:"居中","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(centerMenu,"click",function(event){
+				EastEditor.hanlders.align(event,"center");
+			});
+
+			leftMenu = domUtil.create("input",{type:"button",value:"左对齐","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(leftMenu,"click",function(event){
+				EastEditor.hanlders.align(event,"left");
+			});
+
+			rightMenu = domUtil.create("input",{type:"button",value:"右对齐","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(rightMenu,"click",function(event){
+				EastEditor.hanlders.align(event,"right");
+			});
+
+			html = '&lt;!DOCTYPE html&gt;'+
+				'&lt;html&gt;'+
+				'&lt;head&gt;&lt;meta charset=\'utf-8\'&gt;&lt;/head&gt;'+
+				'&lt;body contenteditable&gt;'+
+				(content||"")+
+				'&lt;/body&gt;'+
+				'&lt;/html&gt;';
+			attr = {
+				id:editorId,
+				src: 'javascript:void(function(){document.open();' + 
+		             'document.write("' + html + '");document.close();}())'
+			}
+			newIframe = domUtil.create("iframe", attr, document.getElementById(nodeId));
+			editor.iframe = newIframe;
+			return editor;
+		};
+		window.EastEditor = EastEditor;
+	})();	
+
+
+	var mueditor = EastEditor.createEditor("myeditor","&lt;h3&gt;欢迎使用富文本编辑器&lt;/h3&gt;");
+		</pre>
+	</div>
+	<!-- <div class="aShow">
+		
+	</div> -->
+</div>
+<script type="text/javascript">
+$(function(){
+	(function(){
+		var EastEditor = function(id){
+			this.id = id;
+		};
+
+		EastEditor.hanlders={
+			surround:function(event,tag){
+				var target = eventUtil.getTarget(event);
+				var editorId = target.getAttribute("data-editor-id");
+				if(client.browser.ie>0&&client.browser.ie<9){
+					var range = frames[editorId].document.selection.createRange();
+					console.log("range",range)
+					try{
+						range.pasteHTML("<"+tag+"> " + range.htmlText +"</"+tag+">");
+					}catch(e){}
+				}else{
+					var selection = frames[editorId].contentDocument.getSelection();
+					var range = selection.getRangeAt(0);
+					try{
+						range.surroundContents(domUtil.create(tag));
+					}catch(e){}
+				}
+			},
+			align:function(event,textAlign){
+				var target = eventUtil.getTarget(event);
+				var editorId = target.getAttribute("data-editor-id");
+				if(client.browser.ie>0&&client.browser.ie<9){
+					var range = frames[editorId].document.selection.createRange();
+					range.parentElement().style.textAlign=textAlign;
+				}else{
+					var selection = frames[editorId].contentDocument.getSelection();
+					/*//console.log(selection);
+					var curNode = selection.anchorNode.parentNode;
+					var range = selection.getRangeAt(0);
+					console.log(range.rangeCount);
+					//console.log(range);
+					do{
+						curNode.style.textAlign = textAlign;
+						curNode = curNode.nextSibling;
+					}while(curNode!=selection.focusNode.parentNode);
+					//selection.anchorNode.parentNode.style.textAlign=textAlign;*/
+					selection.focusNode.parentNode.style.textAlign=textAlign;
+				}
+			}
+		};
+		EastEditor.createNum=0;
+		EastEditor.createEditor=function(nodeId,content){
+			
+			var editorId="",
+				html="",
+				attr={},
+				newIframe=null,
+				editor=null,
+				menuDiv=null,
+				bMenu=null,//加粗按钮
+				iMenu=null,//斜体按钮
+				centerMenu=null,//居中按钮
+				leftMenu=null,//左对齐按钮
+				rightMenu=null;//右对齐按钮
+
+			editorId = "editor"+(++EastEditor.createNum);
+			editor = new EastEditor(editorId);
+
+			menuDiv = domUtil.create("div", null, document.getElementById(nodeId));
+			bMenu = domUtil.create("input",{type:"button",value:"加粗","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(bMenu,"click",function(event){
+				event = eventUtil.getEvent(event);
+				EastEditor.hanlders.surround(event,"b");	
+			});
+
+			iMenu = domUtil.create("input",{type:"button",value:"斜体","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(iMenu,"click",function(event){
+				EastEditor.hanlders.surround(event,"i");
+			});
+
+			centerMenu = domUtil.create("input",{type:"button",value:"居中","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(centerMenu,"click",function(event){
+				EastEditor.hanlders.align(event,"center");
+			});
+
+			leftMenu = domUtil.create("input",{type:"button",value:"左对齐","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(leftMenu,"click",function(event){
+				EastEditor.hanlders.align(event,"left");
+			});
+
+			rightMenu = domUtil.create("input",{type:"button",value:"右对齐","data-editor-id":editorId},menuDiv);
+			eventUtil.bind(rightMenu,"click",function(event){
+				EastEditor.hanlders.align(event,"right");
+			});
+
+			html = '<!DOCTYPE html>'+
+				'<html>'+
+				'<head><meta charset=\'utf-8\'></head>'+
+				'<body contenteditable>'+
+				(content||"")+
+				'</body>'+
+				'</html>';
+			attr = {
+				id:editorId,
+				src: 'javascript:void(function(){document.open();' + 
+		             'document.write("' + html + '");document.close();}())'
+			}
+			newIframe = domUtil.create("iframe", attr, document.getElementById(nodeId));
+			editor.iframe = newIframe;
+			return editor;
+		};
+		window.EastEditor = EastEditor;
+	})();	
+
+
+	var mueditor = EastEditor.createEditor("myeditor","<h3>欢迎使用富文本编辑器</h3>");
+});
+
+
+</script>
+
+</body>
+</html>
+<script type="text/javascript">
+var client = function(){
+    //rendering engines
+    var engine = {            
+        ie: 0,
+        gecko: 0,
+        webkit: 0,
+        khtml: 0,
+        opera: 0,
+
+        //complete version
+        ver: null  
+    };
+    
+    //browsers
+    var browser = {
+        
+        //browsers
+        ie: 0,
+        firefox: 0,
+        safari: 0,
+        konq: 0,
+        opera: 0,
+        chrome: 0,
+
+        //specific version
+        ver: null
+    };
+
+    
+    //platform/device/OS
+    var system = {
+        win: false,
+        mac: false,
+        x11: false,
+        
+        //mobile devices
+        iphone: false,
+        ipod: false,
+        ipad: false,
+        ios: false,
+        android: false,
+        nokiaN: false,
+        winMobile: false,
+        
+        //game systems
+        wii: false,
+        ps: false 
+    };    
+
+    //detect rendering engines/browsers
+    var ua = navigator.userAgent;    
+    if (window.opera){
+        engine.ver = browser.ver = window.opera.version();
+        engine.opera = browser.opera = parseFloat(engine.ver);
+    } else if (/AppleWebKit\/(\S+)/.test(ua)){
+        engine.ver = RegExp["$1"];
+        engine.webkit = parseFloat(engine.ver);
+        
+        //figure out if it's Chrome or Safari
+        if (/Chrome\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.chrome = parseFloat(browser.ver);
+        } else if (/Version\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.safari = parseFloat(browser.ver);
+        } else {
+            //approximate version
+            var safariVersion = 1;
+            if (engine.webkit < 100){
+                safariVersion = 1;
+            } else if (engine.webkit < 312){
+                safariVersion = 1.2;
+            } else if (engine.webkit < 412){
+                safariVersion = 1.3;
+            } else {
+                safariVersion = 2;
+            }   
+            
+            browser.safari = browser.ver = safariVersion;        
+        }
+    } else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)){
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.khtml = browser.konq = parseFloat(engine.ver);
+    } else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){    
+        engine.ver = RegExp["$1"];
+        engine.gecko = parseFloat(engine.ver);
+        
+        //determine if it's Firefox
+        if (/Firefox\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.firefox = parseFloat(browser.ver);
+        }
+    } else if (/MSIE ([^;]+)/.test(ua)){    
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.ie = browser.ie = parseFloat(engine.ver);
+    }
+    
+    //detect browsers
+    browser.ie = engine.ie;
+    browser.opera = engine.opera;
+    
+
+    //detect platform
+    var p = navigator.platform;
+    system.win = p.indexOf("Win") == 0;
+    system.mac = p.indexOf("Mac") == 0;
+    system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+
+    //detect windows operating systems
+    if (system.win){
+        if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
+            if (RegExp["$1"] == "NT"){
+                switch(RegExp["$2"]){
+                    case "5.0":
+                        system.win = "2000";
+                        break;
+                    case "5.1":
+                        system.win = "XP";
+                        break;
+                    case "6.0":
+                        system.win = "Vista";
+                        break;
+                    case "6.1":
+                        system.win = "7";
+                        break;
+                    default:
+                        system.win = "NT";
+                        break;                
+                }                            
+            } else if (RegExp["$1"] == "9x"){
+                system.win = "ME";
+            } else {
+                system.win = RegExp["$1"];
+            }
+        }
+    }
+    
+    //mobile devices
+    system.iphone = ua.indexOf("iPhone") > -1;
+    system.ipod = ua.indexOf("iPod") > -1;
+    system.ipad = ua.indexOf("iPad") > -1;
+    system.nokiaN = ua.indexOf("NokiaN") > -1;
+    
+    //windows mobile
+    if (system.win == "CE"){
+        system.winMobile = system.win;
+    } else if (system.win == "Ph"){
+        if(/Windows Phone OS (\d+.\d+)/.test(ua)){;
+            system.win = "Phone";
+            system.winMobile = parseFloat(RegExp["$1"]);
+        }
+    }
+    
+    
+    //determine iOS version
+    if (system.mac && ua.indexOf("Mobile") > -1){
+        if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)){
+            system.ios = parseFloat(RegExp.$1.replace("_", "."));
+        } else {
+            system.ios = 2;  //can't really detect - so guess
+        }
+    }
+    
+    //determine Android version
+    if (/Android (\d+\.\d+)/.test(ua)){
+        system.android = parseFloat(RegExp.$1);
+    }
+    
+    //gaming systems
+    system.wii = ua.indexOf("Wii") > -1;
+    system.ps = /playstation/i.test(ua);
+    
+    //return it
+    return {
+        engine:     engine,
+        browser:    browser,
+        system:     system        
+    };
+
+}();
+</script>
+
+<script type="text/javascript">
+var eventUtil = {
+	bind: function(element, type, handler){
+		if (element.addEventListener){
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent){
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	unbind: function(element, type, handler){
+		if (element.removeEventListener){
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent){
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	getEvent: function(event){
+		return event ? event : window.event;
+	},
+	getTarget: function(event){
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event){
+		if (event.preventDefault){
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event){
+		if (event.stopPropagation){
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event){
+		if (event.relatedTarget){
+			return event.relatedTarget;
+		} else if (event.toElement){
+			return event.toElement;
+		} else if (event.fromElement){
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event){
+		if (document.implementation.hasFeature("MouseEvents", "2.0")){
+			return event.button;
+		} else {
+			switch(event.button){
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				return 0;
+				case 2:
+				case 6:
+				return 2;
+				case 4:
+				return 1;
+			}
+		}
+	},
+	getWheelDelta: function(event){
+		if (event.wheelDelta){
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+};	
+</script>
+
+<script type="text/javascript">
+var attrFix = client.browser.ie>0 && client.browser.ie < 9 ? {
+        tabindex:"tabIndex",
+        readonly:"readOnly",
+        "for":"htmlFor",
+        "class":"className",
+        maxlength:"maxLength",
+        cellspacing:"cellSpacing",
+        cellpadding:"cellPadding",
+        rowspan:"rowSpan",
+        colspan:"colSpan",
+        usemap:"useMap",
+        frameborder:"frameBorder"
+    } : {
+        tabindex:"tabIndex",
+        readonly:"readOnly"
+    };
+    
+var domUtil = {
+	create:function(tag,attrs,parent){
+		var node = domUtil.setAttributes(document.createElement(tag), attrs);
+		if(parent instanceof Element){
+			parent.appendChild(node);
+		}
+		return node;
+	},
+	setAttributes:function (node, attrs) {
+        for (var attr in attrs) {
+            if(attrs.hasOwnProperty(attr)){
+                var value = attrs[attr];
+                switch (attr) {
+                    case 'class':
+                        //ie下要这样赋值，setAttribute不起作用
+                        node.className = value;
+                        break;
+                    case 'style' :
+                        node.style.cssText = node.style.cssText + ";" + value;
+                        break;
+                    case 'innerHTML':
+                        node[attr] = value;
+                        break;
+                    case 'value':
+                        node.value = value;
+                        break;
+                    default:
+                        node.setAttribute(attrFix[attr] || attr, value);
+                }
+            }
+        }
+        return node;
+    },
+};
+</script>
+

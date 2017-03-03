@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Math对象</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">Math 对象的属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Math.E ：自然对数的底数，即常量e的值
+Math.LN10 ：10的自然对数
+Math.LN2 ：2的自然对数
+Math.LOG2E ：以2为底e的对数
+Math.LOG10E ：以10为底e的对数
+Math.PI ：π的值
+Math.SQRT1_2 ：1/2的平方根（即2的平方根的倒数）
+Math.SQRT2 ：2的平方根
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+
+
+
+<div class="aTitle">min()和max()方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+min()和max()方法用于确定一组数值中的最小值和最大值。
+这两个方法都可以接收任意多个数值参数。
+
+要找到数组中的最大或最小值，可以像下面这样使用apply()方法。
+var values = [1, 2, 3, 4, 5, 6, 7, 8];
+var max = Math.max.apply(Math, values);
+这个技巧的关键是把Math 对象作为apply()的第一个参数，从而正确地设置this 值。
+然后，可以将任何数组作为第二个参数。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+<script type="text/javascript">
+function show(msg){
+	$('<div>'+msg+'</div>').appendTo("#showResult1");
+}
+var max = Math.max(5,3,8);
+show('var max = Math.max(5,3,8);<br/>'
+	+'max --> '+max);
+
+var min = Math.min(5,3,8);
+show('var min = Math.min(5,3,8);<br/>'
+	+'min --> '+min);
+
+var arr = [5,3,8];
+var max2 = Math.max.apply(Math,arr);
+var min2 = Math.min.apply(Math,arr);
+show('var arr = [5,3,8];<br/>'
+	+'var max2 = Math.max.apply(Math,arr);<br/>'
+	+'max2 --> '+max2);
+show('var arr = [5,3,8];<br/>'
+	+'var min2 = Math.min.apply(Math,arr);<br/>'
+	+'min2 --> '+min2);
+
+var max3 = Math.max.apply(this,arr);
+var min3 = Math.min.apply(this,arr);
+show('var arr = [5,3,8];<br/>'
+	+'var max3 = Math.max.apply(this,arr);<br/>'
+	+'max3 --> '+max3);
+show('var arr = [5,3,8];<br/>'
+	+'var min3 = Math.min.apply(this,arr);<br/>'
+	+'min3 --> '+min3);
+</script>
+
+
+<div class="aTitle">舍入方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数；
+Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数；
+Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+<script type="text/javascript">
+function show(msg){
+	$('<div>'+msg+'</div>').appendTo("#showResult2");
+}
+
+show('Math.ceil(2.12) --> '+Math.ceil(2.12));
+show('Math.ceil(5.5) --> '+Math.ceil(5.5));
+show('Math.ceil(3.97) --> '+Math.ceil(3.97));
+show('---------------------------------------');
+show('Math.floor(2.12) --> '+Math.floor(2.12));
+show('Math.floor(5.5) --> '+Math.floor(5.5));
+show('Math.floor(3.97) --> '+Math.floor(3.97));
+show('---------------------------------------');
+show('Math.round(2.12) --> '+Math.round(2.12));
+show('Math.round(5.5) --> '+Math.round(5.5));
+show('Math.round(3.97) --> '+Math.round(3.97));
+</script>
+
+
+
+<div class="aTitle">random()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Math.random()方法返回大于等于0 小于1 的一个随机数。
+
+function randomNum(maxNum){
+	return Math.floor(Math.random()*(maxNum+1));
+}
+
+function randomRangeNum(minNum,maxNum){
+	return minNum+Math.floor(Math.random()*(maxNum-minNum+1));
+}
+
+function randomLengthNum(minNum,length){
+	return Math.floor(minNum+Math.random()*length);
+}
+
+randomNum(5) --> 生成0到5的随机数
+randomRangeNum(5,10) --> 生成5到10的随机数
+randomLengthNum(11,5) --> 生成11到15的随机数
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+	</div>
+</div>
+<script type="text/javascript">
+function show(msg){
+	$('<div>'+msg+'</div>').appendTo("#showResult3");
+}
+
+function randomNum(maxNum){
+	return Math.floor(Math.random()*(maxNum+1));
+}
+
+function randomRangeNum(minNum,maxNum){
+	return minNum+Math.floor(Math.random()*(maxNum-minNum+1));
+}
+
+function randomLengthNum(minNum,length){
+	return Math.floor(minNum+Math.random()*length);
+}
+
+for(var i=0;i<10;i++){
+	show("0到5的随机数："+randomNum(5));
+}
+show('---------------------------------------');
+for(var i=0;i<10;i++){
+	show("5到10的随机数："+randomRangeNum(5,10));
+}
+show('---------------------------------------');
+for(var i=0;i<10;i++){
+	show("11到15的随机数："+randomLengthNum(11,5));
+}
+</script>
+</body>
+</html>

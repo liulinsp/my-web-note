@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>文字溢出</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<style type="text/css">
+	.container{
+		display: inline-block;
+		width: 70px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		background-color: #f3ce85;
+    	color: #fff;
+		box-sizing: border-box;
+		height: 26px;
+		padding: .2em .6em .3em;
+		border-radius: .25em;
+	}
+	</style>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.container{
+	display: inline-block;
+	width: 70px;
+	white-space: nowrap;
+	overflow: hidden;
+	<mark>text-overflow: ellipsis;</mark>
+
+	background-color: #f3ce85;
+	color: #fff;
+	box-sizing: border-box;
+	height: 26px;
+	padding: .2em .6em .3em;
+	border-radius: .25em;
+}
+
+&lt;span class="container" title="文字溢出"&gt;文字溢出&lt;/span&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div style="height:40px;">
+      <span class="container" title="文字溢出">文字溢出</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>UI元素状态伪类选择器</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+/*普通的、未被访问的链接*/
+a:link{
+	text-decoration: none;
+	color: #0DA107;
+}
+/*用户已访问的链接*/
+a:visited{
+	color: #7A1B38;
+}
+/*鼠标指针位于链接的上方*/
+a:hover {
+	color: #FF00FF;
+}
+/*链接被点击的时刻*/
+a:active {
+	color: #0000FF;
+}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*普通的、未被访问的链接*/
+a:link{
+	text-decoration: none;
+	color: #0DA107;
+}
+/*用户已访问的链接*/
+a:visited{
+	color: #7A1B38;
+}
+/*鼠标指针位于链接的上方*/
+a:hover {
+	color: #FF00FF;
+}
+/*链接被点击的时刻*/
+a:active {
+	color: #0000FF;
+}			
+		</pre>
+	</div>
+	<div class="aShow">
+		<a href="#here">链接样式</a>
+	</div>
+</div>
+
+<style type="text/css">
+	/*输入框得到焦点*/
+	.type1>input:focous{
+		border-color: #3EF849;
+	}
+	/*位于输入框的上方*/
+	.type1>input:hover{
+		background-color: #F8BDED;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*输入框得到焦点*/
+input:focous{
+	border-color: #3EF849;
+}
+/*位于输入框的上方*/
+input:hover{
+	background-color: #F8BDED;
+}
+		</pre>
+	</div>
+	<div class="aShow type1">
+		<input type="text" name="content"/>
+	</div>
+</div>
+
+<style type="text/css">
+	/*可用状态的元素*/
+	.type2>input:enabled{
+		background-color: #FCFBC9;
+	}
+
+	/*不可用状态的元素*/
+	.type2>input:disabled{
+		background-color: #EFE5ED;
+	}
+
+	/*只读状态的元素*/
+	.type2>input:read-only{
+		background-color: #E5F6F9;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*可用状态的元素*/
+input:enabled{
+	background-color: #FCFBC9;
+}
+/*不可用状态的元素*/
+input:disabled{
+	background-color: #EFE5ED;
+}
+/*只读状态的元素*/
+input:read-only{
+	background-color: #E5F6F9;
+}
+		</pre>
+	</div>
+	<div class="aShow type2">
+		可用状态的元素：<input type="text" name="bizname"><br>
+		不可用状态的元素：<input type="text" name="biztype" disabled/><br>
+		只读状态的元素：<input type="text" name="bizstatus" readonly/><br>
+	</div>
+</div>
+
+
+
+<style type="text/css">
+	/*隐藏原选择框*/
+	input[type="radio"]{
+		/*position: absolute;
+		left: -10000px;*/
+		display: none;
+	}
+	/*选择框后的label显示选择框样式的图片*/
+	input[type="radio"]+label{
+		display:inline-block;
+		width: 15px;
+		height: 15px;
+		background-image: url("nochecked.png");
+		background-repeat: no-repeat;
+		background-size:100%;
+	}
+	/*选中状态的元素*/
+	input[type="radio"]:checked+label{
+		background-image: url("checked.png");
+	}
+	/*打开时处于选中状态的元素[没有作用]*/
+	/*input[type="radio"]:default+label{
+		background-image: url("default.png");
+	}*/
+</style>
+<script type="text/javascript">
+	$(function(){
+		$("input[type=radio]+label").bind("click",function(){
+			$(this).prev("input").trigger('click');
+
+			//$(this).prev("input").attr("checked","checked");
+			console.debug($(this).prev("input").prop("outerHTML"));
+			var value = $("input[type='radio']:checked").val();
+			console.debug("选中值 ",value);
+		});
+	});
+</script>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*隐藏原选择框*/
+input[type="radio"]{
+	/*position: absolute;
+	left: -10000px;*/
+	display: none;
+}
+/*选择框后的label显示选择框样式的图片*/
+input[type="radio"]+label{
+	display:inline-block;
+	width: 15px;
+	height: 15px;
+	background-image: url("nochecked.png");
+	background-repeat: no-repeat;
+	background-size:100%;
+}
+/*选中状态的元素*/
+input[type="radio"]:checked+label{
+	background-image: url("checked.png");
+}
+/*打开时处于选中状态的元素[没有作用]*/
+/*input[type="radio"]:default+label{
+	background-image: url("default.png");
+}*/
+
+/*****js脚本******************************************/
+$(function(){
+	$("input[type=radio]+label").bind("click",function(){
+		$(this).prev("input").trigger('click');
+
+		//$(this).prev("input").attr("checked","checked");
+		console.debug($(this).prev("input").prop("outerHTML"));
+		var value = $("input[type='radio']:checked").val();
+		console.debug("选中值 ",value);
+	});
+});
+/*****js脚本*****************************************/
+		</pre>
+	</div>
+	<div class="aShow">
+		<input type="radio" name="flag" value="1"><label></label> 1 <br>
+		<input type="radio" name="flag" value="2" checked="checked"><label></label> 2 <br>
+		<input type="radio" name="flag" value="3"><label></label> 3 <br>
+	</div>
+</div>
+
+
+
+<style type="text/css">
+	/*当前被选中内容的样式【注意selection前面有两个冒号】*/
+	div.selectionStyle::selection{
+		background-color: #FCC2F7;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*当前被选中内容的样式【注意selection前面有两个冒号】*/
+div.selectionStyle<mark>::</mark>selection{
+	background-color: #FCC2F7;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="selectionStyle">选择内容样式</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*超链接的目标（当前地址为：...pseudoClass2.html#here 时显示此样式）*/
+	:target{
+		font-family: "Microsoft YaHei" ! important;
+		font-style: blod;
+		background-color: #5A4884;
+		color: #EBF5F9;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*超链接的目标（当前地址为：...pseudoClass2.html#here 时显示此样式）*/
+:target{
+	font-family: "Microsoft YaHei" ! important;
+	font-style: blod;
+	background-color: #5A4884;
+	color: #EBF5F9;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<span id="here">超链接的目标</span>
+	</div>
+</div>
+
+<style type="text/css">
+	/*是li但id不是special的样式*/
+	li:not(#special){
+		background-color: #F4F7CF;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*是li但id不是special的样式*/
+li:not(#special){
+	background-color: #F4F7CF;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<ul>
+			<li id="normal">id="normal"</li>
+			<li id="special">id="special"</li>
+			<li id="other">id="other"</li>
+		</ul>
+	</div>
+</div>
+
+
+<style type="text/css">
+dd{
+	background-color: #BEBEBE;
+}
+dd[flag~="on"]{
+	background-color: #FE9C9C;
+}
+
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+dd{
+	background-color: #BEBEBE;
+}
+dd<mark>[flag~="on"]</mark>{/*选择 flag 属性中包含单词 "on" 的元素*/
+	background-color: #FE9C9C;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<dl>
+			<dd flag="on level1">flag="on level1"</dd>
+			<dd flag="off">flag="off"</dd>
+			<dd flag="on fav">flag="on fav"</dd>
+		</dl>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ajax可以跨域的jsonp</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+$(function(){
+	
+});
+</script>
+<div class="aTitle">dataType:"jsonp"</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+var url = "http://localhost:8080/a/sys/menu/checkMenuName";
+$.ajax({
+  url:url,
+  data:"oldMenuName=个人中心&menuName=个人信息",
+  success:function(data){alert(data);},
+  dataType:"jsonp",
+  jsonp:"<mark>jsonpCallback</mark>" //回调函数名称,会自动添加到请求参数中，默认：callback
+});
+
+<b>请求示例：</b> http://localhost:8080/a/sys/menu/checkMenuName?<mark>jsonpCallback</mark>=jQuery183048968532310682034_1470709767338
+&oldMenuName=%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83&menuName=%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF
+
+<b>后台代码：</b>
+@ResponseBody
+@RequestMapping(value = "checkMenuName")
+public String checkMenuName(String oldMenuName, String menuName, String <mark>jsonpCallback</mark>) {
+  ... 
+  return jsonpCallback+"(true)";
+}
+
+<b>简写形式： </b>
+$.getJSON(
+  "http://localhost:8080/a/sys/menu/checkMenuName?<mark>jsonpCallback=?</mark>&oldMenuName=个人中心&menuName=个人信息",  
+  function(data){  
+    alert(data);  
+  }
+);
+    </pre>
+  </div>
+  <!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+
+
+<div class="aTitle">dataType:"jsonp" 返回的信息包含汉字时</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+
+<b>后台代码：</b>
+@ResponseBody
+@RequestMapping(value = "checkMenuName")
+public String checkMenuName(String oldMenuName, String menuName, String jsonpCallback) {
+  ... 
+  <mark>String result=StringEscapeUtils.escapeJava("成功");</mark>
+  return jsonpCallback+"('"+result+"')";
+}
+
+    </pre>
+  </div>
+  <!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+
+<div class="aTitle">dataType:"jsonp" 自定义回调函数名</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+var url = "${ctx}/sys/menu/checkMenuName";
+$.ajax({
+  url:url,
+  data:"oldMenuName=个人中心&menuName=个人信息",
+  //success:function(data){alert(data);},
+  dataType:"jsonp",
+  jsonp:"jsonpCallback", //回调函数名称添加到请求参数中，默认：callback
+  <mark>jsonpCallback:"callbackFun"</mark>
+}); 
+
+<mark>function callbackFun(data){
+  alert("callbackFun:"+data);
+}</mark>
+
+<b>请求示例：</b> http://localhost:8080/a/sys/menu/checkMenuName?jsonpCallback=<mark>callbackFun</mark>
+&oldMenuName=%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83&menuName=%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF
+
+<b>后台代码（不变）：</b>
+@ResponseBody
+@RequestMapping(value = "checkMenuName")
+public String checkMenuName(String oldMenuName, String menuName, String jsonpCallback) {
+  ... 
+  return jsonpCallback+"(true)";
+}
+
+    </pre>
+  </div>
+  <!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+
+</body>
+</html>

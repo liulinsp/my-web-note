@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>attr和prop比较</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">attr()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+获取匹配的元素集合中的第一个元素的属性的值，
+或设置每一个匹配元素的一个或多个属性。
+
+&lt;span class="sex"&gt;男&lt;/span&gt;
+&lt;span class="sex"&gt;女&lt;/span&gt;
+
+<mark>$(".sex").attr("title","性别");</mark>
+$(".sex").each(function(index,ele){
+    console.log(<mark>$(this).attr("title")</mark>);
+});
+
+<b>注意:</b> 除少数属性意外，属性值都是字符串，如value和tabindex。
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1">
+    <span class="sex">男</span>
+    <span class="sex">女</span>
+  </div>
+</div>
+<script type="text/javascript">
+$(".sex").attr("title","性别");
+$(".sex").each(function(index,ele){
+  $('<div>$(this).attr("title") --> '+$(this).attr("title")+'</div>').appendTo($("#showResult1"));
+});
+</script>
+
+
+<div class="aTitle">prop()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+获取匹配的元素集中第一个元素的属性（property）值
+或设置每一个匹配元素的一个或多个属性。
+
+&lt;input type="text" class="data-input" value="abc"&gt;
+&lt;input type="text" class="data-input" value="ABC"&gt;
+
+$(".data-input").prop("type","password");
+$(".data-input").each(function(index,ele){
+  console.log(<mark>$(this).prop("type")</mark>);
+});
+
+注意: 试图改变通过HTML创建的，或已经在HTML文档中的input元素
+的type属性（property）（或特性attribute），在Internet Explorer
+ 6, 7, or 8下将会抛出一个错误。
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult2">
+    <input type="text" class="data-input" value="abc">
+    <input type="text" class="data-input" value="ABC">
+  </div>
+</div>
+<script type="text/javascript">
+$(".data-input").prop("type","password");
+$(".data-input").each(function(index,ele){
+  $('<div>$(this).prop("type") --> '+$(this).prop("type")+'</div>').appendTo($("#showResult2"));
+});
+</script>
+
+<div class="aTitle">attr()和prop()相同点</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+大多数情况下，attr()和prop()的作用是相同的
+
+<b>脚本：</b>
+$(".sex").prop("title","性别");
+
+$(".data-input").attr("type","password");
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult3">
+    
+  </div>
+</div>
+<script type="text/javascript">
+$(".sex").prop("title","性别");
+$(".sex").each(function(index,ele){
+  $('<div>$(this).prop("title") --> '+$(this).prop("title")+'</div>').appendTo("#showResult3");
+});
+
+$(".data-input").attr("type","password");
+$(".data-input").each(function(index,ele){
+  $('<div>$(this).attr("type") --> '+$(this).attr("type")+'</div>').appendTo("#showResult3");
+});
+</script>
+
+
+<div class="aTitle">attr()和prop()区别</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+attributes和properties之间的差异在特定情况下是很重要。
+jQuery 1.6之前 ，.attr()方法在取某些 attribute 的值时，
+会返回 property 的值，这就导致了结果的不一致。
+从 jQuery 1.6 开始， .prop()方法 方法返回 property 的值,
+而 .attr() 方法返回 attributes 的值。
+
+例如, selectedIndex, tagName, nodeName, nodeType, 
+ownerDocument, defaultChecked, 和 defaultSelected 
+应使用.prop()方法进行取值或赋值。
+
+&lt;input type="checkbox" id="isOK" checked="checked"&gt;
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult4">
+    <input type="checkbox" id="isOK" checked="checked">
+  </div>
+</div>
+<script type="text/javascript">
+  $('<div>$("#isOK").attr("checked") --> '+$("#isOK").attr("checked")+'</div>').appendTo($("#showResult4"));
+  $('<div>$("#isOK").prop("checked") --> '+$("#isOK").prop("checked")+'</div>').appendTo($("#showResult4"));
+  $('<div>$("#isOK").is(":checked") --> '+$("#isOK").is(":checked")+'</div>').appendTo($("#showResult4"));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>表格</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+  <script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<style type="text/css">		
+
+	</style>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+  body{
+    font-family: "微软雅黑", "SimSun", "宋体", "Verdana", "Arial";
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  table{
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 10px 10px 10px 0px;
+    width: 300px;
+  }
+
+  thead{
+    background-color: #F6F6F6;
+  }
+
+  thead>tr, tbody>tr>td{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CFCFCF;
+  }
+
+  tbody>tr:nth-child(odd){
+    background-color: #FFFFFF;
+  }
+
+  tbody>tr:nth-child(even){
+    background-color: #F9F9F9;
+  }
+  
+  td{
+    text-align: center;
+    padding: 3px, 5px, 3px; 
+  }
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+<b>样式：</b>
+  body{
+    font-family: "微软雅黑", "SimSun", "宋体", "Verdana", "Arial";
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  table{
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 10px 10px 10px 0px;
+    width: 300px;
+  }
+
+  thead{
+    background-color: #F6F6F6;
+  }
+
+  thead>tr, tbody>tr>td{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CFCFCF;
+  }
+
+  tbody>tr:nth-child(odd){
+    background-color: #FFFFFF;
+  }
+
+  tbody>tr:nth-child(even){
+    background-color: #F9F9F9;
+  }
+  
+  td{
+    text-align: center;
+    padding: 3px, 5px, 3px; 
+  }
+
+<b>脚本：</b>
+  $("#demoTable1>tbody>tr").each(function(){
+    $(this).hover(handlerIn, handlerOut);
+  });
+
+  function handlerIn() {
+    $(this).find('td').css("border-width","0px");
+    $(this).prev("tr").find('td').css("border-bottom-width","0px");
+    if($(this).prev("tr").length==0){
+      $(this).parent().prev("thead").find("tr")
+        .css("border-bottom-width","0px");
+    }
+    $(this).next("tr").find('td').css("border-top-width","0px");
+    $(this).css({
+      "border-style": "solid",
+      "border-width": "1px",
+      "border-color": "#484EE3"
+    });
+  }
+
+  function handlerOut() {
+    $(this).find('td').css("border-width","1px");
+    $(this).prev("tr").find('td').css("border-bottom-width","1px");
+    if($(this).prev("tr").length==0){
+      $(this).parent().prev("thead").find("tr")
+        .css("border-bottom-width","1px");
+    }
+    $(this).next("tr").find('td').css("border-top-width","1px");
+    $(this).css({
+      "border-width": "0px",
+    });
+  }
+		</pre>
+	</div>
+	<div class="aShow">
+    <table id="demoTable1">
+      <thead>
+          <tr>
+            <th width="50%">姓名</th>
+            <th width="50%">编号</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr><td>王晓</td><td>1</td></tr>
+        <tr><td>李飞</td><td>2</td></tr>
+        <tr><td>张涛</td><td>3</td></tr>
+        <tr><td>郭明</td><td>4</td></tr>
+        <tr><td>季晴川</td><td>5</td></tr>
+        <tr><td>卢海梅</td><td>6</td></tr>
+        <tr><td>李旭刚</td><td>7</td></tr>
+        <tr><td>赵明海</td><td>8</td></tr>
+        <tr><td>卢承明</td><td>9</td></tr>
+        <tr><td>开涛尚</td><td>10</td></tr>
+      </tbody>
+    </table>
+	</div>
+</div>
+
+<script type="text/javascript">
+  //设置鼠标放在行上的样式
+  /*$("#demoTable1>tbody>tr:even").each(function(){
+    $(this).hover(handlerIn, handlerOut);
+  });
+
+  $("#demoTable1>tbody>tr:odd").each(function(){
+      $(this).hover(handlerIn, handlerOut);
+  });*/
+
+  $("#demoTable1>tbody>tr").each(function(){
+    $(this).hover(handlerIn, handlerOut);
+  });
+
+  function handlerIn() {
+    $(this).find('td').css("border-width","0px");
+    $(this).prev("tr").find('td').css("border-bottom-width","0px");
+    if($(this).prev("tr").length==0){
+      $(this).parent().prev("thead").find("tr").css("border-bottom-width","0px");
+    }
+    $(this).next("tr").find('td').css("border-top-width","0px");
+    $(this).css({
+      "border-style": "solid",
+      "border-width": "1px",
+      "border-color": "#484EE3"
+    });
+  }
+
+  function handlerOut() {
+    $(this).find('td').css("border-width","1px");
+    $(this).prev("tr").find('td').css("border-bottom-width","1px");
+    if($(this).prev("tr").length==0){
+      $(this).parent().prev("thead").find("tr").css("border-bottom-width","1px");
+    }
+    $(this).next("tr").find('td').css("border-top-width","1px");
+    $(this).css({
+      "border-width": "0px",
+    });
+  }
+
+</script>
+
+
+</body>
+</html>

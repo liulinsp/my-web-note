@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>transform变形</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<style type="text/css">
+	.trans1{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+
+		transform: translate(100px,20px);
+		/*或 transform: matrix(1,0,0,1,100,20);*/
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans1{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	
+	transform: translate(100px,20px);
+	/*或 transform: matrix(1,0,0,1,100,20);*/
+	说明：<br/>
+	matrix(m11,m12,m21,m22,dx,dy) 变形函数，变形后<br/>
+	x<sup>'</sup> = x*m11 + y*m21 + dx<br/>
+	y<sup>'</sup> = x*m12 + y*m22 + dy<br/>
+}	
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans1">DIV横向移动100px,纵向移动20px</div>
+	</div>
+</div> 
+
+<style type="text/css">
+	.trans2{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+		transform: scale(0.5, 0.5);
+		/*或 transform: matrix(0.5,0,0,0.5,0,0);*/
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans2{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	transform: scale(0.5, 0.5);
+	/*或 transform: matrix(0.5,0,0,0.5,0,0);*/
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans2">DIV横向缩放比例为0.5,纵向缩放比例为0.5</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.trans3{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+		transform: skew(10deg);
+		/*或 transform: matrix(1,0,0.173,1,0,0);*/
+		/*sin(10) = 0.173*/
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans3{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	transform: skew(10deg);
+	/*或 transform: matrix(1,0,0.173,1,0,0);*/
+	/*sin(10) = 0.173*/
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans3">DIV沿x轴倾斜10度</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.trans4{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+		transform: skew(0deg, 10deg);
+		/*transform: matrix(1,0.173,0,1,0,0);*/
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans4{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	transform: skew(0deg, 10deg);
+	/*transform: matrix(1,0.173,0,1,0,0);*/
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans4">DIV沿y轴倾斜10度</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.trans5{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+		transform: rotate(45deg);
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans5{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	transform: rotate(45deg);
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans5">DIV顺时针旋转45度</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.trans6{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+		transform-origin: left top;
+		transform: rotate(45deg);
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans6{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	transform-origin: left top;
+	transform: rotate(45deg);
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans6">DIV以左上角为中心顺时针旋转45度</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.trans7{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+		transform-origin: bottom;
+		transform: perspective(50px) rotateX(5deg);
+		text-align: center;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans7{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	transform-origin: bottom;
+	transform: perspective(50px) rotateX(5deg);
+	text-align: center;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans7">哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.trans8{
+		width: 200px;
+		height: 100px;
+		border: 1px solid #330707;
+		transform-origin: left;
+		transform: perspective(50px) rotateY(5deg);
+		text-align: center;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.trans8{
+	width: 200px;
+	height: 100px;
+	border: 1px solid #330707;
+	transform-origin: left;
+	transform: perspective(50px) rotateY(5deg);
+	text-align: center;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="trans8">哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦</div>
+	</div>
+</div>
+</body>
+</html>

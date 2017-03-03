@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>val()</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">.val()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.val()</b>
+.val()方法主要用于获取表单元素的值，比如 input, select 和 textarea。
+对于 &lt;select multiple="multiple"&gt; 元素, .val()
+方法返回一个包含每个选择项的数组，如果没有选择性被选中，它返回null。
+
+&lt;input type="text" name="username" value="Tom"&gt;
+&lt;input type="password" name="psw" value="123456"&gt;
+
+&lt;input type="radio" name="sex" value="man"&gt;男
+&lt;input type="radio" name="sex" value="woman" checked="checked"&gt;女
+
+&lt;input type="checkbox" name="modules" value="ctrl" 
+  checked="checked"&gt;控制模块
+&lt;input type="checkbox" name="modules" value="proxy" 
+  checked="checked"&gt;代理模块
+
+&lt;select name="province"&gt;
+&lt;option value="11"&gt;北京&lt;/option&gt;
+&lt;option value="12" selected="selected"&gt;天津&lt;/option&gt;
+&lt;option value="13"&gt;河北&lt;/option&gt;
+&lt;/select&gt;
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1">
+  <input type="text" name="username" value="Tom"></br>
+    <input type="password" name="psw" value="123456"></br>
+    <input type="radio" name="sex" value="man">男
+    <input type="radio" name="sex" value="woman" checked="checked">女</br>
+    <input type="checkbox" name="modules" value="ctrl" checked="checked">控制模块
+    <input type="checkbox" name="modules" value="proxy" checked="checked">代理模块</br>
+    <select name="province">
+        <option value="11">北京</option>
+        <option value="12" selected="selected">天津</option>
+        <option value="13">河北</option>
+    </select></br>  
+  </div>
+</div>
+<script type="text/javascript">
+//console.log($("input[name=username]").val());
+$('<div>$("input[name=\'username\']").val() --> '+$("input[name='username']").val()+'</div>').appendTo($("#showResult1"));
+$('<div>$("input[name=\'psw\']").val() --> '+$("input[name='psw']").val()+'</div>').appendTo($("#showResult1"));
+$('<div><strike>$("input[name=\'sex\']").val() --> '+$("input[name='sex']").val()+'</strike></div>').appendTo($("#showResult1"));
+$('<div>$("input[name=\'sex\']:checked").val() --> '+$("input[name='sex']:checked").val()+'</div>').appendTo($("#showResult1"));
+
+$('<div><strike>$("input[name=\'modules\']").val() --> '+$("input[name='modules']").val()+'</strike></div>').appendTo($("#showResult1"));
+$('<div><strike>$("input[name=\'modules\']:checked").val() --> '+$("input[name='modules']:checked").val()+'</strike></div>').appendTo($("#showResult1"));
+var chk_value =[];      
+$('input[name="modules"]:checked').each(function(){     
+  chk_value.push($(this).val());     
+}); 
+$('<div> var chk_value =[];</br>'+
+  '$("input[name="modules"]:checked").each(function(){'+
+  '  chk_value.push($(this).val());</br>'+
+  '});</br> '+
+  'chk_value --> '+chk_value+'</div>').appendTo($("#showResult1"));
+
+$('<div>$("select[name=\'province\']").val() --> '+$("select[name='province']").val()+'</div>').appendTo($("#showResult1"));
+$('<div>$("select[name=\'province\'] option:selected").val() --> '+$("select[name='province'] option:selected").val()+'</div>').appendTo($("#showResult1"));
+</script>
+
+<div class="aTitle">.val( value )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.val( value )</b>
+value 类型: String, Array
+一个文本字符串或一个以字符串形式的数组来设定每个匹配元素的值。
+
+&lt;input type="text" name="nickname" value=""&gt;&lt;/br&gt;
+&lt;input type="radio" name="color" value="black"&gt;黑
+&lt;input type="radio" name="color" value="white"&gt;白&lt;/br&gt;
+&lt;input type="checkbox" name="tools" value="chuizi"&gt;锤子
+&lt;input type="checkbox" name="tools" value="banzi"&gt;扳子&lt;/br&gt;
+&lt;select name="city"&gt;
+&lt;option value="1101"&gt;朝阳区&lt;/option&gt;
+&lt;option value="1102"&gt;东城区&lt;/option&gt;
+&lt;option value="1103"&gt;宣武区&lt;/option&gt;
+&lt;/select&gt;&lt;/br&gt;
+
+$("input[name='nickname']").val("超人");
+$("input[name='color']").val(["white"]);
+//$("input[name='color'][value='white']").prop("checked",true);
+$("input[name='tools']").val(["chuizi","banzi"]);
+//$("input[name='tools'][value='banzi']").prop("checked",true);
+$("select[name='city']").val("1102"); 
+//$("select[name='city'] option[value='1102']").prop("selected",true);
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult2">
+    <input type="text" name="nickname" value=""></br>
+    <input type="radio" name="color" value="black">黑
+    <input type="radio" name="color" value="white">白</br>
+    <input type="checkbox" name="tools" value="chuizi">锤子
+    <input type="checkbox" name="tools" value="banzi">扳子</br>
+    <select name="city">
+        <option value="1101">朝阳区</option>
+        <option value="1102">东城区</option>
+        <option value="1103">宣武区</option>
+    </select></br>
+  </div>
+</div>
+<script type="text/javascript">
+$("input[name='nickname']").val("超人");
+$("input[name='color']").val(["white"]);
+//$("input[name='color'][value='white']").prop("checked",true);
+$("input[name='tools']").val(["chuizi","banzi"]);
+//$("input[name='tools'][value='banzi']").prop("checked",true);
+$("select[name='city']").val("1102"); 
+//$("select[name='city'] option[value='1102']").prop("selected",true);
+</script>
+
+
+<div class="aTitle">.val( function(index, value) )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.val( function(index, value) )</b>
+function(index, value) 类型: Function()
+一个用来返回设置值的函数。this 指向当前元素。
+接收的集合中的元素，旧的值作为参数的索引位置。
+
+&lt;input type="text" name="loginname" value="superman"&gt;
+
+/* $("input[name='loginname']").val(function(index, val){
+  return val.toUpperCase();
+}); */
+
+$("input[name='loginname']").blur(function(){
+    $(this).val(function(index, val){
+      return val.toUpperCase();
+    });
+});
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult3">
+    <input type="text" name="loginname" value="superman">
+  </div>
+</div>
+<script type="text/javascript">
+$("input[name='loginname']").blur(function(){
+    $(this).val(function(index, val){
+      return val.toUpperCase();
+    });
+});
+</script>
+
+</body>
+</html>

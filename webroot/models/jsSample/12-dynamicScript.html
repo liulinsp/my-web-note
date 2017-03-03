@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>动态加载脚本</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+/*function loadScript(url){
+	document.write('<script type="text/javascript" src="'+url+'" ><\/script>');
+}
+loadScript("12-show.js");*/
+</script>
+<div class="aTitle">document.write()方式【同步】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function loadScript(url){
+	document.write('&lt;script type="text/javascript" src="'+url+'" &gt;&lt;\/script&gt;');
+}
+loadScript("12-show.js");
+
+此方法适合在html页面中执行，实现页面加载时的动态脚本加载，
+如果在文档加载结束后再调用document.write()会重写整个页面
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1"></div> -->
+</div>
+
+<div class="aTitle">createElement("script")方式【异步】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 12-show.js的内容：
+var myData = "动态脚本已加载";
+
+2. 页面执行脚本：
+function loadScript(src){
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src=src;
+	document.body.appendChild(script);
+}
+loadScript("12-show.js");
+alert(myData);//报错
+此方法可以在页面加载完成后执行，缺点是不知道脚本什么时候执行完，
+如果要执行完动态脚本后才能执行后面的操作，不适用此方法。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1"></div> -->
+</div>
+<script>
+/*function loadScriptString(code){
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	try {
+		script.appendChild(document.createTextNode(code));
+	} catch (ex){
+		alert(1);
+		script.text = code;
+	}
+	document.body.appendChild(script);
+}
+loadScriptString('alert("动态脚本执行");');
+alert(myData);*/
+$(function(){
+/*function loadScript(src){
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src=src;
+	document.body.appendChild(script);
+}
+loadScript("12-show.js");
+alert(myData);*/
+
+
+
+
+
+/*function loadScriptString(code){
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	try {
+		script.appendChild(document.createTextNode(code));
+	} catch (ex){
+		alert(1);
+		script.text = code;
+	}
+	document.body.appendChild(script);
+}
+loadScriptString('var myData = "动态脚本已加载";');
+alert(myData);*/
+});
+
+</script>
+
+<div class="aTitle">createElement("script")并监听事件方式【异步】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Opera, Chrome和Safari3+会在节点接收完成后发出一个load事件；
+IE则是发出一个readystatechange事件，&lt;script&gt;素有一个readyState属性，它的值随着下载过程而改变。
+readyState有5种取值：
+  1) uninitialized(默认状态)
+  2) loading(下载开始)
+  3) loaded(下载完成)
+  4) interactive(下载完成但尚不可用)
+  5) complete(所有数据已准备好)。
+微软文档上说，这些取值不一定全部出现，有时script会得到loaded不出现complete，有时script会得到complete不出现loaded。
+最安全的做法就是，在readystatechange事件中检查这两种状态，当出现两种状态之一时，
+删除readystatechange句柄，以避免事件不会被执行两次。
+
+function loadScript(src,callback){
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src=src;
+	document.body.appendChild(script);
+
+	if(script.readyState){ // IE
+        script.onreadystatechange = function(){
+            if(script.readyState == "loaded" || script.readyState == "complete"){
+                script.onreadystatechange = null;
+                callback();
+            }
+        };
+    }else{ // Chrome, Opera, ...
+        script.onload = function(){
+            callback();
+        };
+    }
+}
+loadScript("12-show.js",function(){
+	alert(myData);
+});
+
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1"></div> -->
+</div>
+<script type="text/javascript">
+$(function(){
+
+/*function loadScript(src,callback){
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src=src;
+	document.body.appendChild(script);
+
+	if(script.readyState){ // IE
+        script.onreadystatechange = function(){
+            if(script.readyState == "loaded" || script.readyState == "complete"){
+                script.onreadystatechange = null;
+                callback();
+            }
+        };
+    }else{ // Chrome, Opera, ...
+        script.onload = function(){
+            callback();
+        };
+    }
+}
+loadScript("12-show.js",function(){
+	alert(myData);
+});*/
+
+});
+</script>
+
+
+<div class="aTitle">ajax方式【同步/异步】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+jquery有现成的方法:$.getScript(url,callbak)
+
+function ajaxLoadScript(url,callback,async){
+	async=(typeof async =="boolean")?async:true;
+
+	var oXmlHttp = getHttpRequest();
+	oXmlHttp.onreadystatechange = function(){
+		//4代表数据发送完毕
+		if ( oXmlHttp.readyState == 4 ){
+			//0为访问的本地，200代表访问服务器成功，304代表没做修改访问的是缓存
+			if(oXmlHttp.status == 200 || oXmlHttp.status == 0 || oXmlHttp.status == 304){
+				includeJS(oXmlHttp.responseText,callback);
+			}else{
+
+			}
+        }
+	}
+	oXmlHttp.open("GET",url,async);
+	oXmlHttp.send(null);
+}
+
+function getHttpRequest(){
+	if(window.ActiveXObject){//IE
+		return new ActiveXObject("MsXml2.XmlHttp");
+	}else if(window.XMLHttpRequest){//其他
+		return new XMLHttpRequest();
+	}
+}
+
+function includeJS(source,callback){
+	if(source != null){
+		var script = document.createElement( "script" );
+		script.type = "text/javascript";
+		try{
+			script.appendChild(document.createTextNode(source));
+		}catch (ex){
+			script.text = source;//IE
+		}
+		document.body.appendChild( script );
+
+		if(callback instanceof Function){
+			callback();
+		}
+	}
+}
+
+//异步方式
+ajaxLoadScript("12-show.js",function(){
+	alert(myData);
+},true);
+
+//同步方式
+ajaxLoadScript("12-show.js",null,false);
+alert(myData);
+		</pre>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+
+/*function ajaxLoadScript(url,callback,async){
+	async=(typeof async =="boolean")?async:true;
+
+	var oXmlHttp = getHttpRequest();
+	oXmlHttp.onreadystatechange = function(){
+		//4代表数据发送完毕
+		if ( oXmlHttp.readyState == 4 ){
+			//0为访问的本地，200代表访问服务器成功，304代表没做修改访问的是缓存
+			if(oXmlHttp.status == 200 || oXmlHttp.status == 0 || oXmlHttp.status == 304){
+				includeJS(oXmlHttp.responseText,callback);
+			}else{
+
+			}
+        }
+	}
+	oXmlHttp.open("GET",url,async);
+	oXmlHttp.send(null);
+}
+
+function getHttpRequest(){
+	if(window.ActiveXObject){//IE
+		return new ActiveXObject("MsXml2.XmlHttp");
+	}else if(window.XMLHttpRequest){//其他
+		return new XMLHttpRequest();
+	}
+}
+
+function includeJS(source,callback){
+	if(source != null){
+		var script = document.createElement( "script" );
+		script.type = "text/javascript";
+		try{
+			script.appendChild(document.createTextNode(source));
+		}catch (ex){
+			script.text = source;//IE
+		}
+		document.body.appendChild( script );
+
+		if(callback instanceof Function){
+			callback();
+		}
+	}
+}
+
+ajaxLoadScript("12-show.js",function(){
+	alert(myData);
+},true);*/
+
+});
+</script>
+
+
+<link rel="stylesheet" type="text/css" href="12-show.css">
+<div class="aTitle">动态删除样式、加载样式</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<pre class="error">动态加载样式时，必须将&lt;link&gt;元素添加到&lt;head&gt;而不是&lt;body&gt;元素，
+才能保证在所有浏览器中的行为一致。
+
+如果专门针对IE 编写代码，务必小心使用styleSheet.cssText 属性。在重用
+同一个&lt;style&gt;元素并再次设置这个属性时，有可能会导致浏览器崩溃。同样，将
+cssText 属性设置为空字符串也可能导致浏览器崩溃。
+</pre>
+
+&lt;span class="shortcut-alert-container"&gt;
+	&lt;span class="shortcut-content"&gt;技术交流群&lt;/span&gt;
+	&lt;span class="shortcut-alert"&gt;15&lt;/span&gt;
+&lt;/span&gt;
+&lt;br/&gt;
+&lt;button onclick='removejscssfile("12-show.css");'&gt;删除样式&lt;/button&gt;
+&lt;button onclick='loadCssFile("12-show.css");'&gt;加载样式&lt;/button&gt;
+&lt;button onclick='ajaxLoadCss("12-show.css");'&gt;ajax加载样式（不建议用）&lt;/button&gt;
+
+<b>脚本：</b>
+//移除已经加载过的js/css
+function removeJsCssFile(filename){
+	if(typeof filename !== "string"){return;}
+
+	var startIndex = filename.lastIndexOf(".")+1;
+	var filetype = filename.substr(startIndex);
+	if(filetype!=="js" &&  filetype!=="css"){return;}
+
+	var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none";
+	var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none";
+	var allsuspects=document.getElementsByTagName(targetelement)
+	for (var i=allsuspects.length; i>=0; i--){
+		if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null 
+			&& allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1){
+			allsuspects[i].parentNode.removeChild(allsuspects[i]);
+		}
+	}
+}
+
+//加载样式
+function loadCssFile(url){
+	var link = document.createElement("link");
+	link.rel = "stylesheet";
+	link.type = "text/css";
+	link.href = url;
+	var head = document.getElementsByTagName("head")[0];
+	head.appendChild(link);
+}
+
+//ajax方式加载样式(不建议用)
+function ajaxLoadCss(url,callback,async){
+	async=(typeof async =="boolean")?async:true;
+
+	var oXmlHttp = getHttpRequest();
+	oXmlHttp.onreadystatechange = function(){
+		//4代表数据发送完毕
+		if ( oXmlHttp.readyState == 4 ){
+			//0为访问的本地，200代表访问服务器成功，304代表没做修改访问的是缓存
+			if(oXmlHttp.status == 200 || oXmlHttp.status == 0 || oXmlHttp.status == 304){
+				includeCss(oXmlHttp.responseText,callback);
+			}else{
+
+			}
+        }
+	}
+	oXmlHttp.open("GET",url,async);
+	oXmlHttp.send(null);
+}
+
+function getHttpRequest(){
+	if(window.ActiveXObject){//IE
+		return new ActiveXObject("MsXml2.XmlHttp");
+	}else if(window.XMLHttpRequest){//其他
+		return new XMLHttpRequest();
+	}
+}
+
+function includeCss(source,callback){
+	if(source != null){
+		var style = document.createElement( "style" );
+		style.type = "text/css";
+		try{
+			style.appendChild(document.createTextNode(source));
+		}catch (ex){
+			style.styleSheet.cssText = source;//IE
+		}
+		var head = document.getElementsByTagName("head")[0];
+		head.appendChild(style);
+
+		if(callback instanceof Function){
+			callback();
+		}
+	}
+}
+
+<b>12-show.css文件内容：</b>
+.shortcut-alert-container{
+	position: relative; 
+	display: inline-block;
+	padding: 10px 10px;
+}
+.shortcut-content{
+	font-size:30px;
+	background-color:#CEF7DC;
+}
+.shortcut-alert{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	min-width: 18px;
+	height: 18px;
+	line-height: 18px;
+	text-align: center;
+	border-radius: 50em;
+    -moz-border-radius: 50em;
+    -webkit-border-radius: 50em;
+    background: #fc8675;
+
+    font-size: 11px;
+    font-weight: 700;
+    color: #FCF5F5;
+    padding: 0px 1px 0px;
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<span class="shortcut-alert-container">
+			<span class="shortcut-content">技术交流群</span>
+			<span class="shortcut-alert">15</span>
+		</span>
+		<br/>
+		<button onclick='removeJsCssFile("12-show.css");'>删除样式</button>
+		<button onclick='loadCssFile("12-show.css");'>加载样式</button>
+		<button onclick='ajaxLoadCss("12-show.css");'>ajax加载样式</button>
+	</div>
+</div>
+<script>
+//移除已经加载过的js/css
+function removeJsCssFile(filename){
+	if(typeof filename !== "string"){return;}
+
+	var startIndex = filename.lastIndexOf(".")+1;
+	var filetype = filename.substr(startIndex);
+	if(filetype!=="js" &&  filetype!=="css"){return;}
+
+	var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none";
+	var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none";
+	var allsuspects=document.getElementsByTagName(targetelement)
+	for (var i=allsuspects.length; i>=0; i--){
+		if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null 
+			&& allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1){
+			allsuspects[i].parentNode.removeChild(allsuspects[i]);
+		}
+	}
+}
+
+//加载样式
+function loadCssFile(url){
+	var link = document.createElement("link");
+	link.rel = "stylesheet";
+	link.type = "text/css";
+	link.href = url;
+	var head = document.getElementsByTagName("head")[0];
+	head.appendChild(link);
+}
+
+//ajax方式加载样式
+function ajaxLoadCss(url,callback,async){
+	async=(typeof async =="boolean")?async:true;
+
+	var oXmlHttp = getHttpRequest();
+	oXmlHttp.onreadystatechange = function(){
+		//4代表数据发送完毕
+		if ( oXmlHttp.readyState == 4 ){
+			//0为访问的本地，200代表访问服务器成功，304代表没做修改访问的是缓存
+			if(oXmlHttp.status == 200 || oXmlHttp.status == 0 || oXmlHttp.status == 304){
+				includeCss(oXmlHttp.responseText,callback);
+			}else{
+
+			}
+        }
+	}
+	oXmlHttp.open("GET",url,async);
+	oXmlHttp.send(null);
+}
+
+function getHttpRequest(){
+	if(window.ActiveXObject){//IE
+		return new ActiveXObject("MsXml2.XmlHttp");
+	}else if(window.XMLHttpRequest){//其他
+		return new XMLHttpRequest();
+	}
+}
+
+function includeCss(source,callback){
+	if(source != null){
+		var style = document.createElement( "style" );
+		style.type = "text/css";
+		try{
+			style.appendChild(document.createTextNode(source));
+		}catch (ex){
+			style.styleSheet.cssText = source;//IE
+		}
+		var head = document.getElementsByTagName("head")[0];
+		head.appendChild(style);
+
+		if(callback instanceof Function){
+			callback();
+		}
+	}
+}
+</script>
+</body>
+</html>

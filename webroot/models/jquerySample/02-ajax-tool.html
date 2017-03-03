@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ajax辅助函数</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+$(function(){
+	var obj = { width:1680, height:1050 };
+	var str = $.param(obj);
+	$("<div>var obj = { width:1680, height:1050 };<br/> $.param(obj) --> "+str+"</div>").appendTo($("#showResult1"));
+
+	var obj2 = [{name:"first",value:"赵"},{name:"last",value:"刚"},{name:"job",value:"会计"}];
+	var str2 = $.param(obj2);
+	$("<div>var obj = [{name:\"first\",value:\"赵\"},{name:\"last\",value:\"刚\"},{name:\"job\",value:\"会计\"}];<br/> $.param(obj) --> "+str2+"</div>").appendTo($("#showResult1"));
+
+});
+
+</script>
+<div class="aTitle">jQuery.param()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+jQuery.param( obj )
+obj
+类型: Array, Object
+用于数组或序列化的对象。
+
+jQuery.param( obj, traditional )
+obj
+类型: Array, Object
+用于数组或序列化的对象。
+traditional
+类型: Boolean
+一个布尔值，指示是否执行了传统的“shallow”的序列化。
+
+<mark>注意</mark>: 因为一些框架解析序列化的数字的能力有限，
+ 在传递 obj 参数时我们应该谨慎，尽量不要传递含有对象的数组，
+ 或者数组中嵌套其它数组。
+<mark>注意</mark>: 由于目前对序列化字符串没有统一的规约，
+此方法无法对复杂数据结构进行编码，使之可以支持所有语言。 
+在此之前，  $.param 方法将继续保持其目前的形式。
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1"></div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	$("#okBtn").click(function(){
+		$('<div>$("input[name=username]").serialize() --> </br>'+$("input[name=username]").serialize()+'</div>').appendTo($("#showResult2"));
+		$('<div>$("input[name=sex]").serialize() --> </br>'+$("input[name=sex]").serialize()+'</div>').appendTo($("#showResult2"));
+		$('<div>$("#dataForm").serialize() --> </br>'+$("#dataForm").serialize()+'</div>').appendTo($("#showResult2"));
+	});
+
+});
+</script>
+<div class="aTitle">.serialize()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.serialize()
+将用作提交的表单元素的值编译成字符串,这个方法不接受任何参数。
+
+.serialize() 方法使用标准的 URL-encoded 符号上建立一个文本字符串. 
+它可以对一个代表一组表单元素的 jQuery 对象进行操作，
+比如&lt;input&gt;, &lt;textarea&gt;, &lt;from&gt;和 &lt;select&gt;:
+ $( "input, textarea, select" ).serialize();
+    </pre>
+  </div>
+  <div class="aShow note">
+  	<form id="dataForm">
+  		姓名：<input type="text" name="username"><br/>
+  		姓别：<input type="radio" name="sex" value="men">男&emsp;&emsp;<input type="radio" name="sex" value="women">女<br/>
+  		<input type="button" value="确定" id="okBtn">
+  	</form>
+  	<div id="showResult2"></div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+});
+</script>
+<div class="aTitle">.serializeArray()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.serializeArray()
+这个方法不接受任何参数。
+将用作提交的表单元素的值编译成拥有name和value对象组成的数组。
+例如[ { name: a value: 1 }, { name: b value: 2 },...]
+
+.serializeArray() 方法创建一个对象组成的javascript数组，
+用来编码成一个JSON一样的字符串。 
+它可以对一个代表一组表单元素的 jQuery 对象进行操作。
+
+$("input[name=nickname]").serializeArray() <==> 
+	[{name:"nickname",value:"a"}]
+$("input[name=isPart]").serializeArray() <==> 
+	[{name:"isPart",value:"yes"}]
+$("#partForm").serializeArray()<==>
+	[{name:"nickname",value:"a"},{name:"isPart",value:"yes"}]
+    </pre>
+  </div>
+  <div class="aShow note">
+  	<form id="partForm">
+  		昵称：<input type="text" name="nickname" value="a"><br/>
+  		会员：<input type="radio" name="isPart" value="yes" checked="checked">是&emsp;&emsp;<input type="radio" name="isPart" value="no">否<br/>
+  	</form>
+  	<div id="showResult3"></div>
+  </div>
+</div>
+</body>
+</html>

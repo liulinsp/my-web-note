@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Date日期类型</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">Date.parse()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+在调用Date 构造函数而不传递参数的情况下，
+新创建的对象自动获得当前日期和时间。
+如果想根据特定的日期和时间创建日期对象，
+必须传入表示该日期的毫秒数
+（即从UTC 时间1970 年1 月1 日午夜起至该日期止经过的毫秒数）。
+为了简化这一计算过程，ECMAScript 提供了两个方法：
+	Date.parse()和Date.UTC()。
+
+Date.parse()方法接收一个表示日期的字符串参数，
+将地区设置为美国的浏览器通常都接受下列日期格式：
+1. “月/日/年”，如6/13/2004；
+2. “英文月名 日,年”，如January 12,2004；
+3. “英文星期几 英文月名 日 年 时:分:秒 时区”，
+   如Tue May 25 2004 00:00:00 GMT-0700。
+4. ISO 8601 扩展格式YYYY-MM-DDTHH:mm:ss.sssZ
+  （例如2004-05-25T00:00:00）。
+   只有兼容ECMAScript 5 的实现支持这种格式。
+
+var someDate = new Date(Date.parse("May 25, 2004"));
+var someDate = new Date("May 25, 2004");
+两种创建方式是等价的。
+
+对于错误的日期，不同浏览器显示的结果不一样：
+例："January 32, 2017"
+1. Chrome:
+Invalid Date
+2. IE:
+Wed Feb 1 00:00:00 UTC+0800 2017
+
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	var now = new Date();
+	$('<div>var now = new Date();<br/>now --> '+now+'</div>').appendTo("#showResult1");
+	var date1 = new Date("11/30/2016");
+	$('<div>var date1 = new Date("11/30/2016");<br/>date1 --> '+date1+'</div>').appendTo("#showResult1");
+	var date2 = new Date("November 12,2016");
+	$('<div>var date2 = new Date("November 12,2016");<br/>date2 --> '+date2+'</div>').appendTo("#showResult1");
+
+	var date21 = new Date("January 32, 2017");
+	$('<div>var date21 = new Date("January 32, 2017");<br/>date21 --> '+date21+'</div>').appendTo("#showResult1");
+
+	var date3 = new Date("Sat Nov 12 2016 00:00:00 GMT+0800");
+	$('<div>var date3 = new Date("Sat Nov 12 2016 00:00:00 GMT+0800");<br/>date3 --> '+date3+'</div>').appendTo("#showResult1");
+	var date4 = new Date("2016-11-30 12:10:11");
+	$('<div>var date4 = new Date("2016-11-30 12:10:11");<br/>date4 --> '+date4+'</div>').appendTo("#showResult1");
+	var date5 = new Date("2016-11-30T12:10:11");
+	$('<div>var date5 = new Date("2016-11-30T12:10:11");<br/>date5 --> '+date5+'</div>').appendTo("#showResult1");
+	var time = Date.parse("2016-11-30 12:10:11");
+	var date = new Date(time);
+	$('<div>var time = Date.parse("2016-11-30 12:10:11");<br/>'
+		+'var date = new Date(time);<br/>'
+		+'time --> '+time+'<br/>'
+		+'date --> '+date+'</div>').appendTo("#showResult1");
+});
+</script>
+
+
+<div class="aTitle">Date.UTC()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+UTC（Coordinated Universal Time，国际协调时间）
+Date.UTC()的参数分别是:
+1. 年份
+<mark>2. 基于0 的月份（一月是0，二月是1，以此类推）</mark>
+3. 月中的哪一天（1 到31）
+4. 小时数（0 到23）
+5. 分钟
+6. 秒以
+7. 毫秒数。
+
+在这些参数中，只有前两个参数（年和月）是必需的。
+如果没有提供月中的天数，则假设天数为1；如果省略其他参数，则统统假设为0。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	var date1 = new Date(2016,10,30,20,59,30,100);
+	$('<div>var date1 = new Date(2016,10,30,20,59,30,100);<br/>date1 --> '+date1+'</div>').appendTo("#showResult2");
+	var date2 = new Date(2016,10);
+	$('<div>var date2 = new Date(2016,10);<br/>date2 --> '+date2+'</div>').appendTo("#showResult2");
+	var time = Date.UTC(2016,10,30,20,59,30,100);
+	var date = new Date(time);
+	$('<div>var time = Date.UTC(2016,10,30,20,59,30,100);<br/>'
+		+'var date = new Date(time);<br/>'
+		+'time --> '+time+'<br/>'
+		+'date --> '+date+'</div>').appendTo("#showResult2");
+});
+</script>
+
+
+<div class="aTitle">Date.now()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+ECMAScript 5 添加了Data.now()方法，
+返回表示调用这个方法时的日期和时间的毫秒数。
+这个方法简化了使用Data 对象分析代码的工作。
+
+在不支持Date.now()的浏览器中，
+使用+操作符把Data 对象转换成字符串，
+也可以达到同样的目的。
+var start = +new Date();
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var now1 = Date.now();
+	var date1 = new Date(now1);
+	$('<div>var now1 = Date.now();<br/>now1 --> '+now1+'<br/>'+
+		'date1 --> '+date1+'</div>').appendTo("#showResult3");
+
+	var start=+new Date();
+	for(var i=0;i<1000000;i++){
+		var k = i+1;
+	}
+	var end=+new Date();
+	var between = end-start;
+	$('<div>var start=+new Date();<br/>var end=+new Date();<br/>var between = end-start;<br/>'
+		+'start --> '+start+'<br/>'
+		+'end --> '+end+'<br/>'
+		+'between --> '+between+'</div>').appendTo("#showResult3");
+});
+</script>
+
+
+<div class="aTitle">利用日期/时间组件方法实现时间格式化</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+getTime() 返回表示日期的毫秒数；与valueOf()方法返回的值相同
+setTime(毫秒) 以毫秒数设置日期，会改变整个日期
+getFullYear() 取得4位数的年份（如2007而非仅07）
+getUTCFullYear() 返回UTC日期的4位数年份
+setFullYear(年) 设置日期的年份。传入的年份值必须是4位数字（如2007而非仅07）
+setUTCFullYear(年) 设置UTC日期的年份。传入的年份值必须是4位数字（如2007而非仅07）
+getMonth() 返回日期中的月份，其中0表示一月，11表示十二月
+getUTCMonth() 返回UTC日期中的月份，其中0表示一月，11表示十二月
+setMonth(月) 设置日期的月份。传入的月份值必须大于0，超过11则增加年份
+setUTCMonth(月) 设置UTC日期的月份。传入的月份值必须大于0，超过11则增加年份
+getDate() 返回日期月份中的天数（1到31）
+getUTCDate() 返回UTC日期月份中的天数（1到31）
+setDate(日) 设置日期月份中的天数。如果传入的值超过了该月中应有的天数，则增加月份
+setUTCDate(日) 设置UTC日期月份中的天数。如果传入的值超过了该月中应有的天数，则增加月份
+getDay() 返回日期中星期的星期几（其中0表示星期日，6表示星期六）
+getUTCDay() 返回UTC日期中星期的星期几（其中0表示星期日，6表示星期六）
+getHours() 返回日期中的小时数（0到23）
+getUTCHours() 返回UTC日期中的小时数（0到23）
+setHours(时) 设置日期中的小时数。传入的值超过了23则增加月份中的天数
+setUTCHours(时) 设置UTC日期中的小时数。传入的值超过了23则增加月份中的天数
+getMinutes() 返回日期中的分钟数（0到59）
+getUTCMinutes() 返回UTC日期中的分钟数（0到59）
+setMinutes(分) 设置日期中的分钟数。传入的值超过59则增加小时数
+setUTCMinutes(分) 设置UTC日期中的分钟数。传入的值超过59则增加小时数
+getSeconds() 返回日期中的秒数（0到59）
+getUTCSeconds() 返回UTC日期中的秒数（0到59）
+setSeconds(秒) 设置日期中的秒数。传入的值超过了59会增加分钟数
+setUTCSeconds(秒) 设置UTC日期中的秒数。传入的值超过了59会增加分钟数
+getMilliseconds() 返回日期中的毫秒数
+getUTCMilliseconds() 返回UTC日期中的毫秒数
+setMilliseconds(毫秒) 设置日期中的毫秒数
+setUTCMilliseconds(毫秒) 设置UTC日期中的毫秒数
+getTimezoneOffset() 返回本地时间与UTC时间相差的分钟数。例如，美国东部标准时间返回300。在某
+地进入夏令时的情况下，这个值会有所变化
+
+Date.prototype.format = function(format) {  
+    /* 
+     * eg:format="yyyy-MM-dd hh:mm:ss"; 
+     */  
+    var o = {  
+        "M+" : this.getMonth() + 1, // month  
+        "d+" : this.getDate(), // day  
+        "h+" : this.getHours(), // hour  
+        "m+" : this.getMinutes(), // minute  
+        "s+" : this.getSeconds(), // second  
+        "q+" : Math.floor((this.getMonth() + 3) / 3), // quarter  
+        "S" : this.getMilliseconds()  
+        // millisecond  
+    }  
+  
+    if (/(y+)/.test(format)) {  
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4  
+                        - RegExp.$1.length));  
+    }  
+  
+    for (var k in o) {  
+        if (new RegExp("(" + k + ")").test(format)) {  
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1  
+                            ? o[k]  
+                            : ("00" + o[k]).substr(("" + o[k]).length));  
+        }  
+    }  
+    return format;  
+}
+
+
+var curTime = new Date();
+var timeStr = curTime.format("yyyy-MM-dd hh:mm:ss");
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+	</div>
+</div>
+<script type="text/javascript">
+Date.prototype.format = function(format) {  
+    /* 
+     * eg:format="yyyy-MM-dd hh:mm:ss"; 
+     */  
+    var o = {  
+        "M+" : this.getMonth() + 1, // month  
+        "d+" : this.getDate(), // day  
+        "h+" : this.getHours(), // hour  
+        "m+" : this.getMinutes(), // minute  
+        "s+" : this.getSeconds(), // second  
+        "q+" : Math.floor((this.getMonth() + 3) / 3), // quarter  
+        "S" : this.getMilliseconds()  
+        // millisecond  
+    }  
+  
+    if (/(y+)/.test(format)) {  
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4  
+                        - RegExp.$1.length));  
+    }  
+  
+    for (var k in o) {  
+        if (new RegExp("(" + k + ")").test(format)) {  
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1  
+                            ? o[k]  
+                            : ("00" + o[k]).substr(("" + o[k]).length));  
+        }  
+    }  
+    return format;  
+}
+
+var curTime = new Date();
+var timeStr = curTime.format("yyyy-MM-dd hh:mm:ss");
+$('<div>timeStr --> '+timeStr+'</div>').appendTo("#showResult4");
+</script>
+</body>
+</html>

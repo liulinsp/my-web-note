@@ -1,0 +1,78 @@
+*{
+	tab-size: 4;
+}
+.main{
+	width: 600px;
+	margin: 20px;
+}
+
+.main>dl{
+	border-style: solid;
+	border-width: 1px;
+	border-color: #C0D5DD #A4B2B8 #A4B2B8 #C0D5DD;
+	padding: 10px 20px 10px;
+}
+.main>dl>dt{
+	font-family: "Microsoft YaHei";
+	font-size: 16px;
+	background-color: #E7F3FA;
+}
+.main>dl>dd{
+	padding: 5px;
+}
+.main>dl>dd>a{
+	text-decoration: none;
+}
+.aTitle{
+	width: 800px;
+	margin: 20px 20px 0px;
+	font-family:'Microsoft YaHei';
+	font-size: 14px;
+}
+.aPane{
+	width: 800px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #958F8F;
+	margin: 10px 20px 20px;
+}
+
+.aCode, .aShow{
+	display: table-cell;
+	vertical-align:top;
+	width: 380px;
+	padding: 10px 10px 10px;
+}
+
+.aShow{
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #958F8F;
+}
+
+.home{
+	height: 20px;
+	text-align: right;
+	margin-right: 30px;
+}
+
+.home>a{
+	text-decoration: none;
+}
+
+.note{
+	font-family:'Microsoft YaHei'; 
+	font-size:10px; 
+	line-height:1.5
+}
+
+.note>div{
+	margin-top: 5px;
+	background-color: #E6FCEB;
+}
+
+.error{
+	color: #C71111;
+}
+
+

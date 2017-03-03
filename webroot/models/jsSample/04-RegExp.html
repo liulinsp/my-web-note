@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript正则表达式</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+	$(function(){
+		$('<div>/\\d/g.test(1) --> '+(/\d/g.test(1))+
+			'<br/>/\\d/g.test("a") --> '+(/\d/g.test("a"))+
+			'</div>').appendTo($("#showResult1"));
+		
+		var numExp = new RegExp("\\d","g");
+		$('<div>var numExp = new RegExp("\\\\d","g");<br/>'+
+			'numExp.test(1) --> '+numExp.test(1)+
+			'<br/>numExp.test("a") --> '+numExp.test("a")+
+			'</div>').appendTo($("#showResult1"));
+	});
+	
+</script>
+<div class="aTitle">正则表达式声明方式</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 直接量
+	语法：/pattern/attributes
+	示例：/\d/g
+2. 创建 RegExp 对象
+	语法：new RegExp(pattern, attributes);
+	示例：new RegExp("<mark>\\</mark>d","g");
+<div class="error">注意：pattern的字符串"\"要加转义符，用"\\"表示</div>
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var str = "aBcb\naBcb";
+		var exp = new RegExp("b");
+		var exp_i = new RegExp("b","i");
+		var exp_g = new RegExp("b","g");
+		var exp_ig = new RegExp("b","ig");
+		// var exp = /b/;
+		// var exp_i = /b/i;
+		// var exp_g = /b/g;
+		// var exp_ig = /b/ig;
+
+		$('<div>str.replace(exp,"#") 匹配第一行的"b" </div>').appendTo($("#showResult2"));
+		var showDiv1=$('<textarea></textarea>');
+		showDiv1.text(str.replace(exp,"#"));
+		showDiv1.appendTo($("#showResult2"));
+		
+		$('<div>str.replace(exp_i,"#") 匹配第一行的"b"或"B" </div>').appendTo($("#showResult2"));
+		var showDiv2=$('<textarea></textarea>');
+		showDiv2.text(str.replace(exp_i,"#"));
+		showDiv2.appendTo($("#showResult2"));
+
+		$('<div>str.replace(exp_g,"#") 匹配全局的"b" </div>').appendTo($("#showResult2"));
+		var showDiv3=$('<textarea></textarea>');
+		showDiv3.text(str.replace(exp_g,"#"));
+		showDiv3.appendTo($("#showResult2"));
+
+		$('<div>str.replace(exp_ig,"#") 匹配全局的"b"或"B" </div>').appendTo($("#showResult2"));
+		var showDiv4=$('<textarea></textarea>');
+		showDiv4.text(str.replace(exp_ig,"#"));
+		showDiv4.appendTo($("#showResult2"));
+
+		var exp_no = new RegExp("^aBcb$");
+		var exp_m = new RegExp("^aBcb$","m");
+		var exp_mg = new RegExp("^aBcb$","mg");
+		// var exp_no = /^aBcb$/;
+		// var exp_m = /^aBcb$/m;
+		// var exp_mg = /^aBcb$/mg;
+		
+		$('<div>str.replace(exp_no,"#") 匹配整个字符串为"aBcb"</div>').appendTo($("#showResult2"));
+		var showDiv6=$('<textarea></textarea>');
+		showDiv6.text(str.replace(exp_no,"#"));
+		showDiv6.appendTo($("#showResult2"));
+
+		$('<div>str.replace(exp_m,"#") 匹配第一行为"aBcb"</div>').appendTo($("#showResult2"));
+		var showDiv5=$('<textarea></textarea>');
+		showDiv5.text(str.replace(exp_m,"#"));
+		showDiv5.appendTo($("#showResult2"));
+
+		$('<div>str.replace(exp_mg,"#") 匹配所有内容为"aBcb"的行</div>').appendTo($("#showResult2"));
+		var showDiv7=$('<textarea></textarea>');
+		showDiv7.text(str.replace(exp_mg,"#"));
+		showDiv7.appendTo($("#showResult2"));
+
+		
+	});
+	
+</script>
+<div class="aTitle">修饰符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. i(ignoreCase):
+   执行对大小写不敏感的匹配。
+2. g(global)	
+   执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。
+3. m(multiline)	
+   执行多行匹配。
+
+var str = "aBcb\naBcb";
+var exp = new RegExp("b");
+var exp_i = new RegExp("b","i");
+var exp_g = new RegExp("b","g");
+var exp_ig = new RegExp("b","ig");
+// var exp = /b/;
+// var exp_i = /b/i;
+// var exp_g = /b/g;
+// var exp_ig = /b/ig;
+
+m 影响对行首、行尾的解释，也就是影响 ^、$。
+  1. 若不指定 m，则：^ 只在字符串的最开头，$ 只在字符串的最结尾。
+  2. 若指定 m，则：^ 在字符串每一行的开头，$ 在字符串第一行的结尾。
+var exp_no = new RegExp("^aBcb$");
+var exp_m = new RegExp("^aBcb$","m");
+var exp_mg = new RegExp("^aBcb$","mg");
+// var exp_no = /^aBcb$/;
+// var exp_m = /^aBcb$/m;
+// var exp_mg = /^aBcb$/mg;
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('<div>匹配"a"到"n"的所有字符<br>'+
+			'"good luck".replace(/[a-n]/g,"#") --> '+
+			"good luck".replace(/[a-n]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>匹配非"a"到"n"的所有字符<br>'+
+			'"good luck".replace(/[^a-n]/g,"#") --> '+
+			"good luck".replace(/[^a-n]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>匹配"0"到"9"的所有字符<br>'+
+			'"a1b2c3d4".replace(/[0-9]/g,"#") --> '+
+			"a1b2c3d4".replace(/[0-9]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>匹配"a"到"z"的所有字符<br>'+
+			'"a1b2c3d4".replace(/[a-z]/g,"#") --> '+
+			"a1b2c3d4".replace(/[a-z]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>匹配"A"到"Z"的所有字符<br>'+
+			'"a1B2c3D4".replace(/[A-Z]/g,"#") --> '+
+			"a1B2c3D4".replace(/[A-Z]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>匹配"A"到"z"的所有字符,即所有英文字母<br>'+
+			'"a1B2c3D4".replace(/[A-z]/g,"#") --> '+
+			"a1B2c3D4".replace(/[A-z]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+		
+		$('<div>匹配"u"或"o"或"i"<br/>'+
+			'"good luck".replace(/[uoi]/g,"#") --> '+
+			"good luck".replace(/[uoi]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>匹配非"u"或"o"或"i"的所有字符<br>'+
+			'"good luck".replace(/[^uoi]/g,"#") --> '+
+			"good luck".replace(/[^uoi]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>匹配"ab"或"cd"或"ef"的字符串<br>'+
+			'"kabxcdyef".replace(/[ab|cd|ef]/g,"#") --> '+
+			"kabxcdyef".replace(/[ab|cd|ef]/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+
+		$('<div>[ab|cd|ef]和ab|cd|ef效果对比<br>'+
+			'"kabxcdyef".replace(/[ab|cd|ef]/g,"#") --> '+
+			"kabxcdyef".replace(/[ab|cd|ef]/g,"#")+
+			'<br/>"kabxcdyef".replace(/ab|cd|ef/g,"#") --> '+
+			"kabxcdyef".replace(/ab|cd|ef/g,"#")+
+			'</div>').appendTo($("#showResult3"));
+	});
+	
+</script>
+<div class="aTitle">方括号</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+[abc]	查找方括号之间的任何字符。
+[^abc]	查找任何不在方括号之间的字符。
+[0-9]	查找任何从 0 至 9 的数字。
+[a-z]	查找任何从小写 a 到小写 z 的字符。
+[A-Z]	查找任何从大写 A 到大写 Z 的字符。
+[A-z]	查找任何从大写 A 到小写 z 的字符。
+[adgk]	查找给定集合内的任何字符。
+[^adgk]	查找给定集合外的任何字符。
+(red|blue|green)	查找任何指定的选项。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		$('<div>匹配除了换行和行结束符以外的单个字符<br>'+
+			'"a\\nb\\nc".replace(/./g,"#") --> <textarea rows="3">'+
+			"a\nb\nc".replace(/./g,"#")+
+			'</textarea></div>').appendTo($("#showResult4"));
+
+		$('<div>匹配所有单词字符(a-z,A-Z和0-9)<br>'+
+			'"a1b&c*d-".replace(/\\w/g,"#") --> '+
+			"a1b&c*d-".replace(/\w/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配所有非单词字符<br>'+
+			'"a1b&c*d-".replace(/\\W/g,"#") --> '+
+			"a1b&c*d-".replace(/\W/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配所有数字字符<br>'+
+			'"a1b&c*d-".replace(/\\d/g,"#") --> '+
+			"a1b&c*d-".replace(/\d/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配所有非数字字符<br>'+
+			'"a1b&c*d-".replace(/\\D/g,"#") --> '+
+			"a1b&c*d-".replace(/\D/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配所有空白字符<br>'+
+			'"1 2\\t3\\n4".replace(/\\s/g,"#") --> '+
+			"1 2\t3\n4".replace(/\s/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配所有非空白字符<br>'+
+			'"1 2\\t3\\n4".replace(/\\S/g,"#") --> <textarea rows="2">'+
+			"1 2\t3\n4".replace(/\S/g,"#")+
+			'</textarea></div>').appendTo($("#showResult4"));
+
+		$('<div>匹配单词边界<br>'+
+			'"Today is a good day!".replace(/\\b/g,"#") --> '+
+			"Today is a good day!".replace(/\b/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>单词边界的应用<br>'+
+			'"Today is a good day!".replace(/\\bday\\b/g,"#") --> '+
+			"Today is a good day!".replace(/\bday\b/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配非单词边界<br>'+
+			'"Today is a good day!".replace(/\\B/g,"#") --> '+
+			"Today is a good day!".replace(/\B/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>非单词边界的应用<br>'+
+			'"Today is a good day!".replace(/\\Bday\\b/g,"#") --> '+
+			"Today is a good day!".replace(/\Bday\b/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配NUL字符<br>'+
+			'"ab\\0c".replace(/\\0/g,"#") --> '+
+			"ab\0c".replace(/\0/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配换行符<br>'+
+			'"ab\\nc".replace(/\\n/g,"#") --> '+
+			"ab\nc".replace(/\n/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配换页符<br>'+
+			'"ab\\fc".replace(/\\f/g,"#") --> '+
+			"ab\fc".replace(/\f/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配回车符<br>'+
+			'"ab\\rc".replace(/\\r/g,"#") --> '+
+			"ab\rc".replace(/\r/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配制表符<br>'+
+			'"ab\\tc".replace(/\\t/g,"#") --> '+
+			"ab\tc".replace(/\t/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配垂直制表符<br>'+
+			'"ab\\vc".replace(/\\v/g,"#") --> '+
+			"ab\vc".replace(/\v/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配八进制"\\142"表示的字符，即"b"<br>'+
+			'"abc".replace(/\\142/g,"#") --> '+
+			"abc".replace(/\142/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配十六进制"\\x62"表示的字符，即"b"<br>'+
+			'"abc".replace(/\\x62/g,"#") --> '+
+			"abc".replace(/\x62/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+
+		$('<div>匹配十六进制Unicode"\\u5168"表示的字符，即"全"<br>'+
+			'"十全十美".replace(/\\u5168/g,"#") --> '+
+			"十全十美".replace(/\u5168/g,"#")+
+			'</div>').appendTo($("#showResult4"));
+		
+	});	
+</script>
+<div class="aTitle">元字符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+.	查找单个字符，除了换行和行结束符。
+\w	查找单词字符。
+\W	查找非单词字符。
+\d	查找数字。
+\D	查找非数字字符。
+\s	查找空白字符。
+\S	查找非空白字符。
+\b	匹配单词边界。
+\B	匹配非单词边界。
+\0	查找 NUL 字符。
+\n	查找换行符。
+\f	查找换页符。
+\r	查找回车符。
+\t	查找制表符。
+\v	查找垂直制表符。
+\xxx	查找以八进制数 xxx 规定的字符。
+\xdd	查找以十六进制数 dd 规定的字符。
+\uxxxx	查找以十六进制数 xxxx 规定的 Unicode 字符。
+
+说明：
+“\b”匹配的只是一个位置，
+这个位置的一侧是构成单词的字符
+，另一侧为非单词字符、字符串的开始或结束位置
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		$('<div>匹配任何包含至少一个"o"的字符串<br>'+
+			'"Today is a good day!".replace(/o+/g,"#") --> '+
+			"Today is a good day!".replace(/o+/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+
+		$('<div>匹配零个或多个单词字符+"day"<br>'+
+			'"Today is a good day!".replace(/\\w*day/g,"#") --> '+
+			"Today is a good day!".replace(/\w*day/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+
+		$('<div>匹配零个或一个单词字符+"day"<br>'+
+			'"Today is a good day!".replace(/\\w?day/g,"#") --> '+
+			"Today is a good day!".replace(/\w?day/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+
+		$('<div>匹配4个单词字符的字符串<br>'+
+			'"Today is a good day!".replace(/\\w{4}/g,"#") --> '+
+			"Today is a good day!".replace(/\w{4}/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+
+		$('<div>匹配4个或5个单词字符的字符串<br>'+
+			'"Today is a good day!".replace(/\\w{4,5}/g,"#") --> '+
+			"Today is a good day!".replace(/\w{4,5}/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+
+		$('<div>匹配至少4个单词字符的字符串<br>'+
+			'"Today is a good day!".replace(/\\w{4,}/g,"#") --> '+
+			"Today is a good day!".replace(/\w{4,}/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+
+		$('<div>匹配行尾为"y"<br>'+
+			'"Today\\nis\\nsunny".replace(/y$/gm,"#") --> <textarea rows="3">'+
+			"Today\nis\nsunny".replace(/y$/gm,"#")+
+			'</textarea></div>').appendTo($("#showResult5"));
+
+		$('<div>匹配行首为"s"<br>'+
+			'"Today\\nis\\nsunny".replace(/^s/gm,"#") --> <textarea rows="3">'+
+			"Today\nis\nsunny".replace(/^s/gm,"#")+
+			'</textarea></div>').appendTo($("#showResult5"));
+
+		$('<div>匹配后面紧跟"d"的"o"字符<br>'+
+			'"Today is a good day!".replace(/o(?=d)/g,"#") --> '+
+			"Today is a good day!".replace(/o(?=d)/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+
+		$('<div>匹配后面没有紧跟"d"的"o"字符<br>'+
+			'"Today is a good day!".replace(/o(?!d)/g,"#") --> '+
+			"Today is a good day!".replace(/o(?!d)/g,"#")+
+			'</div>').appendTo($("#showResult5"));
+	});
+	
+</script>
+<div class="aTitle">量词</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+n+	匹配任何包含至少一个 n 的字符串。
+n*	匹配任何包含零个或多个 n 的字符串。
+n?	匹配任何包含零个或一个 n 的字符串。
+n{X}	匹配包含 X 个 n 的序列的字符串。
+n{X,Y}	匹配包含 X 或 Y 个 n 的序列的字符串。
+n{X,}	匹配包含至少 X 个 n 的序列的字符串。
+n$	匹配任何结尾为 n 的字符串。
+^n	匹配任何开头为 n 的字符串。
+?=n	匹配任何其后紧接指定字符串 n 的字符串。
+?!n	匹配任何其后没有紧接指定字符串 n 的字符串。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult5">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var reg1 = new RegExp("\\d{9}","gim");
+		$('<div>var reg1 = new RegExp("\\d{9}","gim");'+
+			'<br>reg1.global --> '+ reg1.global +
+			'<br>reg1.ignoreCase --> '+ reg1.ignoreCase +
+			'<br>reg1.multiline --> '+ reg1.multiline +
+			'<br>reg1.source --> '+ reg1.source +
+			'</div>').appendTo($("#showResult6"));
+
+		var reg2 = new RegExp("b","g");
+		var str = "abcb";
+		reg2.test(str);
+		$('<div>var reg2 = new RegExp("b");<br/>var str = "abcb";'+
+			'<br/>reg2.test(str);' +
+			'<br>第一次执行后：reg2.lastIndex --> '+ reg2.lastIndex +
+			'</div>').appendTo($("#showResult6"));
+
+		reg2.test(str);
+		$('<div>reg2.test(str);'+
+			'<br>第二次执行后：reg2.lastIndex --> '+ reg2.lastIndex +
+			'</div>').appendTo($("#showResult6"));
+
+		reg2.test(str);
+		$('<div>reg2.test(str);'+
+			'<br>第三次执行后：reg2.lastIndex --> '+ reg2.lastIndex +
+			'</div>').appendTo($("#showResult6"));
+
+		var reg3 = new RegExp("b","g");
+		reg3.lastIndex=2;
+		reg3.test(str);
+		$('<div>lastIndex的值可以设置:<br/>var reg3 = new RegExp("b","g");<br/>reg3.lastIndex=2;<br/>reg3.test(str);'+
+			'<br>reg3.lastIndex --> '+ reg3.lastIndex +
+			'</div>').appendTo($("#showResult6"));
+	});
+	
+</script>
+<div class="aTitle">RegExp 对象属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+属性：
+global		RegExp 对象是否具有标志 g。
+ignoreCase	RegExp 对象是否具有标志 i。	
+multiline	RegExp 对象是否具有标志 m。
+source		正则表达式的源文本。
+lastIndex	一个整数，标示开始下一次匹配的字符位置。
+<div class="error">注意：lastIndexs适用于RegExp.exec() 和 RegExp.test()方法,
+具有标志 g 的 RegExp 对象才能使用lastIndex </div>
+
+方法：
+1. toLocaleString()和toString()方法:
+仍然会像它是以字面量形式创建的一样显示其字符串表示
+2. valueOf()方法:
+返回正则表达式本身。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult6">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		//var reg = /b/g;
+		var reg = new RegExp("b","g");
+		var str = "abcba";
+
+		$('<div>var reg = new RegExp("b","g");<br/>var str = "abcb";</div>').appendTo($("#showResult7"));
+		reg.lastIndex=0;
+		var exec1 = reg.exec(str);
+		$('<div>第一次执行:reg.lastIndex=0;<br/>var exec1 = reg.exec(str);'+
+			'<br>exec1 --> '+ exec1+
+			'<br>exec1[0] --> '+ exec1[0] +
+			'<br>exec1.index --> '+ exec1.index +
+			'<br>exec1.input --> '+ exec1.input +
+			'<br>reg.lastIndex --> '+ reg.lastIndex +
+			'</div>').appendTo($("#showResult7"));
+
+		var exec2 = reg.exec(str);
+		$('<div>第二次执行:var exec2 = reg.exec(str);'+
+			'<br>exec2 --> '+ exec2+
+			'<br>exec2[0] --> '+ exec2[0] +
+			'<br>exec2.index --> '+ exec2.index +
+			'<br>exec2.input --> '+ exec2.input +
+			'<br>reg.lastIndex --> '+ reg.lastIndex +
+			'</div>').appendTo($("#showResult7"));
+
+		var exec3 = reg.exec(str);
+		$('<div>第三次执行:var exec3 = reg.exec(str);'+
+			'<br>exec3 --> '+ exec3+
+			'<br>reg.lastIndex --> '+ reg.lastIndex +
+			'</div><br/>').appendTo($("#showResult7"));
+
+		var reg2 = new RegExp("b");
+		var str2 = "abcba";
+		$('<div>var reg2 = new RegExp("b");<br/>var str2 = "abcb";</div>').appendTo($("#showResult7"));
+		var exec21 = reg2.exec(str);
+		$('<div>第一次执行:var exec21 = reg2.exec(str);'+
+			'<br>exec21 --> '+ exec21+
+			'<br>exec21[0] --> '+ exec21[0] +
+			'<br>exec21.index --> '+ exec21.index +
+			'<br>exec21.input --> '+ exec21.input +
+			'<br>reg2.lastIndex --> '+ reg2.lastIndex +
+			'</div>').appendTo($("#showResult7"));
+
+		var exec22 = reg2.exec(str);
+		$('<div>第二次执行:var exec22 = reg2.exec(str);'+
+			'<br>exec22 --> '+ exec22+
+			'<br>exec22[0] --> '+ exec22[0] +
+			'<br>exec22.index --> '+ exec22.index +
+			'<br>exec22.input --> '+ exec22.input +
+			'<br>reg2.lastIndex --> '+ reg2.lastIndex +
+			'</div><br/>').appendTo($("#showResult7"));
+
+
+		var regGroup = /b(c(d)?)?/g;
+		str = "abcdcba";
+		$('<div>var regGroup = /b(c(d)?)?/g;<br/>var str = "abcdcba";</div>').appendTo($("#showResult7"));
+		var gexec1 = regGroup.exec(str);
+
+		$('<div>第一次执行:var gexec1 = regGroup.exec(str);'+
+			'<br>gexec1 --> '+ gexec1+
+			'<br>gexec1[0] --> '+ gexec1[0] +
+			'<br>gexec1[1] --> '+ gexec1[1] +
+			'<br>gexec1[2] --> '+ gexec1[2] +
+			'<br>gexec1.index --> '+ gexec1.index +
+			'<br>gexec1.input --> '+ gexec1.input +
+			'<br>regGroup.lastIndex --> '+ regGroup.lastIndex +
+			'</div>').appendTo($("#showResult7"));
+		//console.log(gexec1);
+		var gexec2 = regGroup.exec(str);
+		$('<div>第二次执行:var gexec2 = regGroup.exec(str);'+
+			'<br>gexec2 --> '+ gexec2+
+			'<br>gexec2[0] --> '+ gexec2[0] +
+			'<br>gexec2[1] --> '+ gexec2[1] +
+			'<br>gexec2[2] --> '+ gexec2[2] +
+			'<br>gexec2.index --> '+ gexec2.index +
+			'<br>gexec2.input --> '+ gexec2.input +
+			'<br>regGroup.lastIndex --> '+ regGroup.lastIndex +
+			'</div>').appendTo($("#showResult7"));
+		//console.log(gexec2);
+		var gexec3 = regGroup.exec(str);
+		$('<div>第三次执行:var gexec2 = regGroup.exec(str);'+
+			'<br>gexec3 --> '+ gexec3+
+			'<br>regGroup.lastIndex --> '+ regGroup.lastIndex +
+			'</div>').appendTo($("#showResult7"));
+	});
+	
+</script>
+<div class="aTitle">RegExp.exec()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">	
+exec	检索字符串中指定的值。返回找到的值，并确定其位置。
+	参数:要应用模式的字符串
+	返回值：数组虽然是Array 的实例，但包含两个额外的属性：index 和input。
+			在数组中，第一项是与整个模式匹配的字符串，
+			其他项是与模式中的捕获组匹配的字符串，
+			如果模式中没有捕获组，则该数组只包含一项。
+	        index 表示匹配项在字符串中的位置；
+	        input 表示应用正则表达式的字符串。
+
+全局模式下lastIndex才起作用，在非全局模式下chrome，lastIndex一直为0;    
+IE 的JavaScript 实现在lastIndex 属性上存在偏差，即使在非全局模式下，
+lastIndex 为第一个匹配字符的位置。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult7">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var reg = /b/g;
+		var str = "abcba";
+
+		$('<div>var reg = /b/g;<br/>var str = "abcb";</div>').appendTo($("#showResult9"));
+
+		$('<div>执行前的位置:reg.lastIndex --> '+ reg.lastIndex +
+			'<br/>第一次执行:reg.test(str) --> '+ reg.test(str)+
+			'<br>reg.lastIndex --> '+ reg.lastIndex +
+			'</div>').appendTo($("#showResult9"));
+
+		$('<div>第二次执行:reg.test(str) --> '+ reg.test(str)+
+			'<br>reg.lastIndex --> '+ reg.lastIndex +
+			'</div>').appendTo($("#showResult9"));
+
+		$('<div>第三次执行:reg.test(str) --> '+ reg.test(str)+
+			'<br>reg.lastIndex --> '+ reg.lastIndex +
+			'</div>').appendTo($("#showResult9"));
+	});
+	
+</script>
+<div class="aTitle">RegExp.test()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">	
+test	检索字符串中指定的值。返回 true 或 false。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult9">
+	</div>
+</div>
+
+
+<div class="aTitle">RegExp构造函数属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">	
+长属性名   短属性名  说 明
+input		$_	最近一次要匹配的字符串。Opera未实现此属性
+lastMatch		$&	最近一次的匹配项。Opera未实现此属性
+lastParen		$+	最近一次匹配的捕获组。Opera未实现此属性
+leftContext	$`	input字符串中lastMatch之前的文本
+multiline		$*	布尔值，表示是否所有表达式都使用多行模式。IE和Opera未实现此属性
+rightContext	$'	Input字符串中lastMatch之后的文本
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult10">
+	</div> -->
+</div>
+<script>
+$(function(){
+var text = "this has been a short summer";
+var pattern = /(.)hort/g;//new RegExp("(.)hort","g");//
+/*
+* 注意：Opera 不支持input、lastMatch、lastParen 和multiline 属性
+* Internet Explorer 不支持multiline 属性
+*/
+if (pattern.test(text)){
+	/*$('<div>RegExp.input='+RegExp.input+'</div>').appendTo("#showResult10");
+	$('<div>RegExp.leftContext='+RegExp.leftContext+'</div>').appendTo("#showResult10");
+	$('<div>RegExp.rightContext='+RegExp.rightContext+'</div>').appendTo("#showResult10");
+	$('<div>RegExp.lastMatch='+RegExp.lastMatch+'</div>').appendTo("#showResult10");
+	$('<div>RegExp.lastParen='+RegExp.lastParen+'</div>').appendTo("#showResult10");
+	$('<div>RegExp.multiline='+RegExp.multiline+'</div>').appendTo("#showResult10");*/
+
+	/*alert(RegExp.input); // this has been a short summer
+	alert(RegExp.leftContext); // this has been a
+	alert(RegExp.rightContext); // summer
+	alert(RegExp.lastMatch); // short
+	alert(RegExp.lastParen); // s
+	alert(RegExp.multiline); // false*/
+}
+});
+
+</script>
+
+
+
+<script type="text/javascript">
+	$(function(){
+		var str = "This is an apple";
+		$('<div>var str = "This is an apple";<br/>'+ 
+			'str.search(/\\ba/) --> '+ str.search(/\ba/) +
+			'<br>str.substr(str.search(/\\ba/)) --> '+ str.substr(str.search(/\ba/)) +
+			'</div>').appendTo($("#showResult8"));
+
+		$('<div>'+ 
+			'str.search(/\\ba/g) --> '+ str.search(/\ba/g) +
+			'(全局匹配无意义)</div>').appendTo($("#showResult8"));
+
+		$('<div>'+ 
+			'str.match(/\\ba\\w+\\b/g) --> '+ str.match(/\ba\w+\b/g) +
+			'</div>').appendTo($("#showResult8"));
+
+		$('<div>'+ 
+			'str.replace(/\\ba\\w+\\b/g,"#") --> '+ str.replace(/\ba\w+\b/g,"#") +
+			'</div>').appendTo($("#showResult8"));
+
+		$('<div>'+ 
+			'str.replace(/\\ba\\w+\\b/,"#") --> '+ str.replace(/\ba\w+\b/,"#") +
+			'</div>').appendTo($("#showResult8"));
+
+		$('<div>'+ 
+			'str.replace(/\\ba\\w+\\b/g,"$") --> '+ str.replace(/\ba\w+\b/g,"$") +
+			'</div>').appendTo($("#showResult8"));
+
+		$('<div>'+ 
+			'str.replace(/\\ba\\w+\\b/g,"$$") --> '+ str.replace(/\ba\w+\b/g,"$$") +
+			'</div>').appendTo($("#showResult8"));
+
+		$('<div>'+ 
+			'str.replace(/\\b(a\\w+)\\b/g,"[$1]") --> '+ str.replace(/\b(a\w+)\b/g,"[$1]") +
+			'</div>').appendTo($("#showResult8"));
+
+		var strRe = "<span>标签<span>";
+		function htmlEscape(text){
+			return text.replace(/[<>"&]/g, function(match, pos, originalText){
+				switch(match){
+					case "<":
+					return "&lt;";
+					case ">":
+					return "&gt;";
+					case "&":
+					return "&amp;";
+					case "\"":
+					return "&quot;";
+				}
+			});
+		}
+		var resStr = strRe.replace(/[<>]/g,htmlEscape);
+		$('<div>var strRe = "&lt;span&gt;标签&lt;span&gt;<br/>'
+			+'strRe.replace(/[<>]/g,htmlEscape) --> <input id="replaceRes"/>'
+			+'</div>').appendTo($("#showResult8"));
+		$("#replaceRes").val(resStr);
+
+		$('<div>'+ 
+			'str.split(/\\s/) --> '+ str.split(/\s/) +
+			'<br/>str.split(/\\s/,3) --> '+ str.split(/\s/,3) +
+			'</div>').appendTo($("#showResult8"));
+	});
+	
+</script>
+<div class="aTitle">支持正则表达式的 String 对象的方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. search	返回字符串中第一个匹配项的索引。
+<div class="error">search() 方法不执行全局匹配，它将忽略标志 g。
+它同时忽略 regexp 的 lastIndex 属性，并且总是从字符串的开始进行检索，
+这意味着它总是返回 stringObject 的第一个匹配的位置。
+</div>
+2. match	找到一个或多个正则表达式的匹配。
+    本质上与调用RegExp 的exec()方法相同。
+3. replace	替换与正则表达式匹配的子串。
+ 1) 如果第二个参数是字符串，那么还可以使用一些特殊的字符序列，
+    将正则表达式操作得到的值插入到结果字符串中。
+    下表列出了ECMAScript 提供的这些特殊的字符序列。
+字符序列 替换文本
+$$ 	$
+$&	匹配整个模式的子字符串。与RegExp.lastMatch的值相同
+$'	匹配的子字符串之前的子字符串。与RegExp.leftContext的值相同
+$`	匹配的子字符串之后的子字符串。与RegExp.rightContext的值相同
+$n 	匹配第n个捕获组的子字符串，其中n等于0～9。
+    例如，$1是匹配第一个捕获组的子字符串，
+    $2是匹配第二个捕获组的子字符串，以此类推。
+    如果正则表达式中没有定义捕获组，则使用空字符串
+$nn 匹配第nn个捕获组的子字符串，其中nn等于01～99。
+    例如，$01是匹配第一个捕获组的子字符串，
+    $02 是匹配第二个捕获组的子字符串，以此类推。
+    如果正则表达式中没有定义捕获组，则使用空字符串
+
+ 2) replace()方法的第二个参数也可以是一个函数。
+ 在只有一个匹配项（即与模式匹配的字符串）的情况下，
+ 会向这个函数传递3 个参数：
+ 模式的匹配项、模式匹配项在字符串中的位置和原始字符串。
+
+function htmlEscape(text){
+	return text.replace(/[<>"&]/g, function(match, pos, originalText){
+		switch(match){
+			case "<":
+			return "&amp;lt;";
+			case ">":
+			return "&amp;gt;";
+			case "&":
+			return "&amp;amp;";
+			case "\"":
+			return "&amp;quot;";
+		}
+	});
+}
+
+4. split	把字符串分割为字符串数组。
+对split()中正则表达式的支持因浏览器而异。尽管对于简单的模式没有什么差别，
+但对于未发现匹配项以及带有捕获组的模式，匹配的行为就不大相同了。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult8">
+	</div>
+</div>
+<!-- 参考http://www.w3school.com.cn/jsref/jsref_obj_regexp.asp -->
+
+
+</body>
+</html>

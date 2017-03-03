@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue自定义事件</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">基本用法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1"&gt;
+	&lt;div&gt;全局计数：{{counter}}&lt;/div&gt;
+	&lt;button-counter v-bind:counter="counter" 
+					v-on:counterchange="counterChangeHandler"&gt;
+	&lt;/button-counter&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+Vue.component("button-counter",{
+	props: ['counter'],
+	data:function(){
+		return {innerCounter:this.counter}
+	},
+	template: '&lt;div&gt;组件计数：{{innerCounter}}'+
+		'&lt;button v-on:click="increase"&gt;加&lt;/button&gt;'+
+		'&lt;button v-on:click="decrease"&gt;减&lt;/button&gt;&lt;/div&gt;',
+	methods: {
+	    increase: function () {
+	      this.innerCounter += 1;
+	      this.$emit('counterchange',this.innerCounter);
+	    },
+	    decrease: function () {
+	      this.innerCounter -= 1;
+	      this.$emit('counterchange',this.innerCounter);
+	    }
+	},
+});
+
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		counter:10
+	},
+	methods:{
+		counterChangeHandler:function(newVal){
+			this.counter=newVal;
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app1">
+		<div>全局计数：{{counter}}</div>
+		<button-counter v-bind:counter="counter" 
+						v-on:counterchange="counterChangeHandler">
+		</button-counter>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+Vue.component("button-counter",{
+	props: ['counter'],
+	data:function(){
+		return {innerCounter:this.counter}
+	},
+	template: '<div>组件计数：{{innerCounter}}'+
+		'<button v-on:click="increase">加</button>'+
+		'<button v-on:click="decrease">减</button></div>',
+	methods: {
+	    increase: function () {
+	      this.innerCounter += 1;
+	      this.$emit('counterchange',this.innerCounter);
+	    },
+	    decrease: function () {
+	      this.innerCounter -= 1;
+	      this.$emit('counterchange',this.innerCounter);
+	    }
+	},
+});
+
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		counter:10
+	},
+	methods:{
+		counterChangeHandler:function(newVal){
+			this.counter=newVal;
+		}
+	}
+});
+</script>
+
+
+<div class="aTitle">自定义表单输入组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	&lt;div&gt;{{price}}&lt;/div&gt;
+	&lt;price-input v-model="price" suffix="￥"&gt;&lt;/price-input&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var currencyValidator = {
+  format: function (number) {
+    return (Math.trunc(number * 100) / 100).toFixed(2)
+  },
+  parse: function (newString, oldNumber) {
+    var CleanParse = function (value) {
+      return { value: value }
+    }
+    var CurrencyWarning = function (warning, value) {
+      return { 
+        warning: warning,
+        value: value,
+        attempt: newString 
+      }
+    }
+    var NotAValidDollarAmountWarning = function (value) {
+      return new CurrencyWarning(newString + ' is not a valid dollar amount', value)
+    }
+    var AutomaticConversionWarning = function (value) {
+      return new CurrencyWarning(newString + ' was automatically converted to ' + value, value)
+    }
+  
+    var newNumber = Number(newString)
+    var indexOfDot = newString.indexOf('.')
+    var indexOfE = newString.indexOf('e')
+    
+    if (isNaN(newNumber)) { 
+      if (
+        indexOfDot === -1 &&
+        indexOfE &gt; 0 &&
+        indexOfE === newString.length - 1 &&
+        Number(newString.slice(0, indexOfE)) !== 0
+      ) {
+        return new CleanParse(oldNumber)
+      } else {
+        return new NotAValidDollarAmountWarning(oldNumber)
+      }
+    }
+    
+    var newCurrencyString = currencyValidator.format(newNumber)
+    var newCurrencyNumber = Number(newCurrencyString)
+
+    if (newCurrencyNumber === newNumber) {
+      if (indexOfE !== -1 && indexOfE === newString.length - 2) {
+        return new AutomaticConversionWarning(newNumber)
+      } else {
+        return new CleanParse(newNumber)
+      }
+    } else {
+      return new NotAValidDollarAmountWarning(
+        newNumber &gt; newCurrencyNumber
+          ? newCurrencyNumber
+          : oldNumber
+      )
+    }
+  }
+}
+
+Vue.component("price-input",{
+	props: {
+		value:{
+			type:Number,
+			default:0
+		},
+		suffix:{
+			type:String,
+			default:""
+		}
+	},
+	data:function(){
+		return {innerPrice:this.price}
+	},
+	template: '\
+		&lt;span&gt;\
+			&lt;input\
+				ref="input"\
+				v-bind:value="value"\
+				v-on:input="updateValue($event.target.value)"\
+				v-on:focus="selectAll"\
+				v-on:blur="formatValue"/&gt;\
+			{{suffix}}\
+		&lt;/span&gt;\
+	',
+	mounted: function () {
+    this.formatValue()
+	},
+	methods: {
+		updateValue: function (value) {
+		  var result = currencyValidator.parse(value, this.value)
+		  if (result.warning) {
+		    this.$refs.input.value = result.value
+		  }
+		  this.$emit('input', result.value)
+		},
+		formatValue: function () {
+		  this.$refs.input.value = currencyValidator.format(this.value)
+		},
+		selectAll: function (event) {
+		  // Workaround for Safari bug
+		  setTimeout(function () {
+		  	event.target.select()
+		  }, 0)
+		}
+	}
+});
+
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		price:10.00
+	},
+});
+
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app2">
+	  	<div>{{price}}</div>
+		<price-input v-model="price" suffix="￥"></price-input>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var currencyValidator = {
+  format: function (number) {
+    return (Math.trunc(number * 100) / 100).toFixed(2)
+  },
+  parse: function (newString, oldNumber) {
+    var CleanParse = function (value) {
+      return { value: value }
+    }
+    var CurrencyWarning = function (warning, value) {
+      return { 
+        warning: warning,
+        value: value,
+        attempt: newString 
+      }
+    }
+    var NotAValidDollarAmountWarning = function (value) {
+      return new CurrencyWarning(newString + ' is not a valid dollar amount', value)
+    }
+    var AutomaticConversionWarning = function (value) {
+      return new CurrencyWarning(newString + ' was automatically converted to ' + value, value)
+    }
+  
+    var newNumber = Number(newString)
+    var indexOfDot = newString.indexOf('.')
+    var indexOfE = newString.indexOf('e')
+    
+    if (isNaN(newNumber)) { 
+      if (
+        indexOfDot === -1 &&
+        indexOfE > 0 &&
+        indexOfE === newString.length - 1 &&
+        Number(newString.slice(0, indexOfE)) !== 0
+      ) {
+        return new CleanParse(oldNumber)
+      } else {
+        return new NotAValidDollarAmountWarning(oldNumber)
+      }
+    }
+    
+    var newCurrencyString = currencyValidator.format(newNumber)
+    var newCurrencyNumber = Number(newCurrencyString)
+
+    if (newCurrencyNumber === newNumber) {
+      if (indexOfE !== -1 && indexOfE === newString.length - 2) {
+        return new AutomaticConversionWarning(newNumber)
+      } else {
+        return new CleanParse(newNumber)
+      }
+    } else {
+      return new NotAValidDollarAmountWarning(
+        newNumber > newCurrencyNumber
+          ? newCurrencyNumber
+          : oldNumber
+      )
+    }
+  }
+}
+
+Vue.component("price-input",{
+	props: {
+		value:{
+			type:Number,
+			default:0
+		},
+		suffix:{
+			type:String,
+			default:""
+		}
+	},
+	data:function(){
+		return {innerPrice:this.price}
+	},
+	template: '\
+		<span>\
+			<input\
+				ref="input"\
+				v-bind:value="value"\
+				v-on:input="updateValue($event.target.value)"\
+				v-on:focus="selectAll"\
+				v-on:blur="formatValue"/>\
+			{{suffix}}\
+		</span>\
+	',
+	mounted: function () {
+    this.formatValue()
+	},
+	methods: {
+		updateValue: function (value) {
+		  var result = currencyValidator.parse(value, this.value)
+		  if (result.warning) {
+		    this.$refs.input.value = result.value
+		  }
+		  this.$emit('input', result.value)
+		},
+		formatValue: function () {
+		  this.$refs.input.value = currencyValidator.format(this.value)
+		},
+		selectAll: function (event) {
+		  // Workaround for Safari bug
+		  // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+		  setTimeout(function () {
+		  	event.target.select()
+		  }, 0)
+		}
+	}
+});
+
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		price:10.00
+	},
+});
+</script>
+
+
+
+</body>
+</html>

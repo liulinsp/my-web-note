@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性[float]</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+	<div class="home"><a href="../../index.html">首页</a></div>
+<style type="text/css">
+	.float-parent{
+		width: 400px;
+		height: 300px;
+		background-color: #E6E6FA;
+	}
+	.float-parent>div{
+		width: 100px;
+		height: 100px;
+		background-color: #F5DCDC;
+	}
+
+	.float-left{
+		float: left;
+	}
+
+	.float-right{
+		float: right;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.float-parent{
+	width: 400px;
+	height: 300px;
+	background-color: #E6E6FA;
+}
+.float-parent>div{
+	width: 100px;
+	height: 100px;
+	background-color: #F5DCDC;
+}
+
+.float-left{
+	float: left;
+}
+
+.float-right{
+	float: right;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="float-parent">
+			<div class="float-left">float: left</div>
+			<div class="float-right">float: right</div>
+			如果float不是none，当display:inline-table时，display的计算值为table；当display:inline | inline-block | run-in | table-* 系时，display的计算值为block，其它情况为指定值；<p/>
+			float在绝对定位和display为none时不生效。<p/>
+			对应的脚本特性为styleFloat（IE）或cssFloat（非IE）。(注意这里为styleFloat或cssFloat，而不是float)<p/>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.float-none{
+		float: none;
+		display: inline-block;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.float-none{
+	float: none;
+	display: inline-block;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="float-parent">
+			<div class="float-none">float: none(默认)</div>
+			如果float不是none，当display:inline-table时，display的计算值为table；当display:inline | inline-block | run-in | table-* 系时，display的计算值为block，其它情况为指定值；<p/>
+			<div class="float-none">float: none(默认)</div>
+			float在绝对定位和display为none时不生效。<p/>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.parent{
+		width: 420px;
+		min-height: 220px;
+		background-color: #E6FAEE;
+		margin-bottom: 10px
+	}
+	.parent>div{
+		width: 100px;
+		height: 100px;
+		background-color: #F8FEC9;
+		border:solid #E2E9DE 1px;
+	}
+	.content{
+		display: inline-block;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.parent{
+	width: 420px;
+	height: 220px;
+	background-color: #E6FAEE;
+	margin-bottom: 10px
+}
+.parent>div{
+	width: 100px;
+	height: 100px;
+	background-color: #F8FEC9;
+	border:solid #E2E9DE 1px;
+}
+
+.float-left{
+	float: left;
+}
+.float-none{
+	float: none;
+	display: inline-block;
+}
+.content{
+	display: inline-block;
+}
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent">
+			<div class="float-none">float: none(默认)</div>
+			<div class="content">啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊啊啊啊</div>
+			哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈
+		</div>
+
+		<div class="parent">
+			<div class="float-left">float: left</div>
+			<div class="content">啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊啊啊啊</div>
+			哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	/*允许两边都可以有浮动对象*/
+	.clear-none{
+		clear:none;
+	}
+	/*不允许左边有浮动对象*/
+	.clear-left{
+		clear:left;
+	}
+
+	/*不允许右边有浮动对象*/
+	.clear-right{
+		clear:right;
+	}
+
+	/*不允许有浮动对象*/
+	.clear-both{
+		clear:both;
+	}
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+<mark>对于CSS的清除浮动(clear)，
+只能影响使用清除的元素本身，不能影响其他元素</mark>
+/*允许两边都可以有浮动对象*/
+.clear-none{
+	clear:none;
+}
+/*不允许左边有浮动对象*/
+.clear-left{
+	clear:left;
+}
+
+/*不允许右边有浮动对象*/
+.clear-right{
+	clear:right;
+}
+
+/*不允许有浮动对象*/
+.clear-both{
+	clear:both;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent clear-none">
+			<div class="float-left">float: left</div>
+			<div class="float-left clear-none">float:left; clear:none</div>
+			<div class="float-left">float: left</div>
+		</div>
+
+		<div class="parent">
+			<div class="float-left">float: left</div>
+			<div class="float-left clear-left">float:left; clear:left</div>
+			<div class="float-left">float: left</div>
+		</div>
+
+		<div class="parent">
+			<div class="float-right">float: right</div>
+			<div class="float-right clear-none">float:right; clear:none</div>
+			<div class="float-right">float: right</div>
+		</div>
+
+		<div class="parent">
+			<div class="float-right">float: right</div>
+			<div class="float-right clear-right">float:right; clear:right</div>
+			<div class="float-right">float: right</div>
+		</div>
+
+		<div class="parent">
+			<div class="float-left">1.float: left</div>
+			<div class="float-left">2.float: left</div>
+			<div class="float-right">3.float: right</div>
+			<div class="float-right">4.float: right</div>
+		</div>
+		
+		<div class="parent">
+			<div class="float-left">1.float: left</div>
+			<div class="float-left clear-both">2.float:left; clear:both</div>
+			<div class="float-right">3.float: right</div>
+			<div class="float-right clear-both">4.float:right; clear:both</div>
+		</div>
+	</div>
+</div>
+
+<style>
+.clearfix {
+  overflow: auto;
+}	
+</style>
+<div class="aTitle">浮动溢出</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+http://zh.learnlayout.com/clearfix.html
+上例最后一个浮动块太多导致溢出父div,
+这时父div需要加入新的样式：
+.clearfix {
+  overflow: auto;
+}
+如果你想要支持IE6，你就需要再加入如下样式：
+.clearfix {
+  overflow: auto;
+  zoom: 1;
+}
+
+&lt;div class="parent <mark>clearfix</mark>"&gt;
+	&lt;div class="float-left"&gt;1.&lt;/div&gt;
+	&lt;div class="float-left clear-both"&gt;2.&lt;/div&gt;
+	&lt;div class="float-right"&gt;3.&lt;/div&gt;
+	&lt;div class="float-right clear-both"&gt;4.&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent clearfix">
+			<div class="float-left">1.</div>
+			<div class="float-left clear-both">2.</div>
+			<div class="float-right">3.</div>
+			<div class="float-right clear-both">4.</div>
+		</div>
+	</div>
+</div>	
+
+
+</body>
+</html>

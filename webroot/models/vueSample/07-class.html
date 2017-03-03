@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue绑定HTML class</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style>
+.my-item{
+	width: 200px;
+	height: 50px;
+	margin: 10px;
+	border: 1px solid #f1f1f1;
+	box-sizing: border-box;
+}
+.active{
+	border: 2px solid #A3FEB0;
+}
+</style>
+<div class="aTitle">对象语法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.my-item{
+	width: 200px;
+	height: 50px;
+	margin: 10px;
+	border: 1px solid #f1f1f1;
+	box-sizing: border-box;
+}
+.active{
+	border: 2px solid #A3FEB0;
+}
+
+<b>页面：</b>
+&lt;div id="app1"&gt;
+    &lt;div :class="singleClassObj"&gt;单独对象&lt;/div&gt;
+
+    列表：
+	&lt;div class="my-item" v-for="(item,index) in items" 
+	     v-bind:class="{active: item.isActive}"&gt;列表：{{index}}&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		singleClassObj:{
+			"my-item":true,
+			active:true
+		},
+		items:[{isActive:false},{isActive:true},{isActive:false}]
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app1">
+		    <div :class="singleClassObj">单独对象</div>
+		    列表：
+			<div class="my-item" v-for="(item,index) in items" 
+			     v-bind:class="{active: item.isActive}">列表：{{index}}</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		singleClassObj:{
+			"my-item":true,
+			active:true
+		},
+		items:[{isActive:false},{isActive:true},{isActive:false}]
+	}
+});
+</script>
+
+
+<div class="aTitle">数组语法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.my-item{
+	width: 200px;
+	height: 50px;
+	margin: 10px;
+	border: 1px solid #f1f1f1;
+	box-sizing: border-box;
+}
+.active{
+	border: 2px solid #A3FEB0;
+}
+
+<b>页面：</b>
+&lt;div id="app2"&gt;
+    &lt;div :class="classArray"&gt;&lt;/div&gt;
+    &lt;div :class="[baseClass,actClass]"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		classArray:['my-item','active'],
+		
+		baseClass:'my-item',
+		actClass:'active'
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app2">
+			<div :class="classArray"></div>
+		    <div :class="[baseClass,actClass]"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		classArray:['my-item','active'],
+		
+		baseClass:'my-item',
+		actClass:'active'
+	}
+});
+</script>
+</body>
+</html>

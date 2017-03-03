@@ -1,0 +1,322 @@
+.paginationjs {
+	box-sizing: initial;
+	font-size: 14px;
+	font-family: Marmelad,Lucida Grande,Arial,Hiragino Sans GB,Georgia,sans-serif;
+	line-height: 1.6
+}
+
+.paginationjs:after {
+	clear: both;
+	display: table;
+	content: " "
+}
+
+.paginationjs .paginationjs-pages {
+	float: left
+}
+
+.paginationjs .paginationjs-pages ul {
+	float: left;
+	margin: 0;
+	padding: 0
+}
+
+.paginationjs .paginationjs-go-button,.paginationjs .paginationjs-go-input,.paginationjs .paginationjs-nav {
+	float: left;
+	margin-left: 10px;
+	font-size: 14px
+}
+
+.paginationjs .paginationjs-pages li {
+	float: left;
+	margin-right: 10px;
+	list-style: none;
+	border-radius: 4px;
+}
+
+.paginationjs .paginationjs-pages li a {
+	display: block;
+	height: 28px;
+	/* min-width: 30px; */
+	width: 30px;
+	border: 1px solid #ddd;
+	color: #333;
+	text-align: center;
+	text-decoration: none;
+	font-size: 14px;
+	line-height: 28px;
+	border-radius: 3px;
+	
+}
+
+
+
+.paginationjs .paginationjs-pages li a:hover {
+	/* background: #eee */
+}
+
+.paginationjs .paginationjs-pages li.active {
+	border: none
+}
+.paginationjs .paginationjs-prev a{
+	background:#f6f6f6 url('../../../imgs/icons/arrow_l.png') no-repeat 24px center;
+	background:#f6f6f6 url('../../../imgs/icons/arrow_l.png') no-repeat center center\9;
+}
+.paginationjs .paginationjs-prev a:hover{
+	background:#f6f6f6 url('../../../imgs/icons/arrow_cur_l.png') no-repeat 24px center;
+	background:#f6f6f6 url('../../../imgs/icons/arrow_cur_l.png') no-repeat center center\9;
+}
+.paginationjs .paginationjs-next a{
+	background:#f6f6f6 url('../../../imgs/icons/arrow_r.png') no-repeat center center;
+}
+.paginationjs .paginationjs-next a:hover{
+	background:#f6f6f6 url('../../../imgs/icons/arrow_cur_r.png') no-repeat center center;
+}
+.paginationjs .paginationjs-pages li.paginationjs-prev,.paginationjs .paginationjs-pages li.paginationjs-next{
+	width: 58px;height: 32px\9;
+}
+.paginationjs .paginationjs-pages li.paginationjs-prev a,.paginationjs .paginationjs-pages li.paginationjs-next a{
+	width: 58px;height: 32px\9;
+}
+.paginationjs .paginationjs-pages li.active a {
+	height: 28px;
+	background: #aaa;
+	color: #fff;
+	line-height: 30px
+}
+
+.paginationjs .paginationjs-pages li.disabled a {
+	/* opacity: .3; */
+}
+
+.paginationjs .paginationjs-pages li.disabled a:hover {
+	/* background: 0 0 */
+}
+
+
+
+.paginationjs .paginationjs-go-input input[type=text] {
+	box-sizing: initial;
+	padding: 0;
+	width: 30px;
+	height: 28px;
+	
+}
+
+.paginationjs .paginationjs-go-button input[type=button],.paginationjs .paginationjs-go-input input[type=text] {
+	outline: 0;
+	/* border: 1px solid #ddd; */
+	background: #fff;
+	box-shadow: none;
+	vertical-align: baseline;
+	text-align: center;
+	font-size: 14px;
+
+}
+
+.paginationjs .paginationjs-go-button input[type=button] {
+	padding: 0 8px;
+	height: 30px;
+	min-width: 40px;
+	color: #333;
+	vertical-align: middle\9;
+	line-height: 28px;
+	cursor: pointer
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-go-input input[type=text],.paginationjs.paginationjs-theme-blue .paginationjs-pages li {
+	border-color: #ddd;
+}
+
+.paginationjs .paginationjs-go-button input[type=button]:hover {
+	background-color: #f8f8f8
+}
+
+.paginationjs .paginationjs-nav {
+	height: 30px;
+	line-height: 30px
+}
+
+.paginationjs .paginationjs-go-button,.paginationjs .paginationjs-go-input {
+	margin-left: 5px\9
+}
+
+.paginationjs.paginationjs-small {
+	font-size: 9pt
+}
+
+.paginationjs.paginationjs-small .paginationjs-pages li a {
+	height: 24px;
+	min-width: 26px;
+	font-size: 9pt;
+	line-height: 24px
+}
+
+.paginationjs.paginationjs-small .paginationjs-pages li.active a {
+	height: 26px;
+	line-height: 26px
+}
+
+.paginationjs.paginationjs-small .paginationjs-go-input {
+	font-size: 9pt
+}
+
+.paginationjs.paginationjs-small .paginationjs-go-input input[type=text] {
+	width: 26px;
+	height: 24px;
+	font-size: 9pt
+}
+
+.paginationjs.paginationjs-small .paginationjs-go-button {
+	font-size: 9pt
+}
+
+.paginationjs.paginationjs-small .paginationjs-go-button input[type=button] {
+	padding: 0 6px;
+	height: 26px;
+	min-width: 30px;
+	font-size: 9pt;
+	line-height: 24px
+}
+
+.paginationjs.paginationjs-small .paginationjs-nav {
+	height: 26px;
+	font-size: 9pt;
+	line-height: 26px
+}
+
+.paginationjs.paginationjs-big {
+	font-size: 1pc
+}
+
+.paginationjs.paginationjs-big .paginationjs-pages li a {
+	height: 34px;
+	min-width: 36px;
+	font-size: 1pc;
+	line-height: 34px
+}
+
+.paginationjs.paginationjs-big .paginationjs-pages li.active a {
+	height: 36px;
+	line-height: 36px
+}
+
+.paginationjs.paginationjs-big .paginationjs-go-input {
+	font-size: 1pc
+}
+
+.paginationjs.paginationjs-big .paginationjs-go-input input[type=text] {
+	width: 36px;
+	height: 34px;
+	font-size: 1pc
+}
+
+.paginationjs.paginationjs-big .paginationjs-go-button {
+	font-size: 1pc
+}
+
+.paginationjs.paginationjs-big .paginationjs-go-button input[type=button] {
+	padding: 0 9pt;
+	height: 36px;
+	min-width: 50px;
+	font-size: 1pc;
+	line-height: 34px
+}
+
+.paginationjs.paginationjs-big .paginationjs-nav {
+	height: 36px;
+	font-size: 1pc;
+	line-height: 36px
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li a {
+	color: #556270;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li a:hover {
+	/* background: #e9f4fc */
+}
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li{
+	background: #f6f6f6;
+}
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li.active a {
+	background: #f6f6f6;
+	color: #007aff
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li.disabled a:hover {
+	/* background: 0 0 */
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-go-button input[type=button] {
+	border-color: #289de9;
+	background: #289de9;
+	color: #fff
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-go-button input[type=button]:hover {
+	background-color: #3ca5ea
+}
+
+
+
+.paginationjs .paginationjs-pages li.paginationjs-next {
+	/* border-right: 1px solid\9 */
+}
+
+.paginationjs .paginationjs-go-input input[type=text] {
+	vertical-align: middle\9;
+	line-height: 28px\9
+}
+
+.paginationjs.paginationjs-big .paginationjs-pages li a {
+	line-height: 36px\9
+}
+
+.paginationjs.paginationjs-big .paginationjs-go-input input[type=text] {
+	height: 36px\9;
+	line-height: 36px\9
+}
+
+
+#wrapper{
+    width: 100%;
+    margin: 20px 0;
+    text-align: center;
+
+    width: 796px\9;
+   margin-left: 100px\9;
+}
+.data-container{
+    margin-top: 5px;
+}
+.data-container li{
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    background: #66677c;
+    color: #fff;
+}
+#wrapper .section{
+	float: left\9;
+}
+#wrapper .rightPage{
+	float: right:\9;
+	line-height: 28px;
+}
+#wrapper .section, #wrapper .rightPage{display: inline-block;margin-top: 0;vertical-align: top; }
+#wrapper .rightPage{
+	padding-left: 20px;
+	font-size: 14px;
+	color: #5f6c79;
+}
+#wrapper .rightPage span,#wrapper .rightPage em{
+	display: inline-block;
+	vertical-align: top;
+}
+#wrapper .rightPage input{
+	border: 1px solid #ddd;
+	height: 28px;
+	width: 30px;
+	text-align: center;
+	border-radius: 3px;
+}

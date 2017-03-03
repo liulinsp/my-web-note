@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>toggleClass</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+  .selected{
+    background-color: #DAF9E4;
+  }
+
+  .cursor{
+    cursor: pointer;
+  }
+</style>
+<div class="aTitle">.toggleClass( className )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.toggleClass( className )</b>
+className 类型: String
+在匹配的元素集合中的每个元素上用来切换的一个或多个（用空格隔开）样式类名。
+
+<b>样式:</b>
+.selected{
+  background-color: #DAF9E4;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+<b>脚本:</b>
+$("#showResult1>span").click(function(){
+    $(this).toggleClass("selected cursor");
+});
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1">
+    <span>点我</span></br>
+  </div>
+</div>
+<script type="text/javascript">
+$("#showResult1>span").click(function(){
+    $(this).toggleClass("selected cursor");
+});
+</script>
+
+
+
+<div class="aTitle">.toggleClass( className, switch )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.toggleClass( className, switch )</b>
+className
+类型: String
+在匹配的元素集合中的每个元素上用来切换的一个或多个（用空格隔开）样式类名。
+switch
+类型: Boolean
+一个布尔值，用于判断样式是否应该被添加或移除。
+
+//添加生效按钮事件
+$("#addclassBtn").click(function(){
+  $("#showResult2>span").toggleClass("selected cursor",true);
+});
+
+//添加失效按钮事件
+$("#delclassBtn").click(function(){
+  $("#showResult2>span").toggleClass("selected cursor",false);
+});
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult2">
+    <span>点我</span></br>
+    <button id="addclassBtn">生效</button>
+    <button id="delclassBtn">失效</button>
+  </div>
+</div>
+<script type="text/javascript">
+$("#addclassBtn").click(function(){
+  $("#showResult2>span").toggleClass("selected cursor",true);
+});
+
+$("#delclassBtn").click(function(){
+  $("#showResult2>span").toggleClass("selected cursor",false);
+});
+</script>
+
+
+<style type="text/css">
+  .selected1{
+    background-color: #F9DAF3;
+  }
+
+  .selected2{
+    border: 1px #966ECE solid;
+  }
+
+</style>
+<div class="aTitle">.toggleClass( function(index, class, switch) [, switch ] )</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>.toggleClass( function(index, class, switch) [, switch ] )</b>
+function(index, class, switch) 类型: Function()
+用来返回在匹配的元素集合中的每个元素上用来切换的样式类名的一个函数。
+接收元素的索引位置和元素旧的样式类作为参数。
+switch 类型: Boolean
+一个用来判断样式类添加还是移除的 布尔值。
+
+<b>样式：</b>
+.selected1{
+  background-color: #F9DAF3;
+}
+
+.selected2{
+  border: 1px #966ECE solid;
+}
+
+<b>脚本：</b>
+$("#showResult3>#addclassBtn").click(function(){
+  $("#showResult3>span").toggleClass(switchClassFun,true);
+});
+
+$("#showResult3>#delclassBtn").click(function(){
+  $("#showResult3>span").toggleClass(switchClassFun,false);
+});
+
+function switchClassFun(i, cl, sw){
+  if(sw){
+    if(cl.indexOf("selected1")>=0){
+      return "selected1 selected2";
+    }else{
+      return "selected1";
+    }
+  }else{
+    if(cl.indexOf("selected1")>=0){
+      return "selected1";
+    }else{
+      return "selected1 selected2";
+    }
+  }
+  // console.log("index=",i);
+  // console.log("class=",cl);
+  // console.log("switch=",sw);
+}
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult3">
+    <span>点我</span></br>
+    <button id="addclassBtn">生效</button>第一次点击加底色，第二次点击加边框</br>
+    <button id="delclassBtn">失效</button>第一次点击去底色，第二次点击去边框</br>
+  </div>
+</div>
+<script type="text/javascript">
+$("#showResult3>#addclassBtn").click(function(){
+  $("#showResult3>span").toggleClass(switchClassFun,true);
+});
+
+$("#showResult3>#delclassBtn").click(function(){
+  $("#showResult3>span").toggleClass(switchClassFun,false);
+});
+
+function switchClassFun(i, cl, sw){
+  if(sw){
+    if(cl.indexOf("selected1")>=0){
+      return "selected1 selected2";
+    }else{
+      return "selected1";
+    }
+  }else{
+    if(cl.indexOf("selected1")>=0){
+      return "selected1";
+    }else{
+      return "selected1 selected2";
+    }
+  }
+  // console.log("index=",i);
+  // console.log("class=",cl);
+  // console.log("switch=",sw);
+}
+</script>
+</body>
+</html>

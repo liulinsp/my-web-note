@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>逻辑与和逻辑或</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">逻辑与&&</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 两个操作数都是布尔值时：
+   只有两个值都为true才返回true,
+   其他情况返回false.
+2. 有一个操作数不是布尔值时（此逻辑对第一条同样适用）：
+   如果第一个操作数转换为布尔值后的结果为false,
+   返回第一个操作数，
+   否则返回第二个操作数
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+$('<p>true&&{name:"222"} --> '
+	+JSON.stringify(true&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>false&&{name:"222"} --> '
+	+JSON.stringify(false&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>new Boolean(false)&&{name:"222"} --> '
+	+JSON.stringify(new Boolean(false)&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>1&&{name:"222"} --> '
+	+JSON.stringify(1&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>123&&{name:"222"} --> '
+	+JSON.stringify(123&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>0&&{name:"222"} --> '
+	+JSON.stringify(0&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>(0/0)&&{name:"222"} --> '
+	+((0/0)&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>"a"&&{name:"222"} --> '
+	+JSON.stringify("a"&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>""&&{name:"222"} --> '
+	+JSON.stringify(""&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>{name:"111"}&&{name:"222"} --> '
+	+JSON.stringify({name:"111"}&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>null&&{name:"222"} --> '
+	+(null&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+
+$('<p>undefined&&{name:"222"} --> '
+	+(undefined&&{name:"222"})+'</p>')
+	.appendTo($("#showResult1"));
+</script>
+
+<div class="aTitle">逻辑或||</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 两个操作数都是布尔值时：
+   只有两个值都为false才返回false,
+   其他情况返回true.
+2. 有一个操作数不是布尔值时（此逻辑对第一条同样适用）：
+   如果第一个操作数转换为布尔值后的结果为true,
+   返回第一个操作数，
+   否则返回第二个操作数
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+
+<script type="text/javascript">
+$('<p>{name:"111"}||{name:"222"} --> '
+	+JSON.stringify({name:"111"}||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>true||{name:"222"} --> '
+	+(true||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>false||{name:"222"} --> '
+	+JSON.stringify(false||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>new Boolean(false)||{name:"222"} --> '
+	+JSON.stringify(new Boolean(false)||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>123||{name:"222"} --> '
+	+(123||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>0||{name:"222"} --> '
+	+JSON.stringify(0||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>(0/0)||{name:"222"} --> '
+	+JSON.stringify((0/0)||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>"a"||{name:"222"} --> '
+	+("a"||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>""||{name:"222"} --> '
+	+JSON.stringify(""||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>null||{name:"222"} --> '
+	+JSON.stringify(null||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+
+$('<p>undefined||{name:"222"} --> '
+	+JSON.stringify(undefined||{name:"222"})+'</p>')
+	.appendTo($("#showResult2"));
+</script>
+
+
+<div class="aTitle">逻辑与&&应用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+判断对象是否存在，如果存在再执行某些操作：
+var myConsole = {
+	log:function(msg){
+		$('<p>'+msg+'</p>').appendTo($("#showResult5"));
+	}
+}
+window.myConsole&&myConsole.log("myConsole存在");
+window.noConsole&&noConsole.log("noConsole不存在");
+//直接用noConsole会报错，Uncaught ReferenceError: noConsole is not defined
+//noConsole.log("noConsole不存在");
+
+最常用的是IE8中没有window.console对象，为避免报错：
+window.console&&console.log("test");
+		</pre>
+	</div>
+	<div class="aShow" id="showResult5">
+	</div>
+</div>
+<script type="text/javascript">
+var myConsole = {
+	log:function(msg){
+		$('<p>'+msg+'</p>').appendTo($("#showResult5"));
+	}
+}
+window.myConsole&&myConsole.log("myConsole存在");
+window.noConsole&&noConsole.log("noConsole不存在");
+//直接用noConsole会报错，Uncaught ReferenceError: noConsole is not defined
+//noConsole.log("noConsole不存在");
+</script>
+
+<div class="aTitle">逻辑或||应用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+自定义的配置与默认配置合并：
+    1. 默认提示信息defaultMsg="保存失败！";
+    2. 如果参数传了自定义的提示信息msg="用户信息保存失败！"，
+       则显示自定义的提示信息;
+    3. 否则显示默认提示信息。
+
+var defaultMsg="保存失败！";
+
+function showMsg(msg){
+	var message = <mark>msg||defaultMsg</mark>;
+	$('&lt;p&gt;'+message+'&lt;/p&gt;').appendTo($("#showResult3"));
+}
+
+showMsg();
+showMsg("用户信息保存失败！");
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+	</div>
+</div>
+
+<script type="text/javascript">
+var defaultMsg="保存失败！";
+
+function showMsg(msg){
+	var message = msg||defaultMsg;
+	$('<p>'+message+'</p>').appendTo($("#showResult3"));
+}
+
+showMsg();
+showMsg("用户信息保存失败！");
+</script>
+
+
+<div class="aTitle">综合应用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+等级划分：
+根据学生考试分数划分等级
+1. >=90 , A级
+2. >=80 并且 < 90, B级
+3. >=70 并且 < 80, C级
+4. >=60 并且 < 70, D级
+4. < 60 , E级
+
+function getLevel(score){
+	if(isNaN(score)){
+		return "";
+	}
+	return (score>=90&&"A")||(score>=80&&"B")||
+		   (score>=70&&"C")||(score>=60&&"D")||"E";
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult4">
+	</div>
+</div>
+
+<script type="text/javascript">
+function getLevel(score){
+	if(isNaN(score)){
+		return "";
+	}
+	return (score>=90&&"A")||(score>=80&&"B")||
+		   (score>=70&&"C")||(score>=60&&"D")||"E";
+}
+
+$('<p>getLevel(100) --> '+getLevel(100)+'</p>').appendTo($("#showResult4"));
+$('<p>getLevel("97") --> '+getLevel("97")+'</p>').appendTo($("#showResult4"));
+$('<p>getLevel(87) --> '+getLevel(87)+'</p>').appendTo($("#showResult4"));
+$('<p>getLevel(70) --> '+getLevel(70)+'</p>').appendTo($("#showResult4"));
+$('<p>getLevel(61) --> '+getLevel(61)+'</p>').appendTo($("#showResult4"));
+$('<p>getLevel(48) --> '+getLevel(48)+'</p>').appendTo($("#showResult4"));
+$('<p>getLevel("48") --> '+getLevel("48")+'</p>').appendTo($("#showResult4"));
+$('<p>getLevel("a") --> '+getLevel("a")+'</p>').appendTo($("#showResult4"));
+
+</script>
+</body>
+</html>

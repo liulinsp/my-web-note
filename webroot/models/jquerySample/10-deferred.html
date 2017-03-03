@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery延迟对象</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">deferred.done() 和 deferred.fail()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+$.ajax()如果高于1.5.0版本，返回的是deferred对象，可以进行链式操作。
+done()相当于success方法，fail()相当于error方法
+
+<b>ajax脚本：</b>
+$.ajax("test.json")
+  .done(function(data){
+    $("&lt;div&gt;done&lt;/div&gt;").appendTo('#showResult1')
+    console.log("done --&gt;",data);
+  })
+  .fail(function(data){
+      $("&lt;div&gt;fail&lt;/div&gt;").appendTo('#showResult1')
+    console.log("fail --&gt;",data);
+  });
+<b>ajax fail 日志：</b>
+Object {readyState: 4, responseText: "", status: 404, statusText: "error"}
+
+<b>自定义延迟脚本：</b>
+function doSomething(){
+  $("&lt;div&gt;doSomething&lt;/div&gt;").appendTo('#showResult1');
+  var def = $.Deferred();
+  var num = Math.floor(Math.random()*10);
+  if((num%2)===0){//如果是偶数，执行成功
+    def.resolve(num);
+  }else{//如果是偶数，执行失败
+    def.reject(num);
+  }
+  return def;
+}
+
+doSomething()
+  .done(function(value){
+    $("&lt;div&gt;doSomething [done] value="+value+"&lt;/div&gt;").appendTo('#showResult1');
+  })
+  .fail(function(value){
+    $("&lt;div&gt;doSomething [fail] value="+value+"&lt;/div&gt;").appendTo('#showResult1');
+  });
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult1">
+  </div>
+</div>
+<script type="text/javascript">
+$(function($){
+  $.ajax("test.json")
+    .done(function(data){
+      $("<div>ajax done</div>").appendTo('#showResult1');
+      console.log("done -->",data);
+    })
+    .fail(function(data){
+        $("<div>ajax fail</div>").appendTo('#showResult1');
+      console.log("fail -->",data);
+    });
+
+
+  function doSomething(){
+    $("<div>doSomething</div>").appendTo('#showResult1');
+    var def = $.Deferred();
+    var num = Math.floor(Math.random()*10);
+    if((num%2)===0){//如果是偶数，执行成功
+      def.resolve(num);
+    }else{//如果是偶数，执行失败
+      def.reject(num);
+    }
+    return def;
+  }
+
+  doSomething()
+    .done(function(value){
+      $("<div>doSomething [done] value="+value+"</div>").appendTo('#showResult1');
+    })
+    .fail(function(value){
+      $("<div>doSomething [fail] value="+value+"</div>").appendTo('#showResult1');
+    });
+});
+</script>
+
+<div class="aTitle">deferred.always()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>deferred.always( alwaysCallbacks [, alwaysCallbacks ] )</b>
+alwaysCallbacks
+类型: Function()
+一个函数，或者函数数组，当Deferred（延迟）对象得到解决或拒绝时被调用。
+
+<b>脚本：</b>
+function doSomething(){
+    $("&lt;div&gt;doSomething&lt;/div&gt;").appendTo('#showResult2');
+    var def = $.Deferred();
+    var num = Math.floor(Math.random()*10);
+    if((num%2)===0){//如果是偶数，执行成功
+      def.resolve("resolve",num);
+    }else{//如果是偶数，执行失败
+      def.reject("reject",num);
+    }
+    return def;
+  }
+
+  doSomething()
+    .done(function(result,value){
+      $("&lt;div&gt;doSomething [done] result="+result+",value="+value+"&lt;/div&gt;")
+        .appendTo('#showResult2');
+    })
+    .fail(function(result,value){
+      $("&lt;div&gt;doSomething [fail] result="+result+",value="+value+"&lt;/div&gt;")
+        .appendTo('#showResult2');
+    })
+    <mark>.always</mark>(function(result,value){
+      $("&lt;div&gt;doSomething [always] result="+result+",value="+value+"&lt;/div&gt;")
+        .appendTo('#showResult2');
+    });
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult2">
+  </div>
+</div>
+<script type="text/javascript">
+$(function($){
+  function doSomething(){
+    $("<div>doSomething</div>").appendTo('#showResult2');
+    var def = $.Deferred();
+    var num = Math.floor(Math.random()*10);
+    if((num%2)===0){//如果是偶数，执行成功
+      def.resolve("resolve",num);
+    }else{//如果是偶数，执行失败
+      def.reject("reject",num);
+    }
+    return def;
+  }
+
+  doSomething()
+    .done(function(result,value){
+      $("<div>doSomething [done] result="+result+",value="+value+"</div>").appendTo('#showResult2');
+    })
+    .fail(function(result,value){
+      $("<div>doSomething [fail] result="+result+",value="+value+"</div>").appendTo('#showResult2');
+    })
+    .always(function(result,value){
+      $("<div>doSomething [always] result="+result+",value="+value+"</div>").appendTo('#showResult2');
+    });
+});
+</script>
+
+
+<div class="aTitle">deferred.state()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>deferred.state()</b>
+方法返回一个字符串，代表Deferred（延迟）对象的当前状态。Deferred对象可以在三种状态之一：
+
+"<b>pending</b>": Deferred对象是尚未完成状态 (不是 "rejected" 或 "resolved").
+"<b>resolved</b>": Deferred对象是在解决状态，这意味着，deferred.resolve() 
+或者 deferred.resolveWith()被对象访问和doneCallbacks被访问（或在被调用的过程中） 。
+"<b>rejected</b>": Deferred对象是在被拒绝的状态，这意味着，deferred.reject() 或者
+ deferred.rejectWith() 被对象访问和failCallbacks被访问（或在被调用的过程中） 。
+这种方法主要是有用的调试，例如，在准备拒绝（reject）一个延迟对象前，
+判断它是否已经处于 resolved 状态。
+<b>脚本：</b>
+function doSomething(){
+  $("&lt;div&gt;doSomething&lt;/div&gt;").appendTo('#showResult3');
+  var def = $.Deferred();
+  $("&lt;div&gt;doSomething def.state()="+<mark>def.state()</mark>+"&lt;/div&gt;")
+    .appendTo('#showResult3');
+  var num = Math.floor(Math.random()*10);
+  if((num%2)===0){//如果是偶数，执行成功
+    def.resolve(num);
+  }else{//如果是偶数，执行失败
+    def.reject(num);
+  }
+  return def;
+}
+
+doSomething()
+  .always(function(value){
+    $("&lt;div&gt;doSomething [always] this.state()="+<mark>this.state()</mark>+
+      ",value="+value+"&lt;/div&gt;").appendTo('#showResult3');
+  });
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult3">
+  </div>
+</div>
+<script type="text/javascript">
+$(function($){
+  function doSomething(){
+    $("<div>doSomething</div>").appendTo('#showResult3');
+    var def = $.Deferred();
+    $("<div>doSomething def.state()="+def.state()+"</div>").appendTo('#showResult3');
+    var num = Math.floor(Math.random()*10);
+    if((num%2)===0){//如果是偶数，执行成功
+      def.resolve(num);
+    }else{//如果是偶数，执行失败
+      def.reject(num);
+    }
+    return def;
+  }
+
+  doSomething()
+    .always(function(value){
+      $("<div>doSomething [always] this.state()="+this.state()+
+        ",value="+value+"</div>").appendTo('#showResult3');
+    });
+});
+</script>
+
+
+<div class="aTitle">deferred.notify()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult5">
+  </div>
+</div>
+<script type="text/javascript">
+$(function($){
+  function doSomething(){
+    $("<div>doSomething</div>").appendTo('#showResult5');
+    var def = $.Deferred();
+    var num = Math.floor(Math.random()*10);
+    def.notify(0.5);
+    if((num%2)===0){//如果是偶数，执行成功
+      def.resolve(num);
+    }else{//如果是偶数，执行失败
+      def.reject(num);
+    }
+    return def;
+  }
+
+  doSomething()
+    .progress(function(value){
+      $("<div>doSomething [progress] value="+value+"</div>").appendTo("#showResult5");
+    });
+});
+</script>
+
+<div class="aTitle">deferred.then()</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>deferred.then( doneFilter [, failFilter ] [, progressFilter ] )</b>
+doneFilter
+类型: Function()
+当Deferred（延迟）对象得到解决时被调用的一个函数。
+failFilter
+类型: Function()
+[可选]当Deferred（延迟）对象拒绝时被调用的一个函数。
+progressFilter
+类型: Function()
+[可选]当Deferred（延迟）对象生成进度通知时被调用的一个函数。
+
+function doSomething(){
+  $("&lt;div&gt;doSomething&lt;/div&gt;").appendTo('#showResult4');
+  var def = $.Deferred();
+  var num = Math.floor(Math.random()*10);
+  if((num%2)===0){//如果是偶数，执行成功
+    def.resolve(num);
+  }else{//如果是偶数，执行失败
+    def.reject(num);
+  }
+  return def;
+}
+
+doSomething()
+  .then(function(value){
+    console.log("done",this);
+    $("&lt;div&gt;doSomething [done] value="+value+"&lt;/div&gt;").appendTo("#showResult4");
+  },function(value){
+    console.log("fail",this);
+    $("&lt;div&gt;doSomething [fail] value="+value+"&lt;/div&gt;").appendTo("#showResult4");
+  });
+
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult4">
+  </div>
+</div>
+<script type="text/javascript">
+$(function($){
+  function doSomething(){
+    $("<div>doSomething</div>").appendTo('#showResult4');
+    var def = $.Deferred();
+    var num = Math.floor(Math.random()*10);
+    if((num%2)===0){//如果是偶数，执行成功
+      def.resolve(num);
+    }else{//如果是偶数，执行失败
+      def.reject(num);
+    }
+    return def;
+  }
+
+  doSomething()
+    .then(function(value){
+      $("<div>doSomething [done] value="+value+"</div>").appendTo("#showResult4");
+    },function(value){
+      $("<div>doSomething [fail] value="+value+"</div>").appendTo("#showResult4");
+    },function(value){
+      $("<div>doSomething [progress] value="+value+"</div>").appendTo("#showResult4");
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>提示框</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style>
+.tip-container{
+	position: relative;
+	width: 20em;
+}
+.tip{
+	padding: .5em;
+	margin-top: .3em;
+	border: 1px solid #E2D0D0;
+	background-color: #FBE2E2;
+	box-shadow: 0 .05em .1em rgba(0,0,0,.5);
+	line-height: 1.5
+}
+.tip::before{
+	content: "";
+	position: absolute;
+	top: -.36em; left: 1em;
+	padding: .35em;
+	background: inherit;
+	border: inherit;
+	border-right: 0;
+	border-bottom: 0;
+	transform: rotate(45deg);
+}
+</style>
+
+
+<div class="aTitle">提示框样式</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.tip-container{
+	position: relative;
+	width: 20em;
+}
+.tip{
+	padding: .5em;
+	margin-top: .3em;
+	border: 1px solid #E2D0D0;
+	background-color: #FBE2E2;
+	box-shadow: 0 .05em .1em rgba(0,0,0,.5);
+	line-height: 1.5
+}
+.tip::before{
+	content: "";
+	position: absolute;
+	top: -.36em; left: 1em;
+	padding: .35em;
+	background: inherit;
+	border: inherit;
+	border-right: 0;
+	border-bottom: 0;
+	transform: rotate(45deg);
+}
+
+<b>页面：</b>
+&lt;div&gt;姓名：&lt;/div&gt;
+&lt;input type="text"&gt;
+&lt;div class="tip-container"&gt;
+	&lt;div class="tip"&gt;可以输入汉字、字母、中间点，不可以输入数字及其他字符&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div>姓名：</div>
+		<input type="text">
+		<div class="tip-container">
+			<div class="tip">可以输入汉字、字母、中间点，不可以输入数字及其他字符</div>
+		</div>
+		
+	</div>
+</div>
+
+
+</body>
+</html>

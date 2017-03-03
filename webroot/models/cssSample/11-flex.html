@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>布局相关属性[flex]</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+.container{
+	display: flex;
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+	margin: 5px;
+}
+.row{
+	flex-direction: row;
+}
+.clo{
+	flex-direction: column;
+}
+.container>div{
+	display: inline-block;
+	min-width: 50px;
+	min-height: 50px;
+	background-color: #F99ECA;
+	margin: 2px;
+}
+</style>
+<div class="aTitle">布局方向</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+参考资料：https://www.w3.org/TR/css-flexbox/
+<b>样式：</b>
+.container{
+	display: flex;
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+	margin: 5px;
+}
+.row{
+	<mark>flex-direction: row;</mark>
+}
+.clo{
+	<mark>flex-direction: column;</mark>
+}
+.container>div{
+	display: inline-block;
+	min-width: 50px;
+	min-height: 50px;
+	background-color: #F99ECA;
+	margin: 2px;
+}
+
+<b>页面：</b>
+&lt;div class="container <mark>row</mark>"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="container <mark>clo</mark>"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="container row">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<div class="container clo">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+</div>
+
+
+<style>
+.lable{
+	padding: 15px 5px 0px 5px;
+}
+/*居中*/
+.x-center{
+	justify-content: center;
+}
+/*左对齐*/
+.x-left{
+	justify-content: flex-start;
+}
+/*右对齐*/
+.x-right{
+	justify-content: flex-end;
+}
+/*分散对齐*/
+.x-between{
+	justify-content: space-between;
+}
+/*两端也留空白的分散对齐*/
+.x-around{
+	justify-content: space-around;
+}
+</style>
+<div class="aTitle">justify-content对齐</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+/*居中*/
+.x-center{
+	justify-content: center;
+}
+/*左对齐*/
+.x-left{
+	justify-content: flex-start;
+}
+/*右对齐*/
+.x-right{
+	justify-content: flex-end;
+}
+/*分散对齐*/
+.x-between{
+	justify-content: space-between;
+}
+/*两端也留空白的分散对齐*/
+.x-around{
+	justify-content: space-around;
+}
+
+<b>页面：</b>
+&lt;div class="lable"&gt;居中：&lt;/div&gt;
+&lt;div class="container x-center"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="lable"&gt;左对齐：&lt;/div&gt;
+&lt;div class="container x-left"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="lable"&gt;右对齐：&lt;/div&gt;
+&lt;div class="container x-right"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="lable"&gt;分散对齐：&lt;/div&gt;
+&lt;div class="container x-between"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="lable"&gt;两端也留空白的分散对齐：&lt;/div&gt;
+&lt;div class="container x-around"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="lable">居中：</div>
+		<div class="container x-center">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="lable">左对齐：</div>
+		<div class="container x-left">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="lable">右对齐：</div>
+		<div class="container x-right">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="lable">分散对齐：</div>
+		<div class="container x-between">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		
+		<div class="lable">两端也留空白的分散对齐：</div>
+		<div class="container x-around">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+</div>
+
+
+
+<style>
+/*拉伸*/
+.y-stretch{
+	align-items: stretch;
+}
+/*居中*/
+.y-center{
+	align-items: center;
+}
+/*上对齐*/
+.y-top{
+	align-items: flex-start;
+}
+/*下对齐*/
+.y-bottom{
+	align-items: flex-end;
+}
+</style>
+<div class="aTitle">align-items对齐</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+/*拉伸*/
+.y-stretch{
+	align-items: stretch;
+}
+/*居中*/
+.y-center{
+	align-items: center;
+}
+/*上对齐*/
+.y-top{
+	align-items: flex-start;
+}
+/*下对齐*/
+.y-bottom{
+	align-items: flex-end;
+}
+
+<b>页面：</b>
+		&lt;div class="lable"&gt;拉伸(默认)：&lt;/div&gt;
+		&lt;div class="container y-stretch"&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+		&lt;/div&gt;
+
+		&lt;div class="lable"&gt;居中：&lt;/div&gt;
+		&lt;div class="container y-center"&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+		&lt;/div&gt;
+
+		&lt;div class="lable"&gt;上对齐：&lt;/div&gt;
+		&lt;div class="container y-top"&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+		&lt;/div&gt;
+
+		&lt;div class="lable"&gt;下对齐：&lt;/div&gt;
+		&lt;div class="container y-bottom"&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+			&lt;div&gt;&lt;/div&gt;
+		&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="lable">拉伸(默认)：</div>
+		<div class="container y-stretch">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="lable">居中：</div>
+		<div class="container y-center">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="lable">上对齐：</div>
+		<div class="container y-top">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="lable">下对齐：</div>
+		<div class="container y-bottom">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>		
+	</div>
+</div>
+
+
+<style>
+.box_container{
+	display: flex;
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+	margin: 5px;
+}
+.box_container>div{
+	background-color: #F99ECA;
+	margin: 2px;
+}
+</style>
+<div class="aTitle">按比例分配</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.box_container{
+	display: flex;
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+	margin: 5px;
+}
+.box_container>div{
+	background-color: #F99ECA;
+	margin: 2px;
+}
+
+<b>页面：</b>
+&lt;div class="box_container"&gt;
+	&lt;div style="flex:1"&gt;&lt;/div&gt;
+	&lt;div style="flex:2"&gt;&lt;/div&gt;
+	&lt;div style="flex:3"&gt;&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="box_container">
+			<div style="flex:1"></div>
+			<div style="flex:2"></div>
+			<div style="flex:3"></div>
+		</div>
+	</div>
+</div>
+
+
+<style>
+.equal>div{
+	flex:1;
+}
+</style>
+<div class="aTitle">等比分配</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.box_container{
+	display: flex;
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+	margin: 5px;
+}
+.equal>div{
+	flex:1;
+}
+<b>页面：</b>
+处理前：
+&lt;div class="box_container"&gt;
+	&lt;div&gt;是几件是计算机上&lt;/div&gt;
+	&lt;div&gt;是计算机上&lt;/div&gt;
+	&lt;div&gt;计算机护手霜啥时候是是是&lt;/div&gt;
+&lt;/div&gt;
+
+子元素设为flex:1后：
+&lt;div class="box_container equal"&gt;
+	&lt;div&gt;是几件是计算机上&lt;/div&gt;
+	&lt;div&gt;是计算机上&lt;/div&gt;
+	&lt;div&gt;计算机护手霜啥时候是是是&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		处理前：
+		<div class="box_container">
+			<div>是几件是计算机上</div>
+			<div>是计算机上</div>
+			<div>计算机护手霜啥时候是是是</div>
+		</div>
+		
+		子元素设为flex:1后：
+		<div class="box_container equal">
+			<div>是几件是计算机上</div>
+			<div>是计算机上</div>
+			<div>计算机护手霜啥时候是是是</div>
+		</div>
+	</div>
+</div>
+
+		
+</body>
+</html>

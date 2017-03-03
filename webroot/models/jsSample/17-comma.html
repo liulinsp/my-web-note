@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>逗号运算符</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+逗号运算符，它将先计算左边的参数，再计算右边的参数值。然后返回最右边参数的值。
+使用逗号操作符可以在一条语句中执行多个操作，如下面的例子所示：
+var num1=1, num2=2, num3=3;
+逗号操作符多用于声明多个变量；但除此之外，逗号操作符还可以用于赋值。
+在用于赋值时，逗号操作符总会返回表达式中的最后一项，
+如下面的例子所示：
+var num = (5, 1, 4, 8, 0); // num 的值为0
+由于0 是表达式中的最后一项，因此num 的值就是0
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+
+<!-- <script type="text/javascript">
+$('<p>NaN == NaN '+(NaN == NaN)+'</p>')
+	.appendTo($("#showResult1"));
+
+</script> -->
+
+<div class="aTitle">简单示例1</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var a=10,b=20;
+function test(){
+	return a++,b++,a+b;
+}
+var c= test();
+
+a --> 11
+b --> 21
+c --> 32
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+
+<script type="text/javascript">
+var a=10,b=20;
+
+function test(){
+	return a++,b++,a+b;
+}
+var c= test();
+window.console&&console.log("a=",a);
+window.console&&console.log("b=",b);
+window.console&&console.log("c=",c);
+</script>
+
+<div class="aTitle">简单示例2</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var myConsole = {
+	log:function(msg){
+		$('&lt;p&gt;'+msg+'&lt;/p&gt;').appendTo($("#showResult1"));
+	}
+}
+/*
+ *逗号运算符在JavaScript在的优先级是最底的,
+ *所以函数调用运算符将先于逗号运算符运行,
+ *第一个参数10，第二个参数8，函数打印了第一个参数
+ */
+myConsole.log(2*5, 2*4);  --> 10
+
+
+//通过加括号，保证逗号运算符的结果作为第一个参数
+myConsole.log((2*5, 2*4));  --> 8
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+var myConsole = {
+	log:function(msg){
+		$('<p>'+msg+'</p>').appendTo($("#showResult1"));
+	}
+}
+myConsole.log(2*5, 2*4); 
+myConsole.log((2*5, 2*4)); 
+</script>
+
+<div class="aTitle">交换变量，无需第三个变量</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+//方法一
+var a = "aaa", b = "bbb";
+a = [b][b = a, 0];
+结果：
+a --> "bbb"
+b --> "aaa"
+
+//方法二
+var c = "ccc", d = "ddd";
+c = [d, d = c][0];
+结果：
+c --> "ddd"
+d --> "ccc"
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	var a = "aaa", b = "bbb";
+	//方法一
+	a = [b][b = a, 0];
+	window.console&&console.log("a=",a);
+	window.console&&console.log("b=",b);
+
+	//方法二
+	var c = "ccc", d = "ddd";
+	c = [d, d = c][0];
+	window.console&&console.log("c=",c);
+	window.console&&console.log("d=",d);
+});
+</script>
+
+
+
+</body>
+</html>

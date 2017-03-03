@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS表单验证</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle"></div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+如果想要屏蔽浏览器对表单的默认验证行为，可以在表单元素上添加novalidate标记。
+1. 必填项
+验证某个表单输入是否已填写，只要在输入字段元素上添加HTML5标记required即可：
+&lt;input type="text" required /&gt;
+2. 最小长度
+验证表单输入的文本长度是否大于某个最小值，在输入字段上使用AngularJS指令
+ng-minleng=
+"{number}"：
+&lt;input type="text" ng-minlength="5" /&gt;
+3. 最大长度
+验证表单输入的文本长度是否小于或等于某个最大值，在输入字段上使用AngularJS
+指令ng-maxlength="{number}"：
+&lt;input type="text" ng-maxlength="20" /&gt;
+4. 模式匹配
+使用ng-pattern="/PATTERN/"来确保输入能够匹配指定的正则表达式：
+&lt;input type="text" ng-pattern="[a-zA-Z]" /&gt;
+5. 电子邮件
+验证输入内容是否是电子邮件，只要像下面这样将input的类型设置为email即可：
+&lt;input type="email" name="email" ng-model="user.email" /&gt;
+6. 数字
+验证输入内容是否是数字，将input的类型设置为number：
+&lt;input type="number" name="age" ng-model="user.age" /&gt;
+7. URL
+验证输入内容是否是URL，将input的类型设置为 url：
+&lt;input type="url" name="homepage" ng-model="user.facebook_url" /&gt;
+8. 自定义验证
+在AngularJS中自定义指令是非常容易的。
+
+&ltform <mark>name="userForm"</mark> ng-app="app1" ng-controller="ctrl1"&gt
+  &ltp&gt
+    姓名：&ltinput name="userName" ng-model="userName" required&gt
+    &ltspan style="color:red" 
+          ng-show="<mark>userForm.</mark>userName.$dirty&&userForm.userName.$error.required"&gt
+          请输入姓名
+    &lt/span&gt
+  &lt/p&gt
+  &ltp&gt
+    邮箱：&ltinput name="email" type="email" ng-model="email" required&gt
+    &ltspan style="color:red" 
+        ng-show="userForm.email.$dirty&&userForm.email.$error.required"&gt
+        请输入邮箱
+    &lt/span&gt
+    &ltspan style="color:red" 
+        ng-show="userForm.email.$dirty&&userForm.email.$error.email"&gt
+        邮箱格式错误
+    &lt/span&gt
+  &lt/p&gt
+  &ltp&gt
+    &ltbutton ng-disabled="userForm.userName.$invalid||userForm.email.$invalid"&gt
+      提交
+    &lt/button&gt
+  &lt/p&gt
+  姓名监视：{{watch}}
+&lt/form&gt
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.$watch("userName",function(val){
+    $scope.watch=val;
+  });
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <form name="userForm" ng-app="app1" ng-controller="ctrl1">
+      <p>
+        姓名：<input name="userName" ng-model="userName" required>
+        <span style="color:red" ng-show="userForm.userName.$dirty&&userForm.userName.$error.required">请输入姓名</span>
+      </p>
+      <p>
+        邮箱：<input name="email" type="email" ng-model="email" required>
+        <span style="color:red" ng-show="userForm.email.$dirty&&userForm.email.$error.required">请输入邮箱</span>
+        <span style="color:red" ng-show="userForm.email.$dirty&&userForm.email.$error.email">邮箱格式错误</span>
+      </p>
+      <p><button ng-disabled="userForm.userName.$invalid||userForm.email.$invalid">提交</button></p>
+      姓名监视：{{watch}}
+    </form>
+    
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.$watch("userName",function(val){
+    $scope.watch=val;
+  });
+});
+
+</script>
+
+<div class="aTitle">自定义校验方法</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app2"&gt;
+  &lt;form name="form6" action=""&gt;
+    手机号码1：&lt;input type="text" name="userPhone" ng-model="user.phone" <mark>vali-phone</mark>&gt;
+    &lt;span ng-show="form6.userPhone.$dirty&&form6.userPhone.$error.<b>phone</b>"
+      style="color:red"&gt;填写错误&lt;/span&gt;&lt;br/&gt;
+
+    手机号码2：&lt;input type="text" name="otherPhone" ng-model="user.otherPhone" <mark>vali-phone</mark>&gt;
+    &lt;span ng-show="form6.otherPhone.$dirty&&form6.otherPhone.$error.<b>phone</b>"
+      style="color:red"&gt;填写错误&lt;/span&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+var phoneReg =  /^1[3|4|5|7|8]\d{9}$/; 
+app2.directive(<mark>'valiPhone'</mark>,function(){
+  return {
+    require : '^ngModel',
+    restrict: 'A',
+    link  : function(scope, elm, attrs, ngModelCtrl) {
+      scope.$watch(attrs.ngModel, function(newVal) {
+        var isPhone = phoneReg.test(newVal);
+        ngModelCtrl.$setValidity(<b>'phone'</b>, isPhone);
+      });
+    }
+  };
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2">
+      <form name="form6" action="">
+        手机号码1：<input type="text" name="userPhone" ng-model="user.phone" vali-phone>
+        <span ng-show="form6.userPhone.$dirty&&form6.userPhone.$error.phone" style="color:red">填写错误</span><br/>
+
+        手机号码2：<input type="text" name="otherPhone" ng-model="user.otherPhone" vali-phone>
+        <span ng-show="form6.otherPhone.$dirty&&form6.otherPhone.$error.phone" style="color:red">填写错误</span>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app2 = angular.module("app2",[]);
+  var phoneReg =  /^1[3|4|5|7|8]\d{9}$/; 
+  app2.directive('valiPhone',function(){
+    return {
+      require : '^ngModel',
+      restrict: 'A',
+      link  : function(scope, elm, attrs, ngModelCtrl) {
+        scope.$watch(attrs.ngModel, function(newVal) {
+          var isPhone = phoneReg.test(newVal);
+          ngModelCtrl.$setValidity('phone', isPhone);
+        });
+      }
+    };
+  });
+  angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+</body>
+</html>

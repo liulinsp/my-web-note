@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ng-class</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+  <script type="text/javascript" src="../../js/angular-messages-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">简单示例</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+需要引入angular-messages.js，这种校验提示方式比以前更简洁。
+
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;form name="form1"&gt;
+    &lt;input type="text" name="name" ng-model="name" 
+           ng-maxlength=10 ng-minlength=5 required/&gt;
+    &lt;div class="error" ng-show="form1.name.$dirty" 
+          <mark>ng-messages="form1.name.$error"</mark> ng-messages-multiple&gt;
+      &lt;div <mark>ng-message="required"</mark>&gt;必填&lt;/div&gt;
+      &lt;div <mark>ng-message="minlength"</mark>&gt;至少5个字符&lt;/div&gt;
+      &lt;div <mark>ng-message="maxlength"</mark>&gt;最多10个字符&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module('app1', [<mark>'ngMessages'</mark>])
+  .controller("ctrl1",function($scope){
+
+  });
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <form name="form1">
+        <input type="text" name="name" ng-model="name" 
+               ng-maxlength=10 ng-minlength=5 required/>
+        <div class="error" ng-show="form1.name.$dirty" 
+              ng-messages="form1.name.$error" ng-messages-multiple>
+          <div ng-message="required">必填</div>
+          <div ng-message="minlength">至少5个字符</div>
+          <div ng-message="maxlength">最多10个字符</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module('app1', ['ngMessages'])
+  .controller("ctrl1",function($scope){
+
+  });
+angular.bootstrap(document.getElementById("app1"),["app1"]);
+</script>
+
+
+<div class="aTitle">使用模板</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app2" ng-controller="ctrl2"&gt;
+  &lt;form name="form2"&gt;
+    &lt;input type="text" name="name" ng-model="name" 
+           ng-maxlength=10 ng-minlength=5 required/&gt;
+    &lt;div class="error" ng-show="form2.name.$dirty" 
+          ng-messages="form2.name.$error"&gt;
+      &lt;!-- 个性化提示信息 --&gt;
+      &lt;div ng-message="required"&gt;请输入员工姓名&lt;/div&gt;
+      &lt;!-- 模板提示信息 --&gt;
+      <mark>&lt;ng-messages-include src="23-ng-message-template.html"&gt;&lt;/ng-messages-include&gt;</mark>
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+
+angular.module('app2', ['ngMessages'])
+  .controller("ctrl2",function($scope){
+
+  });
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <form name="form2">
+        <input type="text" name="name" ng-model="name" 
+               ng-maxlength=10 ng-minlength=5 required/>
+        <div class="error" ng-show="form2.name.$dirty" 
+              ng-messages="form2.name.$error">
+          <div ng-message="required">请输入员工姓名</div>
+          <ng-messages-include src="23-ng-message-template.html"></ng-messages-include>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module('app2', ['ngMessages'])
+  .controller("ctrl2",function($scope){
+
+  });
+angular.bootstrap(document.getElementById("app2"),["app2"]);
+</script>
+
+
+<div class="aTitle">自定义校验</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app3" ng-controller="ctrl3"&gt;
+  &lt;form name="form3" ng-submit="saveUser();" <mark>novalidate</mark>&gt;
+    &lt;p&gt;
+      员工姓名：&lt;input type="text" name="userName" ng-model="user.name" 
+             ng-maxlength="10" ng-minlength="2" required/&gt;
+      &lt;span class="error"&gt;*&lt;/span&gt;
+      &lt;div class="error" ng-show="form3.userPhone.$dirty||form3.submitted" 
+            ng-messages="form3.userName.$error"&gt;
+        &lt;div ng-message="required"&gt;请输入员工姓名&lt;/div&gt;
+        &lt;div ng-message="minlength"&gt;至少2个字&lt;/div&gt;
+        &lt;div ng-message="maxlength"&gt;最多10个字&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/p&gt;
+    
+    &lt;p&gt;
+      手机号码：&lt;input type="text" name="userPhone" ng-model="user.phone" 
+             ng-maxlength="11" <mark>vali-phone</mark>/&gt;
+      &lt;div class="error" ng-show="form3.userPhone.$dirty||form3.submitted" 
+            ng-messages="form3.userPhone.$error"&gt;
+        &lt;div ng-message="phone"&gt;手机号码格式错误&lt;/div&gt;
+        &lt;div ng-message="maxlength"&gt;最多11位数字&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/p&gt;
+    &lt;p&gt;&lt;button type="submit"&gt;提交&lt;/button&gt;&lt;/p&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+
+<b>脚本:</b>
+angular.module('app3', ['ngMessages'])
+  .service("validateUtil",function(){
+    this.isPhone=function(val){
+      var phoneReg =  /^1[3|4|5|7|8]\d{9}$/; 
+      if(val=="" || phoneReg.test(val)){
+        return true;
+      }
+      return false;
+    }
+  })
+  .directive(<mark>"valiPhone"</mark>,function(validateUtil){
+    return {
+      restrict: 'A',
+      require: "^ngModel",
+      link: function(scope, ele, attrs, ctrl){
+        ctrl.$parsers.push(function(val){
+          if(validateUtil.isPhone(val)){
+            ctrl.$setValidity("phone",true);
+          }else{
+            ctrl.$setValidity("phone",false);
+          }
+          return val;
+        });
+
+        ctrl.$formatters.push(function(val){
+          if(validateUtil.isPhone(val)){
+            ctrl.$setValidity("phone",true);
+          }else{
+            ctrl.$setValidity("phone",false);
+          }
+          return val;
+        });
+      }
+    }
+  })
+  .controller("ctrl3",function($scope){
+    $scope.user={name:"李",phone:"110"};
+    $scope.saveUser=function(){
+      if (<mark>$scope.form3.$valid</mark>) {
+        alert("已提交");
+      } else {
+        $scope.form3.submitted = true;
+      }
+    }
+  });
+angular.bootstrap(document.getElementById("app3"),["app3"]);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app3" ng-controller="ctrl3">
+      <form name="form3" ng-submit="saveUser();" novalidate>
+        <p>
+          员工姓名：<input type="text" name="userName" ng-model="user.name" 
+                 ng-maxlength="10" ng-minlength="2" required/>
+          <span class="error">*</span>
+          <div class="error" ng-show="form3.userPhone.$dirty||form3.submitted" 
+                ng-messages="form3.userName.$error">
+            <div ng-message="required">请输入员工姓名</div>
+            <div ng-message="minlength">至少2个字</div>
+            <div ng-message="maxlength">最多10个字</div>
+          </div>
+        </p>
+        
+        <p>
+          手机号码：<input type="text" name="userPhone" ng-model="user.phone" 
+                 ng-maxlength="11" vali-phone/>
+          <div class="error" ng-show="form3.userPhone.$dirty||form3.submitted" 
+                ng-messages="form3.userPhone.$error">
+            <div ng-message="phone">手机号码格式错误</div>
+            <div ng-message="maxlength">最多11位数字</div>
+          </div>
+        </p>
+        <p><button type="submit">提交</button></p>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module('app3', ['ngMessages'])
+  .service("validateUtil",function(){
+    this.isPhone=function(val){
+      var phoneReg =  /^1[3|4|5|7|8]\d{9}$/; 
+      if(val=="" || phoneReg.test(val)){
+        return true;
+      }
+      return false;
+    }
+  })
+  .directive("valiPhone",function(validateUtil){
+    return {
+      restrict: 'A',
+      require: "^ngModel",
+      link: function(scope, ele, attrs, ctrl){
+        ctrl.$parsers.push(function(val){
+          if(validateUtil.isPhone(val)){
+            ctrl.$setValidity("phone",true);
+          }else{
+            ctrl.$setValidity("phone",false);
+          }
+          return val;
+        });
+
+        ctrl.$formatters.push(function(val){
+          if(validateUtil.isPhone(val)){
+            ctrl.$setValidity("phone",true);
+          }else{
+            ctrl.$setValidity("phone",false);
+          }
+          return val;
+        });
+      }
+    }
+  })
+  .controller("ctrl3",function($scope){
+    $scope.user={name:"李",phone:"110"};
+    $scope.saveUser=function(){
+      if ($scope.form3.$valid) {
+        alert("已提交");
+      } else {
+        $scope.form3.submitted = true;
+      }
+    }
+  });
+angular.bootstrap(document.getElementById("app3"),["app3"]);
+</script>
+</body>
+</html>

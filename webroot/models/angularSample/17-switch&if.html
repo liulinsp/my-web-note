@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS switch和if</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">ng-switch</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;div ng-repeat="user in users" <mark>ng-switch</mark> <mark>on="user.type"</mark>&gt;
+    &lt;p <mark>ng-switch-default</mark>&gt;{{ user.name }} (会员卡)&lt;/p&gt;
+    &lt;p <mark>ng-switch-when="silver"</mark>&gt;{{ user.name }}(银卡)&lt;/p&gt;
+    &lt;p ng-switch-when="gold"&gt;{{ user.name }}(金卡)&lt;/p&gt;
+  &lt;/div&gt;      
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.users=[{name:"李音",type:"silver"},
+                {name:"王萌",type:""},
+                {name:"张晋",type:"gold"}];
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <div ng-repeat="user in users" ng-switch on="user.type">
+        <p ng-switch-default>{{ user.name }} (会员卡)</p>
+        <p ng-switch-when="silver">{{ user.name }}(银卡)</p>
+        <p ng-switch-when="gold">{{ user.name }}(金卡)</p>
+      </div>      
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.users=[{name:"李音",type:"silver"},
+                {name:"王萌",type:""},
+                {name:"张晋",type:"gold"}];
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+<div class="aTitle">ng-if</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app2" ng-controller="ctrl2"&gt;
+  &lt;div ng-repeat="user in users" <mark>ng-if="user.type=='gold'"</mark>&gt;
+    &lt;p&gt;{{ user.name }}(金卡)&lt;/p&gt;
+  &lt;/div&gt;      
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.users=[{name:"赵金",type:"gold"},
+                {name:"王萌",type:""},
+                {name:"张晋",type:"gold"}];
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <div ng-repeat="user in users" ng-if="user.type=='gold'">
+        <p>{{ user.name }}(金卡)</p>
+      </div>      
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.users=[{name:"赵金",type:"gold"},
+                {name:"王萌",type:""},
+                {name:"张晋",type:"gold"}];
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+</body>
+</html>

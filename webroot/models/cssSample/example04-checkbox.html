@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>复选框</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<style type="text/css">
+  @font-face {
+    font-family: 'FontAwesome';
+    src: url('../../fonts/fontawesome-webfont.eot?v=4.1.0');
+    src: url('../../fonts/fontawesome-webfont.eot?#iefix&v=4.1.0') format('embedded-opentype'), url('../../fonts/fontawesome-webfont.woff?v=4.1.0') format('woff'), url('../../fonts/fontawesome-webfont.ttf?v=4.1.0') format('truetype'), url('../../fonts/fontawesome-webfont.svg?v=4.1.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .label-checkbox{
+    display: inline-block;
+    height: 15px;
+    vertical-align: middle;
+  }
+
+  input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    z-index: 2;
+    cursor: pointer;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    outline: none;
+  }
+
+  input[type="checkbox"] + .custom-checkbox{
+    width: 15px;
+    height: 15px;
+    line-height: 12px;
+    vertical-align: top;
+    text-align: center;
+
+    font-family: FontAwesome;
+    font-style: normal;
+    font-size: 12px;
+
+    display: inline-block;
+     -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #F1F9F2;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+    color: #85A77C;
+  }
+
+  input[type="checkbox"]:checked + .custom-checkbox:before{
+    content: '\f00c';
+    box-sizing: border-box;
+  }
+	</style>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+body{
+  font-size: 24px;
+} 
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../../fonts/fontawesome-webfont.eot?v=4.1.0');
+  src: url('../../fonts/fontawesome-webfont.eot?#iefix&v=4.1.0') format('embedded-opentype'), 
+  url('../../fonts/fontawesome-webfont.woff?v=4.1.0') format('woff'), 
+  url('../../fonts/fontawesome-webfont.ttf?v=4.1.0') format('truetype'), 
+  url('../../fonts/fontawesome-webfont.svg?v=4.1.0#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.label-checkbox{
+  display: inline-block;
+  height: 15px;
+  vertical-align: middle;
+}
+
+input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  z-index: 2;
+  cursor: pointer;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  outline: none;
+}
+
+input[type="checkbox"] + .custom-checkbox{
+  width: 15px;
+  height: 15px;
+  line-height: 12px;
+  vertical-align: top;
+  text-align: center;
+
+  font-family: FontAwesome;
+  font-style: normal;
+  font-size: 12px;
+
+  display: inline-block;
+   -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #F1F9F2;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  color: #85A77C;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox:before{
+  content: '\f00c';
+  box-sizing: border-box;
+}
+
+&lt;div style="height:40px;"&gt;
+  <mark>&lt;label class="label-checkbox"&gt;
+       &lt;input type="checkbox" name="isSelectAll"&gt;
+       &lt;span class="custom-checkbox"&gt;&lt;/span&gt;
+  &lt;/label&gt;</mark>
+  &lt;span style="vertical-align: middle; font-size=24px;"&gt;记住密码&lt;/span&gt;
+&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div style="height:40px;">
+      <label class="label-checkbox">
+           <input type="checkbox" name="isSelectAll">
+           <span class="custom-checkbox"></span>
+      </label>
+      <span style="vertical-align: middle; font-size:24px;">记住密码</span>
+    </div>
+  </div>
+</div>
+
+
+
+</body>
+</html>

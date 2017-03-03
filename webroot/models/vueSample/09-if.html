@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue条件渲染</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">条件渲染</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1" v-if="isError"&gt;
+	{{message}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		isError:true,
+		message:"Hello World!"
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app1" v-if="isError">
+	  	{{message}}
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		isError:true,
+		message:"Hello World!"
+	}
+});
+</script>
+
+
+<div class="aTitle">if、else-if、else组合</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	 &lt;div v-if="color=='red'"&gt;
+	 	红
+	 &lt;/div&gt;
+	 &lt;div v-else-if="color=='yellow'"&gt;
+	 	黄
+	 &lt;/div&gt;
+	 &lt;div v-else&gt;
+	 	蓝
+	 &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		color:"yellow"
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app2">
+	  	 <div v-if="color=='red'">
+	  	 	红
+	  	 </div>
+	  	 <div v-else-if="color=='yellow'">
+	  	 	黄
+	  	 </div>
+	  	 <div v-else>
+	  	 	蓝
+	  	 </div>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		color:"yellow"
+	}
+});
+</script>
+
+
+<div class="aTitle">if与template标签</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+&lt;template&gt; 元素可以当做包装元素，并在上面使用 v-if，最终的渲染结果不会包含它。
+
+<b>页面：</b>
+&lt;div id="app3"&gt;
+	 &lt;template v-if="color=='red'"&gt;
+	 	&lt;span&gt;红&lt;/span&gt;
+	 &lt;/template&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		color:"red"
+	}
+});
+
+<b>渲染结果：</b>
+&lt;div id="app3"&gt;
+	&lt;span&gt;红&lt;/span&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app3">
+	  	 <template v-if="color=='red'">
+	  	 	<span>红</span>
+	  	 </template>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var app3 = new Vue({
+	el:"#app3",
+	data:{
+		color:"red"
+	}
+});
+</script>
+
+
+<style>
+.tabs{
+	height: 30px;
+	width: 100%;
+	border-bottom: 1px solid #999;
+	margin-bottom: 5px;
+}
+.type-tab{
+	display: inline-block;
+	height: 30px;
+line-height: 30px;
+	background-color: #fafafa;
+}
+.cur{
+	background-color: #DEFBFB;
+}
+</style>
+<div class="aTitle">使用 key 控制元素的可重用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。
+导致切换后input原来输入的内容还存在，有时不符合需求，为了解决这种问题，
+Vue 提供一种方式让你可以自己决定是否要复用元素，要做的是添加一个属性 key ，
+key 必须带有唯一的值。
+
+<b>页面：</b>
+&lt;div id="app4"&gt;
+	 &lt;div class="tabs"&gt;
+	 	&lt;span :class="classes.mobile" 
+	 	      v-on:click="switchHandle('mobile')"&gt;手机登录&lt;/span&gt;
+	 	&lt;span :class="classes.email" 
+	 	      v-on:click="switchHandle('email')"&gt;邮箱登录&lt;/span&gt;
+	 &lt;/div&gt;
+	 &lt;div v-if="loginType=='mobile'"&gt;
+	 	&lt;span&gt;手机：&lt;/span&gt;
+	 	&lt;input type="text" key="mobile" placeholder="请输入手机号码"&gt;
+	 &lt;/div&gt;
+	 &lt;div v-else&gt;
+	 	&lt;span&gt;邮箱：&lt;/span&gt;
+	 	&lt;input type="text" key="email" placeholder="请输入邮箱"&gt;
+	 &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		classes:{
+			mobile:{'type-tab':true,'cur':true},
+			email:{'type-tab':true,'cur':false}
+		},
+		loginType:"mobile"
+	},
+	methods:{
+		switchHandle:function(type){
+			this.loginType = type;
+			for(var idx in this.classes){
+				this.classes[idx].cur=false;
+			}
+			this.classes[type].cur=true;
+		}
+	}
+});
+
+		</pre>
+	</div>
+	<div class="aShow">
+	  
+	  <div id="app4">
+	  	 <div class="tabs">
+	  	 	<span :class="classes.mobile" 
+	  	 	      v-on:click="switchHandle('mobile')">手机登录</span>
+	  	 	<span :class="classes.email" 
+	  	 	      v-on:click="switchHandle('email')">邮箱登录</span>
+	  	 </div>
+	  	 <div v-if="loginType=='mobile'">
+	  	 	<span>手机：</span>
+	  	 	<input type="text" key="mobile" placeholder="请输入手机号码">
+	  	 </div>
+	  	 <div v-else>
+	  	 	<span>邮箱：</span>
+	  	 	<input type="text" key="email" placeholder="请输入邮箱">
+	  	 </div>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		classes:{
+			mobile:{'type-tab':true,'cur':true},
+			email:{'type-tab':true,'cur':false}
+		},
+		loginType:"mobile"
+	},
+	methods:{
+		switchHandle:function(type){
+			this.loginType = type;
+			for(var idx in this.classes){
+				this.classes[idx].cur=false;
+			}
+			this.classes[type].cur=true;
+		}
+	}
+});
+</script>
+
+
+
+<div class="aTitle">v-show</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+有 v-show 的元素会始终渲染并保持在 DOM 中。
+v-show 是简单的切换元素的 CSS 属性 display 。
+<span class="error">注意 v-show 不支持 &lt;template&gt; 语法。</span>
+
+<b>页面：</b>
+&lt;div id="app5"&gt;
+	 &lt;div class="tabs"&gt;
+	 	&lt;span :class="classes.mobile" 
+	 	      v-on:click="switchHandle('mobile')"&gt;手机登录&lt;/span&gt;
+	 	&lt;span :class="classes.email" 
+	 	      v-on:click="switchHandle('email')"&gt;邮箱登录&lt;/span&gt;
+	 &lt;/div&gt;
+	 &lt;div v-show="loginType=='mobile'"&gt;
+	 	&lt;span&gt;手机：&lt;/span&gt;
+	 	&lt;input type="text" key="mobile" placeholder="请输入手机号码"&gt;
+	 &lt;/div&gt;
+	 &lt;div v-show="loginType=='email'"&gt;
+	 	&lt;span&gt;邮箱：&lt;/span&gt;
+	 	&lt;input type="text" key="email" placeholder="请输入邮箱"&gt;
+	 &lt;/div&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app5 = new Vue({
+	el:"#app5",
+	data:{
+		classes:{
+			mobile:{'type-tab':true,'cur':true},
+			email:{'type-tab':true,'cur':false}
+		},
+		loginType:"mobile"
+	},
+	methods:{
+		switchHandle:function(type){
+			this.loginType = type;
+			for(var idx in this.classes){
+				this.classes[idx].cur=false;
+			}
+			this.classes[type].cur=true;
+		}
+	}
+});
+
+		</pre>
+	</div>
+	<div class="aShow">
+	  <div id="app5">
+	  	 <div class="tabs">
+	  	 	<span :class="classes.mobile" 
+	  	 	      v-on:click="switchHandle('mobile')">手机登录</span>
+	  	 	<span :class="classes.email" 
+	  	 	      v-on:click="switchHandle('email')">邮箱登录</span>
+	  	 </div>
+	  	 <div v-show="loginType=='mobile'">
+	  	 	<span>手机：</span>
+	  	 	<input type="text" key="mobile" placeholder="请输入手机号码">
+	  	 </div>
+	  	 <div v-show="loginType=='email'">
+	  	 	<span>邮箱：</span>
+	  	 	<input type="text" key="email" placeholder="请输入邮箱">
+	  	 </div>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var app5 = new Vue({
+	el:"#app5",
+	data:{
+		classes:{
+			mobile:{'type-tab':true,'cur':true},
+			email:{'type-tab':true,'cur':false}
+		},
+		loginType:"mobile"
+	},
+	methods:{
+		switchHandle:function(type){
+			this.loginType = type;
+			for(var idx in this.classes){
+				this.classes[idx].cur=false;
+			}
+			this.classes[type].cur=true;
+		}
+	}
+});
+</script>
+
+</body>
+</html>

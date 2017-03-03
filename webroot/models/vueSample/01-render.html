@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue页面渲染</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">声明式渲染</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app1"&gt;
+		{{message}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		message:"Hello World!"
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+		{{message}}
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		message:"Hello World!"
+	}
+});
+</script>
+
+<div class="aTitle">绑定 DOM 元素属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	&lt;span v-bind:title="mytitle"&gt;鼠标放到我上面你就会看到动态绑定的标题&lt;/span&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		mytitle:"这是绑定的标题"
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+		<span v-bind:title="mytitle">鼠标放到我上面你就会看到动态绑定的标题</span>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+		mytitle:"这是绑定的标题"
+	}
+});
+</script>
+
+<div class="aTitle">循环渲染</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="app4"&gt;
+  &lt;li v-for="item in myList"&gt;{{item.name}}&lt;/li&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		myList:[
+			{name:"aaa"},
+			{name:"bbb"},
+			{name:"ccc"}
+		]
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note">
+	  <div id="app4">
+	    <li v-for="item in myList">{{item.name}}</li>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var app4 = new Vue({
+	el:"#app4",
+	data:{
+		myList:[
+			{name:"aaa"},
+			{name:"bbb"},
+			{name:"ccc"}
+		]
+	}
+});
+</script>
+
+</body>
+</html>

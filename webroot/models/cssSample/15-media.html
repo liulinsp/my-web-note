@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>媒体查询</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<style>
+.content{
+	background-color: #DFFBED;
+	word-spacing: -6px;
+	overflow: auto;
+}
+.col-item{
+	float: left;
+  	min-height: 1px;
+	width: 20%;
+	box-sizing:border-box;
+	border: 1px solid #000; 
+	background-color: #FCE2FA;
+}
+@media screen and (max-width: 1024px) {
+	.col-item{
+		width: 25%;
+	}
+}
+@media screen and (max-width: 680px) {
+	.col-item{
+		width: 50%;
+	}
+}
+@media screen and (max-width: 320px) {
+	.col-item{
+		width: 100%;
+	}
+}
+</style>
+<div class="content">
+	<div class="col-item">1</div>
+	<div class="col-item">2</div>
+	<div class="col-item">3</div>
+	<div class="col-item">4</div>
+	<div class="col-item">5</div>
+</div>
+
+<div class="aTitle">媒体查询实现自适应栅格布局</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<span class="error">IE8及以下不支持</span>
+<b>CSS 语法</b>
+@media mediatype and|not|only (media feature) {
+    CSS-Code;
+}
+<b>样式：</b>
+.content{
+	background-color: #DFFBED;
+	word-spacing: -6px;
+	overflow: auto;
+}
+.col-item{
+	float: left;
+  	min-height: 1px;
+	width: 20%;
+	box-sizing:border-box;
+	border: 1px solid #000; 
+	background-color: #FCE2FA;
+}
+@media screen and (max-width: 1024px) {
+	.col-item{
+		width: 25%;
+	}
+}
+@media screen and (max-width: 680px) {
+	.col-item{
+		width: 50%;
+	}
+}
+@media screen and (max-width: 320px) {
+	.col-item{
+		width: 100%;
+	}
+}
+
+<b>页面：</b>
+&lt;div class="content"&gt;
+	&lt;div class="col-item"&gt;1&lt;/div&gt;
+	&lt;div class="col-item"&gt;2&lt;/div&gt;
+	&lt;div class="col-item"&gt;3&lt;/div&gt;
+	&lt;div class="col-item"&gt;4&lt;/div&gt;
+	&lt;div class="col-item"&gt;5&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+	</div>
+</div>
+
+
+</body>
+</html>

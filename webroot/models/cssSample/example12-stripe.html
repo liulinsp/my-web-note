@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>条纹</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.pic-stripe{
+	width: 300px;
+	height: 200px;
+	background: url(../../img/stripe.png) repeat;
+}
+</style>
+<div class="aTitle">利用图片生成条纹</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.pic-stripe{
+	width: 300px;
+	height: 200px;
+	background: url(../../img/stripe.png) repeat;
+}
+
+<b>页面：</b>
+&lt;div class="pic-stripe"&gt;&lt;/div&gt;
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="pic-stripe"></div>
+	</div>
+</div>
+
+
+
+<style>
+.multi-stripe{
+	width: 300px;
+	height: 200px;
+	background: -webkit-linear-gradient(top, #FDD1D1 33.3%, #FCFED0 0, #FCFED0 66.6%, #FEFBFB 0);
+	background: -moz-linear-gradient(top, #FDD1D1 33.3%, #FCFED0 0, #FCFED0 66.6%, #FEFBFB 0);
+	background: -o-linear-gradient(top, #FDD1D1 33.3%, #FCFED0 0, #FCFED0 66.6%, #FEFBFB 0);
+	background-size: 100% 40px;
+}
+</style>
+<div class="aTitle">渐变实现多色条纹【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+把第二个色标的位置值设置为0，那它的位置就总是会被浏览器调整为前一个色标的位置值。
+<b>样式：</b>
+.multi-stripe{
+	width: 300px;
+	height: 200px;
+	background: -webkit-linear-gradient(top, #FDD1D1 33.3%, #FCFED0 <mark>0</mark>, #FCFED0 66.6%, #FEFBFB 0);
+	background: -moz-linear-gradient(top, #FDD1D1 33.3%, #FCFED0 0, #FCFED0 66.6%, #FEFBFB 0);
+	background: -o-linear-gradient(top, #FDD1D1 33.3%, #FCFED0 0, #FCFED0 66.6%, #FEFBFB 0);
+	background-size: 100% 40px;
+}
+
+<b>页面：</b>
+&lt;div class="multi-stripe"&gt;&lt;/div&gt;
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="multi-stripe"></div>
+	</div>
+</div>
+
+
+
+<style>
+.diamond{
+	width: 300px;
+	height: 200px;
+	background: -webkit-linear-gradient(45deg, #555 25%, transparent 0),
+				-webkit-linear-gradient(-45deg, #555 25%, transparent 0),
+				-webkit-linear-gradient(45deg, transparent 75%, #555 0),
+				-webkit-linear-gradient(-45deg, transparent 75%, #555 0);
+	background: -moz-linear-gradient(45deg, #555 25%, transparent 0),
+				-moz-linear-gradient(-45deg, #555 25%, transparent 0),
+				-moz-linear-gradient(45deg, transparent 75%, #555 0),
+				-moz-linear-gradient(-45deg, transparent 75%, #555 0);
+	background: -o-linear-gradient(45deg, #555 25%, transparent 0),
+				-o-linear-gradient(-45deg, #555 25%, transparent 0),
+				-o-linear-gradient(45deg, transparent 75%, #555 0),
+				-o-linear-gradient(-45deg, transparent 75%, #555 0);
+	background: linear-gradient(45deg, #555 25%, transparent 0),
+				linear-gradient(-45deg, #555 25%, transparent 0),
+				linear-gradient(45deg, transparent 75%, #555 0),
+				linear-gradient(-45deg, transparent 75%, #555 0);
+	background-size: 50px 50px;
+}
+</style>
+<div class="aTitle">渐变实现菱形纹【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.diamond{
+	width: 300px;
+	height: 200px;
+	background: -webkit-linear-gradient(45deg, #555 25%, transparent 0),
+				-webkit-linear-gradient(-45deg, #555 25%, transparent 0),
+				-webkit-linear-gradient(45deg, transparent 75%, #555 0),
+				-webkit-linear-gradient(-45deg, transparent 75%, #555 0);
+	background: -moz-linear-gradient(45deg, #555 25%, transparent 0),
+				-moz-linear-gradient(-45deg, #555 25%, transparent 0),
+				-moz-linear-gradient(45deg, transparent 75%, #555 0),
+				-moz-linear-gradient(-45deg, transparent 75%, #555 0);
+	background: -o-linear-gradient(45deg, #555 25%, transparent 0),
+				-o-linear-gradient(-45deg, #555 25%, transparent 0),
+				-o-linear-gradient(45deg, transparent 75%, #555 0),
+				-o-linear-gradient(-45deg, transparent 75%, #555 0);
+	background: linear-gradient(45deg, #555 25%, transparent 0),
+				linear-gradient(-45deg, #555 25%, transparent 0),
+				linear-gradient(45deg, transparent 75%, #555 0),
+				linear-gradient(-45deg, transparent 75%, #555 0);
+	background-size: 50px 50px;
+}
+
+<b>页面：</b>
+&lt;div style="background-color: #ECFDFD;"&gt;
+	&lt;div class="diamond"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div style="background-color: #ECFDFD;">
+			<div class="diamond"></div>
+		</div>
+		
+	</div>
+</div>
+
+
+
+
+<style>
+.diagonal{
+	width: 300px;
+	height: 200px;
+	background: -webkit-linear-gradient(45deg, #555 25%, #eee 0%, #eee 50%, #555 0%, #555 75%, #eee 0%);
+	background: -o-linear-gradient(45deg, #555 25%, #eee 0%, #eee 50%, #555 0%, #555 75%, #eee 0%);
+	background: linear-gradient(45deg, #555 25%, #eee 0%, #eee 50%, #555 0%, #555 75%, #eee 0%);
+	background-size: 50px 50px;
+}
+</style>
+<div class="aTitle">渐变实现斜条纹【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.diagonal{
+	width: 300px;
+	height: 200px;
+	background: -webkit-linear-gradient(45deg, #555 25%, #eee 0%, #eee 50%, #555 0%, #555 75%, #eee 0%);
+	background: -o-linear-gradient(45deg, #555 25%, #eee 0%, #eee 50%, #555 0%, #555 75%, #eee 0%);
+	background: linear-gradient(45deg, #555 25%, #eee 0%, #eee 50%, #555 0%, #555 75%, #eee 0%);
+	background-size: 50px 50px;
+}
+
+<b>页面：</b>
+&lt;div class="diagonal"&gt;&lt;/div&gt;
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="diagonal"></div>
+	</div>
+</div>
+
+
+<style>
+.repeat-diagonal{
+	width: 300px;
+	height: 200px;
+	background: -webkit-repeating-linear-gradient(30deg, #555, #555 15px, #eee 0, #eee 30px);
+	background: -moz-repeating-linear-gradient(30deg, #555, #555 15px, #eee 0, #eee 30px);
+	background: -o-repeating-linear-gradient(30deg, #555, #555 15px, #eee 0, #eee 30px);
+	background: repeating-linear-gradient(30deg, #555, #555 15px, #eee 0, #eee 30px);
+}
+</style>
+<div class="aTitle">重复渐变实现斜条纹【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.repeat-diagonal{
+	width: 300px;
+	height: 200px;
+	background: -webkit-repeating-linear-gradient(<mark>30deg</mark>, #555, #555 15px, #eee 0, #eee 30px);
+	background: -moz-repeating-linear-gradient(30deg, #555, #555 15px, #eee 0, #eee 30px);
+	background: -o-repeating-linear-gradient(30deg, #555, #555 15px, #eee 0, #eee 30px);
+	background: repeating-linear-gradient(30deg, #555, #555 15px, #eee 0, #eee 30px);
+}
+
+<b>页面：</b>
+&lt;div class="repeat-diagonal"&gt;&lt;/div&gt;
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="repeat-diagonal"></div>
+	</div>
+</div>
+
+
+
+<style>
+.alpha-repeat-diagonal{
+	width: 300px;
+	height: 200px;
+	background: #FDC5FD;
+	background-image: -webkit-repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+	background-image: -moz-repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+	background-image: -o-repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+	background-image: repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+}
+</style>
+<div class="aTitle">透明的重复渐变实现斜条纹【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.alpha-repeat-diagonal{
+	width: 300px;
+	height: 200px;
+	background: #FDC5FD;
+	background-image: -webkit-repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+	background-image: -moz-repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+	background-image: -o-repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+	background-image: repeating-linear-gradient(45deg, hsla(0,0%,100%,.2), hsla(0,0%,100%,.2) 25px, transparent 0, transparent 50px);
+}
+
+<b>页面：</b>
+&lt;div class="alpha-repeat-diagonal"&gt;&lt;/div&gt;
+
+		</pre>
+	</div>
+	<div class="aShow">
+			<div class="alpha-repeat-diagonal"></div>
+	</div>
+</div>
+
+
+
+<style>
+.paper{
+	font-size: 16px;
+	font-family: "华文新魏";
+	width: 400px;
+	height: 550px;
+	position: relative;
+	background-color:#E4F6F6;
+	background-image: -webkit-repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	background-image: -moz-repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	background-image: -o-repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	background-image: repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	border-width: 3em 2em;
+	border-style: solid; 
+	border-color: #E4F6F6;
+	padding-top: 0.3em;
+	line-height: 2em;
+	-webkit-box-shadow: 1px 1px 3px -1px #999;
+	-moz-box-shadow: 1px 1px 3px -1px #999;
+	-o-box-shadow: 1px 1px 3px -1px #999;
+	box-shadow: 1px 1px 3px -1px #999;
+}
+
+/*胶带样式*/
+.paper:after {
+    width: 180px;
+    height: 30px;
+    content: " ";
+    margin-left: -90px;
+    border: 1px solid rgba(200, 200, 200, .8);
+    background: rgba(254, 254, 254, .6);
+    -moz-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+    -moz-transform: rotate(-5deg);
+    -webkit-transform: rotate(-5deg);
+    -o-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+    position: absolute;
+    left: 50%;
+    top: -3.6em;
+}
+
+
+</style>
+<div class="aTitle">横格纸效果【IE8不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.paper{
+	font-size: 16px;
+	font-family: "华文新魏";
+	width: 400px;
+	height: 550px;
+	position: relative;
+	background-color:#E4F6F6;
+	background-image: -webkit-repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	background-image: -moz-repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	background-image: -o-repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	background-image: repeating-linear-gradient(
+	    top,
+	    transparent,
+	    transparent 31px, 
+	    rgba(0,0,0,0.1) 0,
+	    rgba(0,0,0,0.1) 32px);
+	border-width: 3em 2em;
+	border-style: solid; 
+	border-color: #E4F6F6;
+	padding-top: 0.3em;
+	line-height: 2em;
+	-webkit-box-shadow: 1px 1px 3px -1px #999;
+	-moz-box-shadow: 1px 1px 3px -1px #999;
+	-o-box-shadow: 1px 1px 3px -1px #999;
+	box-shadow: 1px 1px 3px -1px #999;
+}
+
+/*胶带样式*/
+.paper:after {
+    width: 180px;
+    height: 30px;
+    content: " ";
+    margin-left: -90px;
+    border: 1px solid rgba(200, 200, 200, .8);
+    background: rgba(254, 254, 254, .6);
+    -moz-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+    -moz-transform: rotate(-5deg);
+    -webkit-transform: rotate(-5deg);
+    -o-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+    position: absolute;
+    left: 50%;
+    top: -3.6em;
+}
+
+<b>页面：</b>
+&lt;div class="paper"&gt;XXXXXXXX&lt;/div&gt;
+
+		</pre>
+	</div>
+	<div class="aShow" style="padding-top:30px">
+		<div class="paper">&nbsp;&nbsp;远古以来，中国人就已经懂得养蚕、缫丝。秦汉之际以次茧作丝绵的手工业十分普及。这种处理次茧的方法称为漂絮法，操作时的基本要点包括，反复捶打，以捣碎蚕衣。这一技术后来发展成为造纸中的打浆。此外，中国古代常用石灰水或草木灰水为丝麻脱胶，这种技术也给造纸中为植物纤维脱胶以启示。纸张就是借助这些技术发展起来的。</div>
+		
+	</div>
+</div>
+
+</body>
+</html>

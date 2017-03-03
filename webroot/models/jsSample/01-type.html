@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript数据类型</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<script type="text/javascript">
+	$(function(){
+		$("<div>1/0 --> "+(1/0)+"</div>").appendTo($("#showResult1"));
+		$("<div>0/0 --> "+(0/0)+"</div>").appendTo($("#showResult1"));
+		$("<div>1==true --> "+(1==true)+"</div>").appendTo($("#showResult1"));
+		$("<div>1===true --> "+(1===true)+"</div>").appendTo($("#showResult1"));
+		$("<div>NaN===NaN --> "+(NaN===NaN)+"</div>").appendTo($("#showResult1"));
+		$("<div>isNaN(NaN) --> "+(isNaN(NaN))+"</div>").appendTo($("#showResult1"));
+		$("<div>3.15e6 --> "+(3.15e6)+"</div>").appendTo($("#showResult1"));
+		$("<div>3.15e-3 --> "+(3.15e-3)+"</div>").appendTo($("#showResult1"));
+		$("<div>0123 --> "+(0123)+"</div>").appendTo($("#showResult1"));
+		$("<div>019 --> "+(019)+"(无效的8进制，转化为10进制)</div>").appendTo($("#showResult1"));
+		$("<div>0x123 --> "+(0x123)+"</div>").appendTo($("#showResult1"));
+		$("<div>1.7976931348623159e+308--> "+ 1.7976931348623159e+308 +"</div>").appendTo($("#showResult1"));
+		$("<div>-1.7976931348623159e+308 --> "+(-1.7976931348623159e+308)+"</div>").appendTo($("#showResult1"));
+		$("<div>Number.MAX_VALUE--> "+ Number.MAX_VALUE +"</div>").appendTo($("#showResult1"));
+		$("<div>Number.MIN_VALUE --> "+ Number.MIN_VALUE+"</div>").appendTo($("#showResult1"));
+		$("<div>Number.POSITIVE_INFINITY --> "+ Number.POSITIVE_INFINITY+"</div>").appendTo($("#showResult1"));
+		$("<div>Number.NEGATIVE_INFINITY --> "+ Number.NEGATIVE_INFINITY+"</div>").appendTo($("#showResult1"));
+		$("<div>isFinite(0) --> "+ isFinite(0)+"</div>").appendTo($("#showResult1"));
+		$("<div>isFinite(Number.MAX_VALUE) --> "+ isFinite(Number.MAX_VALUE)+"</div>").appendTo($("#showResult1"));
+		$("<div>isFinite(NaN) --> "+ isFinite(NaN)+"<br/>isFinite(0/0) --> "+ isFinite(0/0)+"</div>").appendTo($("#showResult1"));
+		$("<div>isFinite('a') --> "+ isFinite('a')+"</div>").appendTo($("#showResult1"));
+		$("<div>isFinite(Number.MAX_VALUE+Number.MAX_VALUE) --> "+ isFinite(Number.MAX_VALUE+Number.MAX_VALUE)+"</div>").appendTo($("#showResult1"));
+		$("<div>isFinite(Number.POSITIVE_INFINITY) --> "+ isFinite(Number.POSITIVE_INFINITY)+"</div>").appendTo($("#showResult1"));
+		$("<div>isFinite(Number.NEGATIVE_INFINITY) --> "+ isFinite(Number.NEGATIVE_INFINITY)+"</div>").appendTo($("#showResult1"));
+		$("<div>Number.NaN --> "+ Number.NaN+"</div>").appendTo($("#showResult1"));
+
+		$("<div>Number('2.14e5') --> "+ Number('2.14e5')+"</div>").appendTo($("#showResult1"));
+		$("<div>Number('071') --> "+ Number('071')+"(不支持8进制，前导的零被忽略了)</div>").appendTo($("#showResult1"));
+		$("<div>Number('0x71') --> "+ Number('0x71')+"</div>").appendTo($("#showResult1"));
+		$("<div>Number(' 71') --> "+ Number(' 71')+"(字符串前面的空格被忽略了)</div>").appendTo($("#showResult1"));
+		$("<div>Number('') --> "+ Number('')+"</div>").appendTo($("#showResult1"));
+		$("<div>Number('hello') --> "+ Number('hello')+"</div>").appendTo($("#showResult1"));
+		var undefNum;
+		$("<div>var undefNum; Number(undefNum) --> "+ Number(undefNum)+"</div>").appendTo($("#showResult1"));
+		$("<div>Number(false) --> "+ Number(false)+"</div>").appendTo($("#showResult1"));
+		$("<div>Number(true) --> "+ Number(true)+"</div>").appendTo($("#showResult1"));
+		$("<div>parseInt(true) --> "+ parseInt(true)+"</div>").appendTo($("#showResult1"));
+		$("<div>parseInt('123abc') --> "+ parseInt('123abc')+"</div>").appendTo($("#showResult1"));
+		$("<div>Number('123abc') --> "+ Number('123abc')+"</div>").appendTo($("#showResult1"));
+		$("<div>parseInt('12.97') --> "+ parseInt('12.97')+"(没有四舍五入)</div>").appendTo($("#showResult1"));
+		$('<div>parseInt("071") --> '+ parseInt("071")+'</div>').appendTo($("#showResult1"));
+		$('<div>parseInt("071",8) --> '+ parseInt("071",8)+'</div>').appendTo($("#showResult1"));
+
+		$('<div>parseFloat("22.34.5") --> '+ parseFloat("22.34.5")+'</div>').appendTo($("#showResult1"));
+		$('<div>parseFloat("0x71") --> '+ parseFloat("0x71")+'</div>').appendTo($("#showResult1"));
+		$('<div>parseFloat("071") --> '+ parseFloat("071")+'</div>').appendTo($("#showResult1"));
+		$('<div>parseFloat("071",8) --> '+ parseFloat("071",8)+'(指定的基数没有作用)</div>').appendTo($("#showResult1"));
+		$('<div>Number(57).toString(8) --> '+ Number(57).toString(8)+'</div>').appendTo($("#showResult1"));
+		var num = 10;
+		$("<div>var num = 10;<br/> num.toFixed(2)-->"+num.toFixed(2)+"</div>").appendTo($("#showResult1"));
+		$("<div>0.678.toFixed(0)-->"+0.678.toFixed(0)+"</div>").appendTo($("#showResult1"));
+
+		var numExp = 1234567890;
+		$("<div>var numExp = 1234567890;<br/>numExp.toExponential(3)-->"+numExp.toExponential(3)+"</div>").appendTo($("#showResult1"));
+
+		$("<div>var num = 10;<br/>num.toPrecision(4)-->"+num.toPrecision(4)+"</div>").appendTo($("#showResult1"));
+		$("<div>var numExp = 1234567890;<br/>numExp.toPrecision(4)-->"+numExp.toPrecision(4)+"</div>").appendTo($("#showResult1"));
+	});
+	
+</script>
+<div class="aTitle">Number类型</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. 相等运算符</b>
+JavaScript在设计时，有两种比较运算符：
+(1)第一种是相等操作符(==)
+  它会自动转换数据类型再比较，很多时候，会得到非常诡异的结果；
+(2)第二种是全等操作符(===)
+  它不会自动转换数据类型，如果数据类型不一致，返回false，如果一致，再比较。
+由于JavaScript这个设计缺陷，不要使用==比较，始终坚持<mark>使用===比较</mark>。
+<b>2. NaN</b>
+NaN(Not a Number)是个特殊的Number与所有其他值都不相等，包括它自己；
+唯一能判断NaN的方法是通过isNaN()函数。
+<b>3. 科学计数法</b>
+3.15e6 = 3.25*10<sup>6</sup> = 3150000
+<b>4. 八进制和十六进制</b>
+八进制：0123 = 1*8<sup>2</sup>+2*8+3=83
+十六进制：0x123 = 1*16<sup>2</sup>+2*16+3=291
+<b>5. 无穷大Infinity和无穷小-Infinity</b>
+isFinite(number)函数:
+	如果 number 是有限数字（或可转换为有限数字），
+	那么返回 true。否则，如果 number 是 NaN（非数字），
+	或者是正、负无穷大的数，则返回 false。
+<b>6.Number()函数的转换规则</b>
+如果是Boolean 值，true 和false 将分别被转换为1 和0。
+如果是数字值，只是简单的传入和返回。
+如果是null 值，返回0。
+如果是undefined，返回NaN。
+如果是字符串，遵循下列规则：
+	1> 如果字符串中只包含数字（包括前面带正号或负号的情况），
+  则将其转换为十进制数值，即"1"会变成1，"123"会变成123，
+  "2.14e5"会变成214000，而"011"会变成11（注意：前导的零被忽略了）；
+	2> 如果字符串中包含有效的浮点格式，
+  如"1.1"，则将其转换为对应的浮点数值（同样，也会忽略前导零）；
+	3>如果字符串中包含有效的十六进制格式，例如"0xf"，
+  则将其转换为相同大小的十进制整数值；
+	4>如果字符串是空的（不包含任何字符），则将其转换为0；
+	5>如果字符串中包含除上述格式之外的字符，则将其转换为NaN。
+	6>如果是对象，则调用对象的valueOf()方法，
+  然后依照前面的规则转换返回的值。
+  如果转换的结果是NaN，则调用对象的toString()方法，
+  然后再次依照前面的规则转换返回的字符串值。
+<b>7. parseInt()函数</b>
+专门用于把字符串转换成整数。
+由于Number()函数在转换字符串时比较复杂而且不够合理，
+因此在处理整数的时候更常用的是parseInt()函数。
+  1> 用parseInt()转换空字符串会返回NaN（Number()对空字符返回0）
+  2> "1234blue"会被转换为1234，因为"blue"会被完全忽略
+  3> "22.5"会被转换为22，因为小数点并不是有效的数字字符。
+  4> 在使用parseInt()解析像八进制字面量的字符串时，
+ ECMAScript 3 和5 存在分歧。例如：
+ //ECMAScript 3 认为是56（八进制），ECMAScript 5 认为是70（十进制）
+  5> 提供第二个参数,指定基数：parseInt("71", 8)转换为57
+<b>8. parseFloat()函数</b>
+  1> 字符串中的第一个小数点是有效的，而第二个小数点就是无效的
+     "22.34.5"将会被转换为22.34
+  2> parseFloat()只解析十进制值
+  	 "0x71"被转换成0
+  3> 没有用第二个参数指定基数的用法
+<b>7. toString()方法</b>
+可以传递一个参数：输出数值的基数
+<b>8. toFixed()方法</b>
+按照指定的小数位返回数值的字符串表示，例如：
+var num = 10;
+num.toFixed(2) --> "10.00"
+<span class="error">在给toFixed()传入0 的情况下，
+IE8 及之前版本不能正确舍入范围在{(-0.94,-0.5],[0.5,0.94)}之间的值。
+对于这个范围内的值，IE 会返回0，而不是-1 或1；</span>
+<b>9. toExponential()方法</b>
+返回以指数表示法（也称e 表示法）表示的数值的字符串形式。
+var num = 10;
+num.toExponential(1)) --> "1.0e+1"
+<b>10. toPrecision()方法</b>
+可能会返回固定大小（fixed）格式，也可能返回指数（exponential）格式；
+具体规则是看哪种格式最合适。
+var num = 99;
+num.toPrecision(1) --> "1e+2"
+num.toPrecision(2) --> "99"
+num.toPrecision(3) --> "99.0"
+</span>
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		
+		$("<div>null==0 --> "+(null==0)+"</div>").appendTo($("#showResult2"));
+		$("<div>undefined==0 --> "+(undefined==0)+"</div>").appendTo($("#showResult2"));
+		$("<div>null=='' --> "+(null=='')+"</div>").appendTo($("#showResult2"));
+		$("<div>undefined=='' --> "+(undefined=='')+"</div>").appendTo($("#showResult2"));
+		$("<div>null==false --> "+(null==false)+"</div>").appendTo($("#showResult2"));
+		$("<div>undefined==false --> "+(undefined==false)+"</div>").appendTo($("#showResult2"));
+		$("<div>null==undefined --> "+(null==undefined)+"</div>").appendTo($("#showResult2"));
+		$("<div>null===undefined --> "+(null===undefined)+"</div>").appendTo($("#showResult2"));
+		var ele = document.getElementById('notExistElement');
+		$("<div>document.getElementById('notExistElement') --> "+ele+"</div>").appendTo($("#showResult2"));
+		var value1;
+		$("<div>var value1; --> value1="+value1+"</div>").appendTo($("#showResult2"));
+
+		function fun1(data){return data===null;}
+		$("<div>function fun1(data){return data===null;}<br/> fun1(null); --> "+fun1(null)+"</div>").appendTo($("#showResult2"));
+	});
+</script>
+<div class="aTitle">null和undefined</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+null和undefined基本是同义的，只有一些细微的差别。
+<b>1. null表示"没有对象"，即该处不应该有值。</b>典型用法是：
+（1） 作为函数的参数，表示该函数的参数不是对象。
+（2） 作为对象原型链的终点。<mark>?待研究</mark>
+<b>2. undefined表示"缺少值"，就是此处应该有一个值，但是还没有定义。</b>典型用法是：
+（1）变量被声明了，但没有赋值时，就等于undefined。
+（2) 调用函数时，应该提供的参数没有提供，该参数等于undefined。
+（3）对象没有赋值的属性，该属性的值为undefined。
+（4）函数没有返回值时，默认返回undefined。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+
+
+<style>
+table{
+	padding: 0px;
+	margin: 0px;
+ 	border-spacing: 0px;
+ 	border:solid 1px #CACBE5;
+}
+th,td{
+	padding: 5px;
+	margin: 0px;
+	border:solid 1px #CACBE5;
+}
+</style>
+<div class="aTitle">Boolean类型</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+下表给出了各种数据类型及其对应的转换规则。
+<table>
+	<thead>
+		<tr><th>数据类型</th><th>转换为true的值</th><th>转换为false的值</th></tr>
+	</thead>
+	<tbody>
+		<tr><td>Boolean</td><td>true</td><td>false</td></tr>
+		<tr><td>String</td><td>任何非空字符串</td><td>""（空字符串）</td></tr>
+		<tr><td>Number</td><td>任何非零数字值（包括无穷大）</td><td>0和NaN</td></tr>
+		<tr><td>Object</td><td>任何对象</td><td>null</td></tr>
+		<tr><td>Undefined</td><td>n/a</td><td>undefined</td></tr>
+	</tbody>
+</table>
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult6">
+	</div>
+</div>
+<script type="text/javascript">
+var boolean1=new Boolean();
+$("<div>var boolean1=new Boolean();<br/>boolean1 --> "+boolean1+"</div>")
+	.appendTo($("#showResult6"));
+var boolean2=new Boolean(true);
+$("<div>var boolean2=new Boolean(true);<br/>boolean2 --> "+boolean2+"</div>")
+	.appendTo($("#showResult6"));
+var boolean3=new Boolean(false);
+$("<div>var boolean3=new Boolean(false);<br/>boolean3 --> "+boolean3+"</div>")
+	.appendTo($("#showResult6"));
+
+var str1="";
+$('<div>var str1="";<br/>Boolean(str1) --> '+Boolean(str1)+'</div>')
+	.appendTo($("#showResult6"));
+var str2="abc";
+$('<div>var str2="abc";<br/>Boolean(str2) --> '+Boolean(str2)+'</div>')
+	.appendTo($("#showResult6"));
+var str3=new String("");
+$('<div>var str3=new String("");<br/>Boolean(str3) --> '+Boolean(str3)+'</div>')
+	.appendTo($("#showResult6"));
+
+var num1=2.345555;
+$('<div>var num1=2.345555;<br/>Boolean(num1) --> '+Boolean(num1)+'</div>')
+	.appendTo($("#showResult6"));
+var num2=0.0000000001;
+$('<div>var num2=0.0000000001;<br/>Boolean(num2) --> '+Boolean(num2)+'</div>')
+	.appendTo($("#showResult6"));
+var num3=0;
+$('<div>var num3=0;<br/>Boolean(num3) --> '+Boolean(num3)+'</div>')
+	.appendTo($("#showResult6"));
+
+$('<div>Number.MIN_VALUE-->'+Number.MIN_VALUE+'<br/>Boolean(Number.MIN_VALUE) --> '+Boolean(Number.MIN_VALUE)+'</div>')
+	.appendTo($("#showResult6"));
+$('<div>Number.MAX_VALUE-->'+Number.MAX_VALUE+'<br/>Boolean(Number.MAX_VALUE) --> '+Boolean(Number.MIN_VALUE)+'</div>')
+	.appendTo($("#showResult6"));
+$('<div>Infinity-->'+Infinity+'<br/>Boolean(Infinity) --> '+Boolean(Infinity)+'</div>')
+	.appendTo($("#showResult6"));
+var num4=new Number(0);
+$('<div>var num4=new Number(0);<br/>Boolean(num4) --> '+Boolean(num4)+'</div>')
+	.appendTo($("#showResult6"));
+
+var obj1={};
+$('<div>var obj1={};<br/>Boolean(obj1) --> '+Boolean(obj1)+'</div>')
+	.appendTo($("#showResult6"));
+var obj2=null;
+$('<div>var obj2=null;<br/>Boolean(obj2) --> '+Boolean(obj2)+'</div>')
+	.appendTo($("#showResult6"));
+
+var val = undefined;
+$('<div>var val = undefined;<br/>Boolean(val) --> '+Boolean(val)+'</div>')
+	.appendTo($("#showResult6"));
+</script>
+
+
+
+
+
+<script type="text/javascript">
+	$(function(){
+		var str = "abc";
+		$('<div>var str = "abc";<br/>str.length --> '+str.length+'</div>').appendTo($("#showResult7"));
+
+		$('<div>Math.floor(10.60) --> '+Math.floor(10.60)+'</div>').appendTo($("#showResult7"));
+		$('<div>Math.ceil(10.60) --> '+Math.ceil(10.60)+'</div>').appendTo($("#showResult7"));
+	});
+	
+</script>
+<div class="aTitle">JavaScript内置对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+JavaScript 提供多个内置对象，比如 String、Date、Array、Math 等等。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult7">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		//var person = new Object();
+		var person = {};
+		person.firstname="Bill";
+		person.lastname="Gates";
+		person.age=56;
+		person.eyecolor="blue";
+		$('<div>person.firstname --> '+person.firstname+'</div>').appendTo($("#showResult8"));
+		$('<div>person.lastname --> '+person.lastname+'</div>').appendTo($("#showResult8"));
+		$('<div>person.age --> '+person.age+'</div>').appendTo($("#showResult8"));
+		$('<div>person.eyecolor --> '+person.eyecolor+'</div>').appendTo($("#showResult8"));
+	});
+	
+</script>
+<div class="aTitle">直接创建对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var person = {};
+person.firstname="Bill";
+person.lastname="Gates";
+person.age=56;
+person.eyecolor="blue";
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult8">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		function person(firstname,lastname,age,eyecolor){
+			this.firstname=firstname;
+			this.lastname=lastname;
+			this.age=age;
+			this.eyecolor=eyecolor;
+		}
+
+		var bill = new person("Bill","Gates",56,"blue");
+
+		$('<div>bill.firstname --> '+bill.firstname+'</div>').appendTo($("#showResult9"));
+		$('<div>bill.lastname --> '+bill.lastname+'</div>').appendTo($("#showResult9"));
+		$('<div>bill.age --> '+bill.age+'</div>').appendTo($("#showResult9"));
+		$('<div>bill.eyecolor --> '+bill.eyecolor+'</div>').appendTo($("#showResult9"));
+	});
+	
+</script>
+<div class="aTitle">使用函数构造对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function person(firstname,lastname,age,eyecolor){
+	this.firstname=firstname;
+	this.lastname=lastname;
+	this.age=age;
+	this.eyecolor=eyecolor;
+}
+
+var bill = new person("Bill","Gates",56,"blue");
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult9">
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+	$(function(){
+		var str = "abc";
+		$('<div>var str = "abc";<br/>typeof str --> '+(typeof str)+'</div>').appendTo($("#showResult10"));
+		var strObj = new String("abc");
+		$('<div>var strObj = new String("abc");<br/>typeof strObj --> '+(typeof strObj)+'</div>').appendTo($("#showResult10"));
+
+		var num = 123;
+		$('<div>var num = 123;<br/>typeof(num) --> '+typeof(num)+'</div>').appendTo($("#showResult10"));
+		var numObj = new Number(123);
+		$('<div>var numObj = new Number(123);<br/>typeof numObj --> '+(typeof numObj)+'</div>').appendTo($("#showResult10"));
+
+		var boo = true;
+		$('<div>var boo = true;<br/>typeof(boo) --> '+typeof(boo)+'</div>').appendTo($("#showResult10"));
+		var booObj = new Boolean(true);
+		$('<div>var booObj = new Boolean(true);<br/>typeof booObj --> '+(typeof booObj)+'</div>').appendTo($("#showResult10"));
+
+		var fun = function(){};
+		$('<div>var fun = function(){};<br/>typeof(fun) --> '+typeof(fun)+'</div>').appendTo($("#showResult10"));
+		var arr = ["a","b","c"];
+		$('<div>var arr = ["a","b","c"];<br/>typeof(arr) --> '+typeof(arr)+'</div>').appendTo($("#showResult10"));
+		var obj = {name:"zhang",age:16};
+		$('<div>var obj = {name:"zhang",age:16};<br/>typeof(obj) --> '+typeof(obj)+'</div>').appendTo($("#showResult10"));
+		var non;
+		$('<div>var non;<br/>typeof(obj) --> '+typeof(non)+'</div>').appendTo($("#showResult10"));
+	});
+	
+</script>
+<div class="aTitle">typeof</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+typeof一般只能返回如下几个结果
+number,boolean,string,function,object,undefined
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult10">
+	</div>
+</div>
+</body>
+</html>

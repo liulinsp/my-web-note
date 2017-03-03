@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>定位相关属性</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+	<div class="home"><a href="../../index.html">首页</a></div>
+
+<style type="text/css">
+	div.aShow{
+		padding: 0px;
+	}
+	.parent-style{
+		width: 100px;
+		height: 100px;
+		background-color: #D7E7F3;
+		position: relative;
+		padding: 20px;
+	}
+	.parent-style>div{
+		width: 30px;
+		height: 30px;
+		background-color: #EE86AE;
+	}
+
+	/*绝对定位，相对于static定位以外的第一个父元素进行定位*/
+	.absolute-style{
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		z-index: 100;
+	}
+
+	/*相对定位，相对于其正常位置进行定位*/
+	.relative-style{
+		position: relative;
+		top: 10px;
+		left: 10px;
+		z-index: 100;
+	}
+
+	/*绝对定位，相对于浏览器窗口进行定位*/
+	.fixed-style{
+		position: fixed;
+		top: 550px;
+		left: 500px;
+		z-index: 100;
+	}
+
+	/*没有定位(默认值)，元素出现在正常的流中
+	（忽略 top, bottom, left, right 或者 z-index 声明）*/
+	.static-style{
+		position: static;
+		top: 50px;
+		left: 50px;
+		z-index: -100;
+	}
+
+</style>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+.parent-style{
+	width: 100px;
+	height: 100px;
+	background-color: #D7E7F3;
+	position: relative;
+	<mark>padding: 20px;</mark>
+}
+.parent-style>div{
+	width: 30px;
+	height: 30px;
+	background-color: #EE86AE;
+}
+/*绝对定位，相对于static定位以外的第一个父元素进行定位*/
+.absolute-style{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 100;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent-style">
+			<div class="absolute-style">absolute</div>
+		</div>
+	</div>
+</div>
+
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*相对定位，相对于其正常位置进行定位*/
+.relative-style{
+	position: relative;
+	top: 10px;
+	left: 10px;
+	z-index: 100;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent-style">
+			<div class="relative-style">relative</div>
+		</div>
+	</div>
+</div>
+
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*绝对定位，相对于浏览器窗口进行定位*/
+.fixed-style{
+	position: fixed;
+	top: 550px;
+	left: 500px;
+	z-index: 100;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent-style">
+			<div class="fixed-style">fixed</div>
+		</div>
+	</div>
+</div>
+
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*没有定位(默认值)，元素出现在正常的流中
+（忽略 top, bottom, left, right 或者 z-index 声明）*/
+.static-style{
+	position: static;
+	top: 50px;
+	left: 50px;
+	z-index: -100;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent-style">
+			<div class="static-style">static</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

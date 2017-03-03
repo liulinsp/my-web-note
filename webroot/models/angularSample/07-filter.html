@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS过滤器</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">过滤器</div>
+<div class="aPane">
+    <p> 过滤器可以使用一个管道字符（|）,添加到表达式和指令中。<br/>
+    格式如下：<br/>
+    {{ expression | filter:argument1:argument2:... }}
+    </p>
+    <table> 
+      <tbody>
+        <tr> <th style="width:40%">过滤器</th> <th>描述</th></tr> 
+        <tr> <td>currency</td> <td>格式化数字为货币格式。</td> </tr> 
+        <tr> <td>filter</td> <td>从数组项中选择一个子集。</td> </tr> 
+        <tr> <td>lowercase</td> <td>格式化字符串为小写。</td> </tr> 
+        <tr> <td>uppercase</td> <td>格式化字符串为大写。</td> </tr>
+        <tr> <td>orderBy</td> <td>根据某个表达式排列数组。</td> </tr>
+        <tr> <td>number</td> <td>格式化数字。千位分割、保留小数位数</td> </tr>
+        <tr> <td>limitTo</td> <td>限制数组长度或字符串长度</td> </tr>
+        <tr> <td>json</td> <td>格式化json对象</td> </tr>
+      </tbody>
+    </table>
+    <p></p>
+  <!-- <div class="aCode">
+    <pre></pre> 
+    
+  </div>-->
+  <!-- <div class="aShow">
+  
+  </div> -->
+</div>
+
+<div class="aTitle">过滤器currency</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+使用currency可以将数字格式化为货币，默认是美元符号，
+可以自己传入所需的符号
+
+&lt;div ng-app="app1" ng-controller="ctrl1"&gt;
+  价格1：{{value|currency}}&lt;br/&gt;
+  价格2：{{value|currency:'￥'}}
+&lt;/div&gt; 
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.value=11;
+}); 
+
+<b>结果</b>  
+价格1：$11.00
+价格2：￥11.00
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      价格1：{{value|currency}}<br/>
+      价格2：{{value|currency:'￥'}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app1 = angular.module("app1",[]);
+  app1.controller("ctrl1",function($scope){
+    $scope.value=11;
+  });
+  angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+<div class="aTitle">过滤器filter</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+1. 用来处理一个数组，然后可以过滤出含有某个子串的元素，作为一个子数组来返回。
+&lt;div ng-app="app2" ng-controller="ctrl2"&gt;
+  &lt;li ng-repeat="x in names<mark>|filter:'李'</mark>"&gt;{{x}}&lt;/li&gt;
+&lt;/div&gt;
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.names=["张国","李庆","杨慎","李明"];
+});
+<b>结果：</b>
+• 李庆
+• 李明
+
+2. 如果是对象数组，可以匹配属性的值。它接收一个参数，用来定义子串的匹配规则。
+&lt;li ng-repeat="x in persons<mark>|filter:{name:'李'}</mark>"&gt;
+  {{x.name+"["+x.age+"]"}}
+&lt;/li&gt;
+<b>脚本：</b>
+$scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},
+                {name:"杨慎",age:19},{name:"李明",age:38}];
+<b>结果：</b>
+• 李庆[29]
+• 李明[38]
+
+3. 还可以自定义过滤函数
+&lt;li ng-repeat="x in persons<mark>|filter:ageCheck</mark>"&gt;
+    {{x.name+"["+x.age+"]"}}
+&lt;/li&gt;
+<b>脚本：</b>
+$scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},
+                {name:"杨慎",age:19},{name:"李明",age:38}];
+$scope.ageCheck=function(person){
+  return person.age>20;
+};
+<b>结果：</b>
+• 张国[25]
+• 李庆[29]
+• 李明[38]
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <p><li ng-repeat="x in names|filter:'李'">{{x}}</li></p>
+      <p><li ng-repeat="x in persons|filter:{name:'李'}">{{x.name+"["+x.age+"]"}}</li></p>
+      <p><li ng-repeat="x in persons|filter:ageCheck">{{x.name+"["+x.age+"]"}}</li></p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app2 = angular.module("app2",[]);
+  app2.controller("ctrl2",function($scope){
+    $scope.names=["张国","李庆","杨慎","李明"];
+    $scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},{name:"杨慎",age:19},{name:"李明",age:38}];
+    $scope.ageCheck=function(person){
+      return person.age>20;
+    };
+  });
+  angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+<div class="aTitle">过滤器lowercase/uppercase</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app3" ng-controller="ctrl3"&gt;
+  姓名：{{name}}&lt;br/&gt;
+  姓名小写：{{name<mark>|lowercase</mark>}}&lt;br/&gt;
+  姓名大写：{{name<mark>|uppercase</mark>}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope){
+  $scope.name="Tom";
+});
+
+<b>结果：</b>
+姓名：Tom
+姓名小写：tom
+姓名大写：TOM
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app3" ng-controller="ctrl3">
+      姓名：{{name}}<br/>
+      姓名小写：{{name|lowercase}}<br/>
+      姓名大写：{{name|uppercase}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app3 = angular.module("app3",[]);
+  app3.controller("ctrl3",function($scope){
+    $scope.name="Tom";
+  });
+  angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+
+
+<div class="aTitle">过滤器orderBy</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app4" ng-controller="ctrl4"&gt;
+  &lt;p&gt;原顺序：
+    &lt;li ng-repeat="x in persons"&gt;
+      {{x.name+"["+x.age+"]"}}
+    &lt;/li&gt;
+  &lt;/p&gt;
+  &lt;p&gt;年龄正序：
+    &lt;li ng-repeat="x in persons|orderBy:'age'"&gt;
+      {{x.name+"["+x.age+"]"}}
+    &lt;/li&gt;
+  &lt;/p&gt;
+  &lt;p&gt;年龄倒序(负号)：
+    &lt;li ng-repeat="x in persons|orderBy:'-age'"&gt;
+      {{x.name+"["+x.age+"]"}}
+    &lt;/li&gt;
+  &lt;/p&gt;
+  &lt;p&gt;年龄倒序(boolean参数)：
+    &lt;li ng-repeat="x in persons|orderBy:'age':true"&gt;
+      {{x.name+"["+x.age+"]"}}
+    &lt;/li&gt;
+  &lt;/p&gt;
+  &lt;p&gt;年龄倒序(排序方法)：
+    &lt;li ng-repeat="x in persons|orderBy:sortAge"&gt;
+      {{x.name+"["+x.age+"]"}}
+    &lt;/li&gt;
+  &lt;/p&gt;
+  &lt;p&gt;年龄身高排序：
+    &lt;li ng-repeat="x in children|orderBy:['age','height']"&gt;
+      {{x.name+"["+x.age+","+x.height+"]"}}
+    &lt;/li&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+
+var app4 = angular.module("app4",[]);
+app4.controller("ctrl4",function($scope){
+  $scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},
+                  {name:"杨慎",age:19},{name:"李明",age:38}];
+  $scope.sortAge=function(obj,ddd){
+    console.log(obj);
+    return -obj.age;
+  };
+
+  $scope.children=[{name:"果果",age:5,height:117},
+                   {name:"菲菲",age:6,height:129},
+                   {name:"天天",age:6,height:119},
+                   {name:"明明",age:5,height:109}];
+});
+
+<b>1.正序</b>
+&lt;p&gt;年龄正序：
+  &lt;li ng-repeat="x in persons<mark>|orderBy:'age'</mark>"&gt;
+    {{x.name+"["+x.age+"]"}}
+  &lt;/li&gt;
+&lt;/p&gt;
+$scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},
+                {name:"杨慎",age:19},{name:"李明",age:38}];
+<b>结果：</b>
+• 杨慎[19]
+• 张国[25]
+• 李庆[29]
+• 李明[38]
+
+<b>2.倒序</b>
+&lt;p&gt;年龄倒序：
+  &lt;li ng-repeat="x in persons<mark>|orderBy:'-age'</mark>"&gt;
+    {{x.name+"["+x.age+"]"}}
+  &lt;/li&gt;
+&lt;/p&gt;
+  或者：
+&lt;p&gt;年龄倒序：
+  &lt;li ng-repeat="x in persons<mark>|orderBy:'age':true</mark>"&gt;
+    {{x.name+"["+x.age+"]"}}
+  &lt;/li&gt;
+&lt;/p&gt;
+$scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},
+                {name:"杨慎",age:19},{name:"李明",age:38}];
+<b>结果：</b>
+• 李明[38]
+• 李庆[29]
+• 张国[25]
+• 杨慎[19]
+
+<b>3.排序方法</b>
+&lt;p&gt;年龄倒序：
+  &lt;li ng-repeat="x in persons<mark>|orderBy:sortAge</mark>"&gt;
+    {{x.name+"["+x.age+"]"}}
+  &lt;/li&gt;
+&lt;/p&gt;
+$scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},
+                {name:"杨慎",age:19},{name:"李明",age:38}];
+<mark>$scope.sortAge=function(obj){
+  return -obj.age;
+};</mark>
+<b>结果：</b>
+• 李明[38]
+• 李庆[29]
+• 张国[25]
+• 杨慎[19]
+
+<b>4.多字段排序</b>
+&lt;p&gt;年龄身高排序：
+  &lt;li ng-repeat="x in children<mark>|orderBy:['age','height']</mark>"&gt;
+    {{x.name+"["+x.age+","+x.height+"]"}}
+  &lt;/li&gt;
+&lt;/p&gt;
+$scope.children=[{name:"果果",age:5,height:117},
+                 {name:"菲菲",age:6,height:129},
+                 {name:"天天",age:6,height:119},
+                 {name:"明明",age:5,height:109}];
+<b>结果：</b>
+• 明明[5,109]
+• 果果[5,117]
+• 天天[6,119]
+• 菲菲[6,129]
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app4" ng-controller="ctrl4">
+      <p>原顺序：<li ng-repeat="x in persons">{{x.name+"["+x.age+"]"}}</li></p>
+      <p>年龄正序：<li ng-repeat="x in persons|orderBy:'age'">{{x.name+"["+x.age+"]"}}</li></p>
+      <p>年龄倒序(负号)：<li ng-repeat="x in persons|orderBy:'-age'">{{x.name+"["+x.age+"]"}}</li></p>
+      <p>年龄倒序(boolean参数)：<li ng-repeat="x in persons|orderBy:'age':true">{{x.name+"["+x.age+"]"}}</li></p>
+      <p>年龄倒序(排序方法)：<li ng-repeat="x in persons|orderBy:sortAge">{{x.name+"["+x.age+"]"}}</li></p>
+      <p>年龄身高排序：<li ng-repeat="x in children|orderBy:['age','height']">{{x.name+"["+x.age+","+x.height+"]"}}</li></p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app4 = angular.module("app4",[]);
+  app4.controller("ctrl4",function($scope){
+    $scope.persons=[{name:"张国",age:25},{name:"李庆",age:29},{name:"杨慎",age:19},{name:"李明",age:38}];
+    $scope.sortAge=function(obj){
+      return -obj.age;
+    };
+
+    $scope.children=[{name:"果果",age:5,height:117},{name:"菲菲",age:6,height:129},{name:"天天",age:6,height:119},{name:"明明",age:5,height:109}];
+  });
+  angular.bootstrap(document.getElementById("app4"), ['app4']);
+</script>
+
+
+<div class="aTitle">过滤器number</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+number过滤器可以为一个数字加上千位分割，像这样，123,456,789。
+同时接收一个参数，可以指定小float类型保留几位小数。
+
+&lt;div ng-app="app5" ng-controller="ctrl5"&gt;
+  数字原值：{{value}}&lt;br/&gt;
+  数字格式1：{{value|number}}&lt;br/&gt;
+  数字格式2：{{value|number:2}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app5 = angular.module("app5",[]);
+app5.controller("ctrl5",function($scope){
+  $scope.value=857757.6453;
+});
+
+<b>结果：</b>
+数字原值：857757.6453
+数字格式1：857,757.645
+数字格式2：857,757.65
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app5" ng-controller="ctrl5">
+      数字原值：{{value}}<br/>
+      数字格式1：{{value|number}}<br/>
+      数字格式2：{{value|number:2}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app5 = angular.module("app5",[]);
+  app5.controller("ctrl5",function($scope){
+    $scope.value=857757.6453;
+  });
+  angular.bootstrap(document.getElementById("app5"), ['app5']);
+</script>
+
+
+<div class="aTitle">过滤器date</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app6" ng-controller="ctrl6"&gt;
+  时间原值：{{value}}&lt;br/&gt;
+  时间格式1：{{value|date}}&lt;br/&gt;
+  时间格式2：{{value|date:'yyyy-MM-dd hh:mm:ss'}}
+&lt;/div&gt;
+
+<b>脚本： </b>
+var app6 = angular.module("app6",[]);
+app6.controller("ctrl6",function($scope){
+  $scope.value=new Date();
+});
+
+<b>结果：</b>
+时间原值："2016-11-02T04:51:01.862Z"
+时间格式1：Nov 2, 2016
+时间格式2：2016-11-02 12:51:01
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app6" ng-controller="ctrl6">
+      时间原值：{{value}}<br/>
+      时间格式1：{{value|date}}<br/>
+      时间格式2：{{value|date:'yyyy-MM-dd hh:mm:ss'}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app6 = angular.module("app6",[]);
+  app6.controller("ctrl6",function($scope){
+    $scope.value=new Date();
+  });
+  angular.bootstrap(document.getElementById("app6"), ['app6']);
+</script>
+
+
+<div class="aTitle">过滤器limitTo</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+1. 字符串截取
+&lt;p&gt;字符串原值：{{value}}&lt;br/&gt;
+字符串截取1：{{value|limitTo:5}}&lt;br/&gt;
+字符串截取2：{{value|limitTo:-5}}&lt;/p&gt;
+<b>脚本：</b>
+var app7 = angular.module("app7",[]);
+app7.controller("ctrl7",function($scope){
+  $scope.value="一二三四五六七八九十";
+});
+<b>结果：</b>
+字符串原值：一二三四五六七八九十
+字符串截取1：一二三四五
+字符串截取2：六七八九十
+
+2. 数组截取
+&lt;p&gt;数组原值：&lt;li ng-repeat="x in strs"&gt;{{x}}&lt;/li&gt;{{x}}&lt;/p&gt;
+&lt;p&gt;数组截取1：&lt;li ng-repeat="x in strs|limitTo:2"&gt;{{x}}&lt;/li&gt;{{x}}&lt;/p&gt;
+&lt;p&gt;数组截取2：&lt;li ng-repeat="x in strs|limitTo:-2"&gt;{{x}}&lt;/li&gt;{{x}}&lt;/p&gt;
+<b>脚本：</b>
+$scope.strs=["一","二","三","四"];
+<b>结果：</b>
+数组原值：
+• 一
+• 二
+• 三
+• 四
+
+数组截取1：
+• 一
+• 二
+
+数组截取2：
+• 三
+• 四
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app7" ng-controller="ctrl7">
+      <p>字符串原值：{{value}}<br/>
+      字符串截取1：{{value|limitTo:5}}<br/>
+      字符串截取2：{{value|limitTo:-5}}</p>
+    
+      <p>数组原值：<li ng-repeat="x in strs">{{x}}</li>{{x}}</p>
+      <p>数组截取1：<li ng-repeat="x in strs|limitTo:2">{{x}}</li>{{x}}</p>
+      <p>数组截取2：<li ng-repeat="x in strs|limitTo:-2">{{x}}</li>{{x}}</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app7 = angular.module("app7",[]);
+  app7.controller("ctrl7",function($scope){
+    $scope.value="一二三四五六七八九十";
+    $scope.strs=["一","二","三","四"];
+  });
+  angular.bootstrap(document.getElementById("app7"), ['app7']);
+</script>
+
+
+<div class="aTitle">过滤器json</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app8" ng-controller="ctrl8"&gt;
+  &lt;p&gt;{{obj|json}}&lt;/p&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app8 = angular.module("app8",[]);
+app8.controller("ctrl8",function($scope){
+  $scope.obj=new Object();
+  $scope.obj.name="张三";
+  $scope.obj.age=19;
+});
+
+<b>结果：</b>
+{ "name": "张三", "age": 19 }
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app8" ng-controller="ctrl8">
+      <p>{{obj|json}}</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app8 = angular.module("app8",[]);
+  app8.controller("ctrl8",function($scope){
+    $scope.obj=new Object();
+    $scope.obj.name="张三";
+    $scope.obj.age=19;
+  });
+  angular.bootstrap(document.getElementById("app8"), ['app8']);
+</script>
+
+<div class="aTitle">自定义过滤器(无参数)</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app9" ng-controller="ctrl9"&gt;
+  &lt;li ng-repeat="x in strs<mark>|reverse</mark>"&gt;{{x}}&lt;/li&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app9 = angular.module("app9",[]);
+app9.controller("ctrl9",function($scope){
+  $scope.strs=["一","二","三"];
+});
+
+app9.filter(<mark>"reverse"</mark>,function() {
+  return <mark>function(array)</mark>{
+    var result = [];
+    for(var i=array.length-1;i>=0;i--){
+      result.push(array[i]);
+    }
+    return result;
+  };
+});
+
+<b>结果：</b>
+• 三
+• 二
+• 一
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app9" ng-controller="ctrl9">
+      <p><li ng-repeat="x in strs|reverse">{{x}}</li></p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app9 = angular.module("app9",[]);
+  app9.controller("ctrl9",function($scope){
+    $scope.strs=["一","二","三"];
+  });
+  
+  app9.filter("reverse",function() {
+    return function(array){
+      var result = [];
+      for(var i=array.length-1;i>=0;i--){
+        result.push(array[i]);
+      }
+      return result;
+    };
+  });
+  angular.bootstrap(document.getElementById("app9"), ['app9']);
+</script>
+
+<div class="aTitle">自定义过滤器(含参数)</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app9" ng-controller="ctrl9"&gt;
+  &lt;li ng-repeat="x in strs<mark>|reverseX:2</mark>"&gt;{{x}}&lt;/li&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app9 = angular.module("app9",[]);
+app9.controller("ctrl9",function($scope){
+  $scope.strs=["一","二","三"];
+});
+
+app9.filter("reverseX",function() {
+  return function(array<mark>,len</mark>){
+    var result = [];
+    for(var i=array.length-1;
+        i>=0 &amp;&amp; <mark>result.length&lt;len</mark>;i--){
+      result.push(array[i]);
+    }
+    return result;
+  };
+});
+
+<b>结果：</b>
+• 三
+• 二
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app10" ng-controller="ctrl10">
+      <p><li ng-repeat="x in strs|reverseX:2">{{x}}</li></p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app10",[])
+  .controller("ctrl10",function($scope){
+    $scope.strs=["一","二","三"];
+  })
+
+  .filter("reverseX",function() {
+    return function(array,len){
+      var result = [];
+      for(var i=array.length-1; i>=0 && result.length < len;i--){
+        result.push(array[i]);
+      }
+      return result;
+    };
+  });
+
+angular.bootstrap(document.getElementById("app10"), ['app10']);
+</script>
+
+
+
+<div class="aTitle">代码中使用过滤器</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app11" ng-controller="ctrl11"&gt;
+  {{name}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("app11",[])
+  .controller("ctrl11",function($scope,$filter){
+    $scope.name=<mark>$filter('lowercase')("Zhang San")</mark>;
+  });
+angular.bootstrap(document.getElementById("app11"), ['app11']);
+    </pre> 
+  </div>
+  <div class="aShow">
+    <div id="app11" ng-controller="ctrl11">
+      {{name}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app11",[])
+  .controller("ctrl11",function($scope,$filter){
+    $scope.name=$filter('lowercase')("Zhang San");
+  });
+angular.bootstrap(document.getElementById("app11"), ['app11']);
+</script>
+
+
+</body>
+</html>

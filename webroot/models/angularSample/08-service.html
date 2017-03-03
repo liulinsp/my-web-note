@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS服务器</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">$location 服务</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+在 AngularJS 中，服务是一个函数或对象，可在你的 AngularJS 应用中使用。
+AngularJS 内建了30 多个服务。
+有个 $location 服务，它可以返回当前页面的 URL 地址。
+
+&lt;div ng-app="app1" ng-controller="ctrl1"&gt;
+  {{myUrl}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope,$location){
+  $scope.myUrl = <mark>$location.absUrl()</mark>;
+});
+<b>结果：</b>
+http://localhost:9090/webroot/models/angularSample/08-service.html
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      {{myUrl}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app1 = angular.module("app1",[]);
+  app1.controller("ctrl1",function($scope,$location){
+    $scope.myUrl = $location.absUrl();
+  });
+  angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+<div class="aTitle">$http 服务</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app2" ng-controller="ctrl2"&gt;
+  &lt;li ng-repeat="x in data"&gt;{{x.name+"["+x.age+"]"}}&lt;/li&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope,$http){
+  $http.get("08-data.json").then(function(response){
+    $scope.data = response.data;
+  });
+});
+
+<b>08-data.json请求返回值：</b>
+[{"name":"Tom","age":16},{"name":"Dave","age":19}]
+
+<b>结果：</b>
+• Tom[16]
+• Dave[19]
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <li ng-repeat="x in data">{{x.name+"["+x.age+"]"}}</li>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app2 = angular.module("app2",[]);
+  app2.controller("ctrl2",function($scope,$http){
+    $http.get("08-data.json").then(function(response){
+      $scope.data = response.data;
+    });
+  });
+  angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+<div class="aTitle">$timeout 服务</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app3" ng-controller="ctrl3"&gt;
+  {{status}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope,$timeout){
+  $scope.status="on";
+  $timeout(function(){
+    $scope.status="off";
+  },2000);
+});
+<b>结果：</b>
+2s后on变为off
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app3" ng-controller="ctrl3">
+      {{status}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app3 = angular.module("app3",[]);
+  app3.controller("ctrl3",function($scope,$timeout){
+    $scope.status="on";
+    $timeout(function(){
+      $scope.status="off";
+    },2000);
+  });
+  angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+
+<div class="aTitle">$interval 服务</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app4" ng-controller="ctrl4"&gt;
+  {{status}}
+&lt;/div&gt;
+<b>脚本：</b>
+var app4 = angular.module("app4",[]);
+app4.controller("ctrl4",function($scope,$interval){
+  $scope.status="on";
+  $interval(function(){
+    $scope.status=($scope.status=="on")?"off":"on";
+  },2000);
+});
+<b>结果：</b>
+on和off交替出现
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app4" ng-controller="ctrl4">
+      {{status}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app4 = angular.module("app4",[]);
+  app4.controller("ctrl4",function($scope,$interval){
+    $scope.status="on";
+    $interval(function(){
+      $scope.status=($scope.status=="on")?"off":"on";
+    },2000);
+  });
+  angular.bootstrap(document.getElementById("app4"), ['app4']);
+</script>
+
+<div class="aTitle">自定义服务</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app5" ng-controller="ctrl5"&gt;
+  {{max}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app5 = angular.module("app5",[]);
+app5.service("math",function(){
+  this.max=function(array){
+    if(array==undefined ||array==null || array.length==0){return null;}
+    var maxVal = array[0];
+    for(i in array){
+      if(array[i]>maxVal){
+        maxVal=array[i];
+      }
+    }
+    return maxVal;
+  }
+});
+app5.controller("ctrl5",function($scope,math){
+  $scope.max = math.max([12,65,34,27,74,36]);
+});
+
+<b>结果：</b>
+74
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app5" ng-controller="ctrl5">
+      {{max}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app5 = angular.module("app5",[]);
+  app5.service("math",function(){
+    this.max=function(array){
+      if(array==undefined || array==null || array.length==0){return null;}
+      var maxVal = array[0];
+      for(i in array){
+        if(array[i]>maxVal){
+          maxVal=array[i];
+        }
+      }
+      return maxVal;
+    }
+  });
+  app5.controller("ctrl5",function($scope,math){
+    $scope.max = math.max([12,65,34,27,74,36]);
+  });
+  angular.bootstrap(document.getElementById("app5"), ['app5']);
+</script>
+
+
+<div class="aTitle">filer使用自定义服务</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div ng-app="app6" ng-controller="ctrl6"&gt;
+  &lt;li ng-repeat="x in strs|reverse"&gt;{{x}}&lt;/li&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app6 = angular.module("app6",[]);
+app6.service(<mark>"sorter"</mark>,function(){
+  <mark>this.reverse</mark>=function(array){
+    var result = [];
+    for(var i=array.length-1;i>=0;i--){
+      result.push(array[i]);
+    }
+    return result;
+  };
+});
+app6.filter("reverse",function(<mark>sorter</mark>){
+  return function(array){
+    return <mark>sorter.reverse(array)</mark>;
+  }
+});
+app6.controller("ctrl6",function($scope){
+  $scope.strs = ["一","二","三"];
+});
+
+<b>结果：</b>
+• 三
+• 二
+• 一
+    </pre>
+  </div>
+  <div class="aShow">
+    <div ng-app="app6" ng-controller="ctrl6">
+      <li ng-repeat="x in strs|reverse">{{x}}</li>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app6 = angular.module("app6",[]);
+  app6.service("sorter",function(){
+    this.reverse=function(array){
+      var result = [];
+      for(var i=array.length-1;i>=0;i--){
+        result.push(array[i]);
+      }
+      return result;
+    };
+  });
+  app6.filter("reverse",function(sorter){
+    return function(array){
+      return sorter.reverse(array);
+    }
+  });
+  app6.controller("ctrl6",function($scope){
+    $scope.strs = ["一","二","三"];
+  });
+</script>
+</body>
+</html>

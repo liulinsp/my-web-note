@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript函数</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<script type="text/javascript">
+	funA();
+	try{
+		funB();
+	}catch(error){
+		console.log(error.message);
+	}
+	try{
+		funC(2,3);
+	}catch(error){
+		console.log(error.message);
+	}
+	
+	//1. 函数声明
+	function funA(){
+		console.log("funA:函数声明方式");
+	}
+
+	//2. 函数表达式，又叫函数字面量
+	var funB = function(){
+		console.log("funB:函数表达式方式");
+	};
+
+	//3. 函数构造法，参数必须加引号
+	var funC = new Function('n1','n2','return n1+n2');
+
+	funA();
+	funB();
+	console.log("funC(2,3)函数构造法方式 --> "+funC(2,3));
+
+	//调用函数
+	var funD = new Function('funA();');
+	funD();
+	var funE = new Function('funB();');
+	funE();
+
+	//使用变量（只能获取全局变量，不能获取局部变量）
+	var age="17";
+	!function(){
+		var weight = "50kg";
+		var res1 = new Function(' return "年龄："+age;')();
+		//var res2 = new Function(' return "体重："+weight;')();//异常：weight is not defined
+		console.log("res1=",res1);
+		//console.log("res2=",res2);
+	}();
+
+</script>
+<div class="aTitle">创建函数的三种方式</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+funA();//执行成功
+funB();//异常：funB is not a function
+var sum = funC(2,3);//异常：funC is not a function
+
+//1. 函数声明
+function funA(){
+	console.log("funA");
+}
+
+//2. 函数表达式，又叫函数字面量
+var funB = function(){
+	console.log("funB");
+};
+
+//3. 函数构造法，参数必须加引号
+var funC = new Function('n1','n2','return n1+n2');
+
+funA();//执行成功
+funB();//执行成功
+var sum = funC(2,3); //执行成功，返回值为5
+
+	//函数构造法调用函数
+	var funD = new Function('funA();');
+	funD();
+	var funE = new Function('funB();');
+	funE();
+
+	//函数构造法使用变量（只能获取全局变量，不能获取局部变量）
+	var age="17";
+	!function(){
+		var weight = "50kg";
+		var res1 = new Function(' return "年龄："+age;')();//res1= 年龄：17
+		var res2 = new Function(' return "体重："+weight;')();//异常：weight is not defined
+	}();
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+
+<script type="text/javascript">
+	//自执行函数
+	(function(){
+		console.log("()自执行函数");
+	})();
+
+	var sum = (function(a,b){
+		return a+b;
+	})(2,3);
+	console.log("sum=",sum);
+
+	~function(){
+		console.log("~自执行函数");
+	}();
+
+	!function(){
+		console.log("!自执行函数");
+	}();
+
+	+function(){
+		console.log("+自执行函数");
+	}();
+
+	-function(){
+		console.log("-自执行函数");
+	}();
+
+	1,function(){
+		console.log("1,自执行函数");
+	}();
+
+	1^function(){
+		console.log("1^自执行函数");
+	}();
+
+	(function(){
+	  console.log("call()自执行函数");
+	}).call();
+	
+	(function(){
+	  console.log("apply()自执行函数");
+	}).apply();
+</script>
+<div class="aTitle">自执行函数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+//自执行函数
+(function(){
+	console.log("()自执行函数");
+})();
+
+var sum = (function(a,b){
+	return a+b;
+})(2,3);
+sum --> 5
+
+~function(){
+	console.log("~自执行函数");
+}();
+
+!function(){
+	console.log("!自执行函数");
+}();
+
++function(){
+	console.log("+自执行函数");
+}();
+
+-function(){
+	console.log("-自执行函数");
+}();
+
+1,function(){
+	console.log("1,自执行函数");
+}();
+
+1^function(){
+	console.log("1^自执行函数");
+}();
+
+(function(){
+  console.log("call()自执行函数");
+}).call();
+
+(function(){
+  console.log("apply()自执行函数");
+}).apply();
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+
+<script type="text/javascript">
+	function bike(speed){
+		this.name = "bike";
+		this.run = function(speed){
+			return "bike.run() : the "+this.name+" run at "+speed+" kilometers per hour. ";
+		};
+	}
+
+	function car(speed){
+		this.name = "car";
+		this.run = function(speed){
+			return "car.run() : the "+this.name+" run at "+speed+" kilometers per hour. ";
+		};
+	}
+
+	var result1 = new bike().run.call(new car(),20);
+	console.log(result1);
+
+	var result2 = new bike().run.apply(new car(),[20]);
+	console.log(result2);
+</script>
+<div class="aTitle">call()和apply()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+call和apply 两个方法产生的作用是完全一样的，只是方法传递的参数不同。
+
+call语法：
+call([thisObj[,arg1[, arg2[,   [,.argN]]]]]) 
+apply语法：
+apply([thisObj[,argArray]]) 
+
+function bike(speed){
+	this.name = "bike";
+	this.run = function(speed){
+		return "bike.run() : the "+this.name+" run at "+speed+" kilometers per hour. ";
+	};
+}
+
+function car(speed){
+	this.name = "car";
+	this.run = function(speed){
+		return "car.run() : the "+this.name+" run at "+speed+" kilometers per hour. ";
+	};
+}
+
+new bike().run.call(new car(),20) -->
+bike.run() : the car run at 20 kilometers per hour.
+
+new bike().run.apply(new car(),[20])-->
+bike.run() : the car run at 20 kilometers per hour.
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+
+<script type="text/javascript">
+function sumVal(){
+	return this.val1+this.val2;
+}
+var obj = {val1:10,val2:5}
+var bindFun = sumVal.bind(obj);
+console.log("bindFun()=",bindFun());
+</script>
+<div class="aTitle">bind()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+这个方法会创建一个函数的实例，
+其this 值会被绑定到传给bind()函数的值。
+
+function sumVal(){
+	return this.val1+this.val2;
+}
+var obj = {val1:10,val2:5}
+var bindFun = sumVal.bind(obj);
+
+bindFun() --> 15
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+
+<script type="text/javascript">
+	function Person(name){
+		this.name = name;
+		this.getName = function(){
+			return "My name is "+this.name;
+		};
+	}
+
+	function Student(name,shool){
+		Person.call(this,name);
+		//Person.apply(this,[name]);
+		//Person.apply(this, arguments);
+		this.shool = shool;
+		this.study = function(){
+			return "I study at "+this.shool;
+		};
+	}
+
+	var tom = new Student("Tom", "Beijing University");
+
+	console.log(tom.getName());
+	console.log(tom.study());
+</script>
+<div class="aTitle">call()和apply()实现继承</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function Person(name){
+	this.name = name;
+	this.getName = function(){
+		return "My name is "+this.name;
+	};
+}
+
+function Student(name,shool){
+	Person.call(this,name);
+	//Person.apply(this,[name]);
+	//Person.apply(this, arguments);
+	this.shool = shool;
+	this.study = function(){
+		return "I study at "+this.shool;
+	};
+}
+
+var tom = new Student("Tom", "Beijing University");
+tom.getName() --> 
+My name is Tom
+
+tom.study() -->
+I study at Beijing University
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+
+
+<script type="text/javascript">
+function add(num1,num2){
+	return num1+num2;
+}
+console.log("add.length",add.length);	
+</script>
+<div class="aTitle">函数属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+每个函数都包含两个属性：length 和prototype。
+其中，length 属性表示函数希望接收的命名参数的个数。
+prototype另外再详细说明。
+
+function add(num1,num2){
+	return num1+num2;
+}
+
+add.length --> 2
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1"></div> -->
+</div>
+</body>
+</html>

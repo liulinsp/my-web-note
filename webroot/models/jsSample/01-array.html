@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>数组</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+	
+</script>
+<div class="aTitle">数组的创建</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+数组对象的创建方式：
+1. 使用关键词 new 来创建数组对象，然后再逐一赋值
+2. 使用关键词 new 来创建数组对象的同时赋值
+3. 直接使用[]赋值（建议的创建方式）
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var myMobiles = ["iphone","huawei","xiaomi","samsung"];
+		var i;
+		for (i in myMobiles) {
+			$('<div>'+myMobiles[i]+'</div>').appendTo($("#showResult1"));
+		}
+	});
+	
+</script>
+<div class="aTitle">数组的遍历</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var myMobiles = ["iphone","huawei","xiaomi","samsung"];
+var i;
+<mark>for (i in myMobiles)</mark> {
+	$('&lt;div&gt;'+myMobiles[i]+'&lt;/div&gt;').appendTo($("#showResult1"));
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+<script>
+$(function(){
+	var data=[1,2,3];
+	var newData = data.concat(4,[5,6]);
+	$('<div>var data=[1,2,3];<br/>'
+		+'var newData = data.concat(4,[5,6]);</div>').appendTo($("#showResult2"));
+	$('<div>data --> '+data+'</div>').appendTo($("#showResult2"));
+	$('<div>newData --> '+newData+'</div>').appendTo($("#showResult2"));
+});
+</script>
+<div class="aTitle">concat()连接数组</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+concat()方法可以基于当前数组中的所有项创建一个新数组。
+1. 在没有给concat()方法传递参数的情况下，它只是复制当前数组并返回副本。
+2. 如果传递给concat()方法的是一或多个数组，则该方法会将这些数组中的每一项都添加到结果数组中。
+3. 如果传递的值不是数组，这些值就会被简单地添加到结果数组的末尾。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+
+<script>
+$(function(){
+	var data=["a","b","c","d","e"];
+	var newData1 = data.slice(1,3);
+	var newData2 = data.slice(3);
+	var newData3 = data.slice(-4,-2);
+	var newData4 = data.slice(-2);
+	$('<div>var data=["a","b","c","d","e"];</div>').appendTo($("#showResult3"));
+	$('<div>data --> '+data+'</div>').appendTo($("#showResult3"));
+	$('<div>var newData1 = data.slice(1,3);<br/>newData1 --> '+newData1+'</div>').appendTo($("#showResult3"));
+	$('<div>var newData2 = data.slice(3);<br/>newData2 --> '+newData2+'</div>').appendTo($("#showResult3"));
+	$('<div>var newData3 = data.slice(-4,-2);<br/>newData3 --> '+newData3+'</div>').appendTo($("#showResult3"));
+	$('<div>var newData4 = data.slice(-2);<br/>newData4 --> '+newData4+'</div>').appendTo($("#showResult3"));
+});
+</script>
+<div class="aTitle">slice()数组切片</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+slice()能够基于当前数组中的一或多个项创建一个新数组。
+slice()方法可以接受一或两个参数，即要返回项的起始和结束位置。
+1. 在只有一个参数的情况下，slice()方法返回从该参数指定位置开始到当前数组末尾的所有项。
+2. 如果有两个参数，该方法返回起始和结束位置之间的项——但不包括结束位置的项。
+3. 如果slice()方法的参数中有一个负数，则用数组长度加上该数来确定相应的位置。
+   如果结束位置小于起始位置，则返回空数组。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+	</div>
+</div>
+
+<script>
+$(function(){
+	$('<div>--------------------删除：--------------------</div>').appendTo("#showResult8");
+	var data1=["a","b","c","d","e"];
+	$('<div>var data1=["a","b","c","d","e"];<br/>'
+		+'data1 --> '+data1+'</div>').appendTo($("#showResult8"));
+	var removed1 = data1.splice(1,2);
+	$('<div>var removed1 = data.splice(1,2);<br/>'
+		+'data1 --> '+data1+'<br/>'
+		+'removed1 --> '+ removed1 +'</div>').appendTo($("#showResult8"));
+
+	$('<div>--------------------插入：--------------------</div>').appendTo("#showResult8");
+	var data2=["a","b","c","d","e"];
+	$('<div>var data2=["a","b","c","d","e"];<br/>'
+		+'data2 --> '+data2+'</div>').appendTo($("#showResult8"));
+	var removed2 = data2.splice(1,0,"f","g");
+	$('<div>var removed2 = data2.splice(1,0,"f","g");<br/>'
+		+'data2 --> '+data2+'<br/>'
+		+'removed2 --> '+ removed2 +'</div>').appendTo($("#showResult8"));
+
+	$('<div>--------------------替换：--------------------</div>').appendTo("#showResult8");
+	var data3=["a","b","c","d","e"];
+	$('<div>var data3=["a","b","c","d","e"];<br/>'
+		+'data3 --> '+data3+'</div>').appendTo($("#showResult8"));
+	var removed3 = data3.splice(1,2,"B","C");
+	$('<div>var removed3 = data3.splice(1,2,"B","C");<br/>'
+		+'data3 --> '+data3+'<br/>'
+		+'removed3 --> '+ removed3 +'</div>').appendTo($("#showResult8"));
+
+});
+</script>
+<div class="aTitle">splice()数组剪接</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+splice()方法的参数：
+1. index
+    必需。规定从何处添加/删除元素。
+    该参数是开始插入和（或）删除的数组元素的下标，必须是数字。
+2. howmany	
+    必需。规定应该删除多少元素。必须是数字，但可以是 "0"。
+    如果未规定此参数，则删除从 index 开始到原数组结尾的所有元素。
+3. item1, ..., itemX	
+   可选。要添加到数组的新元素
+
+使用splice()方法的方式则有如下3 种。
+1. 删除：可以删除任意数量的项，只需指定2 个参数：要删除的第一项的位置和要删除的项数。
+2. 插入：可以向指定位置插入任意数量的项，只需提供3 个参数：起始位置、0（要删除的项数）
+和要插入的项。如果要插入多个项，可以再传入第四、第五，以至任意多个项。
+3. 替换：可以向指定位置插入任意数量的项，且同时删除任意数量的项，只需指定3 个参数：起
+始位置、要删除的项数和要插入的任意数量的项。插入的项数不必与删除的项数相等。
+
+splice()方法始终都会返回一个数组，该数组中包含从原始数组中删除的项（如果没有删除任何
+项，则返回一个空数组）
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult8">
+	</div>
+</div>
+
+<script>
+$(function(){
+	var data=[1,2,3];
+	data.reverse();
+	$('<div>var data=[1,2,3];<br/>data.reverse();<br/>data --> '+data+'</div>').appendTo($("#showResult4"));
+});
+</script>
+<div class="aTitle">翻转数组</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+reverse()方法会反转数组项的顺序。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var myMobiles = ["iphone","huawei","xiaomi","samsung"];
+		myMobiles.sort();
+		var i;
+		for (i in myMobiles) {
+			$('<div>'+myMobiles[i]+'</div>').appendTo($("#showResult5"));
+		}
+
+		$('<br/>').appendTo($("#showResult5"));
+
+		//如果是数字，也是按字符排序的
+		var mynums = [14,3,67,12,58];
+		mynums.sort();
+		for (i in mynums) {
+			$('<div>'+mynums[i]+'</div>').appendTo($("#showResult5"));
+		}
+
+		$('<br/>').appendTo($("#showResult5"));
+		//排序时自定义排序方法
+		mynums.sort(function(a,b){
+			return a-b;
+		});
+		for (i in mynums) {
+			$('<div>'+mynums[i]+'</div>').appendTo($("#showResult5"));
+		}
+	});
+	
+</script>
+<div class="aTitle">数组的排序</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var myMobiles = ["iphone","huawei","xiaomi","samsung"];
+<mark>myMobiles.sort();</mark>
+var i;
+for (i in myMobiles){
+	$('&lt;div&gt;'+myMobiles[i]+'&lt;/div&gt;').appendTo($("#showResult5"));
+}
+
+//如果是数字，也是按字符排序的
+var mynums = [14,3,67,12,58];
+<mark>mynums.sort();</mark>
+for (i in mynums) {
+	$('&lt;div&gt;'+mynums[i]+'&lt;/div&gt;').appendTo($("#showResult5"));
+}
+
+//排序时自定义排序方法
+<mark>mynums.sort(function(a,b){
+	return a-b;
+});</mark>
+for (i in mynums) {
+	$('&lt;div&gt;'+mynums[i]+'&lt;/div&gt;').appendTo($("#showResult5"));
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult5">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3];
+		$('<div>var data = [1,2,3];<br/>data --> '+data+'</div>').appendTo($("#showResult6"));
+		data.push(4);
+		$('<div>data.push(4);<br/>data --> '+data+'</div>').appendTo($("#showResult6"));
+		var popData = data.pop();
+		$('<div>var popData = data.pop();<br/>popData --> '+popData+'</div>').appendTo($("#showResult6"));
+		$('<div>data --> '+data+'</div>').appendTo($("#showResult6"));
+		
+	});
+</script>
+<div class="aTitle">数组栈方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+栈是一种LIFO（Last-In-First-Out，后进先出）的数据结构，
+也就是最新添加的项最早被移除。
+
+而栈中项的插入（叫做推入）和移除（叫做弹出），
+只发生在一个位置——栈的顶部。
+
+ECMAScript 为数组专门提供了push()和pop()方法，
+以便实现类似栈的行为。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult6">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3];
+		$('<div>var data = [1,2,3];<br/>data --> '+data+'</div>').appendTo($("#showResult7"));
+		data.push(4);
+		$('<div>data.push(4);<br/>data --> '+data+'</div>').appendTo($("#showResult7"));
+		var shiftData = data.shift();
+		$('<div>var shiftData = data.shift();<br/>shiftData --> '+shiftData+'</div>').appendTo($("#showResult7"));
+		$('<div>data --> '+data+'</div>').appendTo($("#showResult7"));
+		
+		$('<div>------------------------------------------</div>').appendTo($("#showResult7"));
+		var queue = [];
+		$('<div>var queue = [];<br/>queue --> '+queue+'</div>').appendTo($("#showResult7"));
+		queue.unshift(1);
+		$('<div>queue.unshift(1);<br/>queue --> '+queue+'</div>').appendTo($("#showResult7"));
+		queue.unshift(2);
+		$('<div>queue.unshift(2);<br/>queue --> '+queue+'</div>').appendTo($("#showResult7"));
+		queue.unshift(3);
+		$('<div>queue.unshift(3);<br/>queue --> '+queue+'</div>').appendTo($("#showResult7"));
+		
+		var popData = queue.pop();
+		$('<div>var popData = queue.pop();<br/>popData --> '+popData+'</div>').appendTo($("#showResult7"));
+		$('<div>queue --> '+queue+'</div>').appendTo($("#showResult7"));
+	});
+</script>
+<div class="aTitle">数组队列方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+队列数据结构的访问规则是FIFO（First-In-First-Out，先进先出）。
+1. push()向数组末端添加项的方法;
+2. shift()能够移除数组中的第一个项并返回该项，同时将数组长度减1;
+或者
+1. unshift()向数组前端添加项的方法;
+2. pop()能够移除数组中的最后一项并返回该项，同时将数组长度减1;
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult7">
+	</div>
+</div>
+
+
+
+
+<script type="text/javascript">
+	$(function(){
+		var data = ["a","b","c","b"];
+		$('<div>var data = ["a","b","c","b"];<br/>data --> '+data+'</div>').appendTo("#showResult9");
+		var index1 = data.indexOf("b");
+		$('<div>var index1 = data.indexOf("b");<br/>index1 --> '+index1+'</div>').appendTo("#showResult9");
+		var index2 = data.lastIndexOf("b");
+		$('<div>var index2 = data.lastIndexOf("b");<br/>index2 --> '+index2+'</div>').appendTo("#showResult9");
+		var index3 = data.lastIndexOf(new String("b"));
+		$('<div>var index3 = data.lastIndexOf(new String("b"));<br/>index3 --> '+index3+'</div>').appendTo("#showResult9");
+		
+	});
+</script>
+<div class="aTitle">indexOf()和lastIndexOf()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. indexOf()方法从数组的开头（位置0）开始向后查找;
+2. lastIndexOf()方法则从数组的末尾开始向前查找;
+3. 在没找到的情况下返回-1;
+4. 在比较第一个参数与数组中的每一项时，会使用全等操作符。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult9">
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3,4,5];
+		var isEvery = data.every(function(item, index, array){
+			return item>3;
+		});
+		var isSome = data.some(function(item, index, array){
+			return item>3;
+		});
+		$('<div>var data = [1,2,3,4,5];<br/>data --> '+data+'</div>').appendTo("#showResult10");
+		$('<div>isEvery --> '+isEvery+'</div>').appendTo("#showResult10");
+		$('<div>isSome --> '+isSome+'</div>').appendTo("#showResult10");
+		
+	});
+</script>
+<div class="aTitle">迭代方法:every()和some()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+ECMAScript 5 为数组定义了5 个迭代方法。
+ every()：对数组中的每一项运行给定函数，如果该函数对每一项都返回true，则返回true。
+ filter()：对数组中的每一项运行给定函数，返回该函数会返回true 的项组成的数组。
+ forEach()：对数组中的每一项运行给定函数。这个方法没有返回值。
+ map()：对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组。
+ some()：对数组中的每一项运行给定函数，如果该函数对任一项返回true，则返回true。
+
+这些方法中的函数会接收三个参数：
+1. item:数组项的值
+2. index:该项在数组中的位置
+3. array:数组对象本身。
+
+every()和some()，它们都用于查询数组中的项是否满足某个条件。
+1.every() 传入的函数必须对每一项都返回true，这个方法才返回true；
+  否则，它就返回false。
+2. 而some()方法则是只要传入的函数对数组中的某一项返回true，就会返回true。
+
+var data = [1,2,3,4,5];
+var isEvery = data.every(function(item, index, array){
+	return item>3;
+});
+var isSome = data.some(function(item, index, array){
+	return item>3;
+});
+
+结果：
+isEvery --> false
+isSome --> true
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult10">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3,4,5];
+		var sum = 0;
+		data.forEach(function(item, index, array){
+			sum+=item;
+		});
+		$('<div>sum --> '+sum+'</div>').appendTo($("#showResult14"));
+	});
+</script>
+<div class="aTitle">迭代方法:forEach()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+forEach()方法没有返回值，
+本质上与使用for 循环迭代数组一样
+
+var data = [1,2,3,4,5];
+var sum = 0;
+data.forEach(function(item, index, array){
+	sum+=item;
+});
+
+结果：sum --> 15
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult14">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3];
+		var newData = data.map(function(x){
+			return x*x;
+		});
+		$('<div>newData --> '+newData+'</div>').appendTo($("#showResult11"));
+		
+	});
+</script>
+<div class="aTitle">迭代方法:map()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var data = [1,2,3];
+var newData = data.map(function(x){
+	return x*x;
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult11">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3];
+		var newData = data.filter(function(x){
+			return x%2==1;
+		});
+		$('<div>newData --> '+newData+'</div>').appendTo($("#showResult13"));
+
+	});
+	
+</script>
+<div class="aTitle">迭代方法:filter()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var data = [1,2,3];
+var newData = data.filter(function(x){
+	return x%2==1;
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult13">
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3];
+		var newData = data.reduce(function(x,y){
+			return x+y;
+		});
+		$('<div>newData --> '+newData+'</div>').appendTo($("#showResult12"));
+
+	});
+	
+</script>
+<div class="aTitle">归并方法:reduce()和reduceRight()【ECMAScript 5】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Array的reduce()把一个函数作用在这个Array的[x1, x2, x3...]上，
+这个函数必须接收两个参数，
+reduce()把结果继续和序列的下一个元素做累积计算，其效果就是：
+[x1, x2, x3, x4].reduce(f) = f(f(f(x1, x2), x3), x4)
+
+而reduceRight()则从数组的最后一项开始，向前遍历到第一项。
+
+var data = [1,2,3];
+var newData = data.reduce(function(x,y){
+	return x+y;
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult12">
+	</div>
+</div>
+</body>
+</html>

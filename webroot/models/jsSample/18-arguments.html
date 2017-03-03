@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>参数arguments</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+在函数体内可以通过arguments 对象来访问参数数组，
+从而获取传递给函数的每一个参数。
+arguments 对象只是与数组类似（它并不是Array 的实例）。
+
+function showMsg(){
+	if(arguments.length==0){
+		$('&lt;p&gt;完成&lt;/p&gt;').appendTo($("#showResult1"));
+	}else if(arguments.length==1){
+		$('&lt;p&gt;'+arguments[0]+'&lt;/p&gt;').appendTo($("#showResult1"));
+	}else{
+		$('&lt;p&gt;'+arguments[0]+':'+arguments[1]+'&lt;/p&gt;').appendTo($("#showResult1"));
+	}
+}
+
+showMsg();
+showMsg("用户信息保存成功！");
+showMsg("异常","用户信息保存失败！");
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<script type="text/javascript">
+function showMsg(){
+	if(arguments.length==0){
+		$('<p>完成</p>').appendTo($("#showResult1"));
+	}else if(arguments.length==1){
+		$('<p>'+arguments[0]+'</p>').appendTo($("#showResult1"));
+	}else{
+		$('<p>'+arguments[0]+':'+arguments[1]+'</p>').appendTo($("#showResult1"));
+	}
+}
+
+showMsg();
+showMsg("用户信息保存成功！");
+showMsg("异常","用户信息保存失败！");
+</script>
+
+
+
+<div class="aTitle">arguments.callee(严格模式不可用)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+callee该属性是一个指针，指向拥有这个arguments 对象的函数。
+递归算法中避免使用当前函数名，解耦合，便于函数名称修改。
+
+function factorial(num){
+	if (num <=1) {
+		return 1;
+	} else {
+		return num * <mark>arguments.callee</mark>(num-1)
+	}
+}
+
+var doing1 = factorial;
+factorial = null;
+
+----------------------------------
+//严格模式下这样处理：
+var factorial = (function f(num){
+	if (num <=1) {
+		return 1;
+	} else {
+		return num * f(num-1)
+	}
+});
+
+//变量名称改变不会报错
+var doing2 = factorial;
+factorial = null;
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+
+<script type="text/javascript">
+function factorial(num){
+	if (num <=1) {
+		return 1;
+	} else {
+		return num * arguments.callee(num-1)
+	}
+}
+var redult = factorial(5);
+
+var doing1 = factorial;
+factorial = null;
+$('<p>doing1(5)='+doing1(5)+'</p>').appendTo($("#showResult2"));
+
+//严格模式下这样处理：
+var factorial = (function f(num){
+	if (num <=1) {
+		return 1;
+	} else {
+		return num * f(num-1)
+	}
+});
+
+var doing2 = factorial;
+factorial = null;
+
+$('<p>doing2(5)='+doing2(5)+'</p>').appendTo($("#showResult2"));
+</script>
+
+
+<div class="aTitle">caller(严格模式不可用)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+caller：除了Opera 的早期版本不支持，
+其他浏览器都支持这个ECMAScript 3 并没有定义的属性。
+这个属性中保存着调用当前函数的函数的引用，
+如果是在全局作用域中调用当前函数，它的值为null。
+
+ECMAScript 5 还定义了arguments.caller 属性,
+但在严格模式下访问它也会导致错误，
+而在非严格模式下这个属性始终是undefined。
+定义这个属性是为了分清arguments.caller 和函数的caller 属性。
+
+<b>脚本：</b>
+function fun(){
+	console.log("fun.caller=",fun.caller);
+	console.log("arguments.callee.caller=",arguments.callee.caller);
+	console.log("arguments.caller=",arguments.caller);
+}
+function outer(){
+	fun();
+}
+outer();
+
+<b>结果：</b>
+fun.caller= outer(){
+	fun();
+}
+arguments.callee.caller= outer(){
+	fun();
+}
+arguments.caller= undefined
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+	</div>
+</div>
+
+<script type="text/javascript">
+function fun(){
+	window.console&&console.log("fun.caller=",fun.caller);
+	window.console&&console.log("arguments.callee.caller=",arguments.callee.caller);
+	window.console&&console.log("arguments.caller=",arguments.caller);
+}
+
+function outer(){
+	fun();
+}
+
+outer();
+</script>
+</body>
+</html>

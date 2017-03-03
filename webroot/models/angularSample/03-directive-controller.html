@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS指令-controller</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">controller:字符串</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+controller参数可以是一个字符串或一个函数。
+  当设置为字符串时，会以字符串的值为名字，
+  来查找注册在应用中的控制器的构造函数
+
+&lt;div id="app1"&gt;
+    &lt;div&gt;
+    name:&lt;input ng-model="user.name"/&gt;&lt;br/&gt;
+    desc:&lt;input ng-model="user.desc"/&gt;
+    &lt;/div&gt;
+    &lt;p my-user&gt;&lt;/p&gt;
+    &lt;div ng-controller="ctrl1"&gt;
+      name:&lt;input ng-model="user.name"/&gt;&lt;br/&gt;
+      desc:&lt;input ng-model="user.desc"/&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+angular.module("app1",[])
+  .directive('myUser',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      template: 'name:{{user.name}},desc:{{user.desc}}',
+      controller: 'ctrl1'
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.user={name:"张练",desc:"张练，男，26岁"};
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1">
+        <div>
+        name:<input ng-model="user.name"/><br/>
+        desc:<input ng-model="user.desc"/>
+        </div>
+        <p my-user></p>
+        <div ng-controller="ctrl1">
+          name:<input ng-model="user.name"/><br/>
+          desc:<input ng-model="user.desc"/>
+        </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app1",[])
+  .directive('myUser',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      template: 'name:{{user.name}},desc:{{user.desc}}',
+      controller: 'ctrl1'
+    };
+  })
+  .controller("ctrl1",function($scope){
+    $scope.user={name:"张练",desc:"张练，男，26岁"};
+  });
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+<div class="aTitle">controller:匿名构造函数</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app2"&gt;
+  &lt;div&gt;
+    name:&lt;input ng-model="user.name"/&gt;&lt;br/&gt;
+    desc:&lt;input ng-model="user.desc"/&gt;
+  &lt;/div&gt;
+  &lt;p my-user&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+angular.module("app2",[])
+  .directive('myUser',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      template: 'name:{{user.name}},desc:{{user.desc}}',
+      controller: function($scope,$element,$attrs,$log){
+        $scope.user={name:"张练",desc:"张练，男，26岁"};
+      }
+    };
+  });
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2">
+      <div>
+        name:<input ng-model="user.name"/><br/>
+        desc:<input ng-model="user.desc"/>
+      </div>
+      <p my-user></p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app2",[])
+  .directive('myUser',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      template: 'name:{{user.name}},desc:{{user.desc}}',
+      controller: function($scope,$element,$attrs,$log){
+        $scope.user={name:"张练",desc:"张练，男，26岁"};
+      }
+    };
+  });
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+
+<div class="aTitle">controllerAs</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+  controllerAs参数用来设置控制器的别名，可以以此为名来发布控制器，
+并且作用域可以访问controllerAs。这样就可以在视图中引用控制器，
+甚至无需注入$scope。
+
+&lt;div id="app3"&gt;
+  &lt;div&gt;
+    name:&lt;input ng-model="user.name"/&gt;&lt;br/&gt;
+    desc:&lt;input ng-model="user.desc"/&gt;
+  &lt;/div&gt;
+  &lt;p my-user&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+angular.module("app3",[])
+  .directive('myUser',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      template: 'name:{{user.name}},desc:{{user.desc}}',
+      <mark>controllerAs:'user'</mark>,
+      controller: function(){
+        <mark>this.name</mark>="张练";
+        <mark>this.desc</mark>="张练，男，26岁";
+      }
+    };
+  });
+angular.bootstrap(document.getElementById("app3"), ['app3']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app3">
+      <div>
+        name:<input ng-model="user.name"/><br/>
+        desc:<input ng-model="user.desc"/>
+      </div>
+      <p my-user></p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app3",[])
+  .directive('myUser',function(){
+    return {
+      restrict: 'A',
+      scope:true,
+      template: 'name:{{user.name}},desc:{{user.desc}}',
+      controllerAs:'user',
+      controller: function(){
+        this.name="张练";
+        this.desc="张练，男，26岁";
+      }
+    };
+  });
+angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+
+</body>
+</html>

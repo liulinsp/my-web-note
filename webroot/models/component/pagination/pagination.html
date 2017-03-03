@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery 分页插件</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../../css/main.css">
+	<link rel="stylesheet" type="text/css" href="pagination-new.css">
+	<script type="text/javascript" src="../../../js/jquery-1.9.12.js"></script>
+	<script type="text/javascript" src="pagination.js"></script>
+
+</head>
+<body>
+<div class="home"><a href="../../../index.html">首页</a></div>
+
+<style type="text/css">
+	table{
+		font-family: "微软雅黑", "SimSun", "宋体", "Verdana", "Arial";
+		font-size: 14px;
+		line-height: 1.5;
+		
+		border-collapse: collapse;
+  		border-spacing: 0;
+		
+		margin: 10px 10px 10px 0px;
+  		width: 400px;
+	}
+
+	thead{
+		background-color: #F6F6F6;
+	}
+
+	thead>tr, tbody>tr>td{
+		border: solid 1px #CFCFCF;
+	}
+
+	tbody>tr:nth-child(odd){
+		background-color: #FFFFFF;
+	}
+
+	tbody>tr:nth-child(even){
+		background-color: #F9F9F9;
+	}
+	
+	td{
+		text-align: center;
+		height: 25px;
+		padding: 3px, 5px, 3px; 
+	}
+</style>
+<div class="aTitle">分页示例</div>
+
+<div class="aPane" style="border-width:0px">
+	<table id="demoTable1">
+		<thead>
+			<tr>
+		      	<th width="50%">姓名</th>
+		    	<th width="50%">编号</th>
+		    </tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	<div id="pagination-demo1"></div>
+</div>
+
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+参考资料地址：
+http://www.htmleaf.com/jQuery/Menu-Navigation/201511202805.html
+
+&lt;table id="demoTable1"&gt;
+	&lt;thead&gt;
+	    &lt;tr&gt;
+		&lt;th width="50%"&gt;姓名&lt;/th&gt;
+		&lt;th width="50%"&gt;编号&lt;/th&gt;
+	    &lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div id="pagination-demo1"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+function createDemo(name){
+    var container = $('#pagination-' + name);
+    /*var sources = function(){
+        var result = [];
+
+        for(var i = 1; i < 196; i++){
+            result.push({name:"姓名"+i,age:i});
+        }
+
+        return result;
+    }();*/
+
+    var options = {
+        //dataSource: sources,
+        dataSource:function(done){
+			$.ajax({
+				type: 'GET',
+				url: 'test.json',
+				success: function(response){
+					done(response);
+				}
+		    });
+		},   
+        className: 'paginationjs-theme-blue',
+        callback: function(response, pagination){
+            /*window.console && console.log(response, pagination);*/
+
+            var dataHtml = '';
+
+            $.each(response, function(index, item){
+                dataHtml += '<tr><td>'+ item.name+"</td><td>"+item.age +'</td></tr>';
+            });
+            $("#demoTable1").find("tbody").html(dataHtml);
+        },
+        prevText:"上一页",
+        nextText:"下一页",
+    };
+
+    //$.pagination(container, options);
+
+    /*container.addHook('beforeInit', function(){
+        window.console && console.log('beforeInit...');
+    });*/
+
+    container.pagination(options);
+
+    /*container.addHook('beforePageOnClick', function(){
+        window.console && console.log('beforePageOnClick...');
+        //return false
+    });*/
+
+    return container;
+}
+
+createDemo('demo1');
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+		$(function(){
+			
+
+	        function createDemo(name){
+	            var container = $('#pagination-' + name);
+	            /*var sources = function(){
+	                var result = [];
+
+	                for(var i = 1; i < 196; i++){
+	                    result.push({name:"姓名"+i,age:i});
+	                }
+
+	                return result;
+	            }();*/
+
+	            var options = {
+	                //dataSource: sources,
+	                dataSource:function(done){
+						$.ajax({
+							type: 'GET',
+							url: 'test.json',
+							success: function(response){
+								done(response);
+							}
+					    });
+					},   
+	                className: 'paginationjs-theme-blue',
+	                callback: function(response, pagination){
+	                    /*window.console && console.log(response, pagination);*/
+
+	                    var dataHtml = '';
+
+	                    $.each(response, function(index, item){
+	                        dataHtml += '<tr><td>'+ item.name+"</td><td>"+item.age +'</td></tr>';
+	                    });
+	                    $("#demoTable1").find("tbody").html(dataHtml);
+	                },
+	                prevText:"上一页",
+	                nextText:"下一页",
+	            };
+
+	            //$.pagination(container, options);
+
+	            /*container.addHook('beforeInit', function(){
+	                window.console && console.log('beforeInit...');
+	            });*/
+
+	            container.pagination(options);
+
+	            /*container.addHook('beforePageOnClick', function(){
+	                window.console && console.log('beforePageOnClick...');
+	                //return false
+	            });*/
+
+	            return container;
+	        }
+
+	        createDemo('demo1');
+
+	        
+	    });
+</script>
+</body>
+</html>

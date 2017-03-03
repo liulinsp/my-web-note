@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS repeat</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">对象数组的遍历</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  &lt;input type="text" ng-model="newUser"/&gt;
+  &lt;button ng-click="addUser(newUser)"&gt;增加&lt;/button&gt;
+  &lt;p ng-repeat="x in users"&gt;
+    &lt;input type="checkbox" ng-model="x.checked"&gt;
+    &lt;input type="text" ng-model="x.name"&gt;
+    &lt;button ng-click="delUser($index)"&gt;删除&lt;/button&gt;
+  &lt;/p&gt;
+  {{users}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.users=[{name:"user1",checked:true},
+                {name:"user2",checked:false},
+                {name:"user3",checked:true}];
+  $scope.delUser=function(idx){
+    $scope.users.splice(idx,1);
+  }
+  $scope.addUser=function(val){
+    $scope.users.push({name:val,checked:false});
+  }
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      <input type="text" ng-model="newUser"/>
+      <button ng-click="addUser(newUser)">增加</button>
+      <p ng-repeat="x in users">
+        <input type="checkbox" ng-model="x.checked">
+        <input type="text" ng-model="x.name">
+        <button ng-click="delUser($index)">删除</button>
+      </p>
+      {{users}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope){
+  $scope.users=[{name:"user1",checked:true},
+                {name:"user2",checked:false},
+                {name:"user3",checked:true}];
+  $scope.delUser=function(idx){
+    $scope.users.splice(idx,1);
+  }
+  $scope.addUser=function(val){
+    $scope.users.push({name:val,checked:false});
+  }
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+<div class="aTitle">简单数组的遍历（存在scope问题）</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+<b>ng-repeat增加track by $index是为了避免数组有重复的值报错</b>
+&lt;div id="app2" ng-controller="ctrl2"&gt;
+  &lt;input type="text" ng-model="newUser"/&gt;
+  &lt;button ng-click="addUser(newUser)"&gt;增加&lt;/button&gt;
+  &lt;p ng-repeat="x in users track by $index"&gt;
+    &lt;input type="text" ng-model="x" ng-blur="editUser(x,$index)"&gt;
+    &lt;button ng-click="delUser($index)"&gt;删除&lt;/button&gt;
+  &lt;/p&gt;
+  {{users}}
+  
+  &lt;p ng-repeat="x in selects <mark>track by $index</mark>"&gt;
+    &lt;input type="checkbox" ng-model="<mark>$parent.selects[$index]</mark>"&gt;
+  &lt;/p&gt;
+  {{selects}}
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.users=["user1","user2","user3"];
+  $scope.editUser=function(val,idx){
+    $scope.users[idx]=val;
+  }
+  $scope.delUser=function(idx){
+    $scope.users.splice(idx,1);
+  }
+  $scope.addUser=function(val){
+    $scope.users.push(val);
+  }
+
+  $scope.selects=[true,false,true];
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      <input type="text" ng-model="newUser"/>
+      <button ng-click="addUser(newUser)">增加</button>
+      <p ng-repeat="x in users track by $index">
+        <input type="text" ng-model="x" ng-blur="editUser(x,$index)">
+        <button ng-click="delUser($index)">删除</button>
+      </p>
+      {{users}}
+
+      <p ng-repeat="x in selects track by $index">
+        <input type="checkbox" ng-model="$parent.selects[$index]">
+      </p>
+      {{selects}}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.users=["user1","user2","user3"];
+  $scope.editUser=function(val,idx){
+    $scope.users[idx]=val;
+  }
+  $scope.delUser=function(idx){
+    $scope.users.splice(idx,1);
+  }
+  $scope.addUser=function(val){
+    $scope.users.push(val);
+  }
+
+  $scope.selects=[true,false,true];
+});
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+
+<div class="aTitle">遍历对象属性</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;div id="app3" ng-controller="ctrl3"&gt;
+  &lt;ul ng-repeat="item in citys"&gt;
+    &lt;li <mark>ng-repeat="(key,value) in item"</mark>&gt;{{key}} {{value}}&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope){
+  $scope.citys=[{code:"11",name:"石家庄"},
+                {code:"12",name:"郑州"},
+                {code:"13",name:"合肥"}];
+});
+angular.bootstrap(document.getElementById("app3"), ['app3']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app3" ng-controller="ctrl3">
+      <ul ng-repeat="item in citys">
+        <li ng-repeat="(key,value) in item">{{key}} {{value}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app3 = angular.module("app3",[]);
+app3.controller("ctrl3",function($scope){
+  $scope.citys=[{code:"11",name:"石家庄"},
+                {code:"12",name:"郑州"},
+                {code:"13",name:"合肥"}];
+});
+angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+
+<style type="text/css">
+.even{
+  background-color: yellow;
+}
+.odd{
+  background-color: green;
+}
+</style>
+<div class="aTitle">特殊属性</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+$index：遍历的进度（0...length-1）。
+$first：当元素是遍历的第一个时值为true。
+$middle：当元素处于第一个和最后元素之间时值为true。
+$last：当元素是遍历的最后一个时值为true。
+$even：当$index值是偶数时值为true。
+$odd：当$index值是奇数时值为true。
+
+&lt;div id="app4" ng-controller="ctrl4"&gt;
+  &lt;li ng-repeat="item in citys"
+      ng-class="{even: !$even, odd: !$odd}"&gt;
+    {{$index+1}}、{{item.name}}
+  &lt;/li&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app4 = angular.module("app4",[]);
+app4.controller("ctrl4",function($scope){
+  $scope.citys=[{code:"11",name:"石家庄"},
+                {code:"12",name:"郑州"},
+                {code:"13",name:"合肥"}];
+});
+angular.bootstrap(document.getElementById("app4"), ['app4']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app4" ng-controller="ctrl4">
+      <li ng-repeat="item in citys"
+          ng-class="{even: !$even, odd: !$odd}">
+        {{$index+1}}、{{item.name}}
+      </li>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app4 = angular.module("app4",[]);
+app4.controller("ctrl4",function($scope){
+  $scope.citys=[{code:"11",name:"石家庄"},
+                {code:"12",name:"郑州"},
+                {code:"13",name:"合肥"}];
+});
+angular.bootstrap(document.getElementById("app4"), ['app4']);
+</script>
+</body>
+</html>

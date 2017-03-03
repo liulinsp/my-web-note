@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AngularJS模型</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">ng-model 指令</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+ng-model 指令可以将输入域的值与 AngularJS 创建的变量绑定。
+<b>双向绑定</b>：在修改输入域的值时， AngularJS 属性的值也将修改。
+
+&lt;div <mark>ng-app="app1"</mark> <mark>ng-controller="ctrl1"</mark>&gt;
+  姓名：&lt;input type="text" ng-model="name"&gt;
+  &lt;p&gt;输入的姓名为:{{name}}&lt;/p&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module(<mark>"app1"</mark>,[]);
+app1.controller(<mark>"ctrl1"</mark>,function($scope){
+  $scope.name="张三";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      姓名：<input type="text" ng-model="name">
+      <p>输入的姓名为:{{name}}</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var app1 = angular.module("app1",[]);
+  app1.controller("ctrl1",function($scope){
+    $scope.name="张三";
+  });
+  angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+<div class="aTitle">验证用户输入</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;form name="<mark>saveForm</mark>" ng-app="app2" ng-controller="ctrl2"&gt;
+  邮箱：&lt;input type="email" name="<mark>userEmail</mark>" ng-model="userEmail"&gt;
+  &lt;span style="color:red" ng-show="<mark>saveForm</mark>.<mark>userEmail</mark>.$error.email"&gt;
+    邮箱格式错误
+  &lt;/span&gt;
+&lt;/from&gt;
+
+<b>脚本：</b>
+var app2 = angular.module("app2",[]);
+app2.controller("ctrl2",function($scope){
+  $scope.userEmail="linliu21@creditease.cn";
+});
+    </pre>
+  </div>
+  <div class="aShow">
+    <form name="saveForm" id="app2" ng-controller="ctrl2">
+        邮箱：<input type="email" name="userEmail" ng-model="userEmail">
+        <span style="color:red" ng-show="saveForm.userEmail.$error.email">
+          邮箱格式错误
+        </span>
+    </from>
+  </div>
+</div>
+<script type="text/javascript">
+  var app2 = angular.module("app2",[]);
+  app2.controller("ctrl2",function($scope){
+    $scope.userEmail="linliu21@creditease.cn";
+  });
+  angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+
+<div class="aTitle">应用状态</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+ng-model 指令可以为应用数据提供状态值:
+  <b>invalid：</b>当任一验证(required、ng-minlength等)标识表单
+           的任一字段为无效时AngularJS设置这种状态
+  <b>valid:</b>与$invalid相反，设置所有表单验证目前评估为正确状态
+  <b>pristine：</b>AngularJS中所有表单从该状态开始。
+            这允许你找出用户是否开始输入并修改任何表单元素。
+            可能的用法：表单原始状态下禁用reset按钮。
+  <b>dirty：</b>与$pristine相反。即用户做了一些更改
+         （他可以恢复,但$dirty标识已经设置）。 
+  <b>touched：</b>【失去焦点？？】
+  <b>error：</b>包含控件或表单验证失败的引用。
+    </pre>
+  </div>
+  <div class="aShow">
+    <style type="text/css">
+      .ng-valid{
+        border-color: #0804B8;
+      }
+      .ng-invalid{
+        border-color: #F1081B;
+      }
+      input.ng-dirty{
+        background-color: #F7C6D3;
+      }
+      input.ng-pristine{
+        background-color: #F7F6C6;
+      }
+    </style>
+    <div id="app3" ng-controller="ctrl3">
+      <form name="form2">
+          邮箱：<input type="email" name="userEmail" ng-model="userEmail">
+          <span style="color:red" ng-show="form2.userEmail.$error.email">
+            邮箱格式错误
+          </span>
+          <p>状态:<br/>
+          valid :{{form2.userEmail.$valid}}<br/>
+          invalid :{{form2.userEmail.$invalid}}<br/>
+          pristine :{{form2.userEmail.$pristine}}<br/>
+          dirty :{{form2.userEmail.$dirty}}<br/>
+          touched : {{form2.userEmail.$touched}}<br/>
+          error.email :{{form2.userEmail.$error.email}}
+          </p>
+      </from>
+    </div>
+  </div>
+</div>
+<script>
+  var app3 = angular.module("app3",[])
+    .controller("ctrl3",function($scope){
+      $scope.userEmail="linliu21@creditease.cn";
+    });
+  angular.bootstrap(document.getElementById("app3"), ['app3']);
+</script>
+
+<div class="aTitle">状态css类</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+ng-model 指令根据表单域的状态添加/移除以下类：
+  ng-empty
+  ng-not-empty
+  ng-touched
+  ng-untouched
+  ng-valid
+  ng-invalid
+  ng-dirty
+  ng-pending
+  ng-pristine
+    </pre>
+  </div>
+  <div class="aShow">
+<pre>
+<b>样式：</b>
+.ng-valid{
+  border-color: #0804B8;
+}
+.ng-invalid{
+  border-color: #F1081B;
+}
+input.ng-dirty{
+  background-color: #F7C6D3;
+}
+input.ng-pristine{
+  background-color: #F7F6C6;
+}
+</pre>
+  </div>
+</div>
+
+
+</body>
+</html>

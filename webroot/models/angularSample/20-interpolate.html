@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>$interpolate() 插值字符串</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/angular-1.4.6.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">插值字符串</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+$interpolate服务是一个可以接受三个参数的函数，其中第一个参数是必需的。
+ 1. text（字符串）：一个包含字符插值标记的字符串。
+ 2. mustHaveExpression（布尔型）：如果将这个参数设为true，
+当传入的字符串中不含有表达式时会返回null。
+ 3. trustedContext（字符串）：AngularJS会对已经进行过字符插值操作的字符串通过
+$sec.getTrusted()方法进行严格的上下文转义。
+
+&lt;div id="app1" ng-controller="ctrl1"&gt;
+  用户名：&lt;input ng-model="to" type="text"/&gt;&lt;br/&gt;
+  邮件内容模板：&lt;br/&gt;
+  &lt;textarea ng-model="emailBody" rows="3"&gt;&lt;/textarea&gt;&lt;br/&gt;
+  &lt;button ng-click="deal()"&gt;插入&lt;/button&gt;&lt;br/&gt;
+  
+  邮件内容：
+  &lt;h3&gt;{{ previewText }}&lt;/h3&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope,$interpolate){
+  $scope.to="linliu";
+  $scope.emailBody="您好，{{user}}：\n 您的话费余额已不足10元，请及时充值！ ";
+  $scope.deal=function(){
+    if($scope.to && $scope.emailBody){
+      <mark>var template = $interpolate($scope.emailBody);</mark>
+      <mark>$scope.previewText = template({user:$scope.to});</mark>
+    }
+  };
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app1" ng-controller="ctrl1">
+      用户名：<input ng-model="to" type="text"/><br/>
+      邮件内容模板：<br/>
+      <textarea ng-model="emailBody" rows="3"></textarea><br/>
+      <button ng-click="deal()">插入</button><br/>
+      
+      邮件内容：
+      <h3>{{ previewText }}</h3>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var app1 = angular.module("app1",[]);
+app1.controller("ctrl1",function($scope,$interpolate){
+  $scope.to="linliu";
+  $scope.emailBody="您好，{{user}}：\n 您的话费余额已不足10元，请及时充值！ ";
+  $scope.deal=function(){
+    if($scope.to && $scope.emailBody){
+      var template = $interpolate($scope.emailBody);
+      $scope.previewText = template({user:$scope.to});
+    }
+  };
+});
+angular.bootstrap(document.getElementById("app1"), ['app1']);
+</script>
+
+
+
+<div class="aTitle">修改表达式开始和结束的符号</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+如果需要在文本中使用不同于{{ }}的符号来标识表达式的开始和结束，
+可以在$interpolateProvider中配置。
+用startSymbol()方法可以修改标识开始的符号。这个方法接受一个参数。
+ value（字符型）：开始符号的值。
+用endSymbol()方法可以修改标识结束的符号。这个方法也接受一个参数。
+ value（字符型）： 结束符号的值。
+
+&lt;div id="app2" ng-controller="ctrl2"&gt;
+  用户名：&lt;input ng-model="to" type="text"/&gt;&lt;br/&gt;
+  邮件内容模板：&lt;br/&gt;
+  &lt;textarea ng-model="emailBody" rows="3"&gt;&lt;/textarea&gt;&lt;br/&gt;
+  &lt;button ng-click="deal()"&gt;插入&lt;/button&gt;&lt;br/&gt;
+  
+  邮件内容：
+  &lt;h3&gt;<mark>[</mark>previewText<mark>]</mark>&lt;/h3&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+angular.module("app2",[])
+  .config(function($interpolateProvider){
+    $interpolateProvider.startSymbol("[");
+    $interpolateProvider.endSymbol("]");
+  })
+  .service("emailParser",function($interpolate){
+    this.parse = function(content, params){
+      var template = $interpolate(content);
+      return template(params);
+    }
+  })
+  .controller("ctrl2",function($scope,emailParser){
+    $scope.to="linliu";
+    $scope.emailBody="您好，[user]：\n 您的话费余额已不足10元，请及时充值！ ";
+    $scope.deal=function(){
+      if($scope.to && $scope.emailBody){
+        $scope.previewText = emailParser.parse($scope.emailBody,{user:$scope.to});
+      }
+    };
+  });
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+    </pre>
+  </div>
+  <div class="aShow">
+    <div id="app2" ng-controller="ctrl2">
+      用户名：<input ng-model="to" type="text"/><br/>
+      邮件内容模板：<br/>
+      <textarea ng-model="emailBody" rows="3"></textarea><br/>
+      <button ng-click="deal()">插入</button><br/>
+      
+      邮件内容：
+      <h3>[previewText]</h3>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+angular.module("app2",[])
+  .config(function($interpolateProvider){
+    $interpolateProvider.startSymbol("[");
+    $interpolateProvider.endSymbol("]");
+  })
+  .service("emailParser",function($interpolate){
+    this.parse = function(content, params){
+      var template = $interpolate(content);
+      return template(params);
+    }
+  })
+  .controller("ctrl2",function($scope,emailParser){
+    $scope.to="linliu";
+    $scope.emailBody="您好，[user]：\n 您的话费余额已不足10元，请及时充值！ ";
+    $scope.deal=function(){
+      if($scope.to && $scope.emailBody){
+        $scope.previewText = emailParser.parse($scope.emailBody,{user:$scope.to});
+      }
+    };
+  });
+angular.bootstrap(document.getElementById("app2"), ['app2']);
+</script>
+</body>
+</html>

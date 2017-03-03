@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript浏览器对象</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+$(function(){
+	var w=window.innerWidth|| document.documentElement.clientWidth|| document.body.clientWidth;
+	var h=window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
+	$('<div> w --> '+w+' </div>').appendTo($("#showResult1"));
+	$('<div> h --> '+h+' </div>').appendTo($("#showResult1"));
+});
+</script>
+<div class="aTitle">window</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. Window 对象</b>
+所有浏览器都支持 window 对象。它表示浏览器窗口。
+所有 JavaScript 全局对象、函数以及变量均自动成为 window 对象的成员。
+全局变量是 window 对象的属性。
+全局函数是 window 对象的方法。
+甚至 HTML DOM 的 document 也是 window 对象的属性之一：
+window.document.getElementById("header");
+与此相同：
+document.getElementById("header");
+
+<b>Window 尺寸</b>
+有三种方法能够确定浏览器窗口的尺寸（浏览器的视口，不包括工具栏和滚动条）。
+对于Internet Explorer、Chrome、Firefox、Opera 以及 Safari：
+window.innerHeight - 浏览器窗口的内部高度
+window.innerWidth - 浏览器窗口的内部宽度
+对于 Internet Explorer 8、7、6、5：
+document.documentElement.clientHeight
+document.documentElement.clientWidth
+或者（IE混杂模式下用）
+document.body.clientHeight
+document.body.clientWidth
+
+实用的 JavaScript 方案（涵盖所有浏览器）：
+实例
+<mark>var w=window.innerWidth
+|| document.documentElement.clientWidth
+|| document.body.clientWidth;</mark>
+
+<mark>var h=window.innerHeight
+|| document.documentElement.clientHeight
+|| document.body.clientHeight;</mark>
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<div class="aTitle">window.resizeTo() 和 window.resizeBy(),不建议使用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+resizeTo()接收浏览器窗口的新宽度和新高度；
+resizeBy()接收新窗口与原窗口的宽度和高度之差。
+
+这两个方法有可能被浏览器禁用；而且，
+在Opera和IE7（及更高版本）中默认就是禁用的。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1_1">
+	</div> -->
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	function _show(msg,obj){
+		$('<div>'+msg+(typeof obj=="undefined"?"":obj)+'</div>').appendTo("#showResult1_1");
+	}
+	_show("window.screenLeft=",window.screenLeft);
+	_show("window.screenTop=",window.screenTop);
+	_show("window.screenX=",window.screenX);
+	_show("window.screenY=",window.screenY);
+});
+</script>
+<div class="aTitle">window窗口位置（不同浏览器表示的内容不一致, 不建议使用）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. screenLeft 和screenTop
+IE、Safari、Opera 和Chrome 都提供了screenLeft 和screenTop 属性，
+分别用于表示窗口相对于屏幕左边和上边的位置。
+
+2. screenX 和screenY
+Firefox 在screenX 和screenY 属性中提供相同的窗口位置信息，
+Safari 和Chrome 也同时支持这两个属性。
+Opera虽然也支持screenX 和screenY 属性，但与screenLeft 和screenTop 属性并不对应。
+
+<b>最佳实践：</b>
+var leftPos = (typeof window.screenLeft == "number") ?
+			window.screenLeft : window.screenX;
+var topPos = (typeof window.screenTop == "number") ?
+			window.screenTop : window.screenY;
+
+<b>PS:</b>
+不同浏览器表示的内容不一致,例：
+1. Chrome中screenLeft 和screenTop表示浏览器窗口的位置
+ （窗口最大化时，screenLeft为0,screenTop为0）；
+2. IE8中screenLeft 和screenTop表示页面的位置
+ （窗口最大化时，screenLeft为0，由于有标题栏、地址栏等screenTop不为0）。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1_1">
+	</div>
+</div>
+
+
+<div class="aTitle">window.moveTo() 和 window.moveBy(),不建议使用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+moveTo()接收的是新位置的x 和y 坐标值;
+moveBy()接收的是在水平和垂直方向上移动的像素数。
+这两个方法可能会被浏览器禁用；而且，在Opera 和IE 7（及更高版本）中默认就
+是禁用的。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1_1">
+	</div> -->
+</div>
+
+
+<div class="aTitle">window.open()</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.open(URL,name,specs,replace)
+<b>1. URL</b>	
+可选。打开指定的页面的URL。如果没有指定URL，打开与新的空白窗口。
+<b>2. name</b>
+可选。指定target属性或窗口的名称。支持以下值：
+	_blank - URL加载到一个新的窗口。这是默认
+	_parent - URL加载到父框架
+	_self - URL替换当前页面
+	_top - URL替换任何可加载的框架集
+	name - 窗口名称
+<b>3. specs</b>
+可选。一个逗号分隔的项目列表。支持以下值：
+channelmode=yes|no|1|0	是否要在影院模式显示 window。默认是没有的。仅限IE浏览器
+directories=yes|no|1|0	是否添加目录按钮。默认是肯定的。仅限IE浏览器
+fullscreen=yes|no|1|0	浏览器是否显示全屏模式。默认是没有的。在全屏模式下的window，还必须在影院模式。仅限IE浏览器
+height=pixels	窗口的高度。最小值为100
+left=pixels	该窗口的左侧位置。不能是负值
+location=yes|no|1|0	是否显示地址字段.默认值是yes？？？（不同浏览器的默认值不同。如果设置为no，地址栏可能会隐藏，也可能会被禁用）
+menubar=yes|no|1|0	是否显示菜单栏.默认值是yes？？？
+resizable=yes|no|1|0	是否可调整窗口大小.默认值是yes？？？
+scrollbars=yes|no|1|0	是否显示滚动条.默认值是yes？？？
+status=yes|no|1|0	是否要添加一个状态栏.默认值是yes？？？
+titlebar=yes|no|1|0	是否显示标题栏.被忽略，除非调用HTML应用程序或一个值得信赖的对话框.默认值是yes
+toolbar=yes|no|1|0	是否显示浏览器工具栏.默认值是yes？？？
+top=pixels	窗口顶部的位置.仅限IE浏览器
+width=pixels	窗口的宽度.最小.值为100
+<b>4. replace</b>
+Optional.Specifies规定了装载到窗口的 URL 是在窗口的浏览历史中创建一个新条目，还是替换浏览历史中的当前条目。支持下面的值：
+true - URL 替换浏览历史中的当前条目。
+false - URL 在浏览历史中创建新的条目。
+<pre class="error">
+1. 在不打开新窗口的情况下，会忽略第三个参数;
+2. 第三个参数，整个特性字符串中不允许出现空格;
+3. window.open()方法会返回一个指向新窗口的引用。
+4. 有些浏览器在默认情况下可能不允许我们针对主浏览器窗口调整大小或移动位置，
+但却允许我们针对通过window.open()创建的窗口调整大小或移动位置。
+5. 对于浏览器的主窗口，如果没有得到用户的允许是不能关闭它的。
+不过，弹出窗口倒是可以调用top.close()在不经用户允许的情况下关闭自己。
+var myWin = window.open("http://www.baidu.com/","myWindow");
+myWin.close();
+alert(myWin.closed); //true
+6. 新创建的window 对象有一个opener 属性，其中保存着打开它的原始窗口对象。
+7. 如果是浏览器内置的屏蔽程序阻止的弹出窗口，那么window.open()很可能会返回null。
+   如果是浏览器扩展或其他程序阻止的弹出窗口，那么window.open()通常会抛出一个错误。
+try {
+	var myWin = window.open("http://www.baidu.com", "_blank");
+	if (myWin == null){
+		alert("浏览器内置的屏蔽程序阻止了弹出窗口");
+	}
+} catch (ex){
+	alert("浏览器扩展或其他程序阻止了弹出窗口");
+}
+</pre>
+
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1_1">
+	</div> -->
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	$('<div> screen.availWidth --> '+( screen.availWidth )+' </div>').appendTo($("#showResult2"));
+	$('<div> screen.availHeight --> '+( screen.availHeight )+' </div>').appendTo($("#showResult2"));
+});
+</script>
+<div class="aTitle">window.screen(在编程中用处不大)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.screen 对象在编写时可以不使用 window 这个前缀。
+一些属性：
+screen.availWidth - 可用的屏幕宽度(以像素计，减去界面特性，比如窗口任务栏)
+screen.availHeight - 可用的屏幕高度(以像素计，减去界面特性，比如窗口任务栏)
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+</script>
+<div class="aTitle">window.location</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.location 对象在编写时可不使用 window 这个前缀。
+一些例子：
+location.hostname 返回 web 主机的域名
+location.pathname 返回当前页面的路径和文件名
+location.port 返回 web 主机的端口 （80 或 443）
+location.protocol 返回所使用的 web 协议（http:// 或 https://）
+
+
+location对象表示当前页面的URL信息。例如，一个完整的URL：
+
+http://www.example.com:8080/path/index.html?a=1&b=2#TOP
+可以用location.href获取。要获得URL各个部分的值，可以这么写：
+
+location.protocol; // 'http'
+location.host; // 'www.example.com:8080'
+location.hostname; // 'www.example.com'
+location.port; // '8080'
+location.pathname; // '/path/index.html'
+location.search; // '?a=1&b=2'
+location.hash; // 'TOP'
+location.href; // 'http://www.example.com:8080/path/index.html?a=1&b=2#TOP'
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+
+<div class="aTitle">window.location位置操作</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+通过以下方法会在当前页面打开新的URL：		
+1. location.assign("http://www.wrox.com");
+2. window.location = "http://www.wrox.com";
+3. location.href = "http://www.wrox.com";//最常用
+
+每次修改location 的属性，页面都会以新URL 重新加载,如：
+4. location.hash = "#section1";
+5. location.search = "?q=javascript";
+6. location.hostname = "www.yahoo.com";
+7. location.pathname = "mydir";
+8. location.port = 8080;
+<pre class="error">  在IE8、Firefox 1、Safari 2+、Opera 9+和Chrome 中，
+修改hash 的值会在浏览器的历史记录中生成一条新记录。
+  在IE 的早期版本中，hash 属性不会在用户单击“后退”和“前进”按钮时被更新，
+而只会在用户单击包含hash 的URL 时才会被更新。
+</pre>
+
+当通过上述任何一种方式修改URL 之后，浏览器的历史记录中就会生成一条新记录，
+因此用户通过单击“后退”按钮都会导航到前一个页面。要禁用这种行为，可以使用replace()方法。
+1. location.replace("http://www.wrox.com");
+
+浏览器输入“http://localhost/test1”，并回车   -->     http://localhost/test1    
+location.href = "http://localhost/test2";    -->     http://localhost/test2
+location.replace("http://localhost/test3");  -->     http://localhost/test3
+浏览器点击“回退”                             -->     http://localhost/test1
+浏览器点击“前进”                             -->     http://localhost/test3
+
+1. location.reload(); //重新加载（有可能从缓存中加载）
+2. location.reload(true); //重新加载（从服务器重新加载）
+浏览器输入“http://localhost/test1”，并回车   -->     http://localhost/test1    
+location.href = "http://localhost/test2";    -->     http://localhost/test2
+location.reload();                           -->     http://localhost/test2
+浏览器点击“回退”                             -->     http://localhost/test1
+浏览器点击“前进”                             -->     http://localhost/test2
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+
+
+
+<script type="text/javascript">
+
+</script>
+<div class="aTitle">window.history</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.history 对象在编写时可不使用 window 这个前缀。
+为了保护用户隐私，对 JavaScript 访问该对象的方法做出了限制。
+history.back() - 与在浏览器点击后退按钮相同
+history.forward() - 与在浏览器中点击按钮向前相同
+history.go() - 跳转到指定历史页，会重新请求
+
+history.go(-1): 返回上一页，原页面表单中的内容会丢失；
+//history.go("wrox.com")：跳转到最近的wrox.com 页面???【有问题】
+history.back(): 返回上一页，原页表表单中的内容会保留。 
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('<div> navigator.appName --> '+( navigator.appName )+' </div>').appendTo($("#showResult3"));
+		$('<div> navigator.appVersion --> '+( navigator.appVersion )+' </div>').appendTo($("#showResult3"));
+		$('<div> navigator.language --> '+( navigator.language )+' </div>').appendTo($("#showResult3"));
+		$('<div> navigator.platform --> '+( navigator.platform )+' </div>').appendTo($("#showResult3"));
+		$('<div> navigator.userAgent --> '+( navigator.userAgent )+' </div>').appendTo($("#showResult3"));
+	});
+	
+</script>
+<div class="aTitle">window.navigator（不建议用）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.navigator 对象在编写时可不使用 window 这个前缀。
+
+警告：来自 navigator 对象的信息具有误导性，不应该被用于检测浏览器版本，这是因为：
+navigator 数据可被浏览器使用者更改
+浏览器无法报告晚于浏览器发布的新操作系统
+
+navigator.appName：浏览器名称；
+navigator.appVersion：浏览器版本；
+navigator.language：浏览器设置的语言；
+navigator.platform：操作系统类型；
+navigator.userAgent：浏览器设定的User-Agent字符串。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult4");
+	}
+
+	function hasPlugin(name){
+		name = name.toLowerCase();
+		for (var i=0; i < navigator.plugins.length; i++){
+			if (navigator. plugins [i].name.toLowerCase().indexOf(name) > -1){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function hasIEPlugin(name){
+		try {
+			new ActiveXObject(name);
+			return true;
+		} catch (ex){
+			return false;
+		}
+	}
+
+	function hasFlash(){
+		var result = hasPlugin("Flash");
+		if (!result){
+			result = hasIEPlugin("ShockwaveFlash.ShockwaveFlash");
+		}
+		return result;
+	}
+
+	_show('hasPlugin("Flash")='+hasPlugin("Flash"));
+	_show('hasIEPlugin("ShockwaveFlash.ShockwaveFlash")='+hasIEPlugin("ShockwaveFlash.ShockwaveFlash"));
+	_show('hasFlash()='+hasFlash());
+});
+
+</script>
+<div class="aTitle">navigator检测插件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function hasPlugin(name){
+	name = name.toLowerCase();
+	for (var i=0; i < navigator.plugins.length; i++){
+		if (navigator. plugins [i].name.toLowerCase().indexOf(name) > -1){
+			return true;
+		}
+	}
+	return false;
+}
+
+function hasIEPlugin(name){
+	try {
+		new ActiveXObject(name);
+		return true;
+	} catch (ex){
+		return false;
+	}
+}
+
+function hasFlash(){
+	var result = hasPlugin("Flash");
+	if (!result){
+		result = hasIEPlugin("ShockwaveFlash.ShockwaveFlash");
+	}
+	return result;
+}
+
+<pre class="error">IE 是以COM对象的方式实现插件的，而COM对象使用唯一标识符来标识。
+因此，要想检查特定的插件，就必须知道其COM标识符。</pre>
+<pre class="error">plugins 集合有一个名叫refresh()的方法，用于刷新plugins 以反映最新安
+装的插件。这个方法接收一个参数：表示是否应该重新加载页面的一个布尔值。如果
+将这个值设置为true，则会重新加载包含插件的所有页面；否则，只更新plugins
+集合，不重新加载页面。</pre>
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+	</div>
+</div>
+
+
+<div class="aTitle">客户端检测</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+在决定使用哪种客户端检测方法时，一般应优先考虑使用能力检测。
+怪癖检测是确定应该如何处理代码的第二选择。
+而用户代理检测则是客户端检测的最后一种方案，因为这种方法对用户代理字符串具有很强的依赖性。
+
+var client = function(){
+
+    //rendering engines
+    var engine = {            
+        ie: 0,
+        gecko: 0,
+        webkit: 0,
+        khtml: 0,
+        opera: 0,
+
+        //complete version
+        ver: null  
+    };
+    
+    //browsers
+    var browser = {
+        
+        //browsers
+        ie: 0,
+        firefox: 0,
+        safari: 0,
+        konq: 0,
+        opera: 0,
+        chrome: 0,
+
+        //specific version
+        ver: null
+    };
+
+    
+    //platform/device/OS
+    var system = {
+        win: false,
+        mac: false,
+        x11: false,
+        
+        //mobile devices
+        iphone: false,
+        ipod: false,
+        ipad: false,
+        ios: false,
+        android: false,
+        nokiaN: false,
+        winMobile: false,
+        
+        //game systems
+        wii: false,
+        ps: false 
+    };    
+
+    //detect rendering engines/browsers
+    var ua = navigator.userAgent;    
+    if (window.opera){
+        engine.ver = browser.ver = window.opera.version();
+        engine.opera = browser.opera = parseFloat(engine.ver);
+    } else if (/AppleWebKit\/(\S+)/.test(ua)){
+        engine.ver = RegExp["$1"];
+        engine.webkit = parseFloat(engine.ver);
+        
+        //figure out if it's Chrome or Safari
+        if (/Chrome\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.chrome = parseFloat(browser.ver);
+        } else if (/Version\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.safari = parseFloat(browser.ver);
+        } else {
+            //approximate version
+            var safariVersion = 1;
+            if (engine.webkit < 100){
+                safariVersion = 1;
+            } else if (engine.webkit < 312){
+                safariVersion = 1.2;
+            } else if (engine.webkit < 412){
+                safariVersion = 1.3;
+            } else {
+                safariVersion = 2;
+            }   
+            
+            browser.safari = browser.ver = safariVersion;        
+        }
+    } else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)){
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.khtml = browser.konq = parseFloat(engine.ver);
+    } else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){    
+        engine.ver = RegExp["$1"];
+        engine.gecko = parseFloat(engine.ver);
+        
+        //determine if it's Firefox
+        if (/Firefox\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.firefox = parseFloat(browser.ver);
+        }
+    } else if (/MSIE ([^;]+)/.test(ua)){    
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.ie = browser.ie = parseFloat(engine.ver);
+    }
+    
+    //detect browsers
+    browser.ie = engine.ie;
+    browser.opera = engine.opera;
+    
+
+    //detect platform
+    var p = navigator.platform;
+    system.win = p.indexOf("Win") == 0;
+    system.mac = p.indexOf("Mac") == 0;
+    system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+
+    //detect windows operating systems
+    if (system.win){
+        if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
+            if (RegExp["$1"] == "NT"){
+                switch(RegExp["$2"]){
+                    case "5.0":
+                        system.win = "2000";
+                        break;
+                    case "5.1":
+                        system.win = "XP";
+                        break;
+                    case "6.0":
+                        system.win = "Vista";
+                        break;
+                    case "6.1":
+                        system.win = "7";
+                        break;
+                    default:
+                        system.win = "NT";
+                        break;                
+                }                            
+            } else if (RegExp["$1"] == "9x"){
+                system.win = "ME";
+            } else {
+                system.win = RegExp["$1"];
+            }
+        }
+    }
+    
+    //mobile devices
+    system.iphone = ua.indexOf("iPhone") > -1;
+    system.ipod = ua.indexOf("iPod") > -1;
+    system.ipad = ua.indexOf("iPad") > -1;
+    system.nokiaN = ua.indexOf("NokiaN") > -1;
+    
+    //windows mobile
+    if (system.win == "CE"){
+        system.winMobile = system.win;
+    } else if (system.win == "Ph"){
+        if(/Windows Phone OS (\d+.\d+)/.test(ua)){;
+            system.win = "Phone";
+            system.winMobile = parseFloat(RegExp["$1"]);
+        }
+    }
+    
+    
+    //determine iOS version
+    if (system.mac && ua.indexOf("Mobile") > -1){
+        if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)){
+            system.ios = parseFloat(RegExp.$1.replace("_", "."));
+        } else {
+            system.ios = 2;  //can't really detect - so guess
+        }
+    }
+    
+    //determine Android version
+    if (/Android (\d+\.\d+)/.test(ua)){
+        system.android = parseFloat(RegExp.$1);
+    }
+    
+    //gaming systems
+    system.wii = ua.indexOf("Wii") > -1;
+    system.ps = /playstation/i.test(ua);
+    
+    //return it
+    return {
+        engine:     engine,
+        browser:    browser,
+        system:     system        
+    };
+
+}();
+
+
+
+有时候，Safari 版本并不会与WebKit 版本严格地一一对应，也可能会存在某些小
+版本上的差异。这个表中只是列出了最可能的WebKit 版本，但不保证精确。
+<b>Safari版本号</b>   <b>最低限度的WebKit版本号</b>
+2.0.3 			417.9 
+2.0.4 			418.8 
+3.0.4 			523.10
+3.1				525
+
+与Safari 跟WebKit 一样，Firefox 与Gecko 的版本号也不一定严格对应。
+<b>Firefox版本号</b>   <b>最低限度的Gecko版本号</b>
+1.0 				1.7.5
+1.5 				1.8.0
+2.0 				1.8.1
+3.0 				1.9.0
+3.5 				1.9.1
+3.6 				1.9.2
+4.0 				2.0.0
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult5">
+	</div>
+</div>
+<script type="text/javascript">
+
+var client = function(){
+
+    //rendering engines
+    var engine = {            
+        ie: 0,
+        gecko: 0,
+        webkit: 0,
+        khtml: 0,
+        opera: 0,
+
+        //complete version
+        ver: null  
+    };
+    
+    //browsers
+    var browser = {
+        
+        //browsers
+        ie: 0,
+        firefox: 0,
+        safari: 0,
+        konq: 0,
+        opera: 0,
+        chrome: 0,
+
+        //specific version
+        ver: null
+    };
+
+    
+    //platform/device/OS
+    var system = {
+        win: false,
+        mac: false,
+        x11: false,
+        
+        //mobile devices
+        iphone: false,
+        ipod: false,
+        ipad: false,
+        ios: false,
+        android: false,
+        nokiaN: false,
+        winMobile: false,
+        
+        //game systems
+        wii: false,
+        ps: false 
+    };    
+
+    //detect rendering engines/browsers
+    var ua = navigator.userAgent;    
+    if (window.opera){
+        engine.ver = browser.ver = window.opera.version();
+        engine.opera = browser.opera = parseFloat(engine.ver);
+    } else if (/AppleWebKit\/(\S+)/.test(ua)){
+        engine.ver = RegExp["$1"];
+        engine.webkit = parseFloat(engine.ver);
+        
+        //figure out if it's Chrome or Safari
+        if (/Chrome\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.chrome = parseFloat(browser.ver);
+        } else if (/Version\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.safari = parseFloat(browser.ver);
+        } else {
+            //approximate version
+            var safariVersion = 1;
+            if (engine.webkit < 100){
+                safariVersion = 1;
+            } else if (engine.webkit < 312){
+                safariVersion = 1.2;
+            } else if (engine.webkit < 412){
+                safariVersion = 1.3;
+            } else {
+                safariVersion = 2;
+            }   
+            
+            browser.safari = browser.ver = safariVersion;        
+        }
+    } else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)){
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.khtml = browser.konq = parseFloat(engine.ver);
+    } else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){    
+        engine.ver = RegExp["$1"];
+        engine.gecko = parseFloat(engine.ver);
+        
+        //determine if it's Firefox
+        if (/Firefox\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.firefox = parseFloat(browser.ver);
+        }
+    } else if (/MSIE ([^;]+)/.test(ua)){    
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.ie = browser.ie = parseFloat(engine.ver);
+    }
+    
+    //detect browsers
+    browser.ie = engine.ie;
+    browser.opera = engine.opera;
+    
+
+    //detect platform
+    var p = navigator.platform;
+    system.win = p.indexOf("Win") == 0;
+    system.mac = p.indexOf("Mac") == 0;
+    system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+
+    //detect windows operating systems
+    if (system.win){
+        if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
+            if (RegExp["$1"] == "NT"){
+                switch(RegExp["$2"]){
+                    case "5.0":
+                        system.win = "2000";
+                        break;
+                    case "5.1":
+                        system.win = "XP";
+                        break;
+                    case "6.0":
+                        system.win = "Vista";
+                        break;
+                    case "6.1":
+                        system.win = "7";
+                        break;
+                    default:
+                        system.win = "NT";
+                        break;                
+                }                            
+            } else if (RegExp["$1"] == "9x"){
+                system.win = "ME";
+            } else {
+                system.win = RegExp["$1"];
+            }
+        }
+    }
+    
+    //mobile devices
+    system.iphone = ua.indexOf("iPhone") > -1;
+    system.ipod = ua.indexOf("iPod") > -1;
+    system.ipad = ua.indexOf("iPad") > -1;
+    system.nokiaN = ua.indexOf("NokiaN") > -1;
+    
+    //windows mobile
+    if (system.win == "CE"){
+        system.winMobile = system.win;
+    } else if (system.win == "Ph"){
+        if(/Windows Phone OS (\d+.\d+)/.test(ua)){;
+            system.win = "Phone";
+            system.winMobile = parseFloat(RegExp["$1"]);
+        }
+    }
+    
+    
+    //determine iOS version
+    if (system.mac && ua.indexOf("Mobile") > -1){
+        if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)){
+            system.ios = parseFloat(RegExp.$1.replace("_", "."));
+        } else {
+            system.ios = 2;  //can't really detect - so guess
+        }
+    }
+    
+    //determine Android version
+    if (/Android (\d+\.\d+)/.test(ua)){
+        system.android = parseFloat(RegExp.$1);
+    }
+    
+    //gaming systems
+    system.wii = ua.indexOf("Wii") > -1;
+    system.ps = /playstation/i.test(ua);
+    
+    //return it
+    return {
+        engine:     engine,
+        browser:    browser,
+        system:     system        
+    };
+
+}();
+
+
+
+
+
+$("<div>"+JSON.stringify(client)+"</div>").appendTo("#showResult5");
+</script>
+
+</body>
+</html>
