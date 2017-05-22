@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ES6新特性</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">定义函数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var obj1 ={
+	name:"lin",
+	<mark>hello:function()</mark>{
+		$("#showResult1").append("&lt;p&gt;你好,"+this.name+"&lt;/p&gt;");
+	}
+};
+//执行
+obj1.hello();
+
+/*ES6新特性*/
+var obj2 ={
+	name:"ES6",
+	<mark>hello()</mark>{
+		$("#showResult1").append("&lt;p&gt;你好,"+this.name+"&lt;/p&gt;");
+	}
+};
+//执行
+obj2.hello();
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var obj1 ={
+		name:"lin",
+		hello:function(){
+			$("#showResult1").append("&lt;p&gt;你好,"+this.name+"&lt;/p&gt;");
+		}
+	};
+	//执行
+	obj1.hello();
+	
+	/*ES6新特性*/
+	var obj2 ={
+		name:"ES6",
+		hello(){
+			$("#showResult1").append("&lt;p&gt;你好,"+this.name+"&lt;/p&gt;");
+		}
+	};
+	//执行
+	obj2.hello();
+});
+</script>
+
+
+<div class="aTitle">箭头函数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var obj1 ={
+	hello:function(name,sex){
+		$("#showResult2").append("&lt;p&gt;你好,"+name+sex+"&lt;/p&gt;");
+	}
+};
+//执行
+obj1.hello("lin","女士");
+
+/*ES6新特性*/
+var obj2 ={
+	hello: (name,sex) =&gt; $("#showResult2").append("&lt;p&gt;你好,"+name+sex+"&lt;/p&gt;")
+};
+//执行
+obj2.hello("ES6","先生");
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var obj1 ={
+		hello:function(name,sex){
+			$("#showResult2").append("<p>你好,"+name+sex+"</p>");
+		}
+	};
+	//执行
+	obj1.hello("lin","女士");
+	
+	/*ES6新特性*/
+	var obj2 ={
+		hello: (name,sex) => $("#showResult2").append("<p>你好,"+name+sex+"</p>")
+	};
+	//执行
+	obj2.hello("ES6","先生");
+});
+</script>
+
+
+
+<div class="aTitle">可换行字符串</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+	var obj ={
+		msg:`提示：
+    确定要删除？`,
+	};
+	
+	$("#textareaShow").append(obj.msg);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<textarea id="textareaShow" rows="3"></textarea>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var obj ={
+		msg:`提示：
+    确定要删除？`,
+	};
+	
+	$("#textareaShow").append(obj.msg);
+});
+</script>
+
+<p>
+ 待处理：
+var obj = {
+    //动态属性名
+	["prop_"+(()=>42)]:42,
+
+	'_proto_': {
+		...
+	},
+
+	//可换行字符串
+	msg:`提示：
+      确定要删除？`,
+}
+
+</p>
+
+
+
+
