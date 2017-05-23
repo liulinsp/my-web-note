@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react 组件</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/babel.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var <mark>H</mark>elloMessage = React.createClass({
+  render: function() {
+    return &lt;h1&gt;Hello {this.props.name}!&lt;/h1&gt;;
+  }
+});
+
+ReactDOM.render(
+  &lt;HelloMessage name="linda" /&gt;,
+  document.getElementById('example')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example"></div>
+	</div>
+</div>
+<script type="text/babel">
+var HelloMessage = React.createClass({
+  render: function() {
+    return <h1>Hello {this.props.name}!</h1>;
+  }
+});
+
+ReactDOM.render(
+  <HelloMessage name="linda"/>,
+  document.getElementById('example')
+);
+</script>
+
+
+<div class="aTitle">组件子节点</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example2"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var NotesList = React.createClass({
+  render: function() {
+    return (
+      &lt;ol&gt;
+      {
+        React.Children.map(this.props.children, function (child) {
+          return &lt;li&gt;{child}&lt;/li&gt;;
+        })
+      }
+      &lt;/ol&gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &lt;NotesList&gt;
+  	&lt;span&gt;aaa&lt;/span&gt;
+  	&lt;span&gt;bbb&lt;/span&gt;
+  	&lt;span&gt;ccc&lt;/span&gt;
+  &lt;/NotesList&gt;,
+  document.getElementById('example2')
+);
+
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example2"></div>
+	</div>
+</div>
+<script type="text/babel">
+var NotesList = React.createClass({
+  render: function() {
+    return (
+      <ol>
+      {
+        React.Children.map(this.props.children, function (child) {
+          return <li>{child}</li>;
+        })
+      }
+      </ol>
+    );
+  }
+});
+
+ReactDOM.render(
+  <NotesList>
+  	<span>aaa</span>
+  	<span>bbb</span>
+  	<span>ccc</span>
+  </NotesList>,
+  document.getElementById('example2')
+);
+</script>
+
+
+<div class="aTitle">组件属性验证</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example3"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var MyTitle = React.createClass({
+  <mark>propTypes</mark>: {
+    title: React.PropTypes.string.isRequired,
+  },
+
+  render: function() {
+     return &lt;h1&gt; {this.props.title} &lt;/h1&gt;;
+   }
+});
+
+
+var hello = 123;
+ReactDOM.render(
+  &lt;MyTitle title={hello} /&gt;,
+  document.getElementById('example3')
+);
+
+<b>错误信息：</b>
+<span class="error">Warning: Failed propType: Invalid prop `title` of type `number` 
+supplied to `MyTitle`, expected `string`.</span>
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example3"></div>
+	</div>
+</div>
+<script type="text/babel">
+var MyTitle = React.createClass({
+  propTypes: {
+    title: React.PropTypes.string.isRequired,
+  },
+
+  render: function() {
+     return <h1> {this.props.title} </h1>;
+   }
+});
+
+
+var hello = 123;
+ReactDOM.render(
+  <MyTitle title={hello} />,
+  document.getElementById('example3')
+);
+</script>
+
+
+
+
+<div class="aTitle">设置组件默认属性值</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example4"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var HelloTitle = React.createClass({
+  <mark>getDefaultProps</mark> : function () {
+    return {
+      title : 'Hello World'
+    };
+  },
+
+  render: function() {
+     return &lt;h1&gt; {this.props.title} &lt;/h1&gt;;
+   }
+});
+
+
+ReactDOM.render(
+  &lt;HelloTitle/&gt;,
+  document.getElementById('example4')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example4"></div>
+	</div>
+</div>
+<script type="text/babel">
+var HelloTitle = React.createClass({
+  getDefaultProps : function () {
+    return {
+      title : 'Hello World'
+    };
+  },
+
+  render: function() {
+     return <h1> {this.props.title} </h1>;
+   }
+});
+
+
+ReactDOM.render(
+  <HelloTitle/>,
+  document.getElementById('example4')
+);
+</script>
+
+
+
+
+<div class="aTitle">组件获取真实的DOM节点</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example5"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var MyComponent = React.createClass({
+  handleClick: function() {
+    <mark>this.refs.myTextInput</mark>.focus();
+  },
+  render: function() {
+    return (
+      &lt;div&gt;
+        &lt;input type="text" <mark>ref="myTextInput"</mark> /&gt;
+        &lt;input type="button" value="Focus the text input" onClick={this.handleClick} /&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &lt;MyComponent /&gt;,
+  document.getElementById('example5')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example5"></div>
+	</div>
+</div>
+<script type="text/babel">
+var MyComponent = React.createClass({
+  handleClick: function() {
+    this.refs.myTextInput.focus();
+  },
+  render: function() {
+    return (
+      <div>
+        <input type="text" ref="myTextInput" />
+        <input type="button" value="Focus the text input" onClick={this.handleClick} />
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <MyComponent />,
+  document.getElementById('example5')
+);
+</script>
+
+
+<div class="aTitle">组件状态</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example6"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var LikeButton = React.createClass({
+  <mark>getInitialState: function() {
+    return {liked: false};
+  },</mark>
+  handleClick: function(event) {
+    <mark>this.setState({liked: !this.state.liked});</mark>
+  },
+  render: function() {
+    <mark>var text = this.state.liked ? 'like' : 'haven\'t liked';</mark>
+    return (
+      &lt;button onClick={this.handleClick}&gt;
+        You {text} this. Click to toggle.
+      &lt;/button&gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &lt;LikeButton /&gt;,
+  document.getElementById('example6')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example6"></div>
+	</div>
+</div>
+<script type="text/babel">
+var LikeButton = React.createClass({
+  getInitialState: function() {
+    return {liked: false};
+  },
+  handleClick: function(event) {
+    this.setState({liked: !this.state.liked});
+  },
+  render: function() {
+    var text = this.state.liked ? 'like' : 'haven\'t liked';
+    return (
+      <button onClick={this.handleClick}>
+        You {text} this. Click to toggle.
+      </button>
+    );
+  }
+});
+
+ReactDOM.render(
+  <LikeButton />,
+  document.getElementById('example6')
+);
+</script>
+
+
+
+<div class="aTitle">组件表单输入</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example7"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var Input = React.createClass({
+  getInitialState: function() {
+    return {value: 'Hello!'};
+  },
+  handleChange: function(event) {
+    this.setState({value: event.target.value});
+  },
+  render: function () {
+    var value = this.state.value;
+    return (
+      &lt;div&gt;
+        &lt;input type="text" value={value} onChange={this.handleChange} /&gt;
+        &lt;p&gt;{value}&lt;/p&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &lt;Input /&gt;,
+  document.getElementById('example7')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example7"></div>
+	</div>
+</div>
+<script type="text/babel">
+var Input = React.createClass({
+  getInitialState: function() {
+    return {value: 'Hello!'};
+  },
+  handleChange: function(event) {
+    this.setState({value: event.target.value});
+  },
+  render: function () {
+    var value = this.state.value;
+    return (
+      <div>
+        <input type="text" value={value} onChange={this.handleChange} />
+        <p>{value}</p>
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <Input />,
+  document.getElementById('example7')
+);
+</script>
+
+
+
+<div class="aTitle">组件的生命周期</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>组件的生命周期分成三个状态：</b>
+	1. Mounting：已插入真实 DOM
+	2. Updating：正在被重新渲染
+	3. Unmounting：已移出真实 DOM
+
+React 为每个状态都提供了两种处理函数，will 函数在进入状态之前调用，
+did 函数在进入状态之后调用，三种状态共计五种处理函数。
+	1. componentWillMount()
+	2. componentDidMount()
+	3. componentWillUpdate(object nextProps, object nextState)
+	4. componentDidUpdate(object prevProps, object prevState)
+	5. componentWillUnmount()
+
+此外，React 还提供两种特殊状态的处理函数。
+	1. 已加载组件收到新的参数时调用:
+	componentWillReceiveProps(object nextProps)
+	2. 组件判断是否重新渲染时调用
+	shouldComponentUpdate(object nextProps, object nextState)
+
+<b>页面：</b>
+&lt;div id="example8"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var Hello = React.createClass({
+  getInitialState: function () {
+    return {
+      opacity: 1.0
+    };
+  },
+
+  componentDidMount: function () {
+    this.timer = setInterval(function () {
+      var opacity = this.state.opacity;
+      opacity -= .05;
+      if (opacity &lt; 0.1) {
+        opacity = 1.0;
+      }
+      this.setState({
+        opacity: opacity
+      });
+    }.bind(this), 100);
+  },
+
+  render: function () {
+    return (
+      &lt;div style=<mark>{{opacity: this.state.opacity}}</mark>&gt;
+        Hello {this.props.name}
+      &lt;/div&gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &lt;Hello name="world"/&gt;,
+  document.getElementById('example8')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example8"></div>
+	</div>
+</div>
+<script type="text/babel">
+var Hello = React.createClass({
+  getInitialState: function () {
+    return {
+      opacity: 1.0
+    };
+  },
+
+  componentDidMount: function () {
+    this.timer = setInterval(function () {
+      var opacity = this.state.opacity;
+      opacity -= .05;
+      if (opacity < 0.1) {
+        opacity = 1.0;
+      }
+      this.setState({
+        opacity: opacity
+      });
+    }.bind(this), 100);
+  },
+
+  render: function () {
+    return (
+      <div style={{opacity: this.state.opacity}}>
+        Hello {this.props.name}
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <Hello name="world"/>,
+  document.getElementById('example8')
+);
+</script>
+</body>
+</html>

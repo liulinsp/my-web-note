@@ -9,10 +9,11 @@
 <body>
 <div class="home"><a href="../../index.html">首页</a></div>
 
-<div class="aTitle">定义函数</div>
+<div class="aTitle">简化字面量方式定义函数</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
+参考资料：http://www.cnblogs.com/Wayou/p/es6_new_features.html
 <b>脚本：</b>
 var obj1 ={
 	name:"lin",
@@ -43,7 +44,7 @@ $(function(){
 	var obj1 ={
 		name:"lin",
 		hello:function(){
-			$("#showResult1").append("&lt;p&gt;你好,"+this.name+"&lt;/p&gt;");
+			$("#showResult1").append("<p>你好,"+this.name+"</p>");
 		}
 	};
 	//执行
@@ -53,7 +54,7 @@ $(function(){
 	var obj2 ={
 		name:"ES6",
 		hello(){
-			$("#showResult1").append("&lt;p&gt;你好,"+this.name+"&lt;/p&gt;");
+			$("#showResult1").append("<p>你好,"+this.name+"</p>");
 		}
 	};
 	//执行
@@ -61,6 +62,52 @@ $(function(){
 });
 </script>
 
+<div class="aTitle">字面量方式定义原型</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var person = {
+	sayHello(){
+		$("#showResult1-2").append("&lt;p&gt;你好！&lt;/p&gt;");
+	}
+}
+
+var singer = {
+	__proto__: person,
+	sing(){
+		$("#showResult1-2")
+		append("&lt;p&gt;门前大桥下游过一群鸭,快来快来数一数...&lt;/p&gt;");
+	}
+}
+
+singer.sayHello();
+singer.sing();
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1-2">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var person = {
+		sayHello(){
+			$("#showResult1-2").append("<p>你好！</p>");
+		}
+	}
+
+	var singer = {
+		__proto__: person,
+		sing(){
+			$("#showResult1-2").append("<p>门前大桥下游过一群鸭,快来快来数一数...</p>");
+		}
+	}
+
+	singer.sayHello();
+	singer.sing();
+});
+</script>
 
 <div class="aTitle">箭头函数</div>
 <div class="aPane">
@@ -106,7 +153,67 @@ $(function(){
 });
 </script>
 
+<div class="aTitle">箭头函数（使用上下文的作用域）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+window.name = "全局对象";
+var obj1 ={
+	name:"对象1",
+	hello:function(){
+		var wrapMsg = function(){
+			return "&lt;p&gt;你好,"+this.name+"[普通函数]&lt;/p&gt;";
+		}
+		$("#showResult3").append(wrapMsg());
+	}
+};
+//执行
+obj1.hello();
 
+/*ES6新特性*/
+var obj2 ={
+	name:"对象2",
+	hello:function(){
+		var wrapMsg = () => "&lt;p&gt;你好,"+this.name+"[箭头函数]&lt;/p&gt;";
+		$("#showResult3").append(wrapMsg());
+	}
+};
+//执行
+obj2.hello();
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	window.name = "全局对象";
+	var obj1 ={
+		name:"对象1",
+		hello:function(){
+			var wrapMsg = function(){
+				return "<p>你好,"+this.name+"[普通函数]</p>";
+			}
+			$("#showResult3").append(wrapMsg());
+		}
+	};
+	//执行
+	obj1.hello();
+	
+	/*ES6新特性*/
+	var obj2 ={
+		name:"对象2",
+		hello:function(){
+			var wrapMsg = () => "<p>你好,"+this.name+"[箭头函数]</p>";
+			$("#showResult3").append(wrapMsg());
+		}
+	};
+	//执行
+	obj2.hello();
+});
+</script>
 
 <div class="aTitle">可换行字符串</div>
 <div class="aPane">
@@ -136,7 +243,266 @@ $(function(){
 });
 </script>
 
-<p>
+
+<div class="aTitle">字符串模板</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var name= "张三";
+var msg = `你好，${name}`;
+$("#showResult4").append(msg);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var name= "张三";
+	var msg = `你好，${name}`;
+	$("#showResult4").append(msg);
+});
+</script>
+
+
+<div class="aTitle">解构</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var [,x,y] = ["pointer",109,258];
+$("#showResult5").append(`x=${x}, y=${y}`);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult5">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var [,x,y] = ["pointer",109,258];
+	$("#showResult5").append(`x=${x}, y=${y}`);
+});
+</script>
+
+
+<div class="aTitle">默认参数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+function sayHello(name){
+	name = name||"佚名";
+	$("#showResult6").append(`&lt;p&gt;你好，${name}&lt;/p&gt;`);
+}
+function sayHelloES6(name='佚名'){
+	$("#showResult6").append(`&lt;p&gt;你好，${name}&lt;/p&gt;`);
+}
+
+sayHello();
+sayHelloES6();
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult6">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function sayHello(name){
+		name = name||"佚名";
+		$("#showResult6").append(`<p>你好，${name}</p>`);
+	}
+	function sayHelloES6(name='佚名'){
+		$("#showResult6").append(`<p>你好，${name}</p>`);
+	}
+
+	sayHello();
+	sayHelloES6();
+});
+</script>
+
+
+<div class="aTitle">不定参数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+function add(...nums){
+	return nums.reduce((x,y) => x+y);
+}
+var result1 = add(1,2,3);//结果为6
+var result2 = add(1,2,3,4,5);//结果为15
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult7">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function add(...nums){
+		return nums.reduce((x,y) => x+y);
+	}
+	var result1 = add(1,2,3);//=6
+	var result2 = add(1,2,3,4,5);//=15
+});
+</script>
+
+<div class="aTitle">拓展参数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+function sayHello(name,sex){
+	$("#showResult8").append(`&lt;p&gt;你好，${name} ${sex}&lt;/p&gt;`);
+}
+
+var arr = ["张三","先生"];
+//原调用方法
+sayHello.apply(null,arr);
+//ES6
+sayHello(...arr);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult8">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function sayHello(name,sex){
+		$("#showResult8").append(`<p>你好，${name} ${sex}</p>`);
+	}
+
+	var arr = ["张三","先生"];
+	//原调用方法
+	sayHello.apply(null,arr);
+	//ES6
+	sayHello(...arr);
+});
+</script>
+
+<div class="aTitle">let与const 关键字</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+<b>let：</b>
+1. let声明的变量拥有块级作用域(var作用域是函数体的全部)
+2. let声明的全局变量不是全局对象的属性
+3. let声明的变量直到控制流到达该变量被定义的代码行时才会被装载，
+   所以在到达之前使用该变量会触发错误.
+
+<b>const：</b>
+const声明的变量只可以在声明时赋值，不可随意修改，否则会导致SyntaxError。
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult9">
+		
+	</div> -->
+</div>
+
+
+<div class="aTitle">for of 值遍历</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var someArray = [ "a", "b", "c" ];
+ 
+for (let v of someArray) {
+    $("#showResult9").append(v);
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult9">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	var someArray = [ "a", "b", "c" ];
+ 
+	for (let v of someArray) {
+	    $("#showResult9").append(v);
+	}
+});
+</script>
+
+
+<div class="aTitle">类</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+//类的定义
+class Animal {
+	//ES6中新型构造器
+    constructor(name) {
+        this.name = name;
+    }
+    //实例方法
+    sayName() {
+        console.log('My name is '+this.name);
+    }
+}
+//类的继承
+class Programmer extends Animal {
+    constructor(name) {
+    	//直接调用父类构造器进行初始化
+        super(name);
+    }
+    program() {
+        console.log("I'm coding...");
+    }
+}
+//测试我们的类
+var animal=new Animal('波利'),
+li=new Programmer('李雷');
+animal.sayName();
+li.sayName();
+li.program();
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult10">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	//类的定义
+	class Animal {
+		//ES6中新型构造器
+	    constructor(name) {
+	        this.name = name;
+	    }
+	    //实例方法
+	    sayName() {
+	        console.log('My name is '+this.name);
+	    }
+	}
+	//类的继承
+	class Programmer extends Animal {
+	    constructor(name) {
+	    	//直接调用父类构造器进行初始化
+	        super(name);
+	    }
+	    program() {
+	        console.log("I'm coding...");
+	    }
+	}
+	//测试我们的类
+	var animal=new Animal('波利'),
+	li=new Programmer('李雷');
+	animal.sayName();
+	li.sayName();
+	li.program();
+});
+</script>
+<!-- <p>
  待处理：
 var obj = {
     //动态属性名
@@ -151,7 +517,7 @@ var obj = {
       确定要删除？`,
 }
 
-</p>
+</p> -->
 
 
 

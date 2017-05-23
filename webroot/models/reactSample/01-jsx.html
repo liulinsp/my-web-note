@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react JSX语法</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/babel.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">jsx遍历</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var names = ['Alice', 'Emily', 'Kate'];
+
+ReactDOM.render(
+	&lt;div&gt;
+	{
+		names.map(function (name) {
+			return &lt;div&gt;Hello, {name}!&lt;/div&gt;
+		})
+	}
+	&lt;/div&gt;,
+	document.getElementById('example')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example"></div>
+	</div>
+</div>
+<script type="text/babel">
+var names = ['Alice', 'Emily', 'Kate'];
+
+ReactDOM.render(
+	<div>
+	{
+		names.map(function (name) {
+			return <div>Hello, {name}!</div>
+		})
+	}
+	</div>,
+	document.getElementById('example')
+);
+</script>
+
+<div class="aTitle">jsx遍历</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example2"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var arr = [
+  &lt;h1&gt;Hello world!&lt;/h1&gt;,
+  &lt;h2&gt;React is awesome&lt;/h2&gt;,
+];
+
+ReactDOM.render(
+  &lt;div&gt;{arr}&lt;/div&gt;,
+  document.getElementById('example2')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example2"></div>
+	</div>
+</div>
+<script type="text/babel">
+var arr = [
+  <h1>Hello world!</h1>,
+  <h2>React is awesome</h2>,
+];
+
+ReactDOM.render(
+  <div>{arr}</div>,
+  document.getElementById('example2')
+);
+</script>
+
+</body>
+</html>
