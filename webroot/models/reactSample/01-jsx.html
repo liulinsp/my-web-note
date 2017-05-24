@@ -88,5 +88,56 @@ ReactDOM.render(
 );
 </script>
 
+<style>
+.red{
+	color: red;
+}
+</style>
+<div class="aTitle">React.createElement</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>样式：</b>
+.red{
+	color: red;
+}
+
+<b>页面：</b>
+&lt;div id="example3-1"&gt;&lt;/div&gt;
+&lt;div id="example3-2"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var element1 = React.createElement("h1",{className:"red"},"Hello React!");
+ReactDOM.render(
+  element1,
+  document.getElementById('example3-1')
+);
+
+var element2 = &lt;h1 className="red"&gt;你好，React!&lt;/h1&gt;;
+ReactDOM.render(
+  element2,
+  document.getElementById('example3-2')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example3-1"></div>
+		<div id="example3-2"></div>
+	</div>
+</div>
+<script type="text/babel">
+var element1 = React.createElement("h1",{className:"red"},"Hello React!");
+ReactDOM.render(
+  element1,
+  document.getElementById('example3-1')
+);
+
+var element2 = <h1 className="red">Hello React!</h1>;
+ReactDOM.render(
+  element2,
+  document.getElementById('example3-2')
+);
+</script>
+
 </body>
 </html>
