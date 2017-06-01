@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react 组件创建方式</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/browser.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">函数式定义无状态组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example1"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+function Hello(props){
+	return &lt;h1&gt;您好，{props.name}！&lt;/h1&gt;
+}
+
+ReactDOM.render(
+	&lt;Hello name="张三"/&gt;,
+	document.getElementById('example1')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example1"></div>
+	</div>
+</div>
+<script type="text/babel">
+function Hello(props){
+	return <h1>您好，{props.name}！</h1>
+}
+
+ReactDOM.render(
+	<Hello name="张三"/>,
+	document.getElementById('example1')
+);
+</script>
+
+
+
+<div class="aTitle">React.createClass方式创建组件（ES5形式，旧版本功能，性能有缺陷，不建议用）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example2"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+var Hello = React.createClass({
+	render: function() {
+        return (
+            &lt;h1&gt;您好，{this.props.name}！&lt;/h1&gt;
+        );
+    }
+});
+ReactDOM.render(
+	&lt;Hello name="李四"/&gt;,
+	document.getElementById('example2')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example2"></div>
+	</div>
+</div>
+<script type="text/babel">
+var Hello = React.createClass({
+	render: function() {
+        return (
+            <h1>您好，{this.props.name}！</h1>
+        );
+    }
+});
+ReactDOM.render(
+	<Hello name="李四"/>,
+	document.getElementById('example2')
+);
+</script>
+
+<div class="aTitle">React.Component方式创建组件（ES6形式，推荐）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example3"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+class Hello extends React.Component{
+	constructor(props) {
+		super(props);
+	}
+	render(){
+        return (
+            &lt;h1&gt;您好，{this.props.name}！&lt;/h1&gt;
+        );
+    }
+}
+ReactDOM.render(
+	&lt;Hello name="王五"/&gt;,
+	document.getElementById('example3')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example3"></div>
+	</div>
+</div>
+<script type="text/babel">
+class Hello extends React.Component{
+	constructor(props) {
+		super(props);
+	}
+	render(){
+        return (
+            <h1>您好，{this.props.name}！</h1>
+        );
+    }
+}
+
+ReactDOM.render(
+	<Hello name="王五"/>,
+	document.getElementById('example3')
+);
+</script>
