@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react 事件</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/browser.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">函数方式创建组件的事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example1"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+function ClickButton(){
+	function handleClick(e){
+		console.log('The button was clicked.');
+		e.preventDefault();
+	}
+	return &lt;button onClick={handleClick}&gt;点我&lt;/button&gt;
+}
+ReactDOM.render(
+	&lt;ClickButton/&gt;,
+	document.getElementById("example1")
+);
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="example1"></div>
+	</div>
+</div>
+<script type="text/babel">
+function ClickButton(){
+	function handleClick(e){
+		console.log('The button was clicked.');
+		e.preventDefault();
+	}
+	return <button onClick={handleClick}>点我</button>
+}
+ReactDOM.render(
+	<ClickButton/>,
+	document.getElementById("example1")
+);
+</script>
+
+
+<div class="aTitle">类继承方式组件的事件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example2"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+class ClickButton extends React.Component{
+	constructor(props){
+		super(props);
+	}
+	handleClick(e){
+		console.log('The button was clicked!');
+		e.preventDefault();
+	}
+	render(){
+		return &lt;button onClick={this.handleClick}&gt;按钮&lt;/button&gt;
+	}
+}
+ReactDOM.render(
+	&lt;ClickButton/&gt;,
+	document.getElementById("example2")
+);
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="example2"></div>
+	</div>
+</div>
+<script type="text/babel">
+class ClickButton extends React.Component{
+	constructor(props){
+		super(props);
+	}
+	handleClick(e){
+		console.log('The button was clicked!');
+		e.preventDefault();
+	}
+	render(){
+		return <button onClick={this.handleClick}>按钮</button>
+	}
+}
+ReactDOM.render(
+	<ClickButton/>,
+	document.getElementById("example2")
+);
+</script>
+
+
+<div class="aTitle">事件与状态结合</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example3"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+class SwitchButton extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {isOff:false};
+		<mark>this.handleClick = this.handleClick.bind(this);</mark>
+	}
+	handleClick(e){
+		<mark>this.setState(prevState =&gt; ({
+	      isOff: !prevState.isOff
+	    }));</mark>
+		e.preventDefault();
+	}
+	render(){
+		return &lt;button onClick={this.handleClick}&gt;{this.state.isOff?"开":"关"}&lt;/button&gt;
+	}
+}
+ReactDOM.render(
+	&lt;SwitchButton/&gt;,
+	document.getElementById("example3")
+);
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="example3"></div>
+	</div>
+</div>
+<script type="text/babel">
+class SwitchButton extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {isOff:false};
+		this.handleClick = this.handleClick.bind(this);
+	}
+	handleClick(e){
+		this.setState(prevState => ({
+	      isOff: !prevState.isOff
+	    }));
+		e.preventDefault();
+	}
+	render(){
+		return <button onClick={this.handleClick}>{this.state.isOff?"开":"关"}</button>
+	}
+}
+ReactDOM.render(
+	<SwitchButton/>,
+	document.getElementById("example3")
+);
+</script>
+</body>
+</html>

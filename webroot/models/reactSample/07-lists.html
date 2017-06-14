@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react 列表</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/browser.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">列表</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+function PersonList(props){
+	var personItems = props.persons.map((person,index) =&gt; &lt;li key={person.no}&gt;{person.name}&lt;/li&gt;);
+	return (&lt;ul&gt;{personItems}&lt;/ul&gt;);
+}
+
+var persons = [{no:1,name:"丁怡"},{no:2,name:"卫子贤"},{no:3,name:"王牧"},{no:4,name:"卢平镇"}];
+ReactDOM.render(
+	&lt;PersonList persons={persons}/&gt;,
+	document.getElementById("example")
+); 
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example"></div>
+	</div>
+</div>
+<script type="text/babel">
+function PersonList(props){
+	var personItems = props.persons.map((person,index) => <li key={person.no}>{person.name}</li>);
+	return (<ul>{personItems}</ul>);
+}
+
+var persons = [{no:1,name:"丁怡"},{no:2,name:"卫子贤"},{no:3,name:"王牧"},{no:4,name:"卢平镇"}];
+ReactDOM.render(
+	<PersonList persons={persons}/>,
+	document.getElementById("example")
+);
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react 引用</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/browser.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">引用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+class InputFocus extends React.Component{
+	constructor(props){
+		super(props);
+		this.handleClick = this.handleClick.bind(this);
+	}
+	handleClick(){
+		<mark>this.textInput.focus();</mark>
+	}
+	render(){
+		return (
+			&lt;div&gt;
+				<mark>&lt;input type="text" ref={(input)=&gt;this.textInput = input}/&gt;</mark>
+				&lt;button onClick={this.handleClick}&gt;输入框获得焦点&lt;/button&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+
+ReactDOM.render(
+	&lt;InputFocus/&gt;,
+	document.getElementById('example')
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example"></div>
+	</div>
+</div>
+<script type="text/babel">
+class InputFocus extends React.Component{
+	constructor(props){
+		super(props);
+		this.handleClick = this.handleClick.bind(this);
+	}
+	handleClick(){
+		this.textInput.focus();
+	}
+	render(){
+		return (
+			<div>
+				<input type="text" ref={(input)=>this.textInput = input}/>
+				<button onClick={this.handleClick}>输入框获得焦点</button>
+			</div>
+		);
+	}
+}
+
+ReactDOM.render(
+	<InputFocus/>,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

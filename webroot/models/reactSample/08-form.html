@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react 表单</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/browser.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">表单</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+class EditForm extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {name:"张丽梅",desc:"高级设计师"}
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleTextareaChange = this.handleTextareaChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	handleInputChange(e){
+		this.setState({
+			name:e.target.value
+		});
+	}
+	handleTextareaChange(e){
+		this.setState({
+			desc:e.target.value
+		});
+	}
+	handleSubmit(e){
+		console.log("提交表单：",this.state);
+		e.preventDefault();
+	}
+	render(){
+		return (&lt;form onSubmit={this.handleSubmit}&gt;
+			&lt;div&gt;
+				&lt;label for="name"&gt;&lt;/label&gt;
+				&lt;input name="name" type="text" value={this.state.name} onChange={this.handleInputChange}/&gt;
+			&lt;/div&gt;
+			&lt;div&gt;
+				&lt;label for="desc"&gt;&lt;/label&gt;
+				&lt;textarea name="desc" value={this.state.desc} onChange={this.handleTextareaChange}&gt;&lt;/textarea&gt;
+			&lt;/div&gt;
+			&lt;div&gt;&lt;button&gt;提交&lt;/button&gt;&lt;/div&gt;
+		&lt;/form&gt;)
+	}
+}
+
+ReactDOM.render(
+	&lt;EditForm/&gt;,
+	document.getElementById("example")
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example"></div>
+	</div>
+</div>
+<script type="text/babel">
+class EditForm extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {name:"张丽梅",desc:"高级设计师",city:"02",sex:'women'}
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleTextareaChange = this.handleTextareaChange.bind(this);
+		this.handleSelectChange = this.handleSelectChange.bind(this);
+		this.handleRadioChange = this.handleRadioChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	handleInputChange(e){
+		this.setState({
+			name:e.target.value
+		});
+	}
+	handleTextareaChange(e){
+		this.setState({
+			desc:e.target.value
+		});
+	}
+	handleSelectChange(e){
+		this.setState({
+			city:e.target.value
+		});
+	}
+	handleRadioChange(e){
+		if(e.target.checked){
+			this.setState({
+				sex:e.target.value
+			});
+		}
+	}
+	handleSubmit(e){
+		console.log("提交表单：",this.state);
+		e.preventDefault();
+	}
+	options(){
+		var citys = [{value:"01",name:"北京"},{value:"02",name:"天津"},{value:"03",name:"上海"}];
+		return citys.map((city) => <option value={city.value} key={city.value}>{city.name}</option>);
+	}
+	render(){
+		return (<form onSubmit={this.handleSubmit}>
+			<div>
+				<label for="name">姓名： </label>
+				<input name="name" type="text" value={this.state.name} onChange={this.handleInputChange}/>
+			</div>
+			<div>
+				<label for="desc">简介： </label>
+				<textarea name="desc" value={this.state.desc} onChange={this.handleTextareaChange}></textarea>
+			</div>
+			<div>
+				<label for="city">城市： </label>
+				<select name="city" value={this.state.city} onChange={this.handleSelectChange}>
+				  {this.options()}
+				</select>
+			</div>
+			<div>
+				<label for="sex">性别： </label>
+				<input type="radio" name="sex" checked={this.state.sex=='men'} value="men" onChange={this.handleRadioChange}/>男
+				<input type="radio" name="sex" checked={this.state.sex=='women'} value="women" onChange={this.handleRadioChange}/>女
+			</div>
+			<div><button>提交</button></div>
+		</form>)
+	}
+}
+
+ReactDOM.render(
+	<EditForm/>,
+	document.getElementById("example")
+);
+</script>
+</body>
+</html>

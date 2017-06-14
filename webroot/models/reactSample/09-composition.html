@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>react 组件构造</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/react-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/react-dom-15.0.1.js"></script>
+	<script type="text/javascript" src="../../js/browser.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">使用props.children构造组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example1"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+function Box(props){
+	return (
+		&lt;div&gt;
+			&lt;h3&gt;{props.title}&lt;/h3&gt;
+			&lt;div class="content"&gt;
+				{props.children}
+			&lt;/div&gt;
+		&lt;/div&gt;
+	)
+}
+
+ReactDOM.render(
+	&lt;Box title="提示："&gt;
+		&lt;p&gt;签到有红包！&lt;/p&gt;
+	&lt;/Box&gt;,
+	document.getElementById("example1")
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example1"></div>
+	</div>
+</div>
+<script type="text/babel">
+function Box(props){
+	return (
+		<div>
+			<h3>{props.title}</h3>
+			<div class="content">
+				{props.children}
+			</div>
+		</div>
+	)
+}
+
+ReactDOM.render(
+	<Box title="提示：">
+		<p>签到有红包！</p>
+	</Box>,
+	document.getElementById("example1")
+);
+
+</script>
+
+
+<div class="aTitle">使用自定义参数构造组件</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div id="example2"&gt;&lt;/div&gt;
+
+<b>脚本：</b>
+function Box(props){
+	return (
+		&lt;div&gt;
+			&lt;h3&gt;{props.title}&lt;/h3&gt;
+			&lt;div class="content"&gt;
+				{props.content}
+			&lt;/div&gt;
+			&lt;div class="option"&gt;
+				{props.option}
+			&lt;/div&gt;
+		&lt;/div&gt;
+	)
+}
+
+var content = (&lt;p&gt;确认退出系统？&lt;/p&gt;);
+var option = (&lt;p&gt;&lt;button&gt;确定&lt;/button&gt; &lt;button&gt;取消&lt;/button&gt;&lt;/p&gt;);
+ReactDOM.render(
+	&lt;Box title="警告：" content={content} option={option}/&gt;,
+	document.getElementById("example2")
+);
+		</pre>
+	</div>
+	<div class="aShow note">
+		<div id="example2"></div>
+	</div>
+</div>
+<script type="text/babel">
+function Box(props){
+	return (
+		<div>
+			<h3>{props.title}</h3>
+			<div class="content">
+				{props.content}
+			</div>
+			<div class="option">
+				{props.option}
+			</div>
+		</div>
+	)
+}
+
+var content = (<p>确认退出系统？</p>);
+var option = (<p><button>确定</button> <button>取消</button></p>);
+ReactDOM.render(
+	<Box title="警告：" content={content} option={option}/>,
+	document.getElementById("example2")
+);
+
+</script>
+</body>
+</html>
