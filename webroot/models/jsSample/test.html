@@ -6,11 +6,16 @@
 	<script type="text/javascript" src="../../js/jquery-1.6.4.js"></script>
 	<meta charset="utf-8">
 	<script type="text/javascript">
-$(function(){
-	//$("#btn").click(function(){alert("click");});
-	//$("#btn").trigger('click');
-	document.getElementById("btn").click();
-});
+setTimeout(function(){
+	console.log(1);
+	alert(1);
+}, 3000);
+
+setTimeout(function(){
+	console.log(2);
+}, 5000);
+
+alert(0);
 	</script>
 </head>
 <body>

@@ -19,6 +19,7 @@
 	&lt;div&gt;
 		{{message}}&lt;br/&gt;
 		&lt;input type="text" v-model="message"/&gt;
+		&lt;input type="text" v-model.lazy="message"/&gt;失去焦点后同步
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;input type="radio" value="men" v-model="sex"&gt;男 
@@ -65,7 +66,8 @@ var app1 = new Vue({
 		<div id="app1" class="note">
 			<div>
 				{{message}}<br/>
-				<input type="text" v-model="message"/>
+				<input type="text" v-model="message"/><br>
+				<input type="text" v-model.lazy="message" />失去焦点后同步
 			</div>
 			<div>
 				<input type="radio" value="men" v-model="sex">男 
