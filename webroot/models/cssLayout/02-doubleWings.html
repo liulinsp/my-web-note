@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>双飞翼布局</title>
+	<meta charset="utf-8">
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			min-width: 600px;
+		}
+		.header{
+			height: 45px;
+			background-color: #2118AF;
+			border-bottom: 1px solid #818183
+		}
+		.warpper{
+			/*伪等高布局*/
+			overflow: hidden;
+		}
+		.clearfix{
+			*zoom: 1;
+		}
+		.clearfix:after{
+			content: "";
+			display: table;
+			clear: both;
+		}
+		.main, .left, .right{
+			float: left;
+			
+			/*伪等高布局*/
+			padding-bottom: 10000px;
+			margin-bottom: -10000px;
+		}
+		.main{
+			width: 100%;
+			background-color: #FAFCDB;
+		}
+		.main-inner{
+			padding: 0 200px;
+		}
+		
+		.left{
+			width: 199px;
+			margin-left: -100%;
+			background-color: #EBEAF5;
+
+			border: 1px solid #aaa;
+			border-width: 0 1px 0 0;
+		}
+		.right{
+			width: 199px;
+			margin-left: -200px;
+			background-color: #EAF5EA;
+
+			border: 1px solid #aaa;
+			border-width: 0 0 0 1px;
+		}
+		.footer{
+			height: 30px;
+			background-color: #2D2D2E;
+			border-top: 1px solid #818183 
+		}
+
+		p{
+			height: 100px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="header"></div>
+	<div class="warpper clearfix">
+		<div class="main">
+			<div class="main-inner">
+				<h1>主内容区</h1>
+			<div>
+	<pre>
+	优点：
+		内容部分(中间列)优先加载，且实现响应宽
+		结构上仅仅添加了一个父级容器
+		任何一列都可以作为最高列
+	缺点：
+		多写了一成html结构
+		
+	**********************************************
+	
+	两组实现的对比:
+		1.俩种布局方式都是把主列放在文档流最前面，使主列优先加载。
+		2.两种布局方式在实现上也有相同之处，都是让三列浮动，然后通过负外边距形成三列布局。
+		3.两种布局方式的不同之处在于如何处理中间主列的位置：
+				圣杯布局是利用父容器的左、右内边距定位；
+				双飞翼布局是把主列嵌套在div后利用主列的左、右外边距定位
+	</pre>
+			</div>
+				<p>1</p>
+				<p>2</p>
+				<p>3</p>
+				<p>4</p>
+			</div>
+		</div>
+		<div class="left">
+			<h2>左侧区域</h2>
+			<p>1</p>
+			<p>2</p>
+			<p>3</p>
+			
+		</div>
+		<div class="right">
+			<h2>右侧区域</h2>
+			<p>1</p>
+			<p>2</p>
+			<p>3</p>
+		</div>
+	</div>
+	<div class="footer"></div>
+</body>
+</html>
