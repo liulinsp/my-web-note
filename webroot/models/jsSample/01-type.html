@@ -122,6 +122,7 @@ isFinite(number)函数:
   3> "22.5"会被转换为22，因为小数点并不是有效的数字字符。
   4> 在使用parseInt()解析像八进制字面量的字符串时，
  ECMAScript 3 和5 存在分歧。例如：
+ parseInt('070')
  //ECMAScript 3 认为是56（八进制），ECMAScript 5 认为是70（十进制）
   5> 提供第二个参数,指定基数：parseInt("71", 8)转换为57
 <b>8. parseFloat()函数</b>

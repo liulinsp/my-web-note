@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>类型转换</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css"></link>
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script type="text/javascript">
+	$(function(){
+		var num = 12;
+		$("<div>var num = 12; <br> num.toString() --> \""+num.toString()+"\"</div>").appendTo("#showResult1");
+		$("<div>String(num) --> \""+String(num)+"\"</div>").appendTo("#showResult1");
+		$("<div>num+\"\" --> \""+(num+"")+"\"</div>").appendTo("#showResult1");
+		
+	});
+	
+</script>
+<div class="aTitle">转字符串</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1.调用被转换类型的toString()方法</b>
+例子：
+	var a = 123;
+	a = a.toString();
+- 注意，该方式不适用于null和undefined，如果对这两个调用toSting()浏览器会报错
+
+<b>2.调用String()函数</b>
+例子：
+	var b = true;
+	b = String(b);
+- 原理：对于有toString()方法它会调用toString()
+		而对于null，它会直接转换为"null"
+		对于undefined，它会直接转换为"undefined"
+
+<b>3.使用 +"", 进行隐式类型转换</b>
+例子：
+	var c = 567;
+	c = c+"";
+- 原理：结果和String()函数一样，只不过它由浏览器底层调用，使用起来更加的简单
+
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var str1 = "12";
+		$('<div>var str1 = "12";<br>'
+			+"Number(str1) --> "+Number(str1)+"<br>"
+			+"parseInt(str1) --> "+parseInt(str1)+"<br>"
+			+"parseFloat(str1) --> "+parseFloat(str1)+"<br>"
+			+"+str1 --> "+(+str1)+"<br>"
+		+"</div>").appendTo("#showResult2");
+
+		var str2 = "12.97";
+		$('<div>var str2 = "12.97";<br>'
+			+"Number(str2) --> "+Number(str2)+"<br>"
+			+"parseInt(str2) --> "+parseInt(str2)+"<br>"
+			+"parseFloat(str2) --> "+parseFloat(str2)+"<br>"
+			+"+str2 --> "+(+str2)+"<br>"
+		+"</div>").appendTo("#showResult2");
+
+		var str3 = "12px";
+		$('<div>var str3 = "12px";<br>'
+			+"Number(str3) --> "+Number(str3)+"<br>"
+			+"parseInt(str3) --> "+parseInt(str3)+"<br>"
+			+"parseFloat(str3) --> "+parseFloat(str3)+"<br>"
+			+"+str3 --> "+(+str3)+"<br>"
+		+"</div>").appendTo("#showResult2");
+
+		var str4 = "12.5px";
+		$('<div>var str4 = "12.5px";<br>'
+			+"Number(str4) --> "+Number(str4)+"<br>"
+			+"parseInt(str4) --> "+parseInt(str4)+"<br>"
+			+"parseFloat(str4) --> "+parseFloat(str4)+"<br>"
+			+"+str4 --> "+(+str4)+"<br>"
+		+"</div>").appendTo("#showResult2");
+
+		var b1 = true;
+		$('<div>var b1 = true;<br>'
+			+"Number(b1) --> "+Number(b1)+"<br>"
+			+"parseInt(b1) --> "+parseInt(b1)+"<br>"
+			+"parseFloat(b1) --> "+parseFloat(b1)+"<br>"
+			+"+b1 --> "+(+b1)+"<br>"
+		+"</div>").appendTo("#showResult2");
+
+		var b2 = false;
+		$('<div>var b2 = false;<br>'
+			+"Number(b2) --> "+Number(b2)+"<br>"
+			+"parseInt(b2) --> "+parseInt(b2)+"<br>"
+			+"parseFloat(b2) --> "+parseFloat(b2)+"<br>"
+			+"+b2 --> "+(+b2)+"<br>"
+		+"</div>").appendTo("#showResult2");
+
+		var n = null;
+		$('<div>var n = null;<br>'
+			+"Number(n) --> "+Number(n)+"<br>"
+			+"parseInt(n) --> "+parseInt(n)+"<br>"
+			+"parseFloat(n) --> "+parseFloat(n)+"<br>"
+			+"+n --> "+(+n)+"<br>"
+		+"</div>").appendTo("#showResult2");
+
+		var un = undefined;
+		$('<div>var un = undefined;<br>'
+			+"Number(un) --> "+Number(un)+"<br>"
+			+"parseInt(un) --> "+parseInt(un)+"<br>"
+			+"parseFloat(un) --> "+parseFloat(un)+"<br>"
+			+"+un --> "+(+un)+"<br>"
+		+"</div>").appendTo("#showResult2");
+	});
+	
+</script>
+<div class="aTitle">转数字</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1.Number()函数</b>
+	- 例子：
+		var a = "123";
+		a = Number(a);
+		- 转换的情况
+			字符串：
+				- 如果字符串是一个合法数字，则直接转换为对应的数字
+				- 如果是一个非法数字，则直接转换为NaN
+				- 如果是一个空串，或者都是空格则会转换为0
+			布尔值：
+				- true --> 1
+				- false ---> 0
+			其他：
+				- null --> 0
+				- undefined --> NaN
+
+<b>2.parseInt()和parseFloat()</b>
+	- 这两种方式专门用来将一个字符串转换为一个Number
+	- parseInt()可以将一个字符串中的有效的整数位转换为Number
+	- parseFloat()可以将一个字符串中的有效的小数转换为Number
+
+<b>3.使用一元加运算符（+）, 进行隐式类型转换</b>
+	- 例：
+	var a = "123";
+	a = +a;
+	- 结果和使用Number()函数一样
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+	$(function(){
+		var str1 = "";
+		$('<div>var str1 = "";<br>'
+			+"Boolean(str1) --> "+Boolean(str1)+"<br>"
+			+"!!str1 --> "+ !!str1 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+		var str2 = " ";
+		$('<div>var str2 = " ";<br>'
+			+"Boolean(str2) --> "+Boolean(str2)+"<br>"
+			+"!!str2 --> "+ !!str2 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+		var str3 = "false";
+		$('<div>var str3 = "false";<br>'
+			+"Boolean(str3) --> "+Boolean(str3)+"<br>"
+			+"!!str3 --> "+ !!str3 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+		var str4 = "0";
+		$('<div>var str4 = "0";<br>'
+			+"Boolean(str4) --> "+Boolean(str4)+"<br>"
+			+"!!str4 --> "+ !!str4 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+
+		var num1 = 12;
+		$('<div>var num1 = 12;<br>'
+			+"Boolean(num1) --> "+Boolean(num1)+"<br>"
+			+"!!num1 --> "+ !!num1 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+		var num2 = 0;
+		$('<div>var num2 = 0;<br>'
+			+"Boolean(num2) --> "+Boolean(num2)+"<br>"
+			+"!!num2 --> "+ !!num2 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+		var num3 = -1;
+		$('<div>var num3 = -1;<br>'
+			+"Boolean(num3) --> "+Boolean(num3)+"<br>"
+			+"!!num3 --> "+ !!num3 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+		var num4 = NaN;
+		$('<div>var num4 = NaN;<br>'
+			+"Boolean(num4) --> "+Boolean(num4)+"<br>"
+			+"!!num4 --> "+ !!num4 +"<br>"
+		+"</div>").appendTo("#showResult3");
+
+		var obj = {};
+		$('<div>var obj = {};<br>'
+			+"Boolean(obj) --> "+Boolean(obj)+"<br>"
+			+"!!obj --> "+ !!obj +"<br>"
+		+"</div>").appendTo("#showResult3");
+		
+	});
+	
+</script>
+<div class="aTitle">转布尔值</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1.使用Boolean函数</b>
+- 例子：
+	var a = 1;
+	a = Boolean(a);
+- 不同的情况
+	字符串：
+		- 除了空串都是true
+	数值
+		- 除了0和NaN都是true
+		
+	null和undefined都是false	
+	
+	非null对象都是true
+<b>2.使用非运算符（!!）, 进行隐式类型转换</b>
+- 例子：
+	var a = 1;
+	a = !!a;
+- 结果和使用Boolean()函数一样
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+	</div>
+</div>
+
+</body>
+</html>

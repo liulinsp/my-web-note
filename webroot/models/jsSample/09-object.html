@@ -29,9 +29,45 @@ Object 的每个实例都具有下列属性和方法。
 相同。
 		</pre>
 	</div>
-	<div class="aShow" id="showResult0">
+	<div class="aShow" id="">
 	</div>
 </div>
+
+
+<script type="text/javascript">
+$(function(){
+	var arr = ["aaa","bbb","ccc"];
+	$('<div>var arr = ["aaa","bbb","ccc"];<br>'
+			+'2 in arr --> '+(0 in arr)+'<br>'
+			+'3 in arr --> '+(3 in arr)+'<br>'
+		+'</div>').appendTo('#showResult0');
+
+	var obj = {name:"张三", age:20};
+	$('<div>var obj = {name:"张三", age:20};<br>'
+			+'"name" in obj --> '+("name" in obj)+'<br>'
+			+'"weight" in obj --> '+("weight" in obj)+'<br>'
+		+'</div>').appendTo('#showResult0');
+
+	delete obj.name;
+	$('<div>delete obj.name;<br>'
+			+'"name" in obj --> '+("name" in obj)+'<br>'
+		+'</div>').appendTo('#showResult0');
+})
+</script>
+<div class="aTitle">in 运算符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+- 使用in运算符可以检查一个对象中是否含有指定属性
+- 语法："属性名" in 对象
+- 如果对象中还有该属性则返回true，否则返回false
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult0">
+	</div>
+</div>
+
+
 <script type="text/javascript">
 //待以后再试
 function A(){
