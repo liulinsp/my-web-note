@@ -163,6 +163,9 @@ splice()方法的参数：
 
 splice()方法始终都会返回一个数组，该数组中包含从原始数组中删除的项（如果没有删除任何
 项，则返回一个空数组）
+
+
+<p class="error">splice会改变原数组</p>
 		</pre>
 	</div>
 	<div class="aShow note" id="showResult8">
@@ -308,7 +311,7 @@ ECMAScript 为数组专门提供了push()和pop()方法，
 	<div class="aCode">
 		<pre class="note">
 队列数据结构的访问规则是FIFO（First-In-First-Out，先进先出）。
-1. push()向数组末端添加项的方法;
+1. push()向数组末端添加项的方法【可添加多个，返回数组长度】;
 2. shift()能够移除数组中的第一个项并返回该项，同时将数组长度减1;
 或者
 1. unshift()向数组前端添加项的方法;
@@ -320,6 +323,28 @@ ECMAScript 为数组专门提供了push()和pop()方法，
 </div>
 
 
+
+<script type="text/javascript">
+	$(function(){
+		var data = [1,2,3];
+		$('<div>var data = [1,2,3];</div>').appendTo("#showResult7-1")
+		$('<div>data.join() --> '+data.join()+'</div>').appendTo("#showResult7-1");
+		$('<div>data.join("#") --> '+data.join("#")+'</div>').appendTo("#showResult7-1");
+		$('<div>data.join("") --> '+data.join("")+'</div>').appendTo("#showResult7-1");	
+	});
+</script>
+<div class="aTitle">join合并成字符串</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+join()方法可以将数组中的所有的元素连接为一个字符串并返回.
+在方法中可以传递一个字符串作为参数，该字符串将会作为连接符，
+来连接数组中的元素,如果不指定连接符，默认使用,连接
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult7-1">
+	</div>
+</div>
 
 
 <script type="text/javascript">
@@ -370,7 +395,7 @@ ECMAScript 为数组专门提供了push()和pop()方法，
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
-ECMAScript 5 为数组定义了5 个迭代方法。
+ECMAScript 5 为数组定义了5 个迭代方法。(IE8不支持)
  every()：对数组中的每一项运行给定函数，如果该函数对每一项都返回true，则返回true。
  filter()：对数组中的每一项运行给定函数，返回该函数会返回true 的项组成的数组。
  forEach()：对数组中的每一项运行给定函数。这个方法没有返回值。
