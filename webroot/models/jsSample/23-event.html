@@ -131,6 +131,9 @@ document.getElementById("mycheck3").onclick=function(event){
 “DOM2级事件”定义了两个方法，用于处理指定和删除事件处理程序的操作：
 addEventListener()和removeEventListener()。
 <span class="error">IE8不支持DOM2级事件，用attachEvent()和detachEvent()实现，只支持事件冒泡。</span>
+<span class="error">它的响应函数执行顺序和addEventListener()是相反的</span>
+<span class="error">事件名字符串（要on）</span>
+<span class="error">使用attachEvent()绑定的响应函数中，this永远都是window</span>
 
 所有DOM节点中都包含这两个方法，并且它们都接受3 个参数：
 要处理的事件名、作为事件处理程序的函数和一个布尔值。

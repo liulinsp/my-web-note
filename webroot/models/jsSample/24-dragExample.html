@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>拖拽示例</title>
+		<style type="text/css">
+			#box1{
+				width: 100px;
+				height: 100px;
+				background-color: red;
+				/*开启绝对定位*/
+				position: absolute;
+			}
+			
+			#box2{
+				width: 100px;
+				height: 100px;
+				background-color: yellow;
+				position: absolute;
+				top: 200px;
+				left: 500px;
+			}
+		</style>
+		
+		<script type="text/javascript">
+			
+			window.onload = function(){
+				
+				/*
+				 * 拖拽的步骤
+				 * 	1.在被拖拽元素上按下鼠标时，开始拖拽  onmousedown
+				 *  2.当鼠标移动时，被拖拽的元素跟随鼠标移动 onmousemove
+				 * 	3.当鼠标松开时，被拖拽元素固定在当前位置 onmouseup
+				 */
+				
+				//获取box1
+				var box1 = document.getElementById("box1");
+				var box2 = document.getElementById("box2");
+				
+				//1.在被拖拽元素上按下鼠标时，开始拖拽  onmousedown
+				//为box1绑定一个onmousedown事件
+				drag(box1);
+				drag(box2);
+				
+			};
+			
+			//定义一个函数，专门用来开启元素的拖拽
+			function drag(obj){
+				obj.onmousedown = function(event){
+					
+					/*
+					 * 在火狐中不支持setCapture()和releaseCapture()两个方法
+					 * 	但是调用时，他不会报错。
+					 * 在chrome中也不支持这两个方法，但是调用的时候会报错
+					 */
+					
+					//使box1可以捕获到所有的事件
+					obj.setCapture &&　obj.setCapture();
+					
+					//处理事件对象
+					event = event || window.event;
+					//计算元素的偏移
+					var ol = event.clientX - obj.offsetLeft;
+					var ot = event.clientY - obj.offsetTop;
+					
+					/*
+					 * 目前鼠标指针和元素的左上角是重叠，我们希望鼠标点的元素的哪个位置，就可以一直保持在那个位置
+					 * 		就是保持指针和元素的相对位置不变
+					 */
+					
+					
+					//当该事件触发时开始拖拽
+					//2.当鼠标移动时，被拖拽的元素跟随鼠标移动 onmousemove
+					//为document绑定一个onmousemove
+					document.onmousemove = function(event){
+						//处理事件对象
+						event = event || window.event;
+						
+						//获取鼠标的坐标
+						var top = event.clientY - ot;
+						var left = event.clientX - ol;
+						
+						//修改box1的坐标
+						obj.style.left = left + "px";
+						obj.style.top = top + "px";
+						
+					};
+					
+					//3.当鼠标松开时，被拖拽元素固定在当前位置 onmouseup
+					//绑定一个 onmouseup
+					document.onmouseup = function(){
+						//当鼠标松开，使元素固定，使其不随鼠标移动
+						//取消document的mousemove事件
+						document.onmousemove = null;
+						//取消document的onmouseup事件
+						document.onmouseup = null;
+						
+						//使用它可以用来是否box1对事件的捕获
+						obj.releaseCapture　&&　obj.releaseCapture();
+					
+						
+					};
+					
+					//当处理拖拽行为时，如果同时选中了文字，由于浏览器的默认行为，会同时将文字一起拖拽
+					//如果不需要这个行为，可以在函数的最后取消默认行为即可
+					//但是这个办法不适用于ie8
+					return false;
+					
+				};
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+		
+		aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+		
+		<div id="box1"></div>
+		
+		<div id="box2"></div>
+		
+	</body>
+</html>

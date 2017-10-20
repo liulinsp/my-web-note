@@ -416,6 +416,9 @@ alert(html === document.firstChild); //true
 通过document.body则能更快捷、更直接地访问&lt;body&gt;元素。
 var body = document.body; //取得对&lt;body&gt;的引用
 
+3. document.all 属性
+获取页面中所有元素，等效：document.getElementsByTagName('*');
+
 4. document.doctype 属性
 Document 另一个可能的子节点是DocumentType。
 通常将&lt;!DOCTYPE&gt;标签看成一个与文档其他部分不同的实体，
@@ -623,6 +626,7 @@ alert(div.align); //"left"（非自定义）
   1) style
   在通过getAttribute()访问时，返回的style 特性值中包含的是CSS 文本，
   而通过属性来访问它则会返回一个对象。
+
   2) onclick
   如果通过getAttribute()访问，则会返回相应代码的字符串。
   而在访问onclick 属性时，则会返回一个JavaScript 函数
@@ -682,6 +686,45 @@ var div = document.createElement('&lt;div id="myNewDiv" class="box"&gt;&lt;/div 
 	</div>
 	<!-- <div class="aShow" id=""></div> -->
 </div>
+
+<div class="aTitle">元素style</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>操作内联样式</b>
+	- 读取内联样式
+		元素.style.样式名
+	- 修改内联样式
+		元素.style.样式名 = 样式值
+	- 使用style读取和设置的样式都是内联样式。
+	- 对于样式名中含有-的，需要将-去掉，然后改为驼峰命名法
+	- 比如：background-color 使用 backgroundColor
+	
+<b>读取元素的当前的样式</b>
+	- 正常浏览器
+		getComputedStyle(元素,null).样式名
+		- 该方法可以返回一个对象，这个对象中封装当前元素的正在显示的样式
+			- 需要两个参数
+				1.要查看样式的对象
+				2.可以传一个伪元素（一般传null）
+			该方法不支持IE8及以下的浏览器
+		
+	- IE8及以下的浏览器
+		元素.currentStyle.样式名
+
+	1. 通过currentStyle和getComputedStyle获取到的样式都是只读的，不能修改要修改还是得通过style
+
+	2. 如果一个些元素没有设置属性，会使用默认值
+	这时在正常浏览器中会自动计算样式值，但是在IE8中它会直接返回默认值，而不会计算
+		比如：不为元素width，
+	其他浏览器会自动计算元素的width并返回
+	<mark>而IE8它会直接返回auto</mark>
+
+		</pre>
+	</div>
+	<!-- <div class="aShow" id=""></div> -->
+</div>
+
 
 <div class="aTitle">Text</div>
 <div class="aPane">

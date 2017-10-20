@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>滚轮示例</title>
+		<style type="text/css">
+			#box1 {
+				width: 100px;
+				height: 100px;
+				background-color: red;
+			}
+		</style>
+		<script type="text/javascript">
+			function bind(obj, eventStr, callback) {
+
+				//判断对象中是否含有addEventListener
+				if(obj.addEventListener) {
+					//正常浏览器的方式
+					//正常浏览器中this是obj
+					obj.addEventListener(eventStr, callback, false);
+				} else {
+					//IE的方式
+					//IE中是window
+					//修改callback中的this为obj，this是谁由函数的调用方式决定
+					obj.attachEvent("on" + eventStr, function() {
+						//在匿名函数中我们来调用回调函数
+						callback.call(obj);
+					});
+				}
+			}
+			/*
+			 * 使box1随着滚轮的滚动来改变高度
+			 * 	当滚轮向上滚动时，div越来越短
+			 * 	当滚轮向下滚动时，div越来越长
+			 */
+			window.onload = function() {
+				//获取box1
+				var box1 = document.getElementById("box1");
+				//为box1绑定一个鼠标滚轮滚动的事件
+				/*
+				 * onmousewheel鼠标滚轮滚动的事件
+				 * 
+				 * onmousewheel在火狐中并不支持
+				 * 		在火狐中需要使用DOMMouseScroll来绑定滚轮滚动的事件
+				 * 		并且这个事件只能通过addEventListener()来绑定
+				 */
+				
+				function fun(event) {
+					//处理兼容性问题
+					event = event || window.event;
+					
+					//判断滚轮的滚动方向
+					//event.detail这个属性只有火狐支持
+					//当滚轮向上时 -3  向下时 3
+					//alert(event.detail);
+					
+					/*
+					 * 在其他的浏览器中需要使用event.wheelDelta来获取鼠标滚轮的方向
+					 * 当滚轮向上时 120  向下时 -120
+					 * 
+					 * 当我们使用detail和wheelDelta属性时，它们值是多少并不重要
+					 * 	我们只需要使用符号来判断滚轮滚动的方向
+					 */
+					//alert(event.wheelDelta);
+					
+					if(event.wheelDelta > 0 || event.detail < 0){
+						//当该值大于0时，滚轮向上滚动，修改box1高度
+						box1.style.height = box1.clientHeight - 10 + "px";
+						
+					}else{
+						//向下滚
+						box1.style.height = box1.clientHeight + 10 + "px";
+					}
+					
+					/*
+					 * 当页面中含有滚动条时，由于页面的默认行为，滚动滚轮时，滚动条会跟着滚动
+					 * 如果不希望滚动条滚动，可以取消默认行为
+					 * 
+					 * 对于火狐来说事件使用通过addEventListener()绑定的，通过该方法绑定的响应函数
+					 * 	不能使用return false来取消默认行为,而需要通过事件对象preventDefault()方法来取消默认行为
+					 * 在ie8中，不支持preventDefault方法
+					 */
+					//取消默认行为
+					event.preventDefault && event.preventDefault();
+					
+					//取消默认行为
+					return false;
+					
+					
+				};
+				
+				box1.onmousewheel = fun;
+
+				bind(box1, "DOMMouseScroll", fun);
+
+			};
+		</script>
+	</head>
+
+	<body style="height: 2000px;">
+		<div id="box1"></div>
+	</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>元素大小和位置</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<script>
+$(function(){
+	
+})
+</script>
+<div class="aTitle"> window大小</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.innerWidth
+window.innerHeight
+ 	- 用来获取窗口内部的宽度和高度
+ 	- 这两个属性IE8及以下的浏览器不支持
+ 	建议使用：document.documentElement.clientWidth
+ 	【window.innerWidth包含滚动条，而document.documentElement.clientWidth不含滚动条】
+
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+
+
+<div class="aTitle">元素大小</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+元素.clientWidth
+元素.clientHeight
+	- 获取元素的可见区域的宽度和高度
+		包括内容区和内边距 - 滚动条
+		
+元素.offsetWidth
+元素.offsetHeight
+	- 获取元素的可见框的宽度和高度
+		包括内容区、内边距 和 边框
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+<script type="text/javascript">
+/*$(function(){
+	function _show(msg){
+		$('<div>'+msg+'</div>').appendTo("#showResult1");
+	}
+
+	_show('document.implementation.hasFeature("Core", "2.0") --> '+
+		document.implementation.hasFeature("Core", "2.0"));
+	
+});*/
+</script>
+
+
+<div class="aTitle">元素位置</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+元素.offsetParent
+	- 获取当前元素的定位父元素
+		离他最近的开启了定位的祖先元素，如果所有的祖先元素都没开启，则返回body
+		
+元素.offsetTop
+元素.offsetLeft
+	- 获取元素相对于其定位父元素的垂直和水平偏移量
+	
+元素.scrollWidth
+元素.scrollHeight
+	- 获取元素整个滚动区域的宽度和高度
+	
+元素.scrollTop
+元素.scrollLeft
+	- 获取元素垂直和水平滚动条滚动的距离
+	
+- 判断一个滚动条是否滚动到底
+	- 垂直
+		scrollHeight - scrollTop = clientHeight
+	- 水平
+		scrollWidth - scrollLeft = clientWidth
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+<script type="text/javascript">
+/*$(function(){
+	function _show(msg){
+		$('<div>'+msg+'</div>').appendTo("#showResult1");
+	}
+
+	_show('document.implementation.hasFeature("Core", "2.0") --> '+
+		document.implementation.hasFeature("Core", "2.0"));
+	
+});*/
+</script>
+
+</body>
+</html>

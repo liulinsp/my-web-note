@@ -643,6 +643,37 @@ var client = function(){
 3.5 				1.9.1
 3.6 				1.9.2
 4.0 				2.0.0
+
+
+* 火狐的userAgent
+* 	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0
+* 
+* chrome
+* 	Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+    Chrome/52.0.2743.82 Safari/537.36
+* 
+* IE8
+* 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/7.0; SLCC2;
+   .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)
+* 
+* IE9
+* 	Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/7.0; SLCC2; 
+    .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)
+* 
+* IE10
+* 	Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/7.0; SLCC2; 
+    .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)
+* 
+* IE11
+* 	Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729;
+   .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E; rv:11.0) like Gecko
+*  
+<div class="error">由于在IE11的userAgent中已经完全将微软和IE的标识去除了，<br>
+所以已经不能通过userAgent来识别一个浏览器是否是IE11了</div>
+IE11中为了不被识别，window.ActiveXObject --> false，可以通过以下方式判断是否IE
+if("ActiveXObject" in window){
+	alert("是IE");
+}
 		</pre>
 	</div>
 	<div class="aShow note" id="showResult5">
