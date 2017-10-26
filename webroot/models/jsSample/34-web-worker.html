@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web Worker</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">web</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Web Workers是一种机制，通过它可以使一个脚本运行在与Web应用程序的主线程相互
+分离的后台线程中运行。这样做的优点是可以在单独的线程中执行繁琐的处理，让主
+线程运行不被阻塞/减慢。
+
+斐波那契数列表达式：
+fibonacci(n) = fibonacci(n-1) + fibonacci(n-2)
+
+<b>脚本：</b>
+var num = 30;
+var worker = new Worker('worker.js');
+worker.onmessage = function (event) {
+	var result = event.data;
+	alert('结果是：' + result);
+}
+worker.postMessage(num);
+
+<b>// worker.js</b>
+function fibonacci(n) {
+  return n<=2 ? 1 : fibonacci(n-1) + fibonacci(n-2)
+}
+var onmessage = function (event) {
+  var num = event.data
+  var result = fibonacci(num)
+  postMessage(result)
+}
+
+<b>缺点：</b>
+1. worker内代码不能操作DOM更新UI
+2. 不能跨域加载JS
+3. 不是每个浏览器都支持这个新特性
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<input type="text" id="num" value="30"><br>
+		<button id="singleCalculate">主线程计算fibonacci值</button><br>
+		<button id="multiCalculate">web worker计算fibonacci值</button><br>
+		<textarea id="resultMsg" cols="30" rows="10"></textarea>
+
+	</div>
+</div>
+<script>
+
+var singleBtn = $('#singleCalculate');
+var multiBtn = $('#multiCalculate');
+var resultArea = $('#resultMsg')
+
+
+singleBtn.click(function () {
+	var num = $('#num').val();
+	var begin = Date.now();
+	var result = fibonacci(num);
+	var end = Date.now();
+	resultArea.append('单线程计算结果: ' + result + '  (耗时：'+ (end - begin) +'ms)\n')
+});
+
+function fibonacci (n) {
+	return n<=2 ? 1 : fibonacci(n-1) + fibonacci(n-2)
+}
+
+multiBtn.click(function () {
+	var num = $('#num').val();
+	var begin = Date.now();
+	var worker = new Worker('34-worker.js');
+	console.log(worker)
+	worker.onmessage = function (event) {
+		var result = event.data;
+		var end = Date.now();
+		resultArea.append('子线程返回结果: ' + result + '  (耗时：'+ (end - begin) +'ms)\n')
+	}
+	worker.postMessage(num);
+	var end = Date.now();
+	resultArea.append('主线程完成 (耗时：'+ (end - begin) +'ms)\n')
+})
+
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>事件循环</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">web</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<img src="img/event_loop_web.png" alt="">
+上图中，主线程运行的时候，产生堆（heap）和栈（stack），栈中的代码调用各种外部API，
+它们在"任务队列"中加入各种事件（click，load，done）。只要栈中的代码执行完毕，
+主线程就会去读取"任务队列"，依次执行那些事件所对应的回调函数。
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+		
+	</div> -->
+</div>
+
+<div class="aTitle">nodeJs</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<img src="img/event_loop_nodejs.png" alt="">
+（1）V8引擎解析JavaScript脚本。
+（2）解析后的代码，调用Node API。
+（3）libuv库负责Node API的执行。它将不同的任务分配给不同的线程，形成一个Event Loop（事件循环），以异步的方式将任务的执行结果返回给V8引擎。
+（4）V8引擎再将结果返回给用户。
+		</pre>
+	</div>
+</div>		
+</body>
+</html>
