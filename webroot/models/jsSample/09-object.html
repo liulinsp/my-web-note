@@ -27,10 +27,70 @@ Object 的每个实例都具有下列属性和方法。
  toString()：返回对象的字符串表示。
  valueOf()：返回对象的字符串、数值或布尔值表示。通常与toString()方法的返回值
 相同。
+
+function Constructor(){}
+o = new Constructor();
+// 上面的一句就相当于:
+o = Object.create(Constructor.prototype);
+// 当然,如果在Constructor函数中有一些初始化代码,Object.create不能执行那些代码
+
+
+// 创建一个以另一个空对象为原型,且拥有一个属性p的对象
+o = Object.create({}, { p: { value: 42 } })
+
+// 省略了的属性特性默认为false,所以属性p是不可写,不可枚举,不可配置的:
+o.p = 24
+o.p
+//42
+
+o.q = 12
+for (var prop in o) {
+   console.log(prop)
+}
+//"q"
 		</pre>
 	</div>
-	<div class="aShow" id="">
+	<!-- <div class="aShow" id="">
+	</div> -->
+</div>
+
+<div class="aTitle">Object.create() 【IE9以下不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
+<b>Object.create(proto[, propertiesObject])</b>
+参数:
+1. proto
+新创建对象的原型对象。
+2. propertiesObject
+可选。如果没有指定为 undefined，则是要添加到新创建对象的可枚举属性（即其自身定义的属性，
+而不是其原型链上的枚举属性）对象的属性描述符以及相应的属性名称。这些属性对应
+Object.defineProperties()的第二个参数。
+
+返回值
+在指定原型对象上添加新属性后的对象。
+		</pre>
 	</div>
+	<!-- <div class="aShow" id="">
+	</div> -->
+</div>
+
+<div class="aTitle">Object.assign() 混入【IE不支持】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
+<b>Object.assign(target, ...sources)</b>
+参数:
+1. target 目标对象。
+2. sources 源对象。
+
+返回值：目标对象。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="">
+	</div> -->
 </div>
 
 

@@ -216,7 +216,7 @@ $(function(){
 });
 </script>
 
-<div class="aTitle">可换行字符串</div>
+<div class="aTitle">模板字符串-多行</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
@@ -245,7 +245,7 @@ $(function(){
 </script>
 
 
-<div class="aTitle">字符串模板</div>
+<div class="aTitle">模板字符串-表达式插补</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
@@ -268,13 +268,58 @@ $(function(){
 </script>
 
 
-<div class="aTitle">解构</div>
+<div class="aTitle">解构赋值</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
 <b>脚本：</b>
 var [,x,y] = ["pointer",109,258];
 $("#showResult5").append(`x=${x}, y=${y}`);
+
+<b>对象解构：</b>
+  let person = {
+    name: 'Tom',
+    age: 12,
+    sex: '女'
+  }
+  /*
+  let name = person.name
+  let age = person.age
+  */
+  let {name, age} = person  // 变量名与对应的属性名相同
+  console.log(name) // 'Tom'
+  console.log(age) // 12
+
+<b>数组解构：</b>
+  let arr = ['abc', 12, true]
+  let [, n, m] = arr  //根据下标来解构
+  console.log(n) // 12
+  console.log(m) // true
+
+<b>形参解构：</b>
+  /* function showPerson(p) {
+    console.log(p.name, p.age)
+  } 
+  showPerson(person) */
+  function showPerson({name, age}) {
+    console.log(name) // 'Tom'
+  	console.log(age) // 12
+  }
+  showPerson(person)
+
+<b>返回值解构：</b>
+  function fn() {
+    return {
+      k: 12,
+      g: 'abc'
+    }
+  }
+  /* let result = fn()
+  console.log(result.k)
+  console.log(result.g) */
+  let {k, g} = fn()
+  console.log(k) // 12
+  console.log(g) // 'abc'
 		</pre>
 	</div>
 	<div class="aShow note" id="showResult5">
@@ -288,6 +333,124 @@ $(function(){
 });
 </script>
 
+
+<div class="aTitle">解构赋值-扩展语法-函数调用</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+function sayHello(name,sex){
+	$("#showResult8").append(`&lt;p&gt;你好，${name} ${sex}&lt;/p&gt;`);
+}
+
+var arr = ["张三","先生"];
+//原调用方法
+sayHello.apply(null,arr);
+//ES6
+sayHello(...arr);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult8">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function sayHello(name,sex){
+		$("#showResult8").append(`<p>你好，${name} ${sex}</p>`);
+	}
+
+	var arr = ["张三","先生"];
+	//原调用方法
+	sayHello.apply(null,arr);
+	//ES6
+	sayHello(...arr);
+});
+</script>
+
+<div class="aTitle">解构赋值-扩展语法-字面量</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var array = [1, 2, 3];
+var newArray = [...array, 4, 5]
+console.log(array) // [1, 2, 3]
+console.log(newArray) // [1, 2, 3, 4, 5]
+<mark>拓展语句只会进行浅复制</mark>
+		</pre>
+	</div>
+	<div class="aShow note" id="">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var array = [1, 2, 3];
+	var newArray = [...array, 4, 5]
+	console.log(array) // [1, 2, 3]
+	console.log(newArray) // [1, 2, 3, 4, 5]
+	
+});
+</script>
+
+<div class="aTitle">解构赋值-扩展语法-对象/数组克隆</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var obj = {name:'ZHANG',age:20};
+var cloneObj = {...obj};
+console.log(cloneObj) // {name: "ZHANG", age: 20}
+		</pre>
+	</div>
+	<div class="aShow note" id="">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var obj = {name:'ZHANG',age:20};
+	var cloneObj = {...obj};
+	console.log(cloneObj)
+});
+</script>
+
+<div class="aTitle">剩余操作符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+剩余操作符（the rest operator），它的样子看起来和展开操作符一样，但是它是用于解构数组和对象。
+在某种程度上，剩余元素和展开元素相反，展开元素会“展开”数组变成多个元素，剩余元素会收集多个
+元素和“压缩”成一个单一的元素。
+
+剩余参数和 arguments对象之间的区别主要有三个：
+1. 剩余参数只包含那些没有对应形参的实参，而 arguments 对象包含了传给函数的所有实参。
+2. arguments对象不是一个真正的数组，而剩余参数是真正的Array实例，也就是说你能够在它上面直接
+使用所有的数组方法，比如 sort，map，forEach或pop。
+3. arguments对象对象还有一些附加的属性 （如callee属性）。
+
+<b>脚本：</b>
+function add(...nums){
+	return nums.reduce((x,y) => x+y);
+}
+var result1 = add(1,2,3);//结果为6
+var result2 = add(1,2,3,4,5);//结果为15
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult7">
+		
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	function add(...nums){
+		return nums.reduce((x,y) => x+y);
+	}
+	var result1 = add(1,2,3);//=6
+	var result2 = add(1,2,3,4,5);//=15
+});
+</script>
 
 <div class="aTitle">默认参数</div>
 <div class="aPane">
@@ -325,66 +488,6 @@ $(function(){
 });
 </script>
 
-
-<div class="aTitle">不定参数</div>
-<div class="aPane">
-	<div class="aCode">
-		<pre class="note">
-<b>脚本：</b>
-function add(...nums){
-	return nums.reduce((x,y) => x+y);
-}
-var result1 = add(1,2,3);//结果为6
-var result2 = add(1,2,3,4,5);//结果为15
-		</pre>
-	</div>
-	<div class="aShow note" id="showResult7">
-		
-	</div>
-</div>
-<script type="text/javascript">
-$(function(){
-	function add(...nums){
-		return nums.reduce((x,y) => x+y);
-	}
-	var result1 = add(1,2,3);//=6
-	var result2 = add(1,2,3,4,5);//=15
-});
-</script>
-
-<div class="aTitle">拓展参数</div>
-<div class="aPane">
-	<div class="aCode">
-		<pre class="note">
-<b>脚本：</b>
-function sayHello(name,sex){
-	$("#showResult8").append(`&lt;p&gt;你好，${name} ${sex}&lt;/p&gt;`);
-}
-
-var arr = ["张三","先生"];
-//原调用方法
-sayHello.apply(null,arr);
-//ES6
-sayHello(...arr);
-		</pre>
-	</div>
-	<div class="aShow note" id="showResult8">
-		
-	</div>
-</div>
-<script type="text/javascript">
-$(function(){
-	function sayHello(name,sex){
-		$("#showResult8").append(`<p>你好，${name} ${sex}</p>`);
-	}
-
-	var arr = ["张三","先生"];
-	//原调用方法
-	sayHello.apply(null,arr);
-	//ES6
-	sayHello(...arr);
-});
-</script>
 
 <div class="aTitle">let与const 关键字</div>
 <div class="aPane">
