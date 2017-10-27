@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ES7新特性</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">Array.prototype.includes()【ES 7】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+includes() 方法用来判断一个数组是否包含一个指定的值，如果是，酌情返回 true或 false
+
+<b>语法</b>
+arr.includes(searchElement[, fromIndex])
+<b>参数</b>
+1. searchElement 需要查找的元素值。
+2. fromIndex 可选
+从该索引处开始查找 searchElement。如果为负值，则按升序从 array.length + fromIndex 
+的索引开始搜索。默认为 0。如果计算出的索引小于 0，则整个数组都会被搜索。
+<b>返回值</b>
+一个 Boolean。
+
+[1, 2, 3].includes(2);     // true
+[1, 2, 3].includes(4);     // false
+[1, 2, 3].includes(3, 3);  // false
+[1, 2, 3].includes(3, -1); // true
+[1, 2, NaN].includes(NaN); // true
+		</pre>
+	</div>
+</div>
+
+
+<div class="aTitle">** (指数运算符)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>基本用法：</b>
+/* 效果同：Math.pow(3, 2) */
+3 ** 2           // 9
+
+<b>类 += 用法：</b>
+let a = 3
+a **= 2			// 9
+
+
+		</pre>
+	</div>
+</div>
+
+</body>
+</html>

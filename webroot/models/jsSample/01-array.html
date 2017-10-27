@@ -540,5 +540,148 @@ var newData = data.reduce(function(x,y){
 	<div class="aShow note" id="showResult12">
 	</div>
 </div>
+
+
+<div class="aTitle">Array.from(v)【ES 6】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+对伪数组或可迭代对象(包括arguments Array,Map,Set,String...)转换成数组对象。
+<b>语法：</b>
+Array.from(arrayLike, mapFn, thisArg)
+<b>参数</b>
+1. arrayLike
+想要转换成数组的伪数组对象或可迭代对象。
+2. mapFn (可选参数)
+如果指定了该参数，新数组中的每个元素会执行该回调函数。
+3. thisArg (可选参数)
+可选参数，执行回调函数 mapFn 时 this 对象。
+
+<b>字符串转数组</b>
+Array.from('foo'); // ["f", "o", "o"]
+
+<b>Set转数组</b>
+let s = new Set(['foo', window]); 
+Array.from(s); // ["foo", window]
+
+<b>Map转数组</b>
+let m = new Map([[1, 2], [2, 4], [4, 8]]);
+Array.from(m); // [[1, 2], [2, 4], [4, 8]]
+
+<b>伪数组转数组</b>
+function f() {
+  return Array.from(arguments);
+}
+f(1, 2, 3); // [1, 2, 3]
+
+<b>使用箭头函数</b>
+/* 使用箭头函数实现Array.map()的效果 */
+Array.from([1, 2, 3], x => x + x); 
+// [2, 4, 6]
+
+/* 回调函数的参数：(v:值, i:索引) */
+Array.from({length: 5}, (v, i) => i);
+// [0, 1, 2, 3, 4]
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult12">
+	</div> -->
+</div>
+
+<div class="aTitle">Array.of()(v)【ES 6】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Array.of() 方法创建一个具有可变数量参数的新数组实例，而不考虑参数的数量或类型。
+
+Array.of() 和 Array 构造函数之间的区别在于处理整数参数：Array.of(7) 创建一个具有单个
+元素 7 的数组，而 Array(7) 创建一个包含 7 个 undefined 元素的数组。
+
+<b>语法</b>
+Array.of(element0[, element1[, ...[, elementN]]])
+<b>参数</b>
+elementN: 任意个参数，将按顺序成为返回数组中的元素。
+<b>返回值</b>
+新的 Array 实例。
+		</pre>
+	</div>
+</div>
+
+
+<div class="aTitle">Array.prototype.find()【ES 6】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+find() 方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。
+
+<b>语法</b>
+arr.find(callback[, thisArg])
+<b>参数</b>
+1. callback
+在数组每一项上执行的函数，接收 3 个参数：
+	element：当前遍历到的元素。
+	index：当前遍历到的索引。
+	array：数组本身。
+2. thisArg 可选
+可选，指定 callback 的 this 参数
+<b>返回值</b>
+当某个元素通过 callback 的测试时，返回数组中的一个值，否则返回 undefined。
+
+
+var inventory = [
+    {name: 'apples', quantity: 2},
+    {name: 'bananas', quantity: 0},
+    {name: 'cherries', quantity: 5}
+];
+
+function findCherries(fruit) { 
+    return fruit.name === 'cherries';
+}
+
+console.log(inventory.find(findCherries)); // { name: 'cherries', quantity: 5 }
+
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">Array.prototype.findIndex()【ES 6】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+findIndex()方法返回数组中满足提供的测试函数的第一个元素的索引。否则返回-1。
+
+<b>语法</b>
+arr.findIndex(callback[, thisArg])
+同find
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">Array.prototype.includes()【ES 7】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+includes() 方法用来判断一个数组是否包含一个指定的值，如果是，酌情返回 true或 false
+
+<b>语法</b>
+arr.includes(searchElement[, fromIndex])
+<b>参数</b>
+1. searchElement 需要查找的元素值。
+2. fromIndex 可选
+从该索引处开始查找 searchElement。如果为负值，则按升序从 array.length + fromIndex 
+的索引开始搜索。默认为 0。如果计算出的索引小于 0，则整个数组都会被搜索。
+<b>返回值</b>
+一个 Boolean。
+
+[1, 2, 3].includes(2);     // true
+[1, 2, 3].includes(4);     // false
+[1, 2, 3].includes(3, 3);  // false
+[1, 2, 3].includes(3, -1); // true
+[1, 2, NaN].includes(NaN); // true
+		</pre>
+	</div>
+</div>
+
+
 </body>
 </html>
