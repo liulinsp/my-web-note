@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>commonJS模块化</title>
+  <link rel="stylesheet" type="text/css" href="../../../css/main.css">
+</head>
+<body>
+<div class="home"><a href="../../../index.html">首页</a></div>
+
+<div class="aTitle">commonJS</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre class="note">
+Node.js : 服务器端
+Browserify : 浏览器端    也称为js的打包工具
+* 基本语法:
+  * 定义暴露模块 : exports
+    ```
+    exports.xxx = value
+    module.exports = value
+    ```
+  引入模块 : require
+    ```
+    var module = require('模块名/模块相对路径')
+    ```
+* 引入模块发生在什么时候?
+  * Node : 运行时, 动态同步引入
+  * Browserify : 在运行前对模块进行编译/转译/打包的处理(已经将依赖的模块包含进来了), 
+              运行的是打包生成的js, 运行时不存在需要再从远程引入依赖模块
+
+
+<b>module1.js</b>
+module.exports = function add(a,b){
+  return a+b;
+}
+
+<b>module2.js</b>
+const PI = 3.1415926;
+exports.circle = function(r){
+  return 2*PI*r;
+}
+
+<b>main.js</b>
+var add = require('./module1.js');
+var obj = require('./module2.js');
+console.log('add(2,3) --> ', add(2,3))
+console.log('obj.circle(10) -->',obj.circle(10))
+
+<b>NodeJS执行命令：</b>
+node main.js
+
+<b>Browserify打包命令：</b>
+browserify main.js > bundle.js
+
+<b>页面引用：</b>
+&lt;script type="text/javascript" src="bundle.js"&gt;&lt;/script&gt;
+
+<b>打包后脚本：bundle.js(格式化后的)</b>
+<b>参考：</b>https://github.com/browserify/browser-pack/blob/master/prelude.js
+
+// modules 定义为数组，[ module function, map of requireuires ]
+// requireuires 的key是依赖模块的文件名称，value是依赖模块的序号
+
+(function outer(modules, cache, entry) {
+  function newRequire(name, jumped) {
+    if (!cache[name]) {
+      if (!modules[name]) {
+        var currentRequire  = typeof require == "function" && require;
+        if (!jumped && currentRequire ) return currentRequire (name, !0);
+        if (previousRequire) return previousRequire(name, !0);
+        var err = new Error("Cannot find module '" + name + "'");
+        throw err.code = "MODULE_NOT_FOUND", err
+      }
+      var m = cache[name] = {exports: {}};
+      modules[name][0].call(m.exports, function (x) {
+        var id = modules[name][1][x];
+        return newRequire(id ? id : x)
+      }, m, m.exports, outer, modules, cache, entry)
+    }
+    return cache[name].exports
+  }
+
+  var previousRequire = typeof require == "function" && require;
+  for (var i = 0; i < entry.length; i++) newRequire(entry[i]);
+  return newRequire
+})({
+  1: [function (require, module, exports) {
+      var add = require('./module1.js');
+      var obj = require('./module2.js');
+      console.log('add(2,3) --> ', add(2, 3))
+      console.log('obj.circle(10) -->', obj.circle(10))
+    },
+    {"./module1.js": 2, "./module2.js": 3}
+  ],
+  2: [function (require, module, exports) {
+      module.exports = function add(a, b) {
+        return a + b;
+      }
+
+    },
+    {}
+  ],
+  3: [function (require, module, exports) {
+      const PI = 3.1415926;
+      exports.circle = function (r) {
+        return 2 * PI * r;
+      }
+    },
+    {}
+  ]
+}, {}, [1])
+
+
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult">
+  </div>
+</div>
+<script src="./bundle.js"></script>
+
+</body>
+
+

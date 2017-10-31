@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AMD(requireJS)</title>
+  <link rel="stylesheet" type="text/css" href="../../../css/main.css">
+</head>
+<body>
+<div class="home"><a href="../../../index.html">首页</a></div>
+
+<div class="aTitle">AMD规范-requireJS</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre class="note">
+<b>定义暴露模块:</b>
+define(id?, dependencies?, factory)
+参数：
+  1. id (可选) 模块名
+  2. dependencies (可选) 依赖模块数组
+  3. factory 模块定义工厂方法，返回值为模块暴露的值
+<b>引入模块: </b>
+require(['模块1', '模块2', '模块3'], function(m1, m2, m3){//使用模块对象})
+
+<b>页面引用：</b>
+&lt;script type="text/javascript" data-main="./js/main.js" src="../../../js/require.min.js"&gt;&lt;/script&gt;
+
+<b>main.js</b>
+(function(){
+  //1. 配置
+  require.config({
+        //基本路径
+      baseUrl: 'js/',
+      //映射: name: path
+      paths: {
+        /*注意!!!:路径后面不能加.js*/
+        //引入第三方模块
+        'jquery': 'libs/jquery-1.10.1',
+        'angular': 'libs/angular',
+        'angular-messages': 'libs/angular-messages',
+
+        //自定义模块
+        'message': 'modules/message',
+        'show': 'modules/show'
+      },
+      //配置不兼容AMD的模块
+      shim: {
+        angular: {
+          exports: 'angular'
+        },
+        'angular-messages' : {
+          exports : 'angular-messages',
+          deps : ['angular']
+        }
+      }
+  })
+
+  require(['jquery','angular','angular-messages'], function($, show){
+    $('#showResult').css('backgroundColor','#FBFCD1');
+
+    angular.module('myApp', ['ngMessages'])
+    .controller('app-ctrl',['$scope', function($scope){
+      $scope.showMessage = function(){
+        require(['show'], function(show){
+          show();
+        })
+      }
+    }])
+      angular.bootstrap(document.getElementById('showResult'), ['myApp'])
+  })
+
+})()
+
+<b>message.js</b>
+define('message', ['jquery'], function($){
+  return {
+    getMessage : function(){
+      return $('#name').val();
+    }
+  }
+})
+
+<b>show.js</b>
+define('show', ['message'], function(msg){
+  return function(){
+    alert(msg.getMessage())
+  }
+})
+
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult" ng-controller='app-ctrl'>
+    <form name="form1">
+      <input type="text" id="name" name="name" ng-model="name" 
+             ng-maxlength=10 ng-minlength=5 required/>
+      <div class="error" ng-show="form1.name.$dirty" 
+            ng-messages="form1.name.$error" ng-messages-multiple>
+        <div ng-message="required">必填</div>
+        <div ng-message="minlength">至少5个字符</div>
+        <div ng-message="maxlength">最多10个字符</div>
+      </div>
+    </form>
+    <p>
+      <button ng-click="showMessage()">显示信息</button>
+    </p>
+    
+  </div>
+</div>
+<script>
+/*function show(msg){
+  var showDiv = document.getElementById('showResult');
+  showDiv.innerHTML += '<p>'+msg+'</p>'
+}*/
+</script>
+<script type="text/javascript" data-main="./js/main.js" src="../../../js/require.min.js"></script>
+<script>
+  
+</script>
+</body>
+</html>

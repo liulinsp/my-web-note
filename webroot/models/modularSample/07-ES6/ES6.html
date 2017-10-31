@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ES6模块化</title>
+  <link rel="stylesheet" type="text/css" href="../../../css/main.css">
+</head>
+<body>
+<div class="home"><a href="../../../index.html">首页</a></div>
+
+<div class="aTitle">ES6模块化</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre class="note">
+ES6内置了模块化的实现
+基本语法
+定义暴露模块 : export
+
+暴露一个对象:
+export default 对象
+暴露多个:
+export var xxx = value1
+export let yyy = value2
+
+var xxx = value1
+let yyy = value2
+export {xxx, yyy}
+引入使用模块 : import
+
+default模块:
+import xxx  from '模块路径/模块名'
+其它模块
+import {xxx, yyy} from '模块路径/模块名'
+import * as module1 from '模块路径/模块名'
+import {xxx as x} from '模块路径/模块名'
+问题: 所有浏览器还不能直接识别ES6模块化的语法
+解决:
+使用Babel将ES6--->ES5(使用了CommonJS) ----浏览器还不能直接支行
+使用Browserify--->打包处理----浏览器可以运行
+
+
+    </pre>
+  </div>
+  <!-- <div class="aShow note" id="showResult" ng-controller='app-ctrl'>
+  
+  </div> -->
+</div>
+<script src="main.js"></script>
+</body>
+</html>

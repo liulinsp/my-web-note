@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>IIFC(立即调用函数表达式)模式的模块化</title>
+  <link rel="stylesheet" type="text/css" href="../../../css/main.css">
+</head>
+<body>
+<div class="home"><a href="../../../index.html">首页</a></div>
+
+<div class="aTitle">IIFC模式</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre class="note">
+IIFE : immediately-invoked function expression(立即调用函数表达式)
+作用: 数据是私有的, 外部只能通过暴露的方法操作
+问题: 如果当前这个模块依赖另一个模块怎么办?
+
+<b>页面引用：</b>
+&lt;script type="text/javascript" src="module1.js"&gt;&lt;/script&gt;
+
+<b>module1.js</b>
+(function (window) {
+  var data = '我是module1的属性'
+  function foo () {
+    console.log('module1 foo() '+data)
+  }
+  function bar() {
+    console.log('module1 bar() '+data)
+    test()
+  }
+
+  function test() {
+    console.log('test()')
+  }
+
+  //向外暴露行为
+  window.myModule = {
+    foo, bar
+  }
+})(window)
+
+<b>脚本：</b>
+myModule.foo()
+myModule.bar()
+myModule.data = 'xxxx'
+myModule.foo() //没有变化, data是私有的
+// myModule.test() //test是私有的
+
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult">
+  </div>
+</div>
+<script>
+function show(msg){
+  var showDiv = document.getElementById('showResult');
+  showDiv.innerHTML += '<p>'+msg+'</p>'
+}
+</script>
+<script type="text/javascript" src="module1.js"></script>
+<script>
+myModule.foo()
+myModule.bar()
+myModule.data = 'xxxx'
+myModule.foo() //没有变化, data是私有的
+// myModule.test() //test是私有的
+</script>
+
+
+<div class="aTitle">IIFC模式-引入依赖</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre class="note">
+IIFE模式增强 : 引入依赖
+这就是现代模块实现的基石
+
+<b>缺点：</b> 
+1. 通常需要使用很多模块，一个页面引入多个js文件，请求过多，影响性能
+2. 模块间的依赖模糊，引用顺序错误会导致模块不可用，很难维护
+
+
+<b>页面引用：</b>
+&lt;script type="text/javascript" src="log.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="module-super.js"&gt;&lt;/script&gt;
+
+<b>log.js</b>
+(function(){
+	function show(msg){
+	  var showDiv = document.getElementById('showResult2');
+	  showDiv.innerHTML += '<p>'+msg+'</p>'
+	}
+	window.log = show
+})()
+
+<b>module-super.js</b>
+(function (window, <mark>$</mark>) {
+  var data = '我是superModule的属性'
+  function foo () {
+    $('superModule foo() '+data)
+  }
+  function bar() {
+    $('superModule bar() '+data)
+    test()
+  }
+
+  function test() {
+    $('test()')
+  }
+
+  //向外暴露行为
+  window.superModule = {
+    foo, bar
+  }
+})(window, <mark>log</mark>)
+
+<b>脚本：</b>
+superModule.foo()
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult2">
+  </div>
+</div>
+
+<script type="text/javascript" src="log.js"></script>
+<script type="text/javascript" src="module-super.js"></script>
+<script>
+superModule.foo()
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CMD(seaJS)</title>
+  <link rel="stylesheet" type="text/css" href="../../../css/main.css">
+</head>
+<body>
+<div class="home"><a href="../../../index.html">首页</a></div>
+
+<div class="aTitle">CMD规范-seaJS</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre class="note">
+参考：https://seajs.github.io/seajs/docs/#docs
+<b>定义暴露模块:</b>
+define(function(require, module, exports){
+  通过require引入依赖模块
+  通过module/exports来暴露模块【与commonJS相同】
+  exports.xxx = value
+})
+<b>使用模块:</b>
+seajs.use(['模块1', '模块2'])
+
+<b>页面引用：</b>
+&lt;script type="text/javascript" src="../../../js/sea.js"&gt;&lt;/script&gt;
+
+<b>配置脚本：</b>
+// seajs 的简单配置
+seajs.config({
+  base: "../../../js",
+  alias: {
+    "jquery": "jquery-1.10.1.js"
+  }
+})
+
+// 加载入口模块
+seajs.use("./js/main")
+
+<b>main.js:</b>
+define(function(require, exports, module) {
+  require('jquery');
+  var show = require('./show')
+  $('button').click(function(){
+    show();
+  })
+});
+
+<b>message.js</b>
+define(function(require, exports, module) {
+  require('jquery');
+  exports.getMessage = function(){
+    return $('#name').val();
+  }
+})
+
+<b>show.js</b>
+define(function(require, exports, module) {
+  var msg = require('./message');
+  module.exports = function(){
+    alert(msg.getMessage())
+  }
+})
+
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult" ng-controller='app-ctrl'>
+    <form name="form1">
+      <input type="text" id="name" name="name" value="hello" required/>
+    </form>
+    <p>
+      <button ng-click="showMessage()">显示信息</button>
+    </p>
+    
+  </div>
+</div>
+<script>
+
+</script>
+<script type="text/javascript" src="../../../js/sea.js"></script>
+<script>
+seajs.config({
+  base: "../../../js",
+  alias: {
+    "jquery": "jquery-1.10.1.js"
+  }
+})
+
+// 加载入口模块
+seajs.use("./js/main")
+</script>
+</body>
+</html>
