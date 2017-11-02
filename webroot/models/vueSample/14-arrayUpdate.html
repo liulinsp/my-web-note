@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>数组更新</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle"></div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Vue对数组的push、pull、shift、unshift、splice、sort、reverse方法进行了重写，
+当使用这些方法操作数组时，会自动渲染页面
+
+但是如果直接操作数组下标进行修改，页面不会自动渲染,需要执行Vue.set(target,key,value)
+
+PS:
+Vue1.0中给数组增加了扩展方法 $set 和 $remove, 便于操作，但在2.0中废弃了
+
+<b>页面：</b>
+&lt;div class="aShow note" id="app1"&gt;
+	&lt;ul v-for='item in arr'&gt;
+		&lt;li&gt;
+			&lt;span v-text='item.name'&gt;&lt;/span&gt;
+			&lt;button @click='removeItem(item)'&gt;删除&lt;/button&gt;
+			&lt;button @click='changeItem(item)'&gt;改变&lt;/button&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data: {
+		arr:[
+			{id:1, name: '张三'},
+			{id:2, name: '李四'}
+		]
+	},
+	methods: {
+		removeItem(item){
+			var index = this.arr.indexOf(item)
+			this.arr.splice(index, 1)
+		},
+		changeItem(item){
+			var index = this.arr.indexOf(item)
+			//this.arr[index] = {id:3, name:'王五'}; //error:页面没有重新渲染
+			//this.arr.splice(index, 1, {id:3, name:'王五'}) //OK
+			Vue.set(this.arr, index, {id:3, name:'王五'})
+			console.log(this.arr)
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+		<ul v-for='item in arr' :key='item.id'>
+			<li>
+				<span v-text='item.name'></span>
+				<button @click='removeItem(item)'>删除</button>
+				<button @click='changeItem(item)'>改变</button>
+			</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data: {
+		arr:[
+			{id:1, name: '张三'},
+			{id:2, name: '李四'}
+		]
+	},
+	methods: {
+		removeItem(item){
+			var index = this.arr.indexOf(item)
+			this.arr.splice(index, 1)
+		},
+		changeItem(item){
+			var index = this.arr.indexOf(item)
+			//this.arr[index] = {id:3, name:'王五'}; //error:页面没有重新渲染
+			//this.arr.splice(index, 1, {id:3, name:'王五'})
+			Vue.set(this.arr, index, {id:3, name:'王五'})
+			console.log(this.arr)
+		}
+	}
+});
+</script>
+
+
+
+</body>
+</html>

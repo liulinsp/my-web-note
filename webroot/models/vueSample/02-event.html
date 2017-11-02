@@ -32,12 +32,15 @@ var app1 = new Vue({
 		}
 	}
 });
+
+<b>简写：</b>
+&lt;button <mark>@click</mark>="btnHandle"&gt;获取当前时间&lt;/button&gt;
 		</pre>
 	</div>
 	<div class="aShow">
 		<div id="app1">
 			<div>{{time}}</div>
-			<button v-on:click="btnHandle">获取当前时间</button>
+			<button @click="btnHandle">获取当前时间</button>
 		</div>
 	</div>
 </div>

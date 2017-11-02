@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>过滤器</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/moment.min.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">内置过滤器</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+vue1.0有以下内置过滤器，但2.0就没有内置过滤器了
+	capitalize: 首字母大小
+	uppercase: 全部大写
+	lowercase: 全部小写
+	currency: 货币化
+	pluralize: 单数/复数处理
+	json: json格式化
+	limitBy: 限定数组的部分元素(下标)
+	filterBy: 限定数组的部分元素(值)
+	orderBy: 对数组进行排序
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="app1"></div> -->
+</div>
+
+
+<div class="aTitle">自定义过滤器-局部</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div class="aShow note" id="app1"&gt;
+	&lt;ul v-for='item in arr' :key='item.id'&gt;
+		&lt;li&gt;
+			&lt;span&gt;{{item.name | capitalize}}&lt;/span&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data: {
+		arr:[
+			{id:1, name: 'tom'},
+			{id:2, name: 'lily'}
+		]
+	},
+	filters: {
+		capitalize: function (value) {
+			if (!value) return ''
+			value = value.toString()
+			return value.charAt(0).toUpperCase() + value.slice(1)
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+		<ul v-for='item in arr' :key='item.id'>
+			<li>
+				<span>{{item.name | capitalize}}</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data: {
+		arr:[
+			{id:1, name: 'tom'},
+			{id:2, name: 'lily'}
+		]
+	},
+	filters: {
+		capitalize: function (value) {
+			if (!value) return ''
+			value = value.toString()
+			return value.charAt(0).toUpperCase() + value.slice(1)
+		}
+	}
+});
+</script>
+
+<div class="aTitle">自定义过滤器-全局</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div class="aShow note" id="app4"&gt;
+	&lt;ul v-for='item in arr' :key='item.id'&gt;
+		&lt;li&gt;
+			&lt;span&gt;{{item.createTime | time('YYYY-MM-DD HH:mm:ss')}}&lt;/span&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+Vue.filter('time',function(value, pattern){
+	pattern = pattern || 'YYYY-MM-DD'
+	return moment(value).format(pattern)
+})
+
+var app4 = new Vue({
+	el:"#app4",
+	data: {
+		arr:[
+			{id:1, createTime: 1509523521072},
+			{id:2, createTime: 1509411537793}
+		]
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+		<ul v-for='item in arr' :key='item.id'>
+			<li>
+				<span>{{item.createTime | time('YYYY-MM-DD HH:mm:ss')}}</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+
+Vue.filter('time',function(value, pattern){
+	pattern = pattern || 'YYYY-MM-DD'
+	return moment(value).format(pattern)
+})
+
+var app4 = new Vue({
+	el:"#app4",
+	data: {
+		arr:[
+			{id:1, createTime: 1509523521072},
+			{id:2, createTime: 1509411537793}
+		]
+	}
+});
+</script>
+
+<div class="aTitle">自定义过滤器-带参数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div class="aShow note" id="app2"&gt;
+	&lt;ul v-for='item in arr' :key='item.id'&gt;
+		&lt;li&gt;
+			&lt;span&gt;{{item.money | currency('￥', 2)}}&lt;/span&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+const digitsRE = /(\d{3})(?=\d)/g
+
+var app2 = new Vue({
+	el:"#app2",
+	data: {
+		arr:[
+			{id:1, money: 1024.25},
+			{id:2, money: 3788.8276}
+		]
+	},
+	filters: {
+		currency: function (value, currency, decimals) {
+		    value = parseFloat(value)
+		    if (!isFinite(value) || (!value && value !== 0)) return ''
+		    currency = currency != null ? currency : '$'
+		    decimals = decimals != null ? decimals : 2
+		    var stringified = Math.abs(value).toFixed(decimals)
+		    var _int = decimals
+		      ? stringified.slice(0, -1 - decimals)
+		      : stringified
+		    var i = _int.length % 3
+		    var head = i > 0
+		      ? (_int.slice(0, i) + (_int.length > 3 ? ',' : ''))
+		      : ''
+		    var _float = decimals
+		      ? stringified.slice(-1 - decimals)
+		      : ''
+		    var sign = value < 0 ? '-' : ''
+		    return sign + currency + head +
+		      _int.slice(i).replace(digitsRE, '$1,') +
+		      _float
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+		<ul v-for='item in arr' :key='item.id'>
+			<li>
+				<span>{{item.money | currency('￥', 2)}}</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+const digitsRE = /(\d{3})(?=\d)/g
+
+var app2 = new Vue({
+	el:"#app2",
+	data: {
+		arr:[
+			{id:1, money: 1024.25},
+			{id:2, money: 3788.8276}
+		]
+	},
+	filters: {
+		currency: function (value, currency, decimals) {
+		    value = parseFloat(value)
+		    if (!isFinite(value) || (!value && value !== 0)) return ''
+		    currency = currency != null ? currency : '$'
+		    decimals = decimals != null ? decimals : 2
+		    var stringified = Math.abs(value).toFixed(decimals)
+		    var _int = decimals
+		      ? stringified.slice(0, -1 - decimals)
+		      : stringified
+		    var i = _int.length % 3
+		    var head = i > 0
+		      ? (_int.slice(0, i) + (_int.length > 3 ? ',' : ''))
+		      : ''
+		    var _float = decimals
+		      ? stringified.slice(-1 - decimals)
+		      : ''
+		    var sign = value < 0 ? '-' : ''
+		    return sign + currency + head +
+		      _int.slice(i).replace(digitsRE, '$1,') +
+		      _float
+		}
+	}
+});
+</script>
+
+
+<div class="aTitle">自定义过滤器-多个串联</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面：</b>
+&lt;div class="aShow note" id="app3"&gt;
+	&lt;ul v-for='item in arr' :key='item.id'&gt;
+		&lt;li&gt;
+			&lt;span&gt;{{item.name | prefix | suffix}}&lt;/span&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = new Vue({
+	el:"#app3",
+	data: {
+		arr:[
+			{id:1, name: 'tom'},
+			{id:2, name: 'lily'}
+		]
+	},
+	filters: {
+		prefix: function (value) {
+			return 'hello, '+value
+		},
+		suffix: function (value) {
+			return value+'!'
+		}
+	}
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+		<ul v-for='item in arr' :key='item.id'>
+			<li>
+				<span>{{item.name | prefix | suffix}}</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+var app3 = new Vue({
+	el:"#app3",
+	data: {
+		arr:[
+			{id:1, name: 'tom'},
+			{id:2, name: 'lily'}
+		]
+	},
+	filters: {
+		prefix: function (value) {
+			return 'hello, '+value
+		},
+		suffix: function (value) {
+			return value+'!'
+		}
+	}
+});
+</script>
+
+
+
+
+</body>
+</html>

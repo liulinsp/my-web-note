@@ -57,10 +57,13 @@ var app2 = new Vue({
 		mytitle:"这是绑定的标题"
 	}
 });
+
+<b>简写：</b>
+&lt;span <mark>:title</mark>="mytitle"&gt;鼠标放到我上面你就会看到动态绑定的标题&lt;/span&gt;
 		</pre>
 	</div>
 	<div class="aShow note" id="app2">
-		<span v-bind:title="mytitle">鼠标放到我上面你就会看到动态绑定的标题</span>
+		<span :title="mytitle">鼠标放到我上面你就会看到动态绑定的标题</span>
 	</div>
 </div>
 <script type="text/javascript">
