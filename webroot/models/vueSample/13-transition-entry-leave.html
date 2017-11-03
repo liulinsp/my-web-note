@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>vue 过渡效果</title>
+	<title>vue 过渡效果-进入/离开</title>
 	<link rel="stylesheet" type="text/css" href="../../css/main.css">
 	<script type="text/javascript" src="../../js/vue.js"></script>
 	<meta charset="utf-8">
@@ -13,7 +13,7 @@
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s
 }
-.fade-enter, .fade-leave-active {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 </style>
@@ -21,11 +21,17 @@
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
-会有 4 个(CSS)类名在 enter/leave 的过渡中切换
-v-enter: 定义进入过渡的开始状态。在元素被插入时生效，在下一个帧移除。
-v-enter-active: 定义进入过渡的结束状态。在元素被插入时生效，在 transition/animation 完成之后移除。
-v-leave: 定义离开过渡的开始状态。在离开过渡被触发时生效，在下一个帧移除。
-v-leave-active: 定义离开过渡的结束状态。在离开过渡被触发时生效，在 transition/animation 完成之后移除。
+会有 6 个(CSS)类名在 enter/leave 的过渡中切换
+1. <b>v-enter</b>：定义进入过渡的开始状态。在元素被插入时生效，在下一个帧移除。
+2. <b>v-enter-active</b>：定义过渡的状态。在元素整个过渡过程中作用，在元素被插入时生效，
+   在 transition/animation 完成之后移除。这个类可以被用来定义过渡的过程时间，延迟和曲线函数。
+3. <b>v-enter-to</b>: 2.1.8版及以上 定义进入过渡的结束状态。在元素被插入一帧后生效 (于此同时 
+   v-enter 被删除)，在 transition/animation 完成之后移除。
+4. <b>v-leave</b>: 定义离开过渡的开始状态。在离开过渡被触发时生效，在下一个帧移除。
+5. <b>v-leave-active</b>：定义过渡的状态。在元素整个过渡过程中作用，在离开过渡被触发后立即生效，
+   在 transition/animation 完成之后移除。这个类可以被用来定义过渡的过程时间，延迟和曲线函数。
+6. <b>v-leave-to</b>: 2.1.8版及以上 定义离开过渡的结束状态。在离开过渡被触发一帧后生效 
+   (于此同时 v-leave 被删除)，在 transition/animation 完成之后移除。
 
 <b>页面：</b>
 &lt;div id="app1"&gt;
@@ -47,7 +53,7 @@ var app1 = new Vue({
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s
 }
-.fade-enter, .fade-leave-active {
+.fade-enter, .fade-leave-to {
   opacity: 0
 }
 		</pre>
@@ -74,6 +80,9 @@ var app1 = new Vue({
 
 
 <style>
+.jump-enter-active, .jump-leave-active{
+	transform-origin: 0 50%;
+}
 .jump-enter-active{
 	animation: jump-in 1s;
 }
@@ -82,25 +91,25 @@ var app1 = new Vue({
 }
 @keyframes jump-in{
   0% {
-    transform: scale(0);
+    transform: translate(0) scale(0);
   }
   50% {
-    transform: scale(1.5);
+    transform: translate(50px) scale(1.5);
   }
   100% {
-    transform: scale(1);
+    transform: translate(0) scale(1);
   }
 }
 
 @keyframes jump-out{
   0% {
-    transform: scale(1);
+    transform: translate(0) scale(1);
   }
   50% {
-    transform: scale(1.5);
+    transform: translate(50px) scale(1.5);
   }
   100% {
-    transform: scale(0);
+    transform: translate(0) scale(0);
   }
 }
 </style>
@@ -125,6 +134,9 @@ var app2 = new Vue({
 });
 
 <b>样式：</b>
+.jump-enter-active, .jump-leave-active{
+	transform-origin: 0 50%;
+}
 .jump-enter-active{
 	animation: jump-in 1s;
 }
@@ -133,25 +145,25 @@ var app2 = new Vue({
 }
 @keyframes jump-in{
   0% {
-    transform: scale(0);
+    transform: translate(0) scale(0);
   }
   50% {
-    transform: scale(1.5);
+    transform: translate(50px) scale(1.5);
   }
   100% {
-    transform: scale(1);
+    transform: translate(0) scale(1);
   }
 }
 
 @keyframes jump-out{
   0% {
-    transform: scale(1);
+    transform: translate(0) scale(1);
   }
   50% {
-    transform: scale(1.5);
+    transform: translate(50px) scale(1.5);
   }
   100% {
-    transform: scale(0);
+    transform: translate(0) scale(0);
   }
 }
 		</pre>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue 过渡效果-初始渲染</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.left-appear-active{
+  transition: .5s
+}
+.left-appear{
+  transform: translateX(-50%);
+}
+</style>
+<div class="aTitle">自定义css过渡</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+<b>页面：</b>
+&lt;div id="app1"&gt;
+	&lt;transition appear 
+		appear-class="left-appear"
+		appear-to-class="left-appear-to"
+		appear-active-class="left-appear-active"&gt;
+		&lt;div&gt;你好！&lt;/div&gt;
+	&lt;/transition&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		
+	}
+});
+
+<b>样式：</b>
+.left-appear-active{
+  transition: .5s
+}
+.left-appear{
+  transform: translateX(-50%);
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app1">
+			<transition appear 
+				appear-class="left-appear"
+  				appear-to-class="left-appear-to"
+ 				appear-active-class="left-appear-active">
+				<div>你好！</div>
+			</transition>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+
+	}
+});
+</script>
+
+
+<link rel="stylesheet" type="text/css" href="../../css/animate.css">
+<div class="aTitle">css动画库过渡</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>引入第三方样式库：</b>
+&lt;link rel="stylesheet" type="text/css" href="../../css/animate.css"&gt;
+
+<b>页面：</b>
+&lt;div id="app2"&gt;
+	&lt;transition appear appear-active-class="animated bounce"&gt;
+		&lt;div&gt;你好！&lt;/div&gt;
+	&lt;/transition&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app1 = new Vue({
+	el:"#app2",
+	data:{
+		
+	}
+});
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app2">
+			<transition appear appear-active-class="animated bounce">
+				<div>你好！</div>
+			</transition>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var app2 = new Vue({
+	el:"#app2",
+	data:{
+
+	}
+});
+</script>
+
+
+<div class="aTitle">javascript过渡</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>引入第三方脚本库：</b>
+&lt;script type="text/javascript" src="../../js/velocity.js"&gt;&lt;/script&gt;
+
+<b>页面：</b>
+&lt;div id="app3"&gt;
+	&lt;transition 
+		appear
+		v-on:before-appear="beforeAppear"
+		v-on:appear="appear"
+		v-on:after-appear="afterAppear"
+		v-on:appear-cancelled="appearCancelled"
+		v-bind:css="false"&gt;
+		&lt;div&gt;你好！&lt;/div&gt;
+	&lt;/transition&gt;	
+&lt;/div&gt;
+
+<b>脚本：</b>
+var app3 = new Vue({
+	el:"#app3",
+	created () {
+		this.begin = Date.now()
+	},
+	methods: {
+	    beforeAppear: function (el) {
+	      console.log('beforeAppear', Date.now() - this.begin);
+	      el.style.opacity = 0
+	      el.style.transformOrigin = 'left'
+	    },
+	    appear: function (el, done) {
+	      console.log('appear', Date.now() - this.begin);
+	      Velocity(el, { opacity: 1, fontSize: '1.4em',  translateX:'50px'}, { duration: 500 })
+	      Velocity(el, { fontSize: '1em',  translateX:'0' }, { duration: 200, complete: done })
+	    },
+	    afterAppear: function (el, done) {
+	      console.log('afterAppear', Date.now() - this.begin);
+	    },
+	    appearCancelled: function (el, done) {
+	      console.log('appearCancelled', Date.now() - this.begin);
+	    }
+	}
+});
+
+		</pre>
+	</div>
+	<div class="aShow">
+		<div id="app3">
+			<transition 
+				appear
+				v-on:before-appear="beforeAppear"
+				v-on:appear="appear"
+				v-on:after-appear="afterAppear"
+				v-on:appear-cancelled="appearCancelled"
+				v-bind:css="false">
+				<div>你好！</div>
+			</transition>
+			
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/velocity.js"></script>
+<script type="text/javascript">
+
+var app3 = new Vue({
+	el:"#app3",
+	created () {
+		this.begin = Date.now()
+	},
+	methods: {
+	    beforeAppear: function (el) {
+	      console.log('beforeAppear', Date.now() - this.begin);
+	      el.style.opacity = 0
+	      el.style.transformOrigin = 'left'
+	    },
+	    appear: function (el, done) {
+	      console.log('appear', Date.now() - this.begin);
+	      Velocity(el, { opacity: 1, fontSize: '1.4em',  translateX:'50px'}, { duration: 500 })
+	      Velocity(el, { fontSize: '1em',  translateX:'0' }, { duration: 200, complete: done })
+	    },
+	    afterAppear: function (el, done) {
+	      console.log('afterAppear', Date.now() - this.begin);
+	    },
+	    appearCancelled: function (el, done) {
+	      console.log('appearCancelled', Date.now() - this.begin);
+	    }
+	}
+});
+</script>
+</script>
+</body>
+</html>
