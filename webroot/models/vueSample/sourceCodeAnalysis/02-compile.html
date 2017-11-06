@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>源码分析-普通指令解析</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/main.css">
+	<!-- <script type="text/javascript" src="./mvvm.js"></script>
+    <script type="text/javascript" src="./compile.js"></script>
+    <script type="text/javascript" src="./observer.js"></script>
+    <script type="text/javascript" src="./watcher.js"></script> -->
+
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">普通指令解析</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+<b>页面：</b>
+
+
+<b>mvvm.js：</b>
+function MVVM(options) {
+    this.$options = options;
+    var data = this._data = this.$options.data;
+    var me = this;
+
+    // 数据代理
+    Object.keys(data).forEach(function(key) {
+        me._proxy(key);
+    });
+
+    // 指令解析
+    <mark>this.$compile = new Compile(options.el || document.body, this)</mark>
+}
+
+MVVM.prototype = {
+    _proxy: function(key) {
+        var me = this;
+        Object.defineProperty(me, key, {
+            configurable: false,
+            enumerable: true,
+            get: function proxyGetter() {
+                return me._data[key];
+            },
+            set: function proxySetter(newVal) {
+                me._data[key] = newVal;
+            }
+        });
+    }
+};
+
+<b>compile.js：</b>
+
+<b>脚本：</b>
+var vm = new MVVM({
+	el:'#app1',
+	data:{
+		message: 'Hello World!',
+        user: {name:'Tom', age:18}
+	}
+});
+
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+		<p>提示：{{message}}</p>
+        <p>姓名：<span v-text='user.name'></span></p>
+        <p>年龄：<span v-html='user.age'></span></p>
+	</div>
+</div>
+<script>
+function MVVM(options) {
+    this.$options = options;
+    var data = this._data = this.$options.data;
+    var me = this;
+
+    // 数据代理
+    Object.keys(data).forEach(function(key) {
+        me._proxy(key);
+    });
+
+    // 指令解析
+    this.$compile = new Compile(options.el || document.body, this)
+}
+
+MVVM.prototype = {
+    _proxy: function(key) {
+        var me = this;
+        Object.defineProperty(me, key, {
+            configurable: false,
+            enumerable: true,
+            get: function proxyGetter() {
+                return me._data[key];
+            },
+            set: function proxySetter(newVal) {
+                me._data[key] = newVal;
+            }
+        });
+    }
+};
+</script>
+<script type="text/javascript">
+var vm = new MVVM({
+	el:'#app1',
+	data:{
+		message: 'Hello World!'
+	}
+});
+
+document.getElementById('app1').innerHTML = vm.message;
+</script>
+
+
+</body>
+</html>
