@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>源码分析-数据代理</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/main.css">
+	<!-- <script type="text/javascript" src="./mvvm.js"></script>
+    <script type="text/javascript" src="./compile.js"></script>
+    <script type="text/javascript" src="./observer.js"></script>
+    <script type="text/javascript" src="./watcher.js"></script> -->
+
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">数据代理</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+数据代理：将一个对象属性的管理权限交给另外一个对象
+		访问描述符get/set方法
+		将原对象的属性一一取出，为目标对象绑定访问描述符
+		（访问描述符的数据源来自于源对象）
+<b>页面：</b>
+&lt;div class="aShow note" id="app1"&gt;
+&lt;/div&gt;
+
+<b>mvvm.js：</b>
+// MVVM构造函数，模拟Vue构造函数
+// options 配置对象
+function MVVM(options) {
+    // this： MVVM的实例对象 vm
+    this.$options = options;
+    // data：配置对象的数据
+    var data = this._data = this.$options.data;
+    // this的转绑
+    var me = this;
+
+    // 数据代理
+    // 实现 vm.xxx -> vm._data.xxx
+    Object.keys(data).forEach(function(key) {
+        me._proxy(key);
+    });
+}
+
+MVVM.prototype = {
+	// 代理方法
+    _proxy: function(key) {
+        // this的转绑  MVVM的实例对象 vm
+        var me = this;
+        // 使用defineProperty为vm 新增访问描述符
+        Object.defineProperty(me, key, {
+            // 修改了可配置权限
+            configurable: false,
+            // 可枚举
+            enumerable: true,
+            get: function proxyGetter() {
+                return me._data[key];
+            },
+            set: function proxySetter(newVal) {
+                me._data[key] = newVal;
+            }
+        });
+    }
+};
+
+<b>脚本：</b>
+var vm = new MVVM({
+	el:'#app1',
+	data:{
+		message: 'Hello World!'
+	}
+});
+
+document.getElementById('app1').innerHTML = vm.message;
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+		
+	</div>
+</div>
+<script>
+// MVVM构造函数，模拟Vue构造函数
+// options 配置对象
+function MVVM(options) {
+    // this： MVVM的实例对象 vm
+    this.$options = options;
+    // data：配置对象的数据
+    var data = this._data = this.$options.data;
+    // this的转绑
+    var me = this;
+
+    // 数据代理
+    // 实现 vm.xxx -> vm._data.xxx
+    Object.keys(data).forEach(function(key) {
+        me._proxy(key);
+    });
+}
+
+MVVM.prototype = {
+	// 代理方法
+    _proxy: function(key) {
+        // this的转绑  MVVM的实例对象 vm
+        var me = this;
+        // 使用defineProperty为vm 新增访问描述符
+        Object.defineProperty(me, key, {
+            // 修改了可配置权限
+            configurable: false,
+            // 可枚举
+            enumerable: true,
+            get: function proxyGetter() {
+                return me._data[key];
+            },
+            set: function proxySetter(newVal) {
+                me._data[key] = newVal;
+            }
+        });
+    }
+};
+</script>
+<script type="text/javascript">
+var vm = new MVVM({
+	el:'#app1',
+	data:{
+		message: 'Hello World!'
+	}
+});
+
+document.getElementById('app1').innerHTML = vm.message;
+</script>
+
+
+</body>
+</html>

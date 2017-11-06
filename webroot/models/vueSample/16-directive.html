@@ -108,7 +108,21 @@ var app1 = new Vue({
 &lt;/div&gt;	
 
 <b>脚本：</b>
+Vue.directive('image', function(el, binding, vnode, oldVnode){
+	el.style.backgroundColor = 'lightPink'
+	var img = new Image()
+	img.src = binding.value
+	img.onload = function(){
+		el.style.backgroundImage = 'url('+binding.value+')'
+	}
+})
 
+var app2 = new Vue({
+	el:"#app2",
+	data: {
+		imgUrl: '../../img/stone-border.jpg'
+	}	
+});
 		</pre>
 	</div>
 	<div class="aShow" id="app2">
