@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Generator 生成器</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">有限迭代器</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>参考：</b>
+<a href="http://es6.ruanyifeng.com/#docs/generator">http://es6.ruanyifeng.com/#docs/generator</a>
+function<mark>*</mark> countGen (times){
+	var num = 1;
+	for(let i = 0; i< times; i++){
+		<mark>yield</mark> num *= 2;
+	}
+}
+
+var gen = countGen(3)
+
+$('#btn1').click(function(){
+	console.log(gen.next())
+})
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+		<button id='btn1'>计算</button><br>		
+	</div>
+</div>
+<script>
+$(function(){
+	function* countGen (times){
+		var num = 1;
+		for(let i = 0; i< times; i++){
+			yield num *= 2;
+		}
+	}
+
+	var gen = countGen(3)
+	$('#btn1').click(function(){
+		showObj(gen.next())
+	})
+
+	function show(str){
+		$('<p>'+str+'</p>').appendTo('#showResult1');
+	}
+	function showObj(obj){
+		show(JSON.stringify(obj, function(k,v){
+		    if(v === undefined){
+		        return "undefined";
+		    }else{
+		        return v;
+		    }
+		}));
+	}
+})
+</script>
+
+<div class="aTitle">无限迭代器</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function<mark>*</mark> idMaker(){
+    let index = 0;
+    while(true)
+        yield index++;
+}
+var gen = idMaker();
+
+$('#btn2').click(function(){
+	var id = <b>gen.next().value;</b>
+	show(id)
+})
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+		<button id='btn2'>生成ID</button><br>
+		
+	</div>
+</div>
+<script>
+$(function(){
+	function* idMaker(){
+	    let index = 0;
+	    while(true)
+	        yield index++;
+	}
+	var gen = idMaker();
+
+	$('#btn2').click(function(){
+		var id = gen.next().value;
+		show(id)
+	})
+
+	function show(str){
+		$('<p>'+str+'</p>').appendTo('#showResult2');
+	}
+})
+</script>
+
+
+<div class="aTitle">next方法参数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. yield表达式本身没有返回值，或者说总是返回undefined。
+   next方法可以带一个参数，该参数就会被当作上一个yield表达式的返回值。
+
+2. yield表达式如果用在另一个表达式之中，必须放在圆括号里面。
+
+function* countGen (times){
+	var str = '';
+	var num = 1;
+	for(let i = 0; i< times; i++){
+		str += <mark>(</mark>yield num *= 2<mark>)</mark> + ',';
+	}
+	return str.slice(0, str.length-1)
+}
+
+var gen = countGen(3)
+$('#btn3').click(function(){
+	console.log(gen<mark>.next(Date.now()</mark>))
+})
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+		<button id='btn3'>生成ID</button><br>
+		
+	</div>
+</div>
+<script>
+$(function(){
+	function* countGen (times){
+		var str = '';
+		var num = 1;
+		for(let i = 0; i< times; i++){
+			str += (yield num *= 2) + ',';
+		}
+		return str.slice(0, str.length-1)
+	}
+
+	var gen = countGen(3)
+	$('#btn3').click(function(){
+		showObj(gen.next(Date.now()))
+	})
+
+	function show(str){
+		$('<p>'+str+'</p>').appendTo('#showResult3');
+	}
+	function showObj(obj){
+		show(JSON.stringify(obj, function(k,v){
+		    if(v === undefined){
+		        return "undefined";
+		    }else{
+		        return v;
+		    }
+		}));
+	}
+})
+</script>
+
+
+<div class="aTitle">throw方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. throw方法，可以在函数体外抛出错误，然后在 Generator 函数体内捕获。
+2. throw方法被捕获以后，会附带执行下一条yield表达式。也就是说，会附带执行一次next方法。
+
+<b>代码：</b>
+var throwGen = function* () {
+  try {
+    yield;
+  } catch (e) {
+    show('内部捕获 '+ e);
+  }
+  show('内部继续执行');
+};
+
+$('#btn4').click(function(){
+	var gen = throwGen();
+	gen.next();
+
+	try {
+	  gen.throw(new Error('a'));
+	  gen.throw(new Error('b'));
+	} catch (e) {
+	  console.log('外部捕获', e);
+	}
+})
+
+上面代码中，遍历器对象gen连续抛出两个错误。第一个错误被 Generator 
+函数体内的catch语句捕获。gen第二次抛出错误，由于 Generator 函数内部
+的catch语句已经执行过了，不会再捕捉到这个错误了，所以这个错误就被
+抛出了 Generator 函数体，被函数体外的catch语句捕获。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult4">
+		<button id='btn4'>执行</button><br>
+		
+	</div>
+</div>
+<script>
+$(function(){
+	var throwGen = function* () {
+	  try {
+	    yield;
+	  } catch (e) {
+	    show('内部捕获 '+ e);
+	  }
+	  show('内部继续执行');
+	};
+
+	$('#btn4').click(function(){
+		var gen = throwGen();
+		gen.next();
+
+		try {
+		  gen.throw(new Error('a'));
+		  gen.throw(new Error('b'));
+		} catch (e) {
+		  show('外部捕获 '+ e);
+		}
+	})
+	
+
+	function show(str){
+		$('<p>'+str+'</p>').appendTo('#showResult4');
+	}
+})
+</script>
+
+
+<div class="aTitle">Generator内部没有捕获异常</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. Generator 函数g内部没有部署try...catch代码块，所以抛出的错误直接被外部catch代码块捕获。
+
+2. 如果 Generator 函数内部和外部，都没有部署try...catch代码块，那么程序将报错，直接中断执行。
+
+<b>代码：</b>
+var throwGen = function* () {
+	yield;
+	show('内部继续执行');
+};
+
+$('#btn5').click(function(){
+	var gen = throwGen();
+	gen.next();
+
+	try {
+	  gen.throw(new Error('a'));
+	} catch (e) {
+	  show('外部捕获 '+ e);
+	}
+})
+		</pre>
+	</div>
+	<div class="aShow" id="showResult5">
+		<button id='btn5'>执行</button><br>
+		
+	</div>
+</div>
+<script>
+$(function(){
+	var throwGen = function* () {
+		yield;
+		show('内部继续执行');
+	};
+
+	$('#btn5').click(function(){
+		var gen = throwGen();
+		gen.next();
+
+		try {
+		  gen.throw(new Error('a'));
+		} catch (e) {
+		  show('外部捕获 '+ e);
+		}
+	})
+	
+
+	function show(str){
+		$('<p>'+str+'</p>').appendTo('#showResult5');
+	}
+})
+</script>
+
+<div class="aTitle">return方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+return方法，可以返回给定的值，并且终结遍历 Generator 函数。
+
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+var g = gen();
+
+console.log(g.next())  
+console.log(<mark>g.return('foo')</mark>)
+console.log(g.next())
+		</pre>
+	</div>
+	<div class="aShow" id="showResult6">
+		
+	</div>
+</div>
+<script>
+$(function(){
+	function* gen() {
+	  yield 1;
+	  yield 2;
+	  yield 3;
+	}
+
+	var g = gen();
+
+	showObj(g.next())  
+	showObj(g.return('foo'))
+	showObj(g.next())
+	
+
+	function show(str){
+		$('<p>'+str+'</p>').appendTo('#showResult6');
+	}
+	function showObj(obj){
+		show(JSON.stringify(obj, function(k,v){
+		    if(v === undefined){
+		        return "undefined";
+		    }else{
+		        return v;
+		    }
+		}));
+	}
+})
+</script>
+
+
+<div class="aTitle">yield*表达式1</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. yield*表达式，用来在一个 Generator 函数里面执行另一个 Generator 函数。
+2. yield*后面的 Generator 函数（没有return语句时），等同于在 Generator 
+   函数内部，部署一个for...of循环。
+3. 从语法角度看，如果yield表达式后面跟的是一个遍历器对象，需要在yield表达
+   式后面加上星号，表明它返回的是一个遍历器对象。这被称为yield*表达式。
+
+function* foo() {
+  yield 'a';
+  yield 'b';
+}
+
+function* bar() {
+  yield 'x';
+  <mark>yield* foo();</mark>
+  yield 'y';
+}
+
+var g = bar();
+console.log(g.next())
+console.log(g.next())
+console.log(g.next())
+console.log(g.next())
+console.log(g.next())
+		</pre>
+	</div>
+	<div class="aShow" id="showResult7">
+		
+	</div>
+</div>
+<script>
+$(function(){
+
+function* foo() {
+  yield 'a';
+  yield 'b';
+}
+
+function* bar() {
+  yield 'x';
+  yield* foo();
+  yield 'y';
+}
+
+var g = bar();
+showObj(g.next())
+showObj(g.next())
+showObj(g.next())
+showObj(g.next())
+showObj(g.next())
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult7');
+}
+function showObj(obj){
+	show(JSON.stringify(obj, function(k,v){
+	    if(v === undefined){
+	        return "undefined";
+	    }else{
+	        return v;
+	    }
+	}));
+}
+})
+</script>
+
+<div class="aTitle">yield*表达式2</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var arr = ['a','b']
+function* bar() {
+  yield 'x';
+  <mark>yield* arr;</mark>
+  yield 'y';
+}
+
+var g = bar();
+console.log(g.next())
+console.log(g.next())
+console.log(g.next())
+console.log(g.next())
+console.log(g.next())
+		</pre>
+	</div>
+	<div class="aShow" id="showResult8">
+		
+	</div>
+</div>
+<script>
+$(function(){
+
+var arr = ['a','b']
+function* bar() {
+  yield 'x';
+  yield* arr;
+  yield 'y';
+}
+
+var g = bar();
+showObj(g.next())
+showObj(g.next())
+showObj(g.next())
+showObj(g.next())
+showObj(g.next())
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult8');
+}
+function showObj(obj){
+	show(JSON.stringify(obj, function(k,v){
+	    if(v === undefined){
+	        return "undefined";
+	    }else{
+	        return v;
+	    }
+	}));
+}
+})
+</script>
+
+
+
+
+<div class="aTitle">遍历</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+执行 Generator 函数会返回一个遍历器对象，也就是说，
+Generator 函数除了状态机，还是一个遍历器对象生成函数。
+
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
+}
+
+var g = gen();
+for(let id of g){
+	show(id)
+}
+		</pre>
+	</div>
+	<div class="aShow" id="showResult9">
+		
+	</div>
+</div>
+<script>
+$(function(){
+
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
+}
+
+var g = gen();
+for(let id of g){
+	show(id)
+}
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult9');
+}
+function showObj(obj){
+	show(JSON.stringify(obj, function(k,v){
+	    if(v === undefined){
+	        return "undefined";
+	    }else{
+	        return v;
+	    }
+	}));
+}
+})
+</script>
+
+
+
+<div class="aTitle">Thunk 函数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>参考：</b>http://es6.ruanyifeng.com/#docs/generator-async#Thunk-函数的含义
+编程语言刚刚起步，计算机学家还在研究，编译器怎么写比较好。一个争论的焦点是"求值策略"，
+即函数的参数到底应该何时求值。
+<b>1. "传值调用"（call by value）</b>
+	f(x + 5)
+	// 传值调用时，等同于
+	f(6)
+<b>2. “传名调用”（call by name）</b>
+	f(x + 5)
+	// 传名调用时，等同于
+	(x + 5) * 2
+<b>Thunk 函数</b>
+编译器的“传名调用”实现，往往是将参数放到一个临时函数之中，再将这个临时函数传入函数体。
+这个临时函数就叫做 Thunk 函数。
+
+<b>Thunk 函数示例：</b>
+function f(m) {
+  return m * 2;
+}
+f(x + 5);
+
+// 等同于
+var thunk = function () {
+  return x + 5;
+};
+function f(thunk) {
+  return thunk() * 2;
+}
+
+<b>JavaScript语言的Thunk函数：</b>
+JavaScript 语言是传值调用，它的 Thunk 函数含义有所不同。在 JavaScript 语言中，Thunk 函数
+替换的不是表达式，而是多参数函数，将其替换成一个只接受回调函数作为参数的单参数函数。
+// ES5版本
+var Thunk = function(fn){
+  return function (){
+    var args = Array.prototype.slice.call(arguments);
+    return function (callback){
+      args.push(callback);
+      return fn.apply(this, args);
+    }
+  };
+};
+
+// ES6版本
+const Thunk = function(fn) {
+  return function (...args) {
+    return function (callback) {
+      return fn.call(this, ...args, callback);
+    }
+  };
+};
+
+<b>使用:</b>
+var readFileThunk = Thunk(fs.readFile);
+readFileThunk(fileA)(callback);
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult9">
+		
+	</div> -->
+</div>
+
+<div class="aTitle">Thunk函数自动执行Generator 函数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// thunk转化器，多了一个检查机制，变量called确保回调函数只运行一次
+function thunkify(fn) {
+  return function() {
+    var args = new Array(arguments.length);
+    var ctx = this;
+
+    for (var i = 0; i < args.length; ++i) {
+      args[i] = arguments[i];
+    }
+
+    return function (done) {
+      var called;
+
+      args.push(function () {
+        if (called) return;
+        called = true;
+        done.apply(null, arguments);
+      });
+
+      try {
+        fn.apply(ctx, args);
+      } catch (err) {
+        done(err);
+      }
+    }
+  }
+};
+
+// 模拟文件读取
+function readFile(fileName, callback){
+	setTimeout(function(){
+		callback(fileName+'文件的数据')
+	}, 2000);
+}
+
+var readFileThunk = thunkify(readFile);
+function* gen(){
+	var data1 = yield readFileThunk('file1.txt');
+	console.log(data1)
+	var data2 = yield readFileThunk('file2.txt');
+	console.log(data2)
+}
+
+// 手动流程管理
+/* var g = gen();
+g.next().value(function(data1){
+	g.next(data1).value(function(data2){
+		g.next(data2)
+	})
+}); */
+
+// 自动流程管理
+function run(fn) {
+  var gen = fn();
+
+  function next(data) {
+    var result = gen.next(data);
+    if (result.done) return;
+    result.value(next);
+  }
+
+  next();
+}
+run(gen)
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult10">
+		
+	</div>
+</div>
+<script>
+$(function(){
+// thunk转化器，多了一个检查机制，变量called确保回调函数只运行一次
+function thunkify(fn) {
+  return function() {
+    var args = new Array(arguments.length);
+    var ctx = this;
+
+    for (var i = 0; i < args.length; ++i) {
+      args[i] = arguments[i];
+    }
+
+    return function (done) {
+      var called;
+
+      args.push(function () {
+        if (called) return;
+        called = true;
+        done.apply(null, arguments);
+      });
+
+      try {
+        fn.apply(ctx, args);
+      } catch (err) {
+        done(err);
+      }
+    }
+  }
+};
+
+// 模拟文件读取
+function readFile(fileName, callback){
+	setTimeout(function(){
+		callback(fileName+'文件的数据')
+	}, 2000);
+}
+
+var readFileThunk = thunkify(readFile);
+function* gen(){
+	var data1 = yield readFileThunk('file1.txt');
+	show(data1)
+	var data2 = yield readFileThunk('file2.txt');
+	show(data2)
+}
+
+// 手动流程管理
+/* var g = gen();
+g.next().value(function(data1){
+	g.next(data1).value(function(data2){
+		g.next(data2)
+	})
+}); */
+
+// 自动流程管理
+function run(fn) {
+  var gen = fn();
+
+  function next(data) {
+    var result = gen.next(data);
+    if (result.done) return;
+    result.value(next);
+  }
+
+  next();
+}
+run(gen)
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult10');
+}
+function showObj(obj){
+	show(JSON.stringify(obj, function(k,v){
+	    if(v === undefined){
+	        return "undefined";
+	    }else{
+	        return v;
+	    }
+	}));
+}
+})
+</script>
+
+
+<div class="aTitle">基于-Promise-对象的自动执行</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		setTimeout(function(){
+			resolve(fileName+'文件的数据')
+		}, 2000);
+	})
+	
+}
+
+function* gen(){
+	var data1 = yield readFile('file1.txt');
+	show(data1)
+	var data2 = yield readFile('file2.txt');
+	show(data2)
+}
+
+// 手动流程管理
+/*var g = gen();
+g.next().value
+	.then(function(data){
+		return g.next(data).value
+	})
+	.then(function(data){
+		return g.next(data).value
+	})*/
+
+// 自动流程管理
+function run(fn) {
+  var gen = fn();
+
+  function next(data) {
+    var result = gen.next(data);
+    if (result.done) return;
+    result.value.then(next);
+  }
+
+  next();
+}
+// 执行自动流程管理
+run(gen);
+		</pre>
+	</div>
+	<div class="aShow" id="showResult11">
+		
+	</div>
+</div>
+<script>
+$(function(){
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		setTimeout(function(){
+			resolve(fileName+'文件的数据')
+		}, 2000);
+	})
+	
+}
+
+function* gen(){
+	var data1 = yield readFile('file1.txt');
+	show(data1)
+	var data2 = yield readFile('file2.txt');
+	show(data2)
+}
+
+// 手动流程管理
+/*var g = gen();
+g.next().value
+	.then(function(data){
+		return g.next(data).value
+	})
+	.then(function(data){
+		return g.next(data).value
+	})*/
+
+// 自动流程管理
+function run(fn) {
+  var gen = fn();
+
+  function next(data) {
+    var result = gen.next(data);
+    if (result.done) return;
+    result.value.then(next);
+  }
+
+  next();
+}
+// 执行自动流程管理
+run(gen);
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult11');
+}
+function showObj(obj){
+	show(JSON.stringify(obj, function(k,v){
+	    if(v === undefined){
+	        return "undefined";
+	    }else{
+	        return v;
+	    }
+	}));
+}
+})
+</script>
+</body>
+</html>

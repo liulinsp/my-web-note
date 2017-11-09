@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>async函数</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">async基本用法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+ES2017 标准引入了 async 函数，使得异步操作变得更加方便。
+
+async 函数是什么？一句话，它就是 Generator 函数的语法糖。
+
+async函数就是将 Generator 函数的星号（*）替换成async，将yield替换成await，仅此而已。
+
+async函数对 Generator 函数的改进，体现在以下四点。
+<b>（1）内置执行器。</b>
+Generator 函数的执行必须靠执行器，所以才有了co模块，而async函数自带执行器。也就是说，
+async函数的执行，与普通函数一模一样，只要一行。
+<b>（2）更好的语义。</b>
+async和await，比起星号和yield，语义更清楚了。async表示函数里有异步操作，await表示紧跟
+在后面的表达式需要等待结果。
+<b>（3）更广的适用性。</b>
+co模块约定，yield命令后面只能是 Thunk 函数或 Promise 对象，而async函数的await命令后面，
+可以是Promise 对象和原始类型的值（数值、字符串和布尔值，但这时等同于同步操作）。
+<b>（4）返回值是 Promise。</b>
+async函数的返回值是 Promise 对象，这比 Generator 函数的返回值是 Iterator 对象方便多了。
+你可以用then方法指定下一步的操作。
+
+<b>示例：</b>
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		setTimeout(function(){
+			resolve(fileName+'文件的数据');
+		}, 1000);
+	})
+	
+}
+
+<mark>async</mark> function read(){
+	var data1 = <mark>await</mark> readFile('file1.txt');
+	var data2 = await readFile('file2.txt');
+	return data1+'<br>'+data2
+}
+
+<mark>read().then</mark>(function(result){
+	show('结果：');
+	show(result);
+});
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+<script>
+$(function(){
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		setTimeout(function(){
+			resolve(fileName+'文件的数据');
+		}, 1000);
+	})
+	
+}
+
+async function read(){
+	var data1 = await readFile('file1.txt');
+	var data2 = await readFile('file2.txt');
+	return data1+'<br>'+data2
+}
+
+read().then(function(result){
+	show('结果：');
+	show(result);
+});
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult1');
+}
+function showObj(obj){
+	show(JSON.stringify(obj, function(k,v){
+	    if(v === undefined){
+	        return "undefined";
+	    }else{
+	        return v;
+	    }
+	}));
+}
+})
+</script>
+
+
+<div class="aTitle">单步抛异常/rejected, 不影响后续</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		/*if(fileName === 'file1.txt'){
+			throw new Error(fileName+'文件不存在');
+		}*/
+		setTimeout(function(){
+			if(fileName === 'file1.txt'){
+				reject({message: fileName+'文件不存在'});
+				return;
+			}
+			resolve(fileName+'文件的数据');
+		}, 1000);
+	})
+	
+}
+
+async function read(){
+	// var data1 = await readFile('file1.txt');
+	/*try{
+		var data1 = await readFile('file1.txt');
+	}catch(e){
+		show('read方法捕获异常：'+e.message);
+	}*/
+
+	var data1 = await readFile('file1.txt').catch(function(e){
+		show('read方法捕获异常：'+e.message);
+	});
+	var data2 = await readFile('file2.txt');
+	return data1+'<br>'+data2
+}
+
+read().then(function(result){
+	show('结果：');
+	show(result);
+},function(e){
+	show('外面捕获异常：'+ e.message);
+});
+		</pre>
+	</div>
+	<div class="aShow" id="showResult2">
+	</div>
+</div>
+<script>
+$(function(){
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		/*if(fileName === 'file1.txt'){
+			throw new Error(fileName+'文件不存在');
+		}*/
+		setTimeout(function(){
+			if(fileName === 'file1.txt'){
+				reject({message: fileName+'文件不存在'});
+				return;
+			}
+			resolve(fileName+'文件的数据');
+		}, 1000);
+	})
+	
+}
+
+async function read(){
+	// var data1 = await readFile('file1.txt');
+	/*try{
+		var data1 = await readFile('file1.txt');
+	}catch(e){
+		show('read方法捕获异常：'+e.message);
+	}*/
+
+	var data1 = await readFile('file1.txt').catch(function(e){
+		show('read方法捕获异常：'+e.message);
+	});
+	var data2 = await readFile('file2.txt');
+	return data1+'<br>'+data2
+}
+
+read().then(function(result){
+	show('结果：');
+	show(result);
+},function(e){
+	show('外面捕获异常：'+ e.message);
+});
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult2');
+}
+})
+</script>
+
+
+<div class="aTitle">并行处理</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		setTimeout(function(){
+			resolve(fileName+'文件的数据');
+		}, 1000);
+	})
+	
+}
+
+async function read(){
+	/*var p1 = readFile('file1.txt');
+	var p2 = readFile('file2.txt');
+	var p3 = readFile('file3.txt');
+	var data1 = await p1;
+	var data2 = await p2;
+	var data3 = await p3;*/
+	var [data1,data2,data3] = await Promise.all([
+		readFile('file1.txt'),
+		readFile('file2.txt'),
+		readFile('file3.txt')
+	])
+	return data1+'<br>'+data2+'<br>'+data3
+}
+
+read().then(function(result){
+	show('结果：');
+	show(result);
+});
+		</pre>
+	</div>
+	<div class="aShow" id="showResult3">
+	</div>
+</div>
+<script>
+$(function(){
+// 模拟promise方式的文件读取
+function readFile(fileName){
+	return new Promise (function(resolve, reject){
+		setTimeout(function(){
+			resolve(fileName+'文件的数据');
+		}, 1000);
+	})
+	
+}
+
+async function read(){
+	/*var p1 = readFile('file1.txt');
+	var p2 = readFile('file2.txt');
+	var p3 = readFile('file3.txt');
+	var data1 = await p1;
+	var data2 = await p2;
+	var data3 = await p3;*/
+	var [data1,data2,data3] = await Promise.all([
+		readFile('file1.txt'),
+		readFile('file2.txt'),
+		readFile('file3.txt')
+	])
+	return data1+'<br>'+data2+'<br>'+data3
+}
+
+read().then(function(result){
+	show('结果：');
+	show(result);
+});
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult3');
+}
+})
+</script>
+</body>
+</html>
