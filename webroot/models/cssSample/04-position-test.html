@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>定位示例</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		html{
+			height: 500px;
+			margin: 30px;
+			padding: 30px;
+			border: solid 5px #000;
+			background-color: #464289;
+		}
+		body{
+			height: 100%;
+			background-color: #BEBAFC;
+			border: solid 5px #000;
+		}
+		#absolute{
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 200px;
+			height: 200px;
+			background-color: #BDFCBA;
+			border: 10px solid #000;
+			padding: 30px;
+		}
+		#fixed{
+			position: fixed;
+			left: 0;
+			bottom: 0;
+			width: 200px;
+			height: 200px;
+			background-color: #BDFCBA;
+			border: 10px solid #000;
+		}
+		#innerAbsolute{
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			width: 100px;
+			height: 100px;
+			background-color: #FCBAF1
+		}
+		#innerRelay{
+			position: relative;
+			top: 0px;
+			left: 0px;
+			width: 100px;
+			height: 100px;
+			background-color: #FCFABA
+		}
+	</style>
+</head>
+<body>
+	body
+	<div id="absolute">
+		div#absolute
+		<div id="innerRelay">div#innerRelay</div>
+		<div id="innerAbsolute">div#innerAbsolute</div>
+	</div>
+	<div id="fixed">div#fixed</div>
+</body>
+</html>
