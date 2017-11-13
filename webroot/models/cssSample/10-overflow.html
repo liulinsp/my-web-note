@@ -19,6 +19,12 @@
 <div class="aPane">
 	<div class="aCode">
 		<pre>
+<b>考虑document、html、body:</b>
+1. html、body中只有一个有overflow属性时，这个属性会传递给document
+2. 当且仅当html、body都存在overflow属性时，body的overflow属性才能生效:
+   body的overflow属性会作用在body上，html的overflow属性会作用在document上
+   
+
 /*默认：div不显示滚动条，对溢出内容不做处理，
 	内容可能会超出容器*/
 .visible-style{

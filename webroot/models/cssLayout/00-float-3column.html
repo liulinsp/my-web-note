@@ -2,18 +2,15 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>浮动实现的三列布局</title>
 	<style>
 		*{
 			margin: 0;
 			padding: 0;
-
 		}
 		body{
 			min-width: 600px;
-		}
-		div{
-			min-height: 300px
+			text-align: center;
 		}
 		.left, .right{
 			width: 200px;
@@ -29,42 +26,75 @@
 			margin: 0 200px;
 			background-color: #D8FCFB;
 		}
+		.header, .footer{
+			height: 38px;
+			background-color: #222;
+		}
+
+		/* 清除浮动 */
+		.clearfix{
+			/* 兼容IE, 触发IE的haslayout */
+			*zoom: 1;
+		}
+		.clearfix:after{
+			content: "";
+			display: block;
+			clear: both;
+		}
+
+		/* 等高 */
+		.container{
+			overflow: hidden;
+		}
+		.middle, .left, .right{
+			padding-bottom: 10000px;
+			margin-bottom: -10000px;
+		}
 
 	</style>
 </head>
 <body>
-	<div class="right">
+	<div class="header"></div>
+	<div class="container clearfix">
+		<div class="right">
+			<h1>R</h1>
+			<h1>R</h1>
+			<h1>R</h1>
+		</div>
+		<div class="left">
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+			<h1>L</h1>
+		</div>
+		<div class="middle">
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+			<h1>M</h1>
+		</div>
+	</div>
+	<div class="footer">
 		
 	</div>
-	<div class="left">
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-		<h1>L</h1>
-	</div>
-	<div class="middle">
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-		<h1>M</h1>
-	</div>
 </body>
-</html><!html></!html>
+</html>

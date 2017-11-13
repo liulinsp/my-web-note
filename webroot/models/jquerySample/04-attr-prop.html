@@ -128,5 +128,71 @@ ownerDocument, defaultChecked, 和 defaultSelected
   $('<div>$("#isOK").is(":checked") --> '+$("#isOK").is(":checked")+'</div>').appendTo($("#showResult4"));
 </script>
 
+
+<div class="aTitle">原生JS的attribute和property</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+&lt;input id="test"/&gt;
+
+var ele = getElementById('test')
+<b>1. attribute </b>
+ele对象的attributes.id对应的标签id属性节点，通过ele.getAttribute('id')
+或者ele.attributes.id.nodeValue获得属性值
+<b>2. property</b>
+ele.id 获得property属性值
+
+对于标签内置属性：
+1. 当属性为非boolean类型时，如：id、name、title, 
+   设置attribute属性时会自动设置property属性，
+   设置property属性时也会自动设置attribute属性
+2. 当属性为boolean类型时，如：checked、selected，
+   没有设置过property时，第一次设置attribute属性时会自动设置property属性，
+   设置过property或attribute,再次设置attribute不会同步修改property,
+   property有默认值，修改后不会同步设置attribute属性
+
+    </pre>
+  </div>
+  <div class="aShow note" id="showResult5">
+    <input type="checkbox" id="box">
+  </div>
+</div>
+<script type="text/javascript">
+  var checkbox = document.getElementById('box');
+  $('<div>var checkbox = document.getElementById("box");</div>').appendTo("#showResult5");
+  $('<div>checkbox.getAttribute("checked") --> '+checkbox.getAttribute("checked")+'</div>').appendTo("#showResult5");
+  $('<div>checkbox.checked --> '+ checkbox.checked+'</div>').appendTo("#showResult5");
+
+  checkbox.setAttribute('checked','checked');
+  $("<hr><div>checkbox.setAttribute('checked','checked');</div>").appendTo("#showResult5");
+  $('<div>checkbox.getAttribute("checked") --> '+checkbox.getAttribute("checked")+'</div>').appendTo("#showResult5");
+  $('<div>checkbox.checked --> '+ checkbox.checked+'</div>').appendTo("#showResult5");
+
+  checkbox.setAttribute('checked', null);
+  $("<hr><div>checkbox.setAttribute('checked', null);</div>").appendTo("#showResult5");
+  $('<div>checkbox.getAttribute("checked") --> '+checkbox.getAttribute("checked")+'</div>').appendTo("#showResult5");
+  $('<div>checkbox.checked --> '+ checkbox.checked+'</div>').appendTo("#showResult5");
+
+  checkbox.setAttribute('checked', 'aaa');
+  $("<hr><div>checkbox.setAttribute('checked', 'aaa');</div>").appendTo("#showResult5");
+  $('<div>checkbox.getAttribute("checked") --> '+checkbox.getAttribute("checked")+'</div>').appendTo("#showResult5");
+  $('<div>checkbox.checked --> '+ checkbox.checked+'</div>').appendTo("#showResult5");
+
+  checkbox.checked = false;
+  $("<hr><div>checkbox.checked = false;</div>").appendTo("#showResult5");
+  $('<div>checkbox.getAttribute("checked") --> '+checkbox.getAttribute("checked")+'</div>').appendTo("#showResult5");
+  $('<div>checkbox.checked --> '+ checkbox.checked+'</div>').appendTo("#showResult5");
+
+  checkbox.checked = true;
+  $("<hr><div>checkbox.checked = true;</div>").appendTo("#showResult5");
+  $('<div>checkbox.getAttribute("checked") --> '+checkbox.getAttribute("checked")+'</div>').appendTo("#showResult5");
+  $('<div>checkbox.checked --> '+ checkbox.checked+'</div>').appendTo("#showResult5");
+
+  checkbox.removeAttribute('checked');
+  $("<hr><div>checkbox.removeAttribute('checked');</div>").appendTo("#showResult5");
+  $('<div>checkbox.getAttribute("checked") --> '+checkbox.getAttribute("checked")+'</div>').appendTo("#showResult5");
+  $('<div>checkbox.checked --> '+ checkbox.checked+'</div>').appendTo("#showResult5");
+</script>
+
 </body>
 </html>
