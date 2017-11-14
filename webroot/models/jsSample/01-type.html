@@ -420,5 +420,28 @@ number,boolean,string,function,object,undefined
 	<div class="aShow note" id="showResult10">
 	</div>
 </div>
+
+<div class="aTitle">拆箱/装箱</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 拆箱
+把引用类型转换为基本的数据类型称为拆箱。
+将引用类型对象转换为对应的值类型对象，它是通过引用类型的valueOf()或者toString()方法来实现的。
+如果是自定义的对象，你也可以自定义它的valueOf()/tostring()方法，实现对这个对象的拆箱。
+var numObj = new Number(8);
+var num = numObj + 1;
+
+2. 装箱
+  把基本数据类型转换为对应的引用类型的操作称为装箱。
+  每当读取一个基本类型的时候，后台就会创建一个对应的基本包装类型
+对象，从而让我们能够调用一些方法来操作这些数据。
+var num = 8;
+var str = num.toString();
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult10">
+	</div>
+</div>
 </body>
 </html>

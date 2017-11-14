@@ -137,9 +137,11 @@ ownerDocument, defaultChecked, 和 defaultSelected
 
 var ele = getElementById('test')
 <b>1. attribute </b>
-ele对象的attributes.id对应的标签id属性节点，通过ele.getAttribute('id')
+  attribute是DOM节点的属性
+  ele对象的attributes.id对应的标签id属性节点，通过ele.getAttribute('id')
 或者ele.attributes.id.nodeValue获得属性值
 <b>2. property</b>
+property是原生js对象的属性
 ele.id 获得property属性值
 
 对于标签内置属性：
@@ -150,6 +152,9 @@ ele.id 获得property属性值
    没有设置过property时，第一次设置attribute属性时会自动设置property属性，
    设置过property或attribute,再次设置attribute不会同步修改property,
    property有默认值，修改后不会同步设置attribute属性
+3. 用户操作，改变的是property
+
+<span class="error">ie6和ie7没有区分attribute和property</span>
 
     </pre>
   </div>

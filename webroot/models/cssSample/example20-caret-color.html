@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>改变光标颜色</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<style>
+form {
+  width: 80vw;
+  margin: 20px auto;
+}
+.form-group{
+	padding: 15px;
+}
+label{
+	display: block;
+	margin: 5px 0;
+}
+input, textarea{
+	width: 280px;
+}
+input{
+	height: 28px;
+}
+
+input::-webkit-input-placeholder{ 
+	color: blue; /* 改变placeholder文本颜色 */ 
+	text-shadow: none;
+	-webkit-text-fill-color: initial; 
+}
+
+/* firefox48.0以下不支持，IE任何版本都不支持 */
+@supports (-webkit-text-fill-color: transparent) { 
+	input, textarea {
+		color: red !important;/* 文字和光标颜色，由于文字镂空显示阴影的颜色，只有光标的颜色为红色 */
+		text-shadow: 0px 0px 0px #495057;/* 阴影为文字大小 */
+		-webkit-text-fill-color: transparent;/*让文本变成镂空的*/
+	}
+}
+
+/* IE、Safari任何版本都不支持 */
+@supports (caret-color: red) { 
+	input, textarea{ 
+		color: #495057; /* 文本颜色 */ 
+		caret-color: red; /* 光标颜色 */ 
+	} 
+}
+
+	</style>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<div class="aTitle">改变光标颜色</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+input::-webkit-input-placeholder{ 
+	color: blue; /* 改变placeholder文本颜色 */ 
+	text-shadow: none;
+	-webkit-text-fill-color: initial; 
+}
+
+/* firefox48.0以下不支持，IE任何版本都不支持 */
+@supports (-webkit-text-fill-color: transparent) { 
+	input, textarea {
+		/* 文字和光标颜色，由于文字镂空显示阴影的颜色，只有光标的颜色为红色 */
+		color: red !important;
+		text-shadow: 0px 0px 0px #495057;/* 阴影为文字大小 */
+		-webkit-text-fill-color: transparent;/*让文本变成镂空的*/
+	}
+}
+
+/* IE、Safari任何版本都不支持 */
+@supports (caret-color: red) { 
+	input, textarea{ 
+		color: #495057; /* 文本颜色 */ 
+		caret-color: red; /* 光标颜色 */ 
+	} 
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<form>
+			  <div class="form-group">
+			    <label for="exampleFormControlInput1">Email address</label>
+			    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+			  </div>
+			  <div class="form-group">
+			    <label for="exampleFormControlTextarea1">Example textarea</label>
+			    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+			  </div>
+		</form>
+	</div>
+</div>
+	
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>this</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">什么是this</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. this是在运行时绑定的，并不是在代码编写时绑定的
+2. 它的上下文取决于函数调用时的各种条件
+3. this的绑定与函数声明的位置没有任何关系，只取决于函数的调用方式和调用位置
+	
+	当一个函数被调用时，会创建一个活动记录（执行上下文），这个记录会包含函数
+在哪被调用，调用的方法，传入的参数信息等。this就是这个记录的一个属性，会在函数
+的执行过程中用到。
+
+<b>this的好处：</b>
+    因为this给我们提供了一种优雅的方式来隐式传递一个对象的引用，得益于this机制，
+我们可以设计出更加简洁并且易于复用的API。
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<div class="aTitle">四种绑定方式</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. 默认绑定</b>
+   * this指向全局对象window
+   * 严格模式下，this如果执行window会是undefined
+ 1) 定义：
+function fun(){
+	console.log(this)
+}
+
+ 2) 执行：
+   fun();
+或
+   otherFun(){
+     ...
+	 fun();
+   }
+或
+   (function(){
+     ...
+     fun();
+   })()
+
+<b>2. 隐式绑定</b>
+    * this指向函数的调动对象obj
+    * 在链式调用中只有最后一个对象会影响this
+obj.fun(); // this为obj
+obj1.obj2.fun();// this为obj2
+
+	<b>隐式丢失</b>
+	var foo = obj.fun;
+	foo(); // 默认绑定，fun中this为window
+或
+	function foo(fun){
+		fun(); // 默认绑定，this为window
+	}
+	foo(obj.fun);
+
+3. 显示绑定(可以解决隐式丢失)
+	fun.call(obj, arg1, arg2, ...)
+或
+	fun.apply(obj, [arg1, arg2])
+
+	<b>硬绑定</b>
+硬绑定的经典场景就是创建一个包裹函数，传入所有的参数并返回接收到的所有值。
+	function foo(){
+		return fun.apply(obj, arguments);
+	}
+	foo(); // 硬绑定，fun中this为obj
+或
+	setTimeout(function(){
+		return fun.call(obj);
+	}, 1000)
+或
+	function myBind(f, o){
+		return function(){
+			return f.apply(o, arguments);
+		}
+	}
+	setTimeout(myBind(fun, obj),1000);
+或
+	setTimeout(fun.bind(obj), 1000);
+
+4. new绑定
+使用new操作符调用函数时，会将一个新建的对象绑定到this
+
+function Fun (name){
+	this.name = name;
+	console.log(this)
+}
+
+var obj = new Fun('new');
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+
+<div class="aTitle">优先级</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+new绑定 > 显示绑定 > 隐式绑定 > 默认绑定
+
+1. 隐式绑定 > 默认绑定
+obj.fun() // this为obj
+
+2. 显示绑定 > 隐式绑定
+var obj1 = {}
+obj.fun.call(obj1) // this为obj1
+
+3. new绑定 > 显示绑定
+var Fun = fun.bind(obj);
+new Fun(); // this为新对象
+
+4. new绑定 > 隐式绑定
+new obj.fun(); // this为新对象
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<div class="aTitle">this规则</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+
+<div class="aTitle">柯里化</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
