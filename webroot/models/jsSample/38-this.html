@@ -70,7 +70,7 @@ obj1.obj2.fun();// this为obj2
 	}
 	foo(obj.fun);
 
-3. 显示绑定(可以解决隐式丢失)
+<b id="hardBind">3. 显示绑定(可以解决隐式丢失)</b>
 	fun.call(obj, arg1, arg2, ...)
 或
 	fun.apply(obj, [arg1, arg2])
@@ -95,7 +95,16 @@ obj1.obj2.fun();// this为obj2
 或
 	setTimeout(fun.bind(obj), 1000);
 
-4. new绑定
+	<b>例外</b>
+	call、apply、bind的第一个参数为undefined或null时，this指向全局对象window
+
+	fun.call() // this为window
+或
+	fun.call(undefined) // this为window
+或
+	fun.call(null) // this为window
+
+<b>4. new绑定</b>
 使用new操作符调用函数时，会将一个新建的对象绑定到this
 
 function Fun (name){
@@ -135,24 +144,23 @@ new obj.fun(); // this为新对象
 	</div>
 </div>
 
-<div class="aTitle">this规则</div>
+
+<div class="aTitle">DMZ(demilitarized zone，非军事区)</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
+fun.call(null, arg1, arg2, ...)
+当显示绑定this时，如果第一个参数为空，this默认指向window，这种方式很不安全
+
+fun.call({}, arg1, arg2, ...)
+如果第一个参数为{}, 空对象会有__proto__隐式原型属性，不够干净
+
+<b>var ø = Object.create( null );
+fun.call(ø, arg1, arg2, ...)
+通过Object.create( null )创建了一个完全为空的对象，将这个DMZ对象作为this显示绑定的对象更安全</b>
 
 		</pre>
 	</div>
-	<div class="aShow" id="showResult1">
-	</div>
-</div>
-
-<div class="aTitle">柯里化</div>
-<div class="aPane">
-	<div class="aCode">
-		<pre class="note">
-
-		</pre>
-	</div>
-	<div class="aShow" id="showResult1">
-	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
 </div>

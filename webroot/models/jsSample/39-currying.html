@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>curring柯里化</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">什么是柯里化</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+柯里化（Currying）是把接受多个参数的函数变换成接受一个单一参数(最初函数的第一个参数)
+的函数，并且返回接受余下的参数且返回结果的新函数的技术。
+【有点像<a href="38-this.html#hardBind" target="_blank">this的硬绑定</a>，只是柯里化硬绑定了参数】
+
+// 柯里化函数
+function curry(fn){
+	var slice = Array.prototype.slice;
+	var outArgs = slice.call(arguments, 1);
+	return function(){
+		var inArgs = slice.call(arguments);
+		return fn.apply(null, outArgs.concat(inArgs))
+	}
+}
+
+// 模拟ajax的方法
+function ajax(url, callback){
+	var data = url+"返回数据:101010101001010";
+	callback(data);
+}
+
+// ajax柯里化后返回的函数
+var baiduCurry = curry(ajax, "http://www.baidu.com");
+
+// 传入回调函数，并执行柯里化后的函数
+baiduCurry(function(data){
+	console.log(data)
+})
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+	<script>
+// 柯里化函数
+function curry(fn){
+	var slice = Array.prototype.slice;
+	var outArgs = slice.call(arguments, 1);
+	return function(){
+		var inArgs = slice.call(arguments);
+		return fn.apply(null, outArgs.concat(inArgs))
+	}
+}
+
+// 模拟ajax的方法
+function ajax(url, callback){
+	var data = url+"返回数据:101010101001010";
+	callback(data);
+}
+
+// ajax柯里化后返回的函数
+var baiduCurry = curry(ajax, "http://www.baidu.com");
+
+// 传入回调函数，并执行柯里化后的函数
+baiduCurry(function(data){
+	console.log(data)
+})
+	</script>
+</div>
+
+
+
+<div class="aTitle">柯里化的应用-thunk函数</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Thunk函数本质上是函数柯里化(currying)，柯里化进行参数复用和惰性求值，
+这个是函数式编程的一些技巧，在js中，我们可以利用**高阶函数**实现函数柯里化。
+(高阶函数是指至少满足下列条件之一的函数：
+	函数可以作为参数被传递；
+	函数可以作为返回值输出。)
+
+<a href="36-generator.html#thunk" target="_blank">thunk函数在generator的应用</a>
+
+function thunkify(fn) {
+  // 返回这个函数接收前面的参数
+  return function() {
+    var args = new Array(arguments.length);
+    var ctx = this;
+
+    for (var i = 0; i < args.length; ++i) {
+      args[i] = arguments[i];
+    }
+	
+	// 这里返回的函数接收最后一参数 callback
+    return function (done) {
+      // 这用一个called作为标识, 把 callback 包了一下, 
+      // 保证这个包装过的callback只被执行一次
+      var called;
+
+      args.push(function () {
+        if (called) return;
+        called = true;
+        done.apply(null, arguments);
+      });
+
+      try {
+        fn.apply(ctx, args);
+      } catch (err) {
+        done(err);
+      }
+    }
+  }
+};
+
+var ajaxThunk = thunkify(ajax);
+var jdThunk = ajaxThunk('http://www.jd.com');
+jdThunk(function(data){
+	console.log(data)
+});
+		</pre>
+	</div>
+</div>
+<script>
+function thunkify(fn) {
+  // 返回这个函数接收前面的参数
+  return function() {
+    var args = new Array(arguments.length);
+    var ctx = this;
+
+    for (var i = 0; i < args.length; ++i) {
+      args[i] = arguments[i];
+    }
+	
+	// 这里返回的函数接收最后一参数 callback
+    return function (done) {
+      // 这用一个called作为标识, 把 callback 包了一下, 
+      // 保证这个包装过的callback只被执行一次
+      var called; 
+
+      args.push(function () {
+        if (called) return;
+        called = true;
+        done.apply(null, arguments);
+      });
+
+      try {
+        fn.apply(ctx, args);
+      } catch (err) {
+        done(err);
+      }
+    }
+  }
+};
+
+var ajaxThunk = thunkify(ajax);
+var jdThunk = ajaxThunk('http://www.jd.com');
+jdThunk(function(data){
+	console.log(data)
+});
+</script>
+
+
+<div class="aTitle">柯里化的应用-依赖注入</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+没有找到合适的例子，待完善
+		</pre>
+	</div>
+</div>
+
+</body>
+</html>
