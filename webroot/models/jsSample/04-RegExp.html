@@ -422,6 +422,40 @@ n$	匹配任何结尾为 n 的字符串。
 	</div>
 </div>
 
+<script>
+$(function(){
+	var str = 'aaa';
+	var result1 = str.replace(/a+/g,'A');
+	var result2 = str.replace(/a+?/g,'A');
+	show("var str = 'aaa';");
+	show("str.replace(/a+/g,'A') --> "+result1);
+	show("str.replace(/a+?/g,'A') --> "+result2);
+
+	function show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult13");
+	}
+});	
+</script>
+<div class="aTitle">量词-贪婪模式和非贪婪模式</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+贪婪与非贪婪模式影响的是被量词修饰的子表达式的匹配行为，
+<b>贪婪模式</b>在整个表达式匹配成功的前提下，尽可能多的匹配，
+而<b>非贪婪模式</b>在整个表达式匹配成功的前提下，尽可能少的匹配。
+
+量词默认是贪婪模式，如果想将贪婪模式改为非贪婪模式，可以在量词符后面加一个问号。
+
+var str = 'aaa';
+str.replace(/a+/g,'A'); // 贪婪模式：A
+str.replace(/a+<mark>?</mark>/g,'A'); // 非贪婪模式：AAA
+
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult13">
+	</div>
+</div>
+
 <script type="text/javascript">
 	$(function(){
 		var reg1 = new RegExp("\\d{9}","gim");
@@ -471,6 +505,9 @@ source		正则表达式的源文本。
 lastIndex	一个整数，标示开始下一次匹配的字符位置。
 <div class="error">注意：lastIndexs适用于RegExp.exec() 和 RegExp.test()方法,
 具有标志 g 的 RegExp 对象才能使用lastIndex </div>
+lastIndex是可读写属性，当值大于字符串的时：
+  1. test()方法返回false; exec方法返回null
+  2. lastIndex置为0
 
 方法：
 1. toLocaleString()和toString()方法:
@@ -628,17 +665,21 @@ test	检索字符串中指定的值。返回 true 或 false。
 </div>
 
 
-<div class="aTitle">RegExp构造函数属性</div>
+<div class="aTitle">RegExp构造函数属性（静态属性）</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">	
 长属性名   短属性名  说 明
-input		$_	最近一次要匹配的字符串。Opera未实现此属性
-lastMatch		$&	最近一次的匹配项。Opera未实现此属性
-lastParen		$+	最近一次匹配的捕获组。Opera未实现此属性
-leftContext	$`	input字符串中lastMatch之前的文本
-multiline		$*	布尔值，表示是否所有表达式都使用多行模式。IE和Opera未实现此属性
-rightContext	$'	Input字符串中lastMatch之后的文本
+input           $_	最近一次要匹配的字符串。Opera未实现此属性
+lastMatch       $&	最近一次的匹配项。Opera未实现此属性
+lastParen       $+	最近一次匹配的捕获组。Opera未实现此属性
+leftContext     $`	input字符串中lastMatch之前的文本
+rightContext    $'	Input字符串中lastMatch之后的文本
+multiline       $*	布尔值，表示是否所有表达式都使用多行模式。IE和Opera未实现此属性
+
+$1 第一个分组的内容
+$2 第二个分组的内容
+...
 		</pre>
 	</div>
 	<!-- <div class="aShow note" id="showResult10">
@@ -789,6 +830,9 @@ function htmlEscape(text){
 4. split	把字符串分割为字符串数组。
 对split()中正则表达式的支持因浏览器而异。尽管对于简单的模式没有什么差别，
 但对于未发现匹配项以及带有捕获组的模式，匹配的行为就不大相同了。
+
+'apple'.split(/\s{0}/); //["a", "p", "p", "l", "e"]
+// \s{0} 表示空字符串 ，等同'apple'.split('')
 		</pre>
 	</div>
 	<div class="aShow note" id="showResult8">
@@ -796,6 +840,255 @@ function htmlEscape(text){
 </div>
 <!-- 参考http://www.w3school.com.cn/jsref/jsref_obj_regexp.asp -->
 
+
+<div class="aTitle">分组</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+正则表达式的括号表示分组匹配，括号中的模式可以用来匹配分组的内容。
+分组可以分为两种形式，捕获组和非捕获组。
+
+<b>1. 捕获组:</b> 捕获组可以通过从左到右计算其开括号来编号 。
+例：/(\d+)-(\d+)-(\d+)/g.exec("2017-11-20")
+0:"2017-11-20"
+1:"2017"
+2:"11"
+3:"20"
+<b>组零始终代表整个表达式,括号还可以嵌套</b>
+
+var dateStr = '2017-11-20';
+var result = dateStr.replace(
+	/(\d+)-(\d+)-(\d+)/g, 
+	function($0, $1, $2, $3){
+		return $1+'年'+$2+'月'+$3+'日';
+	}
+);
+// 2017年11月20日
+
+<b>反向引用:(Back引用)</b>
+在后面的表达式中我们可以使用组的编号来引用前面的表达式所捕获到的文本序列。
+注意：反向引用，引用的是前面捕获组中的文本而不是正则，也就是说反向引用处
+匹配的文本应和前面捕获组中的文本相同，这一点很重要。
+例： /&lt;(\w+)&gt;(.+)&lt;\/<mark>\1</mark>&gt;/g.exec('&lt;div>正文&lt;/div&gt;')
+0:"&lt;div&gt;正文&lt;/div&gt;"
+1:"div"
+2:"正文"
+(\1表示第一个括号匹配的内容)
+
+<b>2. 非捕获组 :</b>(?:Pattern)
+表示不返回该组匹配的内容，即匹配的结果中不计入这个括号。
+好处就是不捕获文本，不将匹配到的字符存储到内存中，从而节省内存。
+例：
+ 1) 捕获(bc)组： /a((bc){1,9})/g.exec('abcbccccc')
+0:"abcbc"
+1:"bcbc"
+2:"bc" // 不想捕获这一组
+
+ 2) 不捕获(bc)组： /a((<mark>?:</mark>bc){1,9})/g.exec('abcbccccc')
+0:"abcbc"
+1:"bcbc"
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult14">
+	</div>
+</div>
+<script>
+$(function(){
+
+	var dateStr = '2017-11-20';
+	var result = dateStr.replace(
+		/(\d+)-(\d+)-(\d+)/g, 
+		function($0, $1, $2, $3){
+			return $1+'年'+$2+'月'+$3+'日';
+		}
+	);
+	show('result --> '+result);
+	function show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult14");
+	}	
+
+	//console.log(/<(\w+)>(.+)<\/\1>/g.exec('<div>正文</div>'))
+	//console.log(/a((bc){1,9})/g.exec('abcbccccc'))
+	//console.log(/a((?:bc){1,9})/g.exec('abcbccccc'));
+})
+</script>
+
+
+<div class="aTitle">零宽度断言</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>(?=X )</b> 零宽度正先行断言
+仅当子表达式 X 在 此位置的右侧匹配时才继续匹配。
+也就是说要使此零宽度断言起到我们想要的效果的话，就必须把这个非捕
+获组放在整个表达式的右侧。
+例如，/w+(?=/d) 与后跟数字的单词匹配，而不与该数字匹配。此构造不会回溯。
+
+<b>(?!X)</b> 零宽度负先行断言
+仅当子表达式 X 不在 此位置的右侧匹配时才继续匹配。
+例如，例如，/w+(?!/d) 与后不跟数字的单词匹配，而不与该数字匹配 。
+
+<b>(?&lt;=X)</b> 零宽度正后发断言
+仅当子表达式 X 在 此位置的左侧匹配时才继续匹配。
+例如，(?<=19)99 与跟在 19 后面的 99 的实例匹配。此构造不会回溯。
+
+<b>(?&lt;!X)</b> 零宽度负后发断言
+仅当子表达式 X 不在此位置的左侧匹配时才继续匹配。
+例如，(?&lt;!19)99 与不跟在 19 后面的 99 的实例匹配
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult16">
+	</div>
+</div>
+<script>
+var result1 = 'test2 test test10'.replace(/test(?=\d*)/g, 'class');
+show("零宽度正先行断言(?=X)：<br>"+"'test2 test test10'.replace(/test(?=\\d*)/g, 'class') --> "+result1);
+
+var result2 = 'test2 test test10'.replace(/test(?!\d+)/g, 'class');
+show("零宽度负先行断言(?!X)：<br>"+"'test2 test test10'.replace(/test(?!\d+)/g, 'class') --> "+result2);
+
+var result3 = 'test2 active class2'.replace(/(?<=\w+)\d+/g, '0');
+show("零宽度正后发断言(?<=X)：<br>"+"'test2 active class2'.replace(/(?<=\\w+)\\d+/g, '0') --> "+result3);
+
+var result4 = 'test2 active1 class2'.replace(/(?<!test)\d+/g, '0');
+show("零宽度负后发断言(?&lt;!X)：<br>"+"'test2 active1 class2'.replace(/(?&lt;!test)\\d+/g, '0') --> "+result4);
+
+function show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult16");
+}
+</script>
+
+
+<div class="aTitle">正则应用-trim方法，去掉首尾的空白字符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function trim(str){
+	if(str){
+		return str.replace(/(^\s+)|(\s+$)/g,'')
+	}
+	return str;
+}
+'['+trim('  Tom Li ')+']'; // [Tom Li]
+
+<b>注意：</b>在match、replace方法中尽量避免匹配到空字符
+\s{0}或\s{0,1}或\s*或\s?都会匹配到空字符，应避免使用
+' Tom Li '.replace(/^\s<mark>*</mark>|\s<mark>*</mark>$/g,'#'); // #Tom Li##
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult11">
+	</div>
+</div>
+<script>
+function trim(str){
+	if(str){
+		return str.replace(/^\s+|\s+$/g,'')
+	}
+	return str;
+}
+var result = trim('  Tom Li ');
+show("["+result+"]");
+
+show(' Tom Li '.replace(/^\s*|\s*$/g,'#'))
+
+function show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult11");
+}
+</script>
+
+
+
+<div class="aTitle">正则应用-敏感词</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+$('#filterBtn').click(function(){
+	var inText = $('#inArea').val();
+	var outText = inText.replace(/骗子|忽悠人/g, function($1){
+		var replaceStr = '';
+		for(let i=0; i<$1.length ; i++){
+			replaceStr+='*'
+		}
+		
+		return replaceStr;
+	});
+	$('#outArea').val(outText);
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult12">
+		<div>
+			输入：<br>
+			<textarea name="inArea" id="inArea" cols="30" rows="5">这是个骗子公司，就是忽悠人，千万不要上当！</textarea>
+		</div>
+		<div>
+			输出：<br>
+			<textarea name="outArea" id="outArea" cols="30" rows="5"></textarea>
+		</div>
+		<button id='filterBtn'>过滤</button>
+	</div>
+</div>
+<script>
+$('#filterBtn').click(function(){
+	var inText = $('#inArea').val();
+	var outText = inText.replace(/骗子|忽悠人/g, function($1){
+		var replaceStr = '';
+		for(let i=0; i<$1.length ; i++){
+			replaceStr+='*'
+		}
+		
+		return replaceStr;
+	});
+	$('#outArea').val(outText);
+});
+
+function show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult12");
+}
+</script>
+
+
+<div class="aTitle">正则应用-出现次数最多的字符</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+function findMostChar(str){
+	var sortedStr = str.split('').sort().join('');
+	var char = '';
+	var count = 0;
+	sortedStr.replace(/(\w)\1*/g, function($0, $1){
+		if(count < $0.length){
+			char = $1;
+			count = $0.length;
+		}
+	});
+	return char;
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult15">
+	</div>
+</div>
+<script>
+function findMostChar(str){
+	var sortedStr = str.split('').sort().join('');
+	var char = '';
+	var count = 0;
+	sortedStr.replace(/(\w)\1*/g, function($0, $1){
+		if(count < $0.length){
+			char = $1;
+			count = $0.length;
+		}
+	});
+	return char;
+}
+
+show("findMostChar('abc') --> "+findMostChar('abc'));
+show("findMostChar('shsfuusaisauhd') --> "+findMostChar('shsfuusaisauhd'));
+function show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult15");
+}
+</script>
 
 </body>
 </html>

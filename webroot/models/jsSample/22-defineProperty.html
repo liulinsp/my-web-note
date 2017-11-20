@@ -10,27 +10,34 @@
 <div class="home"><a href="../../index.html">首页</a></div>
 
 
-<div class="aTitle"></div>
+<div class="aTitle">属性描述符</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
-ECMAScript 中有两种属性：数据属性和访问器属性。
-1. 数据属性：
+属性描述符有：
+1. value
+2. writable
+3. configurable
+4. enumerable
+5. get/set
+
+属性分为两种：数据属性和访问器属性。
+1. 数据属性：(没有set、get描述符时)
     数据属性有4 个描述其行为的特性。
 	1) [[Configurable]]：
 表示能否通过delete 删除属性从而重新定义属性，能否修改属性的特性，或者能否把属性修改为访问器属性。
-（直接在对象上定义的属性，这个特性默认值为true）
+（直接在对象上定义的属性，这个特性默认值为true; defineProperty定义的默认为false）
 
 	2) [[Enumerable]]：
-表示能否通过for-in 循环返回属性。（直接在对象上定义的属性，这个特性默认值为true）
+表示能否通过for-in 循环返回属性。（直接在对象上定义的属性，这个特性默认值为true; defineProperty定义的默认为false）
 
 	3) [[Writable]]：
-表示能否修改属性的值。（直接在对象上定义的属性，这个特性默认值为true）
+表示能否修改属性的值。（直接在对象上定义的属性，这个特性默认值为true; defineProperty定义的默认为false）
 
 	4) [[Value]]：
 包含这个属性的数据值。读取属性值的时候，从这个位置读；写入属性值的时候，把新值保存在这个位置。（这个特性的默认值为undefined）
 
-2. 访问器属性：
+2. 访问器属性：(有set或get描述符时)
 	1) [[Configurable]]：
 表示能否通过delete 删除属性从而重新定义属性，能否修改属性的特性，或者能否把属性修改为数据属性。
 （直接在对象上定义的属性，这个特性默认值为true）
@@ -163,6 +170,9 @@ $(function(){
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
+当给一个属性定义setter或者getter,或者两者都有时，这个属性是访问器属性。
+对于访问器属性会忽略value和writable描述符。
+
 不一定非要同时指定getter 和setter。
 只指定getter 意味着属性是不能写，尝试写入属性会被忽略。
 在严格模式下，尝试写入只指定了getter 函数的属性会抛出错误。
@@ -238,6 +248,58 @@ $(function(){
 });
 </script>
 
+
+<div class="aTitle">访问器属性-get和set的字面量定义方式(不常用)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var book = {
+	_name:"红楼梦",
+	change:0,
+	get name(){
+		return this._name;
+	},
+	set name(val){
+		this._name=val;
+		this.change++;
+	}
+};
+
+book.name="水浒传";
+
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3-2">
+	</div>
+</div>
+<script>
+$(function(){
+	var book = {
+		_name:"红楼梦",
+		change:0,
+		get name(){
+			return this._name;
+		},
+		set name(val){
+			this._name=val;
+			this.change++;
+		}
+	};
+
+	_show('book.name --> '+book.name+
+		'<br/>book.change --> '+book.change);
+
+	book.name="水浒传";
+	_show('book.name="水浒传";');
+	_show('book.name --> '+book.name
+		+'<br/>book.change --> '+book.change);
+
+	function _show(msg){
+		$("<div>"+msg+"</div>").appendTo("#showResult3-2");
+	}
+
+});	
+</script>
 
 <div class="aTitle">定义多个属性</div>
 <div class="aPane">
@@ -340,5 +402,78 @@ $(function(){
 		+'<br/>def.configurable --> '+def.configurable);
 });
 </script>
+
+<div class="aTitle">默认数据属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+var book = {name: "红楼梦"};
+Object.defineProperty(book,"price",{
+	value:39.8
+});
+
+customer = "张三";
+
+window.reader = "李四";
+
+var namedef= Object.getOwnPropertyDescriptor(book,"name");
+var pricedef= Object.getOwnPropertyDescriptor(book,"price");
+var bookdef= Object.getOwnPropertyDescriptor(window,"book");
+var customerdef= Object.getOwnPropertyDescriptor(window,"customer");
+var readerdef= Object.getOwnPropertyDescriptor(window,"reader");
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult6">
+	</div>
+</div>
+<script type="text/javascript">
+
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult6");
+}
+	
+var book = {name: "红楼梦"};
+Object.defineProperty(book,"price",{
+	value:39.8
+});
+
+customer = "张三";
+
+window.reader = "李四";
+
+var namedef= Object.getOwnPropertyDescriptor(book,"name");
+var pricedef= Object.getOwnPropertyDescriptor(book,"price");
+var bookdef= Object.getOwnPropertyDescriptor(window,"book");
+var customerdef= Object.getOwnPropertyDescriptor(window,"customer");
+var readerdef= Object.getOwnPropertyDescriptor(window,"reader");
+	
+_show('namedef.value --> '+namedef.value
+	+'<br/>namedef.writable --> '+namedef.writable
+	+'<br/>namedef.enumerable --> '+namedef.enumerable
+	+'<br/>namedef.configurable --> '+namedef.configurable);
+
+
+_show('pricedef.value --> '+pricedef.value
+	+'<br/>pricedef.writable --> '+pricedef.writable
+	+'<br/>pricedef.enumerable --> '+pricedef.enumerable
+	+'<br/>pricedef.configurable --> '+pricedef.configurable);
+
+_show('bookdef.value --> '+bookdef.value
+	+'<br/>bookdef.writable --> '+bookdef.writable
+	+'<br/>bookdef.enumerable --> '+bookdef.enumerable
+	+'<br/>bookdef.configurable --> '+bookdef.configurable);
+
+_show('customerdef.value --> '+customerdef.value
+	+'<br/>customerdef.writable --> '+customerdef.writable
+	+'<br/>customerdef.enumerable --> '+customerdef.enumerable
+	+'<br/>customerdef.configurable --> '+customerdef.configurable);
+
+_show('readerdef.value --> '+readerdef.value
+	+'<br/>readerdef.writable --> '+readerdef.writable
+	+'<br/>readerdef.enumerable --> '+readerdef.enumerable
+	+'<br/>readerdef.configurable --> '+readerdef.configurable);
+</script>
+
+
 </body>
 </html>

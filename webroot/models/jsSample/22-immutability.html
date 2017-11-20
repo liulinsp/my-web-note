@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>对象不变性</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">对象常量属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>定义一个常量属性，只需要把属性的writable和configurable设为false</b>
+
+var mathTool = {};
+Object.defineProperty(mathTool, 'PI', {
+	value: 3.1415926,
+	writable: false, // 默认也是false
+	configurable: false // 默认也是false
+});
+
+mathTool.PI = 1.1;
+console.log('mathTool.PI = ' + mathTool.PI);
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+<script>
+$(function(){
+var mathTool = {};
+Object.defineProperty(mathTool, 'PI', {
+	value: 3.1415926,
+	writable: false,
+	configurable: false
+});
+
+mathTool.PI = 1.1;
+_show('mathTool.PI =' + mathTool.PI );
+
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult1");
+}
+});
+</script>
+
+<div class="aTitle">禁止对象扩展</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>由于属性描述符只是对单个属性的管理，所以想要禁止对象扩展属性不能用属性描述符，
+而是要调用Object.preventExtensions(obj)</b>
+
+var mathTool = { PI: 3.1415926 };
+for(var prop in mathTool){
+	console.log('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+console.log('---------------------------------------')
+
+Object.<mark>preventExtensions</mark>(mathTool);
+Object.defineProperty(mathTool,'PI',{
+	value: 3.14,
+	enumerable: false
+})
+mathTool.e = 2.72;
+
+for(var prop in mathTool){
+	_show('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+console.log('---------------------------------------')
+
+console.log('mathTool.PI = ' + mathTool.PI);
+console.log('mathTool.e = ' + mathTool.e);
+
+<b>注意：</b>禁止对象扩展只是禁止了对象去扩展属性，而之前的属性是可以进行重新定义
+或者删除的，属性值也可以修改。
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+<script>
+$(function(){
+var mathTool = { PI: 3.1415926 };
+for(var prop in mathTool){
+	_show('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+_show('---------------------------------------')
+
+Object.preventExtensions(mathTool);
+Object.defineProperty(mathTool,'PI',{
+	value: 3.14,
+	enumerable: false
+})
+mathTool.e = 2.72;
+
+for(var prop in mathTool){
+	_show('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+_show('---------------------------------------')
+_show('mathTool.PI =' + mathTool.PI );
+_show('mathTool.e =' + mathTool.e );
+
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult2");
+}
+});
+</script>
+
+<div class="aTitle">密封对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>密封对象是在<mark>禁止对象扩展的基础上</mark>把所有属性的configurable都调整为false,
+调用Object.seal(obj)</b>
+密封之后禁止了对象去扩展属性，原有的属性不可以进行重新定义或删除，但属性值是可以修改的
+
+
+var mathTool = { PI: 3.1415926 };
+for(var prop in mathTool){
+	console.log('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+console.log('---------------------------------------')
+
+Object.<mark>seal</mark>(mathTool);
+Object.defineProperty(mathTool,'PI',{
+	value: 3.14,
+	// enumerable: false //TypeError: Cannot redefine property: PI
+})
+mathTool.e = 2.72;
+
+for(var prop in mathTool){
+	console.log('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+console.log('---------------------------------------')
+console.log('mathTool.PI =' + mathTool.PI );
+console.log('mathTool.e =' + mathTool.e );
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult3">
+	</div>
+</div>
+<script>
+$(function(){
+var mathTool = { PI: 3.1415926 };
+for(var prop in mathTool){
+	_show('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+_show('---------------------------------------')
+
+Object.seal(mathTool);
+Object.defineProperty(mathTool,'PI',{
+	value: 3.14,
+	// enumerable: false //TypeError: Cannot redefine property: PI
+})
+mathTool.e = 2.72;
+
+for(var prop in mathTool){
+	_show('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+_show('---------------------------------------')
+_show('mathTool.PI =' + mathTool.PI );
+_show('mathTool.e =' + mathTool.e );
+
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult3");
+}
+});
+</script>
+
+
+<div class="aTitle">冻结对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>冻结对象是在<mark>密封对象的基础上</mark>把所有属性的writable都调整为false,
+调用Object.freeze(obj)冻结对象</b>
+冻结之后禁止了对象去扩展属性，原有的属性不可以进行重新定义或删除，属性值也不可以修改
+
+
+var mathTool = { PI: 3.1415926 };
+for(var prop in mathTool){
+	console.log('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+console.log('---------------------------------------')
+
+Object.<mark>freeze</mark>(mathTool);
+mathTool.PI = 3.14;
+mathTool.e = 2.72;
+
+for(var prop in mathTool){
+	console.log('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+console.log('---------------------------------------')
+console.log('mathTool.PI =' + mathTool.PI );
+console.log('mathTool.e =' + mathTool.e );
+
+<span class="error">以上方法的处理都是浅处理，只会影响目标对象的直接属性</span>
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult4">
+	</div>
+</div>
+<script>
+$(function(){
+var mathTool = { PI: 3.1415926 };
+for(var prop in mathTool){
+	_show('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+_show('---------------------------------------')
+
+Object.freeze(mathTool);
+mathTool.PI = 3.14;
+mathTool.e = 2.72;
+
+for(var prop in mathTool){
+	_show('for: mathTool.'+prop+' =' + mathTool[prop] );
+}
+_show('---------------------------------------')
+_show('mathTool.PI =' + mathTool.PI );
+_show('mathTool.e =' + mathTool.e );
+
+function _show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult4");
+}
+});
+</script>
+</body>
+</html>

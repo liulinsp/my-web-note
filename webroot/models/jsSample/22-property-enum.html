@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>属性枚举</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">判断是否可枚举</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>用obj.propertyIsEnumerable('propName')判断属性是否可枚举（不会遍历原型链）</b>
+
+function Girl(name){
+	this.name = name;
+}
+Girl.prototype.sex = '女'
+
+var obj = new Girl('Lily');
+Object.defineProperty(obj, 'age', {
+	value: 20,
+	enumerable: false
+});
+
+obj.propertyIsEnumerable('name'); // true
+obj.propertyIsEnumerable('sex'); // false
+obj.propertyIsEnumerable('age'); // false
+
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+	</div>
+</div>
+<script>
+$(function(){
+
+function show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult1");
+}
+
+function Girl(name){
+	this.name = name;
+}
+Girl.prototype.sex = '女'
+
+var obj = new Girl('Lily');
+Object.defineProperty(obj, 'age', {
+	value: 20,
+	enumerable: false
+});
+show("obj.propertyIsEnumerable('name') --> " + obj.propertyIsEnumerable('name'));
+show("obj.propertyIsEnumerable('sex') --> " + obj.propertyIsEnumerable('sex'));
+show("obj.propertyIsEnumerable('age') --> " + obj.propertyIsEnumerable('age'));
+
+});
+</script>
+
+
+<div class="aTitle">获取可枚举属性列表</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>用Object.keys(obj)可以获得obj的可枚举属性数组（不遍历原型链）</b>
+如果要获得所有属性数组可以用Object.getOwnPropertyNames(obj)（不遍历原型链）
+
+function Girl(name, height){
+	this.name = name;
+	this.height = height;
+}
+Girl.prototype.sex = '女'
+
+var obj = new Girl('Lily', 168);
+Object.defineProperty(obj, 'age', {
+	value: 20,
+	enumerable: false
+});
+
+Object.keys(obj); // ["name","height"]
+Object.getOwnPropertyNames(obj); // ["name","height","age"]
+
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+	</div>
+</div>
+<script>
+$(function(){
+
+function show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult2");
+}
+
+function Girl(name, height){
+	this.name = name;
+	this.height = height;
+}
+Girl.prototype.sex = '女'
+
+var obj = new Girl('Lily', 168);
+Object.defineProperty(obj, 'age', {
+	value: 20,
+	enumerable: false
+});
+show("Object.keys(obj) --> " + JSON.stringify(Object.keys(obj)));
+show("Object.keys(obj) --> " + JSON.stringify(Object.getOwnPropertyNames(obj)));
+});
+</script>
+</body>
+</html>

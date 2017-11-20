@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>左查询和右查询</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">定义</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>左查询：</b>变量查找的一个规范，代表的是等号左边的查找，如果它所处的作用域中
+		没有同名的变量则js引擎会主动声明一个变量给它。
+b = 'bbb'; //不会报错
+
+<b>右查询：</b>变量查找的一个规范，代表的是非左边变量的查找，如果它所处的作用域中
+		没有同名的变量则js引擎会主动报错ReferenceError。
+		对于typeof的右查询，有自己的安全机制，不会报错，而是返回"undefined"
+var b = c; // ReferenceError: c is not defined
+
+typeof c; // "undefined"
+		</pre>
+	</div>
+</div>

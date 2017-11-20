@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>属性的查找和设置</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">属性的查找</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+属性的查找：先查找对象的直接属性，如果没有遍历原型链，遍历完原型链也没有就返回undefined
+
+var name = obj.name; // obj中找name是属性的查找，而获取obj是右查询
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+
+<div class="aTitle">属性的设置</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+属性的设置：设置的都是对象的直接属性（一般情况是这样,有特殊情况）
+
+1. 如果属性直接存在于对象中，不在原型链上
+   1) 数据属性（没有set、get）：
+    直接修改对象的属性（<mark>如果writable为false</mark>，静默失败，严格模式报错）
+
+   2) 访问器属性(有set或get)：
+    直接调用set方法
+
+2. 如果属性不直接存在于对象上，也不在原型链上
+   在对象的直接属性中添加一个数据属性
+
+3. 如果属性不直接存在于对象中，但是在原型链上
+   1) 数据属性：
+      wirtable为true： 直接在对象中添加一个属性，称之为屏蔽属性
+      <mark>wirtable为false：静默失败，严格模式报错</mark>
+   2) 访问属性：
+   	  <mark>调用原型链上属性的set方法</mark>
+
+4. 如果属性直接存在于对象上，也在原型链上
+   找到直接存在于对象的属性，同1.
+
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+<script>
+$(function(){
+
+function show(msg){
+	$("<div>"+msg+"</div>").appendTo("#showResult1");
+}
+
+
+
+});
+</script>
+
+</body>
+</html>
