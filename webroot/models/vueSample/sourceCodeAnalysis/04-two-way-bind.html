@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>源码分析-</title>
+	<title>源码分析-双向绑定</title>
 	<link rel="stylesheet" type="text/css" href="../../../css/main.css">
 	<script type="text/javascript" src="./mvvm.js"></script>
     <script type="text/javascript" src="./compile.js"></script>
@@ -14,10 +14,13 @@
 <div class="home"><a href="../../../index.html">首页</a></div>
 
 
-<div class="aTitle"></div>
+<div class="aTitle">双向绑定</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
+指令解析的最后一步
+1. 为每一个普通指令去构造一个watcher
+2. 构造了dep与watcher之间的关系
 
 <b>页面：</b>
 
@@ -204,11 +207,28 @@ Watcher.prototype = {
 
 <b>compile.js</b>
 ...
+    model: function(node, vm, exp) {
+        this.bind(node, vm, exp, 'model');
+
+        var me = this,
+            val = this._getVMVal(vm, exp);
+        node.addEventListener('input', function(e) {
+            var newValue = e.target.value;
+            if (val === newValue) {
+                return;
+            }
+
+            me._setVMVal(vm, exp, newValue);
+            val = newValue;
+        });
+    },
     bind: function(node, vm, exp, dir) {
         var updaterFn = updater[dir + 'Updater'];
 
         updaterFn && updaterFn(node, this._getVMVal(vm, exp));
 
+        // 每一个普通指令都有一个Watcher对象
+        // 每一个劫持属性都有一个Dep对象
         <mark>new Watcher(vm, exp, function(value, oldValue) {
             updaterFn && updaterFn(node, value, oldValue);
         });</mark>
