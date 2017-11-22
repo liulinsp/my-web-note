@@ -21,6 +21,20 @@
 指令解析的最后一步
 1. 为每一个普通指令去构造一个watcher
 2. 构造了dep与watcher之间的关系
+   dep有一个数组来存放watcher，具体dep存放多少个watcher，取决于属性被多少个指令引用
+   watcher中有一个对象来存放dep {depId: dep}, 具体watcher存放多少个dep，取决于指令值中属性的深度
+
+<b>view-->model：</b>
+    1. view层的数据改变触发input事件
+    2. 数据中的属性值改为新值
+    3. 触发被劫持属性的set方法
+    4. 通知属性中dep的所有watcher，执行watcher回调，更新view层
+
+<b>model-->view:</b>
+    1. 数据中的属性值改为新值
+    2. 触发被劫持属性的set方法
+    3. 如果新值是对象，遍历对象进行数据劫持
+    4. 通知属性中dep的所有watcher，执行watcher回调，更新view层
 
 <b>页面：</b>
 
