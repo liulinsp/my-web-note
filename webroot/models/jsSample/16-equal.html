@@ -26,6 +26,27 @@
 5. 如果一个操作数是对象，另一个操作数不是，则调用对象的valueOf()方法，
    用得到的基本类型值按照前面的规则进行比较；
 6. 如果两个操作数都是对象，则比较它们是不是同一个对象。
+
+<b>PS: 相同数据类型的比较</b>
+1. Nan永远不等于NaN
+2. 基本数据类型比较：类型相同、值相同，返回true
+3. 引用数据类型：引用地址相同，返回true
+
+<b>PS: 不同数据类型的比较</b>
+   将数据类型分成两组：
+   A. undefined / null
+   B. string / number / boolean / object
+   
+   1) A组之间的比较返回true; (参考上第2条)
+   2) A组与B组比较返回false; (参考上第2条)
+   3) B组间比较，趋于数字化；
+      3.1) string、number、boolean之间比较(参考上第3、4条)
+           用<a href="01-typeConversion.html#numberConvert" target="_blank">Number</a>方法转化为数字再比较
+      3.2) object与string、number、boolean比较(参考上第5条)
+      	   现将object转化为基本数据类型再以3.1的规则比较
+      	   (先obj.valueOf()看是不是基本数据类型，如果不是再obj.toString())
+
+
 		</pre>
 	</div>
 	<div class="aShow" id="showResult1">

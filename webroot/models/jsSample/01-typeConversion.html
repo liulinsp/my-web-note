@@ -118,7 +118,7 @@
 	});
 	
 </script>
-<div class="aTitle">转数字</div>
+<div class="aTitle" id="numberConvert">转数字</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
@@ -130,7 +130,7 @@
 			字符串：
 				- 如果字符串是一个合法数字，则直接转换为对应的数字
 				- 如果是一个非法数字，则直接转换为NaN
-				- 如果是一个空串，或者都是空格则会转换为0
+				<mark>- 如果是一个空串，或者都是空格则会转换为0</mark>
 			布尔值：
 				- true --> 1
 				- false ---> 0

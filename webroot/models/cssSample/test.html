@@ -3,36 +3,20 @@
 <head>
 <meta charset="utf-8">
 <style> 
-#myDIV
-{
-width:220px;
-height:300px;
-border:1px solid black;
-display:flex;
+div{
+	width: 500px;
+	height: 2000px;
+	background-color: red;
+	float: left;
 }
 </style>
 </head>
 
 <body>
-
-<p>点击“尝试一下”按钮设置 "myDIV" 元素内的所有 DIV 元素的 flex 属性。</p>
-
-<button onclick="myFunction()">尝试一下</button>
-
-<div id="myDIV">
-  <div style="background-color:coral;">红色</div>
-  <div style="background-color:lightblue;">蓝色</div>  
-  <div style="background-color:lightgreen;">带有更多内容的绿色 div</div>
-</div>
+<div></div>
 
 <script>
-function myFunction() {
-  var x = document.getElementById("myDIV");
-  var y = x.getElementsByTagName("div");
-  for (i = 0; i < y.length; i++) {
-    y[i].style.flex="1";
-  }
-}
+
 </script>
 </body>
 </html>

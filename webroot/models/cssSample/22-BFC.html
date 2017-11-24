@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BFC</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">BFC块级格式化上下文</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>先了解Box和Formatting context</b>
+1. Box
+	Box是css布局的对象和基本单位，直观点来说，就是一个页面是由很多个Box组成的。
+	元素的类型和display属性，决定了这个Box的类型。不同类型的Box，会参与不同的
+Formatting Context(一个决定如何渲染文档的容器)，因此Box内的元素会以不同的方式
+渲染。让我们看看有哪些盒子：
+    <b>block-level box:</b>
+	1) display属性为block的元素
+	2) list-item, table元素
+	会生成block-level box,并且参与block formatting context
+	<b>inline-level box:</b>
+	1) display属性为inline, inline-block, inline-table的元素
+	会生成inline-level box,并参与inline formatting context
+
+2. Formatting context
+	Formatting context 是W3C CSS2.1规范的一个概念。
+	它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，
+	以及和其他元素的关系和相互作用。最常见的Formatting context有：
+	Block Formatting Context(简称BFC)
+	Inline Formatting Context(简称IFC)
+
+<b>什么是BFC</b>
+	BFC（Block formatting content）直译为“块级格式化上下文”。
+它是一个独立的渲染区域，只有block-level box参与，它规定了内部的
+block-level box 如何布局，并且与这个区域外部毫不相干。
+
+<s><b>BFC布局规则</b>
+1. 内部的Box会在垂直方向，一个接一个的放置。
+2. 内部的box垂直方向的距离由margin决定。属于同一个BFC的两个相邻
+box的margin会发生重叠。
+3. 每个元素的margin box左边，与包含块border box的左边相接触(对于
+从左往右的格式化，否则相反)。即时在浮动也是如此。
+4. BFC的区域不会与float box 重叠。
+5. BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到
+外面的元素。反之也如此。
+6. 计算BFC的高度时，浮动元素也参与计算。</s>
+
+<b>BFC 的特性：</b>
+1. BFC 会阻止外边距折叠
+2. BFC 可以包含浮动的元素
+3. BFC 可以阻止元素被浮动元素覆盖
+
+<b>默认拥有BFC的元素</b>
+body
+
+<b>什么时候触发BFC</b>
+float: left或right
+position: absolute 或 fixed
+overflow: 除visible外任意值
+display: inline-block, table-cell, table-caption(, flex, inline-flex???)
+
+在 CSS3 中，BFC 叫做 Flow Root
+
+说明："display:table" 本身并不产生 BFC，而是由它产生匿名框，匿名框中包含 
+"display:table-cell" 的框会产 BFC。 总之，对于 "display:table" 的元素，
+产生 BFC 的是匿名框而不是 "display:table"。
+
+		</pre>
+	</div>
+</div>
+
+<style>
+.wrap1{
+	height: 200px;
+	margin: 20px;
+	background-color: lightblue;
+}
+.inner1{
+	width: 100px;
+	height: 100px;
+	margin: 20px;
+	background-color: green;
+}
+.bfc1{
+	overflow: hidden;
+}
+</style>
+<div class="aTitle">开启BFC的元素外边距不会与子元素的外边距重叠</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+ 父元素没有border的时候，如果父元素和子元素都有margin,
+ 会出现外边距重叠的现象。
+
+<b>HTML:</b>
+&lt;div class="wrap1"&gt;
+	&lt;div class="inner1"&gt;我的外边距和父元素重叠了&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="wrap1 bfc1"&gt;
+	&lt;div class="inner1"&gt;我的父元素开启了BFC&lt;/div&gt;
+&lt;/div&gt;
+
+<b>样式：</b>
+.wrap1{
+	height: 200px;
+	margin: 20px;
+	background-color: lightblue;
+}
+.inner1{
+	width: 100px;
+	height: 100px;
+	margin: 20px;
+	background-color: green;
+}
+.bfc1{
+	overflow: hidden;
+}
+		</pre>
+	</div>
+	<div class="aShow" style="padding:0">
+		<div class="wrap1">
+			<div class="inner1">我的外边距和父元素重叠了</div>
+		</div>
+	</div>
+	<div class="aShow" style="padding:0">
+		<div class="wrap1 bfc1">
+			<div class="inner1">我的父元素开启了BFC</div>
+		</div>
+	</div>
+</div>
+
+
+<style>
+.wrap2{
+	border: 1px solid blue;
+}
+.inner2{
+	width: 100px;
+	height: 100px;
+	background-color: green;
+	float: left;
+}
+.bfc2{
+	overflow: hidden;
+}
+</style>
+<div class="aTitle">开启BFC的元素可以包含浮动元素</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+ 如果子元素为浮动元素，会引起父元素的高度塌陷
+
+ <b>HTML:</b>
+ &lt;div class="wrap2"&gt;
+	&lt;div class="inner2"&gt;我的父元素高度塌陷了&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="wrap2 bfc2"&gt;
+	&lt;div class="inner2"&gt;我的父元素开启了BFC&lt;/div&gt;
+&lt;/div&gt;
+
+<b>样式:</b>
+.wrap2{
+	border: 1px solid blue;
+}
+.inner2{
+	width: 100px;
+	height: 100px;
+	background-color: green;
+	float: left;
+}
+.bfc2{
+	overflow: hidden;
+}
+		</pre>
+	</div>
+	<div class="aShow" style="padding:0">
+		<div class="wrap2">
+			<div class="inner2">我的父元素高度塌陷了</div>
+		</div>
+	</div>
+	<div class="aShow" style="padding:0">
+		<div class="wrap2 bfc2">
+			<div class="inner2">我的父元素开启了BFC</div>
+		</div>
+	</div>
+</div>
+
+
+<style>
+.wrap3{
+	border: 1px solid blue;
+}
+.inner3{
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+.left3{
+	width: 50px;
+	height: 50px;
+	float: left;
+	background-color: yellow;
+}
+.bfc3{
+	overflow: hidden;
+}
+</style>
+<div class="aTitle">开启BFC的元素可以阻止被浮动元素覆盖</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>HTML:</b> 
+&lt;div class="wrap3"&gt;
+	&lt;div class="left3"&gt;浮动元素&lt;/div&gt;
+	&lt;div class="inner3"&gt;我被浮动元素覆盖了&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="wrap3"&gt;
+	&lt;div class="left3"&gt;浮动元素&lt;/div&gt;
+	&lt;div class="inner3 bfc3"&gt;我开启了BFC&lt;/div&gt;
+&lt;/div&gt;
+
+<b>样式：</b>
+.wrap3{
+	border: 1px solid blue;
+}
+.inner3{
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+.left3{
+	width: 50px;
+	height: 50px;
+	float: left;
+	background-color: yellow;
+}
+.bfc3{
+	overflow: hidden;
+}
+		</pre>
+	</div>
+	<div class="aShow" style="padding:0">
+		<div class="wrap3">
+			<div class="left3">浮动元素</div>
+			<div class="inner3">我被浮动元素覆盖了</div>
+		</div>
+	</div>
+	<div class="aShow" style="padding:0">
+		<div class="wrap3">
+			<div class="left3">浮动元素</div>
+			<div class="inner3 bfc3">我开启了BFC</div>
+		</div>
+	</div>
+</div>
+
+<div class="aTitle">IE6、7的haslayout</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>什么是haslayout</b>
+	layout是windows IE的一个私有概念，它决定了元素如何对其内容定位和尺寸计算
+以及与其他元素的关系和相互作用。当一个元素“拥有布局”时，它会负责本身及其子元素
+的尺寸和定位。而如果一个元素“没有拥有布局”，那么它的尺寸和位置由最近的拥有布局
+的祖先元素控制。
+	必须说明的是，IE8及以上浏览器使用了全新的显示引擎，已经不再使用haslayout属
+性，因此haslayout属性只针对IE6和IE7。
+
+<b>为什么会有haslayout</b>
+	理论上说，每一个元素都应该控制自己的尺寸和定位，即每个元素都应该“拥有布局”，
+当然这只是理想状态。而对于早期IE显示引擎来说，如果所有元素都“拥有布局”的话，会
+导致很大的性能问题。因此IE开发团队决定使用布局概念来减少浏览器的性能开销，即只
+将布局应用于实际需要的那些元素，所有便出现了“拥有布局”和“没有拥有布局”两种情况。
+
+<b>默认拥有布局的元素</b>
+	html, body, table, tr, td, img, hr
+	input, select, textarea, button,
+	iframe, embed, object, applet, marquee
+
+<b>怎么触发haslayout</b>
+	float: left或right
+	display: inline-block
+	position: absolute
+	width: 除auto外任何值
+	height: 除auto外任何值
+	zoom: 除normal外任何值（zoom无法在IE5中触发haslayout）
+	wirghting-mode: tb-rl
+
+	在IE7中,以下属性也可以触发元素的haslayout：
+	min-height: 任意值
+	min-width: 任意值
+	max-height: 除none外任意值
+	max-width: 除none外任意值
+	overflow: 除visible外任意值，仅用于块元素
+	overflow-x: 除visible外任意值，仅用于块元素
+	overflow-y: 除visible外任意值，仅用于块元素
+	position: fixed
+		</pre>
+	</div>
+<!-- 	<div class="aShow">
+</div> -->
+</div>

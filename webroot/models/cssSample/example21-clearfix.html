@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.wrap{
+	border: 1px solid blue;
+}
+.inner{
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+.left{
+	float: left;
+}
+</style>
+<div class="aTitle">问题现象：高度塌陷</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>HTML：</b>
+&lt;div class="wrap"&gt;
+	&lt;div class="inner left"&gt;float: left&lt;/div&gt;
+&lt;/div&gt;
+
+<b>样式：</b>
+.wrap{
+	border: 1px solid blue;
+}
+.inner{
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+.left{
+	float: left;
+}
+
+由于inner是浮动的，wrap无法被内容撑开，
+导致高度塌陷
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="wrap">
+			<div class="inner left">float: left</div>
+		</div>
+	</div>
+</div>
+
+<style>
+.wrap1{
+	height: 150px;
+	margin: 0 auto;
+	border: 1px solid blue;
+}
+</style>
+<div class="aTitle">方案1：给父级加高度</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>缺点：</b>
+当内容高度不固定时，不适用
+
+.wrap1{
+	<mark>height: 150px;</mark>
+	margin: 0 auto;
+	border: 1px solid blue;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="wrap1">
+			<div class="inner left">float: left</div>
+		</div>
+	</div>
+</div>
+
+<style>
+.wrap2{
+	border: 1px solid blue;
+
+	float: left;
+	/* position: absolute; */
+	/* position: fixed; */
+}
+</style>
+<div class="aTitle">方案2：给父级加浮动</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>缺点：</b>
+1. 影响外边的布局（水平居中失效）
+
+.wrap2{
+	border: 1px solid blue;
+
+	<mark>float: left;</mark>
+	/* position: absolute; */
+	/* position: fixed; */
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="wrap2">
+			<div class="inner left">float: left</div>
+		</div>
+	</div>
+</div>
+
+<style>
+.wrap3{ 
+	margin: 0 auto;
+	border: 1px solid blue;
+
+	overflow: hidden;
+	*zoom: 1;
+}
+</style>
+<div class="aTitle">方案3：overflow</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>缺点：</b>
+1. inner溢出的内容也会被隐藏
+2. overflow能开启现代浏览器的BFC
+   还能开启IE7的haslayout
+   不能开启IE6的haslayout
+（IE6下无法解决高度塌陷,zoom:1或width不为auto，
+  开启IE6的haslayout）
+
+.wrap3{
+	
+	width: 150px; 
+	margin: 0 auto;
+	border: 1px solid blue;
+
+	<mark>overflow: hidden;</mark>
+	*zoom: 1;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="wrap3">
+			<div class="inner left">
+				float: left<br>
+				float: left<br>
+				float: left<br>
+				float: left<br>
+				float: left<br>
+				float: left<br>
+				float: left<br>
+				float: left<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+.clear{
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+</style>
+<div class="aTitle">方案4：空标签清除浮动</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>缺点：</b>
+1. IE6、7不支持
+	(IE6最小高度为19px,父元素font-size:0
+	来解决, 还有2像素的空隙)
+2. 违反了结构、样式、行为分离的原则
+
+<b>HTML：</b>
+&lt;div class="wrap"&gt;
+	&lt;div class="inner left"&gt;float: left&lt;/div&gt;
+	<mark>&lt;div class="clear"&gt;&lt;/div&gt;</mark>
+&lt;/div&gt;
+
+<b>样式：</b>
+.clear{
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="wrap">
+			<div class="inner left">float: left</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+
+<div class="aTitle">方案5：br清除浮动</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>缺点：</b>
+1. IE6、7不支持
+2. 违反了结构、样式、行为分离的原则
+
+&lt;div class="wrap"&gt;
+	&lt;div class="inner left"&gt;float: left&lt;/div&gt;
+	<mark>&lt;br clear="all" /&gt;</mark>
+&lt;/div&gt;
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="wrap">
+			<div class="inner left">float: left</div>
+			<br clear="all" />
+		</div>
+	</div>
+</div>
+
+<style>
+/* IE6、7不支持伪元素
+  开启haslayout */
+.clearfix{
+	*zoom: 1;
+}
+.clearfix:after{
+	content: " ";
+	display: block;
+	clear: both;
+}
+/* .clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+.clearfix:after {
+  clear: both;
+} */
+</style>
+<div class="aTitle">方案6：伪元素after</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>HTML：</b>	
+&lt;div class="wrap <mark>clearfix</mark>"&gt;
+	&lt;div class="inner left"&gt;float: left&lt;/div&gt;
+&lt;/div&gt;
+
+<b>样式：</b>
+/* IE6、7不支持伪元素
+  开启haslayout */
+.clearfix{
+	*zoom: 1;
+}
+.clearfix:after{
+	content: " ";
+	display: block;
+	clear: both;
+}
+/* .clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+.clearfix:after {
+  clear: both;
+} */
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="wrap clearfix">
+			<div class="inner left">
+				float: left <br>
+				float: left <br>
+				float: left <br>
+				float: left <br>
+				float: left <br>
+				float: left <br>
+				float: left <br>
+				float: left <br>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
