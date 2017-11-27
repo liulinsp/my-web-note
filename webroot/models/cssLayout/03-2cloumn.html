@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>浮动实现的三列布局</title>
+	<title>浮动+BFC两列布局</title>
 	<style>
 		*{
 			margin: 0;
@@ -12,18 +12,13 @@
 			min-width: 600px;
 			text-align: center;
 		}
-		.left, .right{
+		.left{
 			width: 200px;
 			background-color: #FBFAB0;
-		}
-		.left{
 			float: left;
 		}
 		.right{
-			float: right;
-		}
-		.middle{
-			margin: 0 200px;
+			overflow: hidden;
 			background-color: #D8FCFB;
 		}
 		.header, .footer{
@@ -46,7 +41,7 @@
 		.container{
 			overflow: hidden;
 		}
-		.middle, .left, .right{
+		.left, .right{
 			padding-bottom: 10000px;
 			margin-bottom: -10000px;
 		}
@@ -56,41 +51,20 @@
 <body>
 	<div class="header"></div>
 	<div class="container clearfix">
-		<div class="right">
-			<h1>R</h1>
-			<h1>R</h1>
-			<h1>R</h1>
-		</div>
 		<div class="left">
 			<h1>L</h1>
 			<h1>L</h1>
 			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
-			<h1>L</h1>
 		</div>
-		<div class="middle" onclick="alert('middle')">
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
-			<h1>M</h1>
+		<div class="right">
+			<h1>R</h1>
+			<h1>R</h1>
+			<h1>R</h1>
+			<h1>R</h1>
+			<h1>R</h1>
+			<h1>R</h1>
+			<h1>R</h1>
+			<h1>R</h1>
 		</div>
 	</div>
 	<div class="footer">
