@@ -188,6 +188,12 @@ try {
 } catch (ex){
 	alert("浏览器扩展或其他程序阻止了弹出窗口");
 }
+8. 跨页面传输数据
+var myWin = window.open("newPage.html","_blank");
+myWin.data = '数据'
+
+<b>newPage.html: </b>
+alert(window.data)
 </pre>
 
 		</pre>

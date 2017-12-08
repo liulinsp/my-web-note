@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>移动端基础概念</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+	
+<div class="aTitle">像素</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>屏幕尺寸、屏幕分辨、屏幕像素密度</b>
+1. 屏幕尺寸
+	指屏幕的对角线长度，单位是英寸，1英寸=2.54厘米。
+	常见的尺寸有2.4、2.8、3.5、3.7、4.2、5.0、5.5、6.0等。
+
+2. 屏幕分辨率
+	指在横纵向上的像素点的数量，单位是px,1px=1个像素点。
+	一般以横向像素*纵向像素来表示一个手机的分辨率，如1960*1080.
+	（例：iphone6的分辨率为750*1334）
+
+3. 屏幕像素密度/像素密度/屏幕密度
+	屏幕上每英寸可以显示的像素点的数量，单位ppi,即“pixels per inch”的缩写。
+	屏幕像素密度与屏幕尺寸和屏幕分辨率有关。
+
+<b>物理像素、CSS像素、设备独立像素</b>
+1. 物理像素/设备像素
+	买手机的时候会有一个n*m的设备分辨率，那是屏幕的n*m个呈像点，
+	一个点（小方格）就是一个物理像素。它是屏幕能显示的最小粒度。
+
+2. CSS像素/设备无关像素
+	CSS像素是一个抽象的单位，主要使用在浏览器上，用来精确的度量（确定）Web
+	页面上的内容。
+	它是为Web开发者创造的，在CSS后者Javascript中使用的一个抽象层。
+	一般情况下，CSS像素被称为与设备无关的像素（device-independent像素），简称“DIPs”。
+	在一个标准的显示密度下，一个CSS像素对应着一个设备像素。
+
+3. 设备独立像素/密度无关像素
+	可以认为是计算机坐标系统中的一个点，这个点代表一个可以由程序使用并控制
+	的虚拟像素（比如：CSS像素，只是在android机中CSS像素就不叫“CSS像素”了而
+	是叫“设备独立像素”），然后由相关系统转换为物理像素。
+
+<b>CSS像素与物理像素的关系</b>
+	一个width为200px的元素，它占据了200个CSS像素，但200个CSS像素占据多少个
+	物理像素取决于屏幕的特性（是否是高密度，即像素比）和用户的缩放行为。
+
+<b>像素比</b>
+	它的官方定义为：设备物理像素和设备独立像素的比例
+	js获取方式：window.devicePixelRatio
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult">
+	</div> -->
+</div>
+
+
+<div class="aTitle">视口</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>布局视口(layout viewport)</b>
+	CSS布局，是以布局视口做为参照系来计算的；
+	手机上，为了容纳为桌面浏览器设计的网站，默认的布局视口的宽度远大于屏幕宽度:
+<table border=1 cellspacing=0 cellpadding=5 style="border-collapse:collapse;">
+	<thead style="text-align: center; font-weight: bold">
+		<tr>
+			<td>设备</td>
+			<td>iPhone</td>
+			<td>iPad</td>
+			<td>Android Samsung</td>
+			<td>Android HTC</td>
+			<td>Chrome</td>
+			<td>Opera Presto</td>
+			<td>BlackBerry</td>
+			<td>IE</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>默认宽度(px)</td>
+			<td>980</td>
+			<td>980</td>
+			<td>980</td>
+			<td>980</td>
+			<td>980</td>
+			<td>980</td>
+			<td>1024</td>
+			<td>1024</td>
+		</tr>
+	</tbody>
+</table>
+	布局视口的出现，在极大程度上帮助了桌面网站到移动设备上的转移
+
+	可以通过document.documentElement.clientWidth来获取
+
+<b>视觉视口(visual viewport)</b>
+	视觉视口是页面当前显示在屏幕上的部分。用户可以通过滚动来改变他所看到的页面
+部分，或者通过缩放来改变视觉视口的大小。
+
+<b>缩放</b>
+	布局视口和视觉视口都是以像素度量的，但是当进行缩放（放大时屏幕上的css像素会变少）
+的时候，视觉视口的尺寸会发生变化，布局视口的尺寸仍然跟之前一样。（如果不这样，你
+的页面将会像百分比宽度被重新计算一样而经常被重新布局）
+	<mark>重点是：</mark>浏览器会在初始情况下以完全缩小的模式来展示页面，布局视口有默认尺寸，在完全
+缩小模式下完整覆盖了屏幕（并且等于视觉视口）
+
+<b>理想视口(ideal viewport)</b>
+	理想视口给设备上的网页提供了理想的尺寸，因此，每个设备的理想视口尺寸都不同。
+	在旧的非视网膜屏幕设备中，理想视口等于物理像素数量，但这不是必须的。
+	具有更高物理像素的新设备很可能保持旧的理想视口，因为它非常适合设备。
+	例如：iphone4S的物理像素是640*960，但是理想视口是320*480，因为320*480是网页的理想尺寸。
+
+理想视口有两个要点：
+1. 布局视口能够设置为理想视口的值，通过width=device-width和initial-scale=1.0来实现。
+2. 缩放是相对于理想视口的，而不是布局视口的宽度。因此，maximum-scale=3 表示最大缩放
+是理想视口的300%
+
+理想视口与设备之间的关系：
+1. 定义理想视口是浏览器厂商的工作，而不是设备或操作系统的工作
+2. 因此，同一设备上的不同浏览器拥有不同的理想视口
+3. 但是浏览器理想视口大小取决于设备
+
+<b>获取视口宽度</b>
+1. 理想视口：
+screen.width // 有很大兼容性问题，有的浏览器返回的是物理像素
+2. 视觉视口：
+window.innerWidth // 接近全部支持
+3. 布局视口：
+document.documentElement.clientWidth //没有兼容性问题
+<b>PC端对比</b>
+1. PC端屏幕分辨率
+screen.width
+2. PC端浏览器外部窗口的宽度（包含侧边栏、窗口镶边和调整窗口大小的边框）
+window.outerWidth
+3. PC端浏览器视口宽度（包含滚动条）
+window.innerWidth
+4. PC端视口的大小（最干净的，不含滚动条）
+document.documentElement.clientWidth
+
+参考：
+https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html
+https://www.quirksmode.org/mobile/metaviewport/
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult">
+	</div> -->
+</div>
+
+
+<div class="aTitle">meta</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+&lt;meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"&gt;
+<b>width</b>
+	用来控制布局视口的宽度，width=device-width会使布局视口的宽度等于理想视口的宽度（即设备独立像素的宽度）
+
+横竖屏切换：
+	当用户旋转设备时，布局视口的宽度会发生改变。因为横竖屏时的理想视口尺寸不一样，但是ios的safari很例外，
+基于性能考虑它的布局视口不会做出改变。（相反IE10如果只设置initial-scale旋转时也会出问题）
+
+<b>inital-scale</b>
+	缩放是根据理想视口来计算的，从而生成可视视口的宽度。
+	ios Safari横竖屏切换布局视口不变问题可以通过设置initial-scale来解决。
+
+<b>完美视口</b>
+&lt;meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"&gt;
+完美视口解决的问题：
+1. 上述横竖屏切换的问题
+2. 页面存在太大元素问题
+	如果页面中存在太大的元素，当meta标签只使用width=device-width, initial-scale=1.0中的一个，
+有些浏览器会扩展布局视口的宽度来容纳这个元素，这里的兼容性很复杂，当两个都使用时，大部分浏览
+器都不会改变布局视口
+
+<b>minimun-scale和maximun-scale</b>
+允许缩放的最小比例和最大比例
+ios Safari 允许范围大于0到10，默认 minimum-scale = 0.25, maximum-scale = 5.0
+安卓webkit不支持这两个属性，默认缩放范围0.25-4
+
+
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult">
+	</div> -->
+</div>
+</body>
+</html>

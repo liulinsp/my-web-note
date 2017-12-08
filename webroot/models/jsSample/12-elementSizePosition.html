@@ -53,20 +53,8 @@ window.innerHeight
 	<!-- <div class="aShow note" id="showResult1">
 	</div> -->
 </div>
-<script type="text/javascript">
-/*$(function(){
-	function _show(msg){
-		$('<div>'+msg+'</div>').appendTo("#showResult1");
-	}
 
-	_show('document.implementation.hasFeature("Core", "2.0") --> '+
-		document.implementation.hasFeature("Core", "2.0"));
-	
-});*/
-</script>
-
-
-<div class="aTitle">元素位置</div>
+<div class="aTitle">元素位置-相对定位父元素</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
@@ -98,17 +86,29 @@ window.innerHeight
 	<!-- <div class="aShow note" id="showResult1">
 	</div> -->
 </div>
-<script type="text/javascript">
-/*$(function(){
-	function _show(msg){
-		$('<div>'+msg+'</div>').appendTo("#showResult1");
-	}
 
-	_show('document.implementation.hasFeature("Core", "2.0") --> '+
-		document.implementation.hasFeature("Core", "2.0"));
-	
-});*/
-</script>
+
+<div class="aTitle">元素位置-相对视口</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+元素.getBoundingClientRect()
+	- 返回一个 ClientRect 对象,
+	- 该对象有6个属性：top,lef,right,bottom,width,height
+	- top: 元素上边框上边与视口顶部的距离
+	- left: 元素左边框左侧与视口左侧的距离
+	- right: 元素右边框右侧与视口左侧的距离
+	- bottom: 元素下边框下边与视口顶部的距离
+	- width: 元素宽度（含边框、内边距、内容）
+	- height: 元素高度（含边框、内边距、内容）
+<span class="error">Safari、IE9以下、Firefox4.0以下不支持</span>
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="showResult1">
+	</div> -->
+</div>
+
 
 </body>
 </html>

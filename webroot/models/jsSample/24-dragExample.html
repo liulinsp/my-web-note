@@ -20,6 +20,9 @@
 				top: 200px;
 				left: 500px;
 			}
+			html, body{
+				height: 150%;
+			}
 		</style>
 		
 		<script type="text/javascript">
@@ -54,20 +57,22 @@
 					 * 在chrome中也不支持这两个方法，但是调用的时候会报错
 					 */
 					
-					//使box1可以捕获到所有的事件
+					//开启全局捕获：使box1可以捕获到所有的事件，解决IE低版本浏览器默认行为问题
 					obj.setCapture &&　obj.setCapture();
 					
 					//处理事件对象
 					event = event || window.event;
-					//计算元素的偏移
-					var ol = event.clientX - obj.offsetLeft;
-					var ot = event.clientY - obj.offsetTop;
-					
-					/*
-					 * 目前鼠标指针和元素的左上角是重叠，我们希望鼠标点的元素的哪个位置，就可以一直保持在那个位置
-					 * 		就是保持指针和元素的相对位置不变
-					 */
-					
+
+					// 获得开始时元素的偏移
+					var eleOffset = {
+						left: obj.offsetLeft,
+						top: obj.offsetTop
+					}
+					// 获得开始时鼠标的位置
+					var startPoint = {
+						x: event.clientX,
+						y: event.clientY
+					}
 					
 					//当该事件触发时开始拖拽
 					//2.当鼠标移动时，被拖拽的元素跟随鼠标移动 onmousemove
@@ -75,10 +80,21 @@
 					document.onmousemove = function(event){
 						//处理事件对象
 						event = event || window.event;
-						
+						// 当前鼠标位置
+						var nowPoint = {
+							x: event.clientX,
+							y: event.clientY
+						}
 						//获取鼠标的坐标
-						var top = event.clientY - ot;
-						var left = event.clientX - ol;
+						var left = eleOffset.left + (nowPoint.x - startPoint.x);
+						var top = eleOffset.top + (nowPoint.y - startPoint.y);
+						
+
+						//文档边界判断
+						var maxMoveLeft = document.documentElement.clientWidth - obj.offsetWidth;
+						var maxMoveTop = document.documentElement.clientHeight - obj.offsetHeight;
+						left = left < 0 ? 0 : (left > maxMoveLeft ? maxMoveLeft : left);
+						top = top < 0 ? 0 : (top > maxMoveTop ? maxMoveTop : top)
 						
 						//修改box1的坐标
 						obj.style.left = left + "px";
@@ -95,8 +111,8 @@
 						//取消document的onmouseup事件
 						document.onmouseup = null;
 						
-						//使用它可以用来是否box1对事件的捕获
-						obj.releaseCapture　&&　obj.releaseCapture();
+						// 释放全局捕获(注意：用obj开始，用document释放)
+						document.releaseCapture　&& document.releaseCapture();
 					
 						
 					};
