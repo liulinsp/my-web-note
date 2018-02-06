@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>选择器优先级和权重</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">选择器优先级和权重</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+参考：http://blog.csdn.net/lzgs_4/article/details/43446303
+http://www.qdfuns.com/notes/17606/fdbe69d63a371cafea27bee59fb53c98.html
+
+选择器的特殊性值表述为4个部分，用0,0,0,0表示：
+  1. 内联样式，加1,0,0,0
+  2. ID选择器，加0,1,0,0
+  3. 类选择器、属性选择器或伪类，加0,0,1,0
+  4. 元素和伪元素，加0,0,0,1
+
+通用选择器（*），子选择器（>）和相邻同胞选择器（+）
+并不在这四个等级中，所以他们的权值都为0,0,0,0
+
+比较特殊的一个标志!important（权重），它没有特殊性值，但它的优先级是最高的，
+为了方便记忆，可以认为它的特殊性值为1,0,0,0,0。
+
+选择器特殊性值是从左向右排序的，特殊性值1,0,0,0大于以0开头的所有特殊性值，
+即便它是0,99,99,99，优先级依然比1,0,0,0要低。
+		</pre>
+	</div>
+</div>

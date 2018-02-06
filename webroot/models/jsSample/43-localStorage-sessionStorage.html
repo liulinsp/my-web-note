@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web Storage: localStorage 和 sessionStorage</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<div class="aTitle">概念</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+Web Storage 包含如下两种机制：sessionStorage和localStorage
+用来做本地存储，浏览器为每个站点提供了独立的存储区域(5M)
+1. sessionStorage 
+   存储区域只在页面会话期间可用，浏览器关闭数据就无效了
+2. localStorage 
+   在浏览器关闭，然后重新打开后数据仍然存在。
+
+兼容性：
+1. IE6、IE7不支持
+2. 从ios 5.1后，Safari移动存储本地存储的数据在缓存文件夹，
+	这样在系统空间不足的情况下，方便系统自动清理。
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">localStorage操作</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 设置
+window.localStorage.setItem('sessionId','12345')
+
+2. 读取
+var sessionId = window.localStorage.getItem('sessionId')
+
+3. 遍历
+var data = {};
+for(var i=0; i &lt; window.localStorage.length; i++){
+	var key = window.localStorage.key(i);
+	data[key] = window.localStorage.getItem(key);
+}
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult1">
+	</div> -->
+</div>
+<script>
+/*window.onload=function(){
+
+if(window.localStorage){
+	// window.localStorage.setItem('sessionId','12345')
+	window.localStorage.setItem('username','gag')
+	// window.localStorage.getItem('sessionId')
+	// $('#showResult1').html('support')
+	var data = {};
+	for(var i=0; i<window.localStorage.length; i++){
+		var key = window.localStorage.key(i);
+		data[key] = window.localStorage.getItem(key);
+	}
+	$('#showResult1').html(JSON.stringify(data));
+
+}else{
+	$('#showResult1').html("not support");
+}
+
+}*/
+</script>

