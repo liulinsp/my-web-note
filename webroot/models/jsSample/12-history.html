@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>浏览器history对象</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+
+<script type="text/javascript">
+
+</script>
+<div class="aTitle">window.history</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+window.history 对象在编写时可不使用 window 这个前缀。
+为了保护用户隐私，对 JavaScript 访问该对象的方法做出了限制。
+history.back() - 与在浏览器点击后退按钮相同
+history.forward() - 与在浏览器中点击按钮向前相同
+history.go() - 跳转到指定历史页，会重新请求
+
+history.go(-1): 返回上一页，原页面表单中的内容会丢失；
+//history.go("wrox.com")：跳转到最近的wrox.com 页面???【有问题】
+history.back(): 返回上一页，原页表表单中的内容会保留。
+
+HTML5引入了 history.pushState() 和 history.replaceState() 方法：
+1. history.pushState(state, title, url) 向浏览器历史添加了一个状态
+2. history.replaceState(state, title, url) 替换当前状态
+<b>参数:</b>
+* state：存储JSON字符串，可以用在popstate事件中。
+* title：现在大多数浏览器不支持或者忽略这个参数，最好用null代替
+* url：任意有效的URL，用于更新浏览器的地址栏，并不在乎URL是否已经存在地址列表中。更重要的是，它不会重新加载页面。
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+
+<div class="aTitle">ajax 与 HTML5 history pushState/replaceState</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>背景：</b>
+Ajax可以实现页面的无刷新操作，但是也有个缺点就是无法前进与后退。
+通过使用HTML5的history.pushState/replaceState以及window的popstate事件可以解决这个问题。
+
+【待完成】
+参考： http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MessageChannel</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<div class="aTitle">概念</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+待整理：通道通信
+http://www.zhangxinxu.com/wordpress/2012/02/html5-web-messaging-cross-document-messaging-channel-messaging/
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">用MessageChannel实现深度克隆</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+const obj = {name: 'aaa', age: 16, child: {name: 'bbb'}};
+
+function structuralClone(obj) {
+  return new Promise(resolve => {
+    const {port1, port2} = new MessageChannel();
+    port2.onmessage = ev => resolve(ev.data);
+    port1.postMessage(obj);
+  });
+}
+
+async function doClone() {
+	var clone = await structuralClone(obj);
+	return clone;
+}
+
+doClone().then(function (clone) {
+	obj.child.name = 'old'
+	clone.child.name = 'new'
+	showObj(obj)
+	showObj(clone)
+})
+		</pre>
+	</div>
+	<div class="aShow" id="showResult1">
+	</div>
+</div>
+<script>
+const obj = {name: 'aaa', age: 16, child: {name: 'bbb'}};
+
+function structuralClone(obj) {
+  return new Promise(resolve => {
+    const {port1, port2} = new MessageChannel();
+    port2.onmessage = ev => resolve(ev.data);
+    port1.postMessage(obj);
+  });
+}
+
+async function doClone() {
+	var clone = await structuralClone(obj);
+	return clone;
+}
+
+doClone().then(function (clone) {
+	obj.child.name = 'old'
+	clone.child.name = 'new'
+	showObj(obj)
+	showObj(clone)
+})
+
+function show(str){
+	$('<p>'+str+'</p>').appendTo('#showResult1');
+}
+function showObj(obj){
+	show(JSON.stringify(obj, function(k,v){
+	    if(v === undefined){
+	        return "undefined";
+	    }else{
+	        return v;
+	    }
+	}));
+}
+</script>
