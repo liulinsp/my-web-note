@@ -106,9 +106,13 @@
 .x-between{
 	justify-content: space-between;
 }
-/*两端也留空白的分散对齐*/
+/*两端也留空白的分散对齐-两端空隙与中间空隙的比例为1:2*/
 .x-around{
 	justify-content: space-around;
+}
+/*两端也留空白的分散对齐-两端空隙与中间空隙相同*/
+.x-evenly{
+	justify-content: space-evenly;
 }
 </style>
 <div class="aTitle">justify-content对齐</div>
@@ -132,9 +136,13 @@
 .x-between{
 	justify-content: space-between;
 }
-/*两端也留空白的分散对齐*/
+/*两端也留空白的分散对齐-两端空隙与中间空隙的比例为1:2*/
 .x-around{
 	justify-content: space-around;
+}
+/*两端也留空白的分散对齐-两端空隙与中间空隙相同*/
+.x-evenly{
+	justify-content: space-evenly;
 }
 
 <b>页面：</b>
@@ -166,8 +174,16 @@
 	&lt;div&gt;&lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div class="lable"&gt;两端也留空白的分散对齐：&lt;/div&gt;
+&lt;div class="lable"&gt;两端也留空白的分散对齐：两端空隙与中间空隙的比例为1:2&lt;/div&gt;
 &lt;div class="container x-around"&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="lable"&gt;两端也留空白的分散对齐：两端空隙与中间空隙相同
+（很多浏览器不支持，慎用）&lt;/div&gt;
+&lt;div class="container x-evenly"&gt;
 	&lt;div&gt;&lt;/div&gt;
 	&lt;div&gt;&lt;/div&gt;
 	&lt;div&gt;&lt;/div&gt;
@@ -203,8 +219,15 @@
 			<div></div>
 		</div>
 		
-		<div class="lable">两端也留空白的分散对齐：</div>
+		<div class="lable">两端也留空白的分散对齐：两端空隙与中间空隙的比例为1:2</div>
 		<div class="container x-around">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="lable">两端也留空白的分散对齐：两端空隙与中间空隙相同（很多浏览器不支持，慎用！！！）</div>
+		<div class="container x-evenly">
 			<div></div>
 			<div></div>
 			<div></div>
