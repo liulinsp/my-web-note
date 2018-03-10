@@ -4,26 +4,28 @@
 	<title>文字溢出</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="../../css/main.css">
-	<style type="text/css">
-	.container{
-		display: inline-block;
-		width: 70px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-
-		background-color: #f3ce85;
-    	color: #fff;
-		box-sizing: border-box;
-		height: 26px;
-		padding: .2em .6em .3em;
-		border-radius: .25em;
-	}
-	</style>
+	
 </head>
 <body>
 <div class="home"><a href="../../index.html">首页</a></div>
 
+<style type="text/css">
+.container{
+	display: inline-block;
+	width: 70px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	background-color: #f3ce85;
+	color: #fff;
+	box-sizing: border-box;
+	height: 26px;
+	padding: .2em .6em .3em;
+	border-radius: .25em;
+}
+</style>
+<div class="aTitle">单行文字溢出</div>
 <div class="aPane">
   <div class="aCode">
     <pre>
@@ -48,6 +50,91 @@
   <div class="aShow">
     <div style="height:40px;">
       <span class="container" title="文字溢出">文字溢出</span>
+    </div>
+  </div>
+</div>
+
+
+<style type="text/css">
+.container-rows{
+	width: 10em;
+
+	overflow : hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+
+	background-color: #f3ce85;
+	color: #fff;
+	line-height: 1.5;
+	box-sizing: border-box;
+	padding: 0 .5em;
+	border-radius: .25em;
+}
+
+@supports not (-webkit-line-clamp: 3) {
+	.container-rows{
+		position:relative;
+		height:4.5em;
+	}
+	
+	.container-rows::after {
+		display: block;
+		position:absolute;
+		background-color: #f3ce85;
+		width: 1em;
+	    content:"...";
+	    bottom:0;
+	    right:0;
+	    margin-right: .5em;
+	}
+}
+
+</style>
+<div class="aTitle">多行文字溢出</div>
+<div class="aPane">
+  <div class="aCode">
+    <pre>
+.container-rows{
+	width: 10em;
+
+	overflow : hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+
+	background-color: #f3ce85;
+	color: #fff;
+	line-height: 1.5;
+	box-sizing: border-box;
+	padding: 0 .5em;
+	border-radius: .25em;
+}
+
+@supports not (-webkit-line-clamp: 3) {
+	.container-rows{
+		position:relative;
+		height:4.5em;
+	}
+	
+	.container-rows::after {
+		display: block;
+		position:absolute;
+		background-color: #f3ce85;
+		width: 1em;
+	    content:"...";
+	    bottom:0;
+	    right:0;
+	    margin-right: .5em;
+	}
+}
+
+&lt;div class="container-rows"&gt;文字溢出...&lt;/div&gt;
+    </pre>
+  </div>
+  <div class="aShow">
+    <div style="height:40px;">
+      <div class="container-rows" title="文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出">文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出文字溢出</div>
     </div>
   </div>
 </div>
