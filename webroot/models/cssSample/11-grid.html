@@ -11,7 +11,9 @@
 	<div class="aPane">
 		<div class="aCode">
 			<pre class="note">
-	参考资料：https://segmentfault.com/a/1190000012889793
+	参考资料：
+	1. https://segmentfault.com/a/1190000012889793
+	2.【minmax()函数如何工作】https://www.w3cplus.com/css3/how-the-minmax-function-works.html
 
 	<b>1. 网格容器(Grid Container)</b>
 	设置了 display: gird 的元素。 这是所有grid item的直接父项。
@@ -179,6 +181,21 @@ grid-template-rows: &lt;track-size&gt; ... | [&lt;line-name&gt;] &lt;track-size&
 	grid-template-columns: 1fr 1fr 2fr;
 	grid-template-rows: 1fr 1fr;
 	说明：“fr”单位允许您将轨道大小设置为网格容器自由空间的一部分。
+
+	<b>定义最小或最大尺寸</b>
+	grid-template-columns: minmax(50px, 100px) 1fr 2fr;
+	说明：
+		1. 通过minmax()函数来创建网格轨道的最小或最大尺寸
+		2. minmax函数接受六种类型的值:
+				长度值, 百分比值, 弹性值,
+				max-content, min-content, auto
+		3. max-content关键词
+			是一个特殊的值，它代表了单元格“最理想的大小”。网格单元格最小的宽度
+			围绕它的内容。例如，如果单元格的的内容是一个句子，理想的单元格的宽度
+			将是整个名子的长度，无论是什么长度，单元格内容的句子都不会换行。
+		4. min-content关键词
+			和max-content一样，是一种特殊的值。它代表单元格最小宽度，
+			可以不让内容溢出单元格，除非是不可避免的。
 			</pre>
 		</div>
 		<div class="aShow" id="showResult2">
