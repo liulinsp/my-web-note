@@ -57,7 +57,13 @@
 		left: 50px;
 		z-index: -100;
 	}
-
+	
+	/*粘性定位，粘性定位是相对定位和固定定位的混合。
+	  元素在跨越特定阈值前为相对定位，之后为固定定位。*/
+	.sticky-style{
+		position: sticky; 
+		top: 10px;
+	}
 </style>
 <div class="aPane">
 	<div class="aCode">
@@ -124,6 +130,44 @@
 	<div class="aShow">
 		<div class="parent-style">
 			<div class="fixed-style">fixed</div>
+		</div>
+	</div>
+</div>
+
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*没有定位(默认值)，元素出现在正常的流中
+（忽略 top, bottom, left, right 或者 z-index 声明）*/
+.static-style{
+	position: static;
+	top: 50px;
+	left: 50px;
+	z-index: -100;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent-style">
+			<div class="static-style">static</div>
+		</div>
+	</div>
+</div>
+
+<div class="aPane">
+	<div class="aCode">
+		<pre>
+/*粘性定位，粘性定位是相对定位和固定定位的混合。
+  元素在跨越特定阈值前为相对定位，之后为固定定位。*/
+.sticky-style{
+	position: sticky; 
+	top: 10px;
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="parent-style">
+			<div class="sticky-style">sticky</div>
 		</div>
 	</div>
 </div>
