@@ -27,7 +27,7 @@
 	    }
 	})
 
-	require(['jquery','angular','angular-messages'], function($, show){
+	require(['jquery','angular','angular-messages'], function($, angular){
 		$('#showResult').css('backgroundColor','#FBFCD1');
 
 		angular.module('myApp', ['ngMessages'])
