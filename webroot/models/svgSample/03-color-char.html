@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>彩色字母动画</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <svg version="1.1" id="ceng" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         viewBox="0 0 400 300" style="enable-background:new 0 0 400 300;" xml:space="preserve">
+    <style type="text/css">
+        .st0{fill:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+        #outer{
+            stroke:#212589;
+            stroke-dasharray: 400;
+            stroke-dashoffset: 0;
+            animation: charOuter 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charOuter {
+            0%{stroke-dashoffset: 400;}
+            100%{stroke-dashoffset: 0;}
+        }
+        #inner{
+            stroke:#212589;
+            stroke-dasharray: 280;
+            stroke-dashoffset: 0;
+            animation: charInner 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charInner {
+            0%{stroke-dashoffset: 280;}
+            100%{stroke-dashoffset: 0;}
+        }
+
+        #outer1{
+            stroke: #843cef;
+            stroke-dasharray: 0, 401;
+            stroke-dashoffset: -400;
+            animation: charOuter1 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charOuter1 {
+            0%{
+                stroke-dasharray: 1, 399;
+                stroke-dashoffset: 1;
+            }
+            50%{
+                stroke-dasharray: 200, 200;
+                stroke-dashoffset: -100;
+            }
+            100%{
+                stroke-dasharray: 0, 401;
+                stroke-dashoffset: -400;
+            }
+        }
+        #inner1{
+            stroke: #843cef;
+            stroke-dasharray: 0, 281;
+            stroke-dashoffset: -280;
+            animation: charInner1 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charInner1 {
+            0%{
+                stroke-dasharray: 1, 279;
+                stroke-dashoffset: 1;
+            }
+            50%{
+                stroke-dasharray: 140, 140;
+                stroke-dashoffset: -70;
+            }
+            100%{
+                stroke-dasharray: 0, 281;
+                stroke-dashoffset: -280;
+            }
+        }
+
+        #outer2{
+            stroke: #d0449e;
+            stroke-dasharray: 0, 401;
+            stroke-dashoffset: -400;
+            animation: charOuter2 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charOuter2 {
+            0%{
+                stroke-dasharray: 1, 399;
+                stroke-dashoffset: 1;
+            }
+            50%{
+                stroke-dasharray: 100, 300;
+                stroke-dashoffset: -150;
+            }
+            95%{
+                stroke-dasharray: 0, 401;
+                stroke-dashoffset: -400;
+            }
+        }
+        #inner2{
+            stroke: #d0449e;
+            stroke-dasharray: 0, 281;
+            stroke-dashoffset: -280;
+            animation: charInner2 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charInner2 {
+            0%{
+                stroke-dasharray: 1, 279;
+                stroke-dashoffset: 1;
+            }
+            50%{
+                stroke-dasharray: 70, 210;
+                stroke-dashoffset: -105;
+            }
+            95%{
+                stroke-dasharray: 0, 281;
+                stroke-dashoffset: -280;
+            }
+        }
+
+        #outer3{
+            stroke: #4e95f2;
+            stroke-dasharray: 0, 401;
+            stroke-dashoffset: -400;
+            animation: charOuter3 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charOuter3 {
+            0%{
+                stroke-dasharray: 1, 399;
+                stroke-dashoffset: 1;
+            }
+            50%{
+                stroke-dasharray: 50, 350;
+                stroke-dashoffset: -175;
+            }
+            90%{
+                stroke-dasharray: 0, 401;
+                stroke-dashoffset: -400;
+            }
+        }
+        #inner3{
+            stroke: #4e95f2;
+            stroke-dasharray: 0, 281;
+            stroke-dashoffset: -280;
+            animation: charInner3 2s cubic-bezier(0.4, 0.14, 0.59, 0.89);
+        }
+        @keyframes charInner3 {
+            0%{
+                stroke-dasharray: 1, 279;
+                stroke-dashoffset: 1;
+            }
+            50%{
+                stroke-dasharray: 36, 244;
+                stroke-dashoffset: -122;
+            }
+            90%{
+                stroke-dasharray: 0, 281;
+                stroke-dashoffset: -280;
+            }
+        }
+    </style>
+        <path id="outer" class="st0" d="M250.8,171.9l11.3,3.3c-6.7,30.4-26.6,45.7-59.8,45.7c-40.7-2.2-62.2-25.5-64.5-69.8
+            c2.2-45.2,23.9-69.2,65.1-71.8c28.6,0.9,47.7,14.6,57.1,41l-9.7,2.5"/>
+        <path id="inner" class="st0" d="M250.2,122.7l-10.9,2.8c-5.4-17.9-17.5-27.3-36.3-28.2c-26.4,1.8-40.5,19.5-42.3,53
+            c1.3,33.6,15.2,51.5,41.6,53.7c21.5-0.4,34.5-12.1,38.9-34.9l9.3,2.7"/>
+        <path id="outer1" class="st0" d="M250.8,171.9l11.3,3.3c-6.7,30.4-26.6,45.7-59.8,45.7c-40.7-2.2-62.2-25.5-64.5-69.8
+            c2.2-45.2,23.9-69.2,65.1-71.8c28.6,0.9,47.7,14.6,57.1,41l-9.7,2.5"/>
+        <path id="inner1" class="st0" d="M250.2,122.7l-10.9,2.8c-5.4-17.9-17.5-27.3-36.3-28.2c-26.4,1.8-40.5,19.5-42.3,53
+            c1.3,33.6,15.2,51.5,41.6,53.7c21.5-0.4,34.5-12.1,38.9-34.9l9.3,2.7"/>
+        <path id="outer2" class="st0" d="M250.8,171.9l11.3,3.3c-6.7,30.4-26.6,45.7-59.8,45.7c-40.7-2.2-62.2-25.5-64.5-69.8
+            c2.2-45.2,23.9-69.2,65.1-71.8c28.6,0.9,47.7,14.6,57.1,41l-9.7,2.5"/>
+        <path id="inner2" class="st0" d="M250.2,122.7l-10.9,2.8c-5.4-17.9-17.5-27.3-36.3-28.2c-26.4,1.8-40.5,19.5-42.3,53
+            c1.3,33.6,15.2,51.5,41.6,53.7c21.5-0.4,34.5-12.1,38.9-34.9l9.3,2.7"/>
+        <path id="outer3" class="st0" d="M250.8,171.9l11.3,3.3c-6.7,30.4-26.6,45.7-59.8,45.7c-40.7-2.2-62.2-25.5-64.5-69.8
+            c2.2-45.2,23.9-69.2,65.1-71.8c28.6,0.9,47.7,14.6,57.1,41l-9.7,2.5"/>
+        <path id="inner3" class="st0" d="M250.2,122.7l-10.9,2.8c-5.4-17.9-17.5-27.3-36.3-28.2c-26.4,1.8-40.5,19.5-42.3,53
+            c1.3,33.6,15.2,51.5,41.6,53.7c21.5-0.4,34.5-12.1,38.9-34.9l9.3,2.7"/>
+    </svg>
+</body>
+</html>
