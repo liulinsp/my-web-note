@@ -12,21 +12,30 @@
 	</style>
 </head>
 <body>
-
-	<div id="ele" style="background:red">
-		test test 
-	</div>
-	<!-- <div id="ele" style="width:750px;background:blue">
-		test test 
-	</div>
-	<div id="ele" style="width:800px;background:green">
-		test test 
-	</div> -->
-	<!-- <div id="ele" style="width:667px;background:yellow">
-		test test 
-	</div> -->
+	<a id='a' target="_blank">下载</a>
+	<script src="../../js/jquery-1.9.1.js"></script>
 </body>
 <script>
-	alert(document.documentElement.clientWidth)
+	$('#a').click(function () {
+		var that = this;
+		$.ajax({
+			url: 'http://localhost:3000/api/user/signIn',
+			method: 'GET',
+			// async: false,
+			success: function () {
+				$(that).attr("href", 'http://www.baidu.com');
+			}
+		})
+	})
+</script>
+<script>
+	setTimeout(function(){console.log('t')},0)
+	Promise.resolve().then(function (){
+		console.log('p')
+	})
+	console.log('m1')
+</script>
+<script>
+	console.log('m2')
 </script>
 </html>

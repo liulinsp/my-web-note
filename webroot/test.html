@@ -1,0 +1,41 @@
+<html>
+ <head>
+  <Meta http-equiv="Content-Type" Content="text/html; Charset=UTF-8">
+  <title>获得图片文件大小</title>
+ </head>
+ <body>
+  <input id="oFile" type="file" onchange="javascript:onGetFileSize();" />
+  <span id="oConsole"></span>
+  <script type="text/javascript">
+  
+var onGetFileSize = function(){
+ var oFile = document.getElementById('oFile');
+ getSize(oFile,function(fileSize){
+  document.getElementById('oConsole').innerHTML = fileSize;
+ }); 
+} 
+  
+var getSize = function(oFile,callback){
+ if(oFile.files&&oFile.files.item){
+  var item = oFile.files.item(0);
+  if(item.size!==undefined){
+   callback(item.size);
+  }else{
+   callback(item.fileSize);
+  }
+ }else{
+  var img = new Image();
+  img.src = oFile.value;
+  var fn = function(){
+   if(img.readyState === 'complete'){
+    callback(img.fileSize);
+   }else{
+    setTimeout(fn,500);
+   }
+  }  
+  fn();
+ }
+}
+  </script>
+ </body>
+</html>

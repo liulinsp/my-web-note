@@ -11,6 +11,70 @@
 
 <script>
 $(function(){
+	var ele = document.getElementById('div1')
+	$('#showResult1').append('<p>ele.style.width = ' + ele.style.width + '</p>')
+})
+</script>
+<div class="aTitle">获得内联样式设置的大小</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>ele.style.width
+ele.style.height</b>
+
+&lt;style&gt;
+	#div1{width:100px !important;}
+&lt;/style&gt;
+&lt;div id="div1" style="width:50px;height:50px;"&gt;&lt;/div&gt;
+
+1. 不会重新计算，获得的大小不一定是元素真实大小
+2. 获得的是字符串，例如：50px
+3. 所有浏览器都支持
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult1">
+		<style>
+			#div1{width:100px !important;}
+		</style>
+		<div id="div1" style="width:50px;height:50px;background-color: #FFE8E8"></div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	var ele = document.getElementById('div2')
+	$('#showResult2').append('<p>ele.currentStyle.width = ' + ele.currentStyle.width + '</p>')
+})
+</script>
+<div class="aTitle">获得样式大小(只IE)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>ele.currentStyle.width
+ele.currentStyle.height</b>
+
+&lt;style&gt;
+	#div2{width:100px !important;}
+&lt;/style&gt;
+&lt;div id="div2" style="width:50px;height:50px;"&gt;&lt;/div&gt;
+
+1. 不会重新计算
+2. 获得的是字符串，例如：100px
+3. 只有IE支持
+4. 如果没有设置任何样式返回默认值：auto
+		</pre>
+	</div>
+	<div class="aShow note" id="showResult2">
+		<style>
+			#div2{width:100px !important;}
+		</style>
+		<div id="div2" style="width:50px;height:50px;background-color: #FFE8E8"></div>
+		<!-- <div id="div2" style="height:50px;background-color: #FFE8E8"></div> -->
+	</div>
+</div>
+
+<script>
+$(function(){
 	
 })
 </script>
