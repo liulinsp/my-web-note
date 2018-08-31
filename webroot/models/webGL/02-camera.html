@@ -3,7 +3,7 @@
 <head>
 	<title>webGL Camera 照相机</title>
 	<link rel="stylesheet" type="text/css" href="../../css/main.css">
-	<script src="../../js/three.js"></script>
+	<script src="../../js/three/three.js"></script>
 	<meta charset="utf-8">
 </head>
 <body>
@@ -70,7 +70,7 @@ renderer.render(scene, camera);
 init();
 function init () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app1')
 	parentEle.appendChild(renderer.domElement);
@@ -151,7 +151,7 @@ renderer.render(scene, camera);
 init2();
 function init2 () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app2')
 	parentEle.appendChild(renderer.domElement);

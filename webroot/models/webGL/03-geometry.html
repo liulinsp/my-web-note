@@ -3,7 +3,7 @@
 <head>
 	<title>webGL Camera 几何形状</title>
 	<link rel="stylesheet" type="text/css" href="../../css/main.css">
-	<script src="../../js/three.js"></script>
+	<script src="../../js/three/three.js"></script>
 	<meta charset="utf-8">
 </head>
 <body>
@@ -83,7 +83,7 @@ var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1, 2, 2, 2),
 init();
 function init () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app1')
 	parentEle.appendChild(renderer.domElement);
@@ -139,7 +139,7 @@ var cube = new THREE.Mesh(new THREE.PlaneGeometry(3, 2, 3, 2),
 init2();
 function init2 () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app2')
 	parentEle.appendChild(renderer.domElement);
@@ -205,7 +205,7 @@ var cube = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 16),
 init3();
 function init3 () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app3')
 	parentEle.appendChild(renderer.domElement);
@@ -265,7 +265,7 @@ var cube = new THREE.Mesh(new THREE.CircleGeometry(1, 16),
 init4();
 function init4 () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app4')
 	parentEle.appendChild(renderer.domElement);
@@ -321,7 +321,7 @@ THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSe
 init5();
 function init5 () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app5')
 	parentEle.appendChild(renderer.domElement);
@@ -376,7 +376,7 @@ THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc)
 init6();
 function init6 () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app6')
 	parentEle.appendChild(renderer.domElement);
@@ -392,7 +392,7 @@ function init6 () {
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 	scene.add(camera);
 
-	// 圆形
+	// 圆环面
 	var cube = new THREE.Mesh(new THREE.TorusGeometry(3, 1, 8, 16, Math.PI * 2),
 	    new THREE.MeshBasicMaterial({
             color: 0xff0000,
@@ -417,7 +417,7 @@ THREE.Geometry()
 &lt;div class="aShow note" id="app7"&gt;&lt;/div&gt;
 
 <b>脚本：</b>
-var geometry = new THREE.Geometry();
+var geometry = new THREE.Geometry({antialias: true});
 // 设置顶点位置
 // 顶部4顶点
 geometry.vertices.push(new THREE.Vector3(-1, 2, -1));
@@ -449,7 +449,7 @@ geometry.faces.push(new THREE.Face3(3, 0, 4, 7));
 init7();
 function init7 () {
 	// HTML中无canvas标签，自动创建
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
 	var parentEle = document.getElementById('app7')
 	parentEle.appendChild(renderer.domElement);

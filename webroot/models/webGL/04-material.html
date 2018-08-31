@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>webGL 材质</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">材质分类</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. 基本材质</b>
+	* 物体的颜色始终为该材质的颜色
+	* 不会由于光照产生明暗、阴影效果
+
+	THREE.MeshBasicMaterial(opt)
+
+<b>2. Lambert材质</b>
+   * 只考虑漫反射而不考虑镜面反射的效果
+   * 不适合金属、镜子等需要镜面反射效果的物体
+
+   THREE.MeshLambertMaterial(opt)
+
+<b>3. Phong材质</b>
+   * Lambert不同的是，Phong模型考虑了镜面反射的效果
+
+   THREE.MeshPhongMaterial(opt)
+
+<b>4. 法向材质</b>
+   * 法向材质可以将材质的颜色设置为其法向量的方向，有时候对于调试很有帮助。
+
+   THREE.MeshNormalMaterial()
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">基本材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>公式：</b>
+THREE.MeshBasicMaterial(opt)
+
+<b>常用属性：</b>
+1. visible：是否可见，默认为true
+2. side：渲染面片正面或是反面
+    默认为正面THREE.FrontSide，可设置为反面THREE.BackSide，或双面THREE.DoubleSide
+3. wireframe：是否渲染线而非面，默认为false
+4. color：十六进制RGB颜色，如红色表示为0xff0000
+5. map：使用纹理贴图（<a href="#materialMap">后面再介绍</a>）
+
+<b>示例：</b>
+new THREE.MeshBasicMaterial({
+    color: 0xffff00,
+    visible: true,
+    side: THREE.FrontSide
+    // wireframe: true
+})
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<script type="text/javascript">
+init();
+function init () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(2,2,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 正方体
+	var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1, 2, 2, 2),
+	    new THREE.MeshBasicMaterial({
+		    color: 0xffff00,
+		    visible: true,
+		    side: THREE.FrontSide
+		    // wireframe: true
+		})
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+<div class="aTitle">Lambert材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>公式：</b>
+THREE.MeshLambertMaterial(opt)
+
+<b>常用属性</b>
+1. color：是用来表现材质对散射光的反射能力，也是最常用来设置材质颜色的属性
+2. emissive：是材质的自发光颜色，可以用来表现光源的颜色
+// 3. ambient： 表示对环境光的反射能力，只有当设置了AmbientLight后，该值才是有效的
+// 材质对环境光的反射能力与环境光强相乘后得到材质实际表现的颜色(<a href="07-light.html">参看</a>)
+
+
+<b>示例：</b>
+// 光照
+var light = new THREE.AmbientLight(0x000000);
+scene.add(light);
+var lights = [];
+lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+lights[ 0 ].position.set( 200, 200, 200 );
+lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+scene.add( lights[ 0 ] );
+scene.add( lights[ 1 ] );
+
+// 材料
+var material = new THREE.MeshLambertMaterial({
+    color: 0xffff00,
+	emissive: 0xff0000
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(0,0,5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x000000);
+	scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 200, 200, 200 );
+	lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+	// 材料
+	var material = new THREE.MeshLambertMaterial({
+	    color: 0xffff00,
+		emissive: 0xff0000
+	});
+
+	// 球体
+	var cube = new THREE.Mesh(
+		new THREE.SphereGeometry(1, 64, 64),
+	    material
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+<div class="aTitle">Phong材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+与Lambert不同的是，Phong模型考虑了镜面反射的效果，因此对于金属、镜面的表现尤为适合。
+<b>公式：</b>
+THREE.MeshPhongMaterial(opt)
+
+<b>镜面反射部分的模型:</b>
+ Ispecular = Ks * Is * (cos(alpha)) ^ n
+ 1. Ispecular是镜面反射的光强
+ 2. Ks是材质表面镜面反射系数
+ 3. Is是光源强度
+ 4. alpha是反射光与视线的夹角
+ 5. n是高光指数，越大则高光光斑越小
+
+<b>常用属性</b>
+1. color：是用来表现材质对散射光的反射能力，也是最常用来设置材质颜色的属性
+2. emissive：是材质的自发光颜色，可以用来表现光源的颜色
+3. specular：控制光照模型中的n值，当shininess值越大时，高光的光斑越小，默认值为30
+
+
+<b>示例：</b>
+// 光照
+var light = new THREE.AmbientLight(0x000000);
+scene.add(light);
+var lights = [];
+lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+lights[ 0 ].position.set( 200, 200, 200 );
+lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+scene.add( lights[ 0 ] );
+scene.add( lights[ 1 ] );
+
+// 材料
+var material = new THREE.MeshPhongMaterial({
+	// emissive: 0xff0000,
+	color: 0xff0000,
+    specular: 0xffff00,
+    shininess: 100
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(0,0,5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x000000);
+	scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 200, 200, 200 );
+	lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+	// 材料
+	var material = new THREE.MeshPhongMaterial({
+		// emissive: 0xff0000,
+		color: 0xff0000,
+	    specular: 0xffff00,
+	    shininess: 100
+	});
+
+	// 球体
+	var cube = new THREE.Mesh(
+		new THREE.SphereGeometry(1, 64, 64),
+	    material
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+
+<div class="aTitle">法向材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+法向材质可以将材质的颜色设置为其法向量的方向，有时候对于调试很有帮助。
+<b>公式：</b>
+new THREE.MeshNormalMaterial()
+
+<b>示例：</b>
+// 材料
+var material = new THREE.MeshNormalMaterial();
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+	</div>
+</div>
+<script type="text/javascript">
+init4();
+function init4 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app4')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(2,2,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 材料
+	var material = new THREE.MeshNormalMaterial();
+
+	// 正方体
+	var cube = new THREE.Mesh(
+		new THREE.CubeGeometry(1, 1, 1),
+	    material
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+<div class="aTitle" id="materialMap">材质的纹理贴图</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// 光照
+var light = new THREE.AmbientLight(0x000000);
+scene.add(light);
+var lights = [];
+lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+lights[ 0 ].position.set( 100, 100, 100 );
+lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+scene.add( lights[ 0 ] );
+scene.add( lights[ 1 ] );
+
+// 纹理, 加载完图片后需要重新渲染
+<mark>var texture = new THREE.TextureLoader().load('./mabu.jpg', function() {
+    renderer.render(scene, camera);
+});</mark>
+// 材料
+var material = new THREE.MeshLambertMaterial({
+	// color: 0xffff00,
+	emissive: 0x9b733a,
+	<mark>map: texture</mark>
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+	</div>
+</div>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app5')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(3,3,5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x000000);
+	scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 10, 10, 10 );
+	lights[ 1 ].position.set( - 10, - 20, - 10 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+	// 纹理
+	var texture = new THREE.TextureLoader().load('./mabu.jpg', function() {
+	    renderer.render(scene, camera);
+	});
+	// 材料
+	var material = new THREE.MeshLambertMaterial({
+		// color: 0xffff00,
+		emissive: 0x9b733a,
+		map: texture
+	});
+
+	// 正方体
+	var cube = new THREE.Mesh(
+		new THREE.CubeGeometry(2, 2, 2),
+	    material
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">材质的纹理重复</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// 纹理
+var texture = new THREE.TextureLoader().load('./grid.png', function() {
+    renderer.render(scene, camera);
+});
+texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+texture.repeat.set(3, 3);
+		</pre>
+	</div>
+	<div class="aShow note" id="app6">
+	</div>
+</div>
+<script type="text/javascript">
+init6();
+function init6 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app6')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(3,3,5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0xffffff);
+	scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 10, 10, 10 );
+	lights[ 1 ].position.set( - 10, - 20, - 10 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+	// 纹理
+	var texture = new THREE.TextureLoader().load('./grid.png', function() {
+	    renderer.render(scene, camera);
+	});
+	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set(3, 3);
+
+	// 材料
+	var material = new THREE.MeshLambertMaterial({
+		map: texture
+	});
+
+	// 正方体
+	var cube = new THREE.Mesh(
+		new THREE.CubeGeometry(2, 2, 2),
+	    material
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+</body>
+</html>
