@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="../../js/three/three.js"></script>
+</head>
+<body>
+	<div id="earth"></div>
+<script>
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(800, 600);
+	var parentEle = document.getElementById('earth')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(0,0,4);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x999999);
+	scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	// lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( -10, 6, 10 );
+	// lights[ 1 ].position.set( - 10, - 20, - 10 );
+
+	scene.add( lights[ 0 ] );
+	// scene.add( lights[ 1 ] );
+
+	// 纹理
+	var texture = new THREE.TextureLoader().load('./earth.jpg', function() {
+	    renderer.render(scene, camera);
+	});
+	// 材料
+	var material = new THREE.MeshLambertMaterial({
+		// color: 0xffff00,
+		// emissive: 0x9b733a,
+		map: texture
+	});
+
+	// 球体
+	var cube = new THREE.Mesh(
+		new THREE.SphereGeometry(1, 64, 64),
+	    material
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+	// 旋转动画
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var lastTime = new Date().getTime(); // 上次动画时间
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		var curTime = new Date().getTime();
+		v += Math.PI / 5000 * (curTime - lastTime);
+		lastTime = curTime;
+		v = v % (Math.PI * 2)
+		cube.rotation.set(0, v , 0);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+</script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>webGL 粒子</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">参考</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+https://www.cnblogs.com/amy2011/p/6358330.html
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">粒子简单示例</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+<b>1. 通过sprite.position设置粒子位置(数量多时有性能问题): </b>
+var spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
+for (var x = -3; x <= 3; x++) {
+	for (var y = -3; y <= 3; y++) {
+		var sprite = new THREE.Sprite( spriteMaterial )
+		sprite.position.set(x * 4, y * 4,0)
+		scene.add( sprite );
+	}
+}
+
+<b>2. 通过现有几何体设置粒子位置:</b>
+var geom = new THREE.Geometry();
+for (var x = -3; x <= 3; x++) {
+	for (var y = -3; y <= 3; y++) {
+		var v = new THREE.Vector3(x * 4, y * 4, 0);
+		geom.vertices.push(v);
+		// 设置顶点颜色
+		geom.colors.push(new THREE.Color(Math.random() * 0x00ffff));
+	}
+}
+// 使用顶点颜色的材质
+var material = new THREE.PointsMaterial({size: 2, vertexColors: true});
+
+var points = new THREE.Points(geom, material);
+scene.add(points);
+
+
+<b>3. 通过现有几何体设置粒子位置</b>
+var geom = new THREE.SphereGeometry(16, 16, 16);
+var material = new THREE.PointsMaterial({size: 2, vertexColors: false, color: 0xffffff});
+var points = new THREE.Points(geom, material);
+scene.add(points);
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<script type="text/javascript">
+init1();
+function init1 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 1/1, 1, 100);
+	camera.position.set(0,0,50);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	
+	/*// 通过sprite.position设置粒子位置
+	var spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
+	for (var x = -3; x <= 3; x++) {
+		for (var y = -3; y <= 3; y++) {
+			var sprite = new THREE.Sprite( spriteMaterial )
+			sprite.position.set(x * 4, y * 4,0)
+			scene.add( sprite );
+		}
+	}*/
+
+	/*// 通过自定义几何体设置粒子位置
+	var geom = new THREE.Geometry();
+	for (var x = -3; x <= 3; x++) {
+		for (var y = -3; y <= 3; y++) {
+			var v = new THREE.Vector3(x * 4, y * 4, 0);
+			geom.vertices.push(v);
+			// 设置定点颜色
+			geom.colors.push(new THREE.Color(Math.random() * 0x00ffff));
+		}
+	}
+	// 使用定点颜色的材质
+	var material = new THREE.PointsMaterial({size: 2, vertexColors: true});
+
+	var points = new THREE.Points(geom, material);
+	scene.add(points);*/
+
+	// 通过现有几何体设置粒子位置
+	var geom = new THREE.SphereGeometry(16, 16, 16);
+	var material = new THREE.PointsMaterial({size: 2, vertexColors: false, color: 0xffffff});
+	var points = new THREE.Points(geom, material);
+	scene.add(points);
+	
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+
+<div class="aTitle">使用纹理样式化粒子</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// 纹理
+var texture = new THREE.TextureLoader().load('./light.png', function() {
+    renderer.render(scene, camera);
+});
+
+
+// 通过自定义几何体设置粒子位置
+var geom = new THREE.Geometry();
+var range = 100;
+for (var i = 0; i < 5000; i++) {
+	var v = new THREE.Vector3(
+		Math.random() * range - range/2, 
+		Math.random() * range - range/2,
+		Math.random() * range - range/2
+	);
+	geom.vertices.push(v);
+}
+// 使用图片纹理材质
+var material = new THREE.PointsMaterial({
+	size: 2,
+	map: texture,
+	transparent: true,
+	opacity: 1
+	// blending: THREE.AdditiveBlending // 融合模式
+});
+console.log(THREE.AdditiveBlending)
+
+// 点云
+var points = new THREE.Points(geom, material);
+scene.add(points);
+
+// 进行渲染
+renderer.render(scene, camera);
+
+// 动画
+var v = 0;
+function animate () {
+	v += Math.PI/1000;
+	if (v > Math.PI * 2) {
+		v = v - Math.PI * 2;
+	}
+	var x = 50 * Math.sin(v);
+	var z = 50 * Math.cos(v);
+	camera.position.set(x, 0, z);
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	renderer.render(scene, camera);
+	requestAnimationFrame(animate);
+}
+animate();
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 1/1, 2, 50);
+	camera.position.set(0,0,50);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 纹理
+	var texture = new THREE.TextureLoader().load('./light.png', function() {
+	    renderer.render(scene, camera);
+	});
+
+	
+	// 通过自定义几何体设置粒子位置
+	var geom = new THREE.Geometry();
+	var range = 100;
+	for (var i = 0; i < 5000; i++) {
+		var v = new THREE.Vector3(
+			Math.random() * range - range/2, 
+			Math.random() * range - range/2,
+			Math.random() * range - range/2
+		);
+		geom.vertices.push(v);
+	}
+	// 使用图片纹理材质
+	var material = new THREE.PointsMaterial({
+		size: 2,
+		map: texture,
+		transparent: true,
+		opacity: 1
+		// blending: THREE.AdditiveBlending // 融合模式
+	});
+
+	// 点云
+	var points = new THREE.Points(geom, material);
+	scene.add(points);
+	
+	// 进行渲染
+	renderer.render(scene, camera);
+    
+    // 动画
+	var v = 0;
+	function animate () {
+		v += Math.PI/1000;
+		if (v > Math.PI * 2) {
+			v = v - Math.PI * 2;
+		}
+		var x = 50 * Math.sin(v);
+		var z = 50 * Math.cos(v);
+		camera.position.set(x, 0, z);
+		camera.lookAt(new THREE.Vector3(0, 0, 0));
+		renderer.render(scene, camera);
+		requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+
+<div class="aTitle">下雨动效</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(300, 300);
+var parentEle = document.getElementById('app3')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0x000000);
+// 场景
+var scene = new THREE.Scene();
+// 正交投影摄像机
+var camera = new THREE.PerspectiveCamera(45, 1/1, 2, 200);
+camera.position.set(0, 30, 40);
+// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+camera.lookAt(new THREE.Vector3(0, 30, 0));
+scene.add(camera);
+
+// 下雨角度
+var angle = Math.PI/9;
+// 下落速度 
+var velocity = 0.5 + Math.random() / 10;
+
+// 纹理
+var texture = new THREE.TextureLoader().load('./raindrop.png', function() {
+    renderer.render(scene, camera);
+});
+texture.rotation = -angle;
+
+
+// 通过自定义几何体设置粒子位置
+var geom = new THREE.Geometry();
+var range = 40;
+for (var i = 0; i < 1000; i++) {
+	var v = new THREE.Vector3(
+		Math.random() * range - range/2, 
+		Math.random() * range * 1.5,
+		Math.random() * range - range/2
+	);
+	geom.vertices.push(v);
+}
+
+// 使用图片纹理材质
+var material = new THREE.PointsMaterial({
+	size: 5,
+	map: texture,
+	transparent: true,
+	opacity: 1,
+	depthTest: false // 可以去掉texture的黑色背景
+	// blending: THREE.AdditiveBlending // 融合模式
+});
+
+// 点云
+var points = new THREE.Points(geom, material);
+scene.add(points);
+
+// 进行渲染
+renderer.render(scene, camera);
+
+// 动画
+function animate () {
+	var vertices = points.geometry.vertices;
+	
+    vertices.forEach(function (v, idx) {
+    	v.y = v.y - velocity * Math.cos(angle);
+        v.x = v.x - velocity * Math.sin(angle);
+        
+        if (v.y <= 0) v.y = 60;
+        if (v.x <= -20 || v.x >= 20) v.x = v.x * -1;  
+    });
+
+    //重要：渲染时需要更新位置（如果没有设为true,则无法显示动画）
+    points.geometry.verticesNeedUpdate = true;
+
+	renderer.render(scene, camera);
+	requestAnimationFrame(animate);
+}
+animate();
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 1/1, 2, 200);
+	camera.position.set(0, 30, 40);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 30, 0));
+	scene.add(camera);
+
+	// 下雨角度
+	var angle = Math.PI/9;
+	// 下落速度 
+	var velocity = 0.5 + Math.random() / 10;
+
+	// 纹理
+	var texture = new THREE.TextureLoader().load(
+		'./raindrop.png', 
+		function() {
+		    renderer.render(scene, camera);
+		}
+	);
+	texture.rotation = -angle;
+
+	
+	// 通过自定义几何体设置粒子位置
+	var geom = new THREE.Geometry();
+	var range = 40;
+	for (var i = 0; i < 1000; i++) {
+		var v = new THREE.Vector3(
+			Math.random() * range - range/2, 
+			Math.random() * range * 1.5,
+			Math.random() * range - range/2
+		);
+		geom.vertices.push(v);
+	}
+
+	// 使用图片纹理材质
+	var material = new THREE.PointsMaterial({
+		size: 5,
+		map: texture,
+		transparent: true,
+		opacity: 1,
+		depthTest: false // 可以去掉texture的黑色背景
+		// blending: THREE.AdditiveBlending // 融合模式
+	});
+
+	// 点云
+	var points = new THREE.Points(geom, material);
+	scene.add(points);
+	
+	// 进行渲染
+	renderer.render(scene, camera);
+
+    // 动画
+	function animate () {
+		var vertices = points.geometry.vertices;
+		
+        vertices.forEach(function (v, idx) {
+        	v.y = v.y - velocity * Math.cos(angle);
+            v.x = v.x - velocity * Math.sin(angle);
+            
+            if (v.y <= 0) v.y = 60;
+            if (v.x <= -20 || v.x >= 20) v.x = v.x * -1;  
+        });
+
+        //重要：渲染时需要更新位置（如果没有设为true,则无法显示动画）
+        points.geometry.verticesNeedUpdate = true;
+
+		renderer.render(scene, camera);
+		requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+
+<div class="aTitle">下雪动效(使用多个点云)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app4')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 1/1, 2, 200);
+	camera.position.set(0, 30, 40);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 30, 0));
+	scene.add(camera);
+
+	var cloudNum = 4;
+
+	// 纹理
+	var textures = [];
+	for (var i = 1; i <= cloudNum; i++) {
+		var texture = new THREE.TextureLoader().load(
+			'./snowflake'+i+'.png',
+			function() {
+			    renderer.render(scene, camera);
+			}
+		);
+		textures.push(texture);
+	}
+	
+	// 通过自定义几何体设置粒子位置
+	var geoms = [];
+	for (var k = 0; k < cloudNum; k++) {
+		var geom = new THREE.Geometry();
+		var range = 40;
+		for (var i = 0; i < 300; i++) {
+			var v = new THREE.Vector3(
+				Math.random() * range - range/2, 
+				Math.random() * range * 1.5,
+				Math.random() * range - range/2
+			);
+			v.velocityY = 0.1 + Math.random() / 5;
+	        v.velocityX = (Math.random() - 0.5) / 3;
+	        v.velocityZ = (Math.random() - 0.5) / 3;
+			geom.vertices.push(v);
+		}
+		geoms.push(geom);
+	}
+	
+
+	// 使用图片纹理材质
+	var materials = [];
+	for (var i = 0; i < cloudNum; i++) {
+		var material = new THREE.PointsMaterial({
+			size: 2,
+			map: textures[i],
+			transparent: true,
+			opacity: 1,
+			depthTest: false, // 可以去掉texture的黑色背景
+			blending: THREE.AdditiveBlending // 融合模式
+		});
+		materials.push(material);
+	}
+
+	// 点云
+	var clouds = [];
+	for (var i = 0; i < cloudNum; i++) {
+		var points = new THREE.Points(geoms[i], materials[i]);
+		clouds.push(points)
+		scene.add(points);
+	}
+	
+	// 进行渲染
+	renderer.render(scene, camera);
+
+    // 动画
+	function animate () {
+		clouds.forEach(function (points, i) {
+			var vertices = points.geometry.vertices;
+		
+	        vertices.forEach(function (v, idx) {
+	        	v.y = v.y - (v.velocityY);
+	            v.x = v.x - (v.velocityX);
+	            v.z = v.z - (v.velocityZ);
+	            
+	            if (v.y <= 0) v.y = 60;
+	            if (v.x <= -20 || v.x >= 20) v.x = v.x * -1;  
+	            if (v.z <= -20 || v.z >= 20) v.velocityZ = v.velocityZ * -1;
+	        });
+
+	        //重要：渲染时需要更新位置（如果没有设为true,则无法显示动画）
+	        points.geometry.verticesNeedUpdate = true;
+		});
+
+		renderer.render(scene, camera);
+		requestAnimationFrame(animate);
+	}
+	animate();
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+	</div>
+</div>
+<script type="text/javascript">
+init4();
+function init4 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app4')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 1/1, 2, 200);
+	camera.position.set(0, 30, 40);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 30, 0));
+	scene.add(camera);
+
+	var cloudNum = 4;
+
+	// 纹理
+	var textures = [];
+	for (var i = 1; i <= cloudNum; i++) {
+		var texture = new THREE.TextureLoader().load(
+			'./snowflake'+i+'.png',
+			function() {
+			    renderer.render(scene, camera);
+			}
+		);
+		textures.push(texture);
+	}
+	
+	// 通过自定义几何体设置粒子位置
+	var geoms = [];
+	for (var k = 0; k < cloudNum; k++) {
+		var geom = new THREE.Geometry();
+		var range = 40;
+		for (var i = 0; i < 100; i++) {
+			var v = new THREE.Vector3(
+				Math.random() * range - range/2, 
+				Math.random() * range * 1.5,
+				Math.random() * range - range/2
+			);
+			v.velocityY = 0.1 + Math.random() / 5;
+	        v.velocityX = (Math.random() - 0.5) / 3;
+	        v.velocityZ = (Math.random() - 0.5) / 3;
+			geom.vertices.push(v);
+		}
+		geoms.push(geom);
+	}
+	
+
+	// 使用图片纹理材质
+	var materials = [];
+	for (var i = 0; i < cloudNum; i++) {
+		var material = new THREE.PointsMaterial({
+			size: 2,
+			map: textures[i],
+			transparent: true,
+			opacity: 1,
+			depthTest: false, // 可以去掉texture的黑色背景
+			blending: THREE.AdditiveBlending // 融合模式
+		});
+		materials.push(material);
+	}
+
+	// 点云
+	var clouds = [];
+	for (var i = 0; i < cloudNum; i++) {
+		var points = new THREE.Points(geoms[i], materials[i]);
+		clouds.push(points)
+		scene.add(points);
+	}
+	
+	// 进行渲染
+	renderer.render(scene, camera);
+
+    // 动画
+	function animate () {
+		clouds.forEach(function (points, i) {
+			var vertices = points.geometry.vertices;
+		
+	        vertices.forEach(function (v, idx) {
+	        	v.y = v.y - (v.velocityY);
+	            v.x = v.x - (v.velocityX);
+	            v.z = v.z - (v.velocityZ);
+	            
+	            if (v.y <= 0) v.y = 60;
+	            if (v.x <= -20 || v.x >= 20) v.x = v.x * -1;  
+	            if (v.z <= -20 || v.z >= 20) v.velocityZ = v.velocityZ * -1;
+	        });
+
+	        //重要：渲染时需要更新位置（如果没有设为true,则无法显示动画）
+	        points.geometry.verticesNeedUpdate = true;
+		});
+
+		renderer.render(scene, camera);
+		requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+</body>
+</html>
