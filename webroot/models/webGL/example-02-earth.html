@@ -4,13 +4,21 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="../../js/three/three.js"></script>
+	<style>
+		html, body{
+			padding:  0;
+			margin: 0;
+		}
+	</style>
 </head>
 <body>
 	<div id="earth"></div>
 <script>
+	var width = window.innerWidth;
+	var height = window.innerHeight;
 	// HTML中无canvas标签，自动创建
 	var renderer = new THREE.WebGLRenderer({antialias:true});
-	renderer.setSize(800, 600);
+	renderer.setSize(width, height);
 	var parentEle = document.getElementById('earth')
 	parentEle.appendChild(renderer.domElement);
 
@@ -19,7 +27,7 @@
 	// 场景
 	var scene = new THREE.Scene();
 	// 正交投影摄像机
-	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	var camera = new THREE.PerspectiveCamera(45, width/height, 1, 10);
 	camera.position.set(0,0,4);
 	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -80,6 +88,16 @@
 		id = requestAnimationFrame(animate);
 	}
 	animate();
+
+	// 浏览器自适应
+	function onResize () {
+		width =  window.innerWidth;
+		height = window.innerHeight;
+		camera.aspect = width / height; // 设置屏幕长宽比
+		camera.updateProjectionMatrix();
+		renderer.setSize(width, height);
+	}
+	window.addEventListener('resize', onResize);
 </script>
 </body>
 </html>

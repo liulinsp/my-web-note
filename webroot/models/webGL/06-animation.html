@@ -108,7 +108,7 @@ function init () {
 	function animate () {
 		v += Math.PI / 100
 		v = v % (Math.PI * 2)
-		cube.rotation.set(v, v , v);
+		cube.rotation.set(v, v, v);
 		renderer.render(scene, camera);
 		id = requestAnimationFrame(animate);
 	}
