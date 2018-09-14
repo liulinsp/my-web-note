@@ -21,7 +21,9 @@ THREE.AmbientLight(hex)
 THREE.PointLight(hex, intensity, distance)
 1. hex是光源十六进制的颜色值；
 2. intensity是亮度，缺省值为1，表示100%亮度；
+	（如果设为2，会得到一个两倍强度的亮度）
 3. distance是光源最远照射到的距离，缺省值为0。
+	(值为0时，意味着光的强度不会随着距离增加而减少)
 
 <b>脚本：</b>
 // 环境光
@@ -106,11 +108,6 @@ THREE.DirectionalLight(hex, intensity)
 * 只要平面是平行的，那么得到的光照也一定是相同的。
 
 <b>脚本：</b>
-// 平行光
-var light = new THREE.DirectionalLight();
-light.position.set(2, 1, 3);
-scene.add(light);
-
 // 物体
 var cube1 = new THREE.Mesh(
 	new THREE.CubeGeometry(1, 1, 1),
@@ -127,6 +124,14 @@ var cube2 = new THREE.Mesh(
 cube2.position.set(1, 0, 0);
 cube2.rotation.set(Math.PI / 4, Math.PI / 4 , 0);
 scene.add(cube2);
+
+// 平行光
+var light = new THREE.DirectionalLight();
+light.position.set(2, 1, 3);
+var cube = new THREE.Object3D();
+cube.position.set(0, 0, 0);
+light.target = cube; // 设置目标物体
+scene.add(light);
 		</pre>
 	</div>
 	<div class="aShow note" id="app2">
@@ -152,11 +157,6 @@ function init2 () {
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 	scene.add(camera);
 
-	// 平行光
-	var light = new THREE.DirectionalLight();
-	light.position.set(2, 1, 3);
-	scene.add(light);
-
 	// 材料
 	var material = new THREE.MeshPhongMaterial({
 	    color: 0x04fe42,
@@ -180,6 +180,14 @@ function init2 () {
 	cube2.position.set(1, 0, 0);
 	cube2.rotation.set(Math.PI / 4, Math.PI / 4 , 0);
 	scene.add(cube2);
+
+	// 平行光
+	var light = new THREE.DirectionalLight();
+	light.position.set(2, 1, 3);
+	var cube = new THREE.Object3D();
+	cube.position.set(0, 0, 0);
+	light.target = cube; // 设置目标物体
+	scene.add(light);
 
 	// 进行渲染
 	renderer.render(scene, camera);
@@ -322,6 +330,19 @@ light.shadow.camera.far = 20;
 light.shadow.camera.fov = 50;</mark>
 scene.add(light);
 
+/*// 平行光
+var light = new THREE.DirectionalLight();
+light.position.set(0, 10, 0);
+light.target = cube; // 设置目标物体
+light.castShadow = true; // 需要产生阴影
+light.shadow.camera.left = -10;
+light.shadow.camera.right = 10;
+light.shadow.camera.top = 10;
+light.shadow.camera.bottom = -10;
+light.shadow.camera.near = 8;
+light.shadow.camera.far = 26;
+scene.add(light);*/
+
 // 告诉渲染器渲染阴影
 <mark>renderer.shadowMap.enabled = true;</mark>
 // 软阴影(默认：THREE.PCFShadowMap)
@@ -380,7 +401,7 @@ function init4 () {
 	plane.receiveShadow  = true; // 需要接收阴影
 	scene.add(plane);
 
-	// 聚光灯
+	/*// 聚光灯
 	var light = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 4, 25);
 	light.position.set(0, 10, 0);
 	light.target = cube; // 设置目标物体
@@ -390,10 +411,334 @@ function init4 () {
 	light.shadow.camera.near = 2;
 	light.shadow.camera.far = 20;
 	light.shadow.camera.fov = 50;
+	scene.add(light);*/
+
+	// 平行光
+	var light = new THREE.DirectionalLight();
+	light.position.set(0, 10, 0);
+	light.target = cube; // 设置目标物体
+	light.castShadow = true; // 需要产生阴影
+	light.shadow.camera.left = -10;
+	light.shadow.camera.right = 10;
+	light.shadow.camera.top = 10;
+	light.shadow.camera.bottom = -10;
+	light.shadow.camera.near = 8;
+	light.shadow.camera.far = 26;
 	scene.add(light);
 
 	// 告诉渲染器渲染阴影
 	renderer.shadowMap.enabled = true;
+	// 软阴影(默认：THREE.PCFShadowMap)
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+
+<div class="aTitle">特殊光源 - 半球光 （更自然的户外光照效果）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>半球光：</b>
+THREE.HemisphereLight(skyColor, groundColor, intensity)
+
+1. skyColor 天空颜色，默认：0xffffff
+2. groundColor 地面颜色，默认：0xffffff
+3. distance 光照强度，默认为1
+
+<b>脚本：</b>
+// 环境光
+var ambientLight = new THREE.AmbientLight(0x555555);
+scene.add(ambientLight);
+
+// 平行光
+var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight.position.set(0, 3, -3);
+dirLight.target = cube;
+dirLight.castShadow = true;
+scene.add(dirLight);
+
+// 半球光
+var hemiLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.5);
+scene.add(hemiLight);
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+	</div>
+</div>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app5')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 30);
+	camera.position.set(0, 10, 10);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 物体
+	var cube = new THREE.Mesh(
+		new THREE.TorusGeometry(3, 1, 64, 64, Math.PI * 2),
+	    /*new THREE.MeshLambertMaterial({
+            color: 0x0d11c2,
+            emissive: 0x114e19
+        })*/
+        new THREE.MeshPhongMaterial({
+		    color: 0x0cb836,
+			emissive: 0x024004,
+			shininess: 1000
+		})
+	);
+	cube.position.set(0, 1, 0);
+	cube.rotation.set(-Math.PI / 2, 0 , 0);
+	cube.castShadow = true
+	scene.add(cube);
+
+	// 平面
+	var plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20),
+	    new THREE.MeshLambertMaterial({
+            color: 0x433d3d
+        })
+	);
+	plane.position.set(0, 0, 0);
+	plane.rotation.set(-Math.PI / 2, 0 , 0);
+	plane.receiveShadow  = true; // 需要接收阴影
+	scene.add(plane);
+
+	// 环境光
+	var ambientLight = new THREE.AmbientLight(0x555555);
+	scene.add(ambientLight);
+
+	/*// 聚光灯
+	var spotLight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI/6, 25);
+	spotLight.position.set(5, 20, 0);
+	spotLight.target = cube; // 设置目标物体
+	spotLight.castShadow = true;
+	spotLight.shadow.mapSize.width = 512;
+	spotLight.shadow.mapSize.height = 512;
+	spotLight.shadow.camera.near = 2;
+	spotLight.shadow.camera.far = 20;
+	spotLight.shadow.camera.fov = 50;
+	scene.add(spotLight);*/
+
+	// 平行光
+	var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(0, 3, -3);
+    dirLight.target = cube;
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+
+	// 半球光
+	var hemiLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.5);
+	scene.add(hemiLight);
+
+	/*var helper = new THREE.HemisphereLightHelper( hemiLight, 5 );
+  	scene.add( helper );*/
+
+	// 告诉渲染器渲染阴影
+	renderer.shadowMap.enabled = true;
+	// 软阴影(默认：THREE.PCFShadowMap)
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+
+<div class="aTitle">特殊光源 - 矩形发光区域</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>矩形发光区域：</b>
+THREE.RectAreaLight(color, intensity, width, height)
+
+1. color 颜色，默认：0xffffff
+2. distance 光照强度，默认为1
+3. width 发光区域的宽度，默认：10
+4. height 发光区域的高度，默认：10
+
+* 不支持阴影
+* 只支持 MeshStandardMaterial 和 MeshPhysicalMaterial 材质
+
+<b>脚本：</b>
+// 平面
+var plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20),
+    new THREE.<mark>MeshStandardMaterial</mark>({
+        color: 0x433d3d
+    })
+);
+plane.position.set(0, 0, 0);
+plane.rotation.set(-Math.PI / 2, 0 , 0);
+scene.add(plane);
+
+// 环境光
+var ambientLight = new THREE.AmbientLight(0x555555);
+scene.add(ambientLight);
+
+// 平行光
+var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight.position.set(0, 3, -3);
+new THREE.Object3D()
+scene.add(dirLight);
+
+// 矩形发光区域
+<mark>var rectLight = new THREE.RectAreaLight( 0xff0000, 20,  2, 4 );
+rectLight.position.set( 0, 2, -10 );
+rectLight.lookAt( 0, 0, 0 );
+scene.add( rectLight );</mark>
+
+rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
+scene.add( rectLightHelper );
+		</pre>
+	</div>
+	<div class="aShow note" id="app6">
+	</div>
+</div>
+<script type="text/javascript">
+init6();
+function init6 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app6')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 30);
+	camera.position.set(0, 5, 5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 3, 0));
+	scene.add(camera);
+
+	// 平面
+	var plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20),
+	    new THREE.MeshStandardMaterial({
+            color: 0x433d3d
+        })
+	);
+	plane.position.set(0, 0, 0);
+	plane.rotation.set(-Math.PI / 2, 0 , 0);
+	scene.add(plane);
+
+	// 环境光
+	var ambientLight = new THREE.AmbientLight(0x555555);
+	scene.add(ambientLight);
+
+	// 平行光
+	var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(0, 3, -3);
+    new THREE.Object3D()
+    scene.add(dirLight);
+
+	// 矩形发光区域
+	var rectLight = new THREE.RectAreaLight( 0xff0000, 20,  2, 4 );
+	rectLight.position.set( 0, 2, -5 );
+	rectLight.lookAt( 0, 0, 0 );
+	scene.add( rectLight );
+
+	rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
+	scene.add( rectLightHelper );
+
+	// 软阴影(默认：THREE.PCFShadowMap)
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+
+<div class="aTitle">特殊光源 - 镜头光晕</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>镜头光晕：</b>
+THREE.Lensflare()
+
+* 需要添加LensflareElement元素
+THREE.LensflareElement( texture, size, distance, color, blending)
+
+1. texture 纹理
+2. size 尺寸
+3. distance 距离，默认：10
+4. blending 混合，多种材质混合使用
+
+<b>脚本：</b>
+		</pre>
+	</div>
+	<div class="aShow note" id="app7">
+	</div>
+</div>
+<script src="../../js/three/Lensflare.js"></script>
+<script type="text/javascript">
+init7();
+function init7 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app7')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 30);
+	camera.position.set(0, 0, 5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	/*// 平面
+	var plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20),
+	    new THREE.MeshLambertMaterial({
+            color: 0x433d3d
+        })
+	);
+	plane.position.set(0, 0, 0);
+	plane.rotation.set(-Math.PI / 2, 0 , 0);
+	scene.add(plane);*/
+
+	// 环境光
+	var ambientLight = new THREE.AmbientLight(0x555555);
+	scene.add(ambientLight);
+
+	/*// 平行光
+	var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(0, 3, -3);
+    new THREE.Object3D()
+    scene.add(dirLight);*/
+
+	// 使用光晕的点光源
+	var pointLight = new THREE.PointLight( 0xffffff, 1.5, 2000 );
+	pointLight.position.set( 0, 0, 100 );
+	var textureLoader = new THREE.TextureLoader();
+	var textureFlare0 = textureLoader.load( "./lensflare/lensflare0.png" );
+	var textureFlare1 = textureLoader.load( "./lensflare/lensflare2.png" );
+	var textureFlare2 = textureLoader.load( "./lensflare/lensflare3.png" );
+
+	var lensflare = new THREE.Lensflare();
+	lensflare.addElement( new THREE.LensflareElement( textureFlare0, 512, 0 ) );
+	lensflare.addElement( new THREE.LensflareElement( textureFlare1, 512, 0 ) );
+	lensflare.addElement( new THREE.LensflareElement( textureFlare2, 60, 0.6 ) );
+	pointLight.add( lensflare );
+	scene.add( pointLight );
+
 	// 软阴影(默认：THREE.PCFShadowMap)
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	// 进行渲染
