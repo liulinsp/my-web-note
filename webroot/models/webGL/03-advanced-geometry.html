@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>webGL 高级几何体</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">高级几何体 - 凸包</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数：</b>
+THREE.ConvexGeometry( points )
+* points: 顶点数组
+
+<b>脚本：</b>
+<mark>&lt;script src="../../js/three/QuickHull.js"&gt;&lt;/script&gt;
+&lt;script src="../../js/three/geometry/ConvexGeometry.js"&gt;&lt;/script&gt;</mark>
+
+// 灯光
+scene.add( new THREE.AmbientLight( 0x222222 ) );
+var light = new THREE.PointLight( 0xffffff, 1 );
+<mark>camera.add( light );</mark> // 居然添加到摄像机上了?????????????
+
+var group = new THREE.Group();
+
+// 顶点：获得12面体的顶点
+var vertices = new THREE.DodecahedronGeometry(1).vertices;
+
+var texture = new THREE.TextureLoader().load( './disc.png' );
+var pointsMaterial = new THREE.PointsMaterial( {
+	color: 0x0080ff,
+	map: texture,
+	size: 0.5,
+	alphaTest: 0.5,
+	depthTest: false
+});
+var pointsGeometry = new THREE.BufferGeometry().setFromPoints( vertices );
+var points = new THREE.Points( pointsGeometry, pointsMaterial );
+group.add(points);
+
+// 凸包
+var meshMaterial = new THREE.MeshLambertMaterial( {
+	color: 0xffffff,
+	opacity: 0.5,
+	transparent: true
+} );
+
+<mark>var meshGeometry = new THREE.ConvexBufferGeometry( vertices );</mark>
+var mesh = new THREE.Mesh( meshGeometry, meshMaterial );
+mesh.material.side = THREE.BackSide;
+mesh.renderOrder = 0;
+group.add( mesh );
+
+var mesh = new THREE.Mesh( meshGeometry, meshMaterial.clone() );
+mesh.material.side = THREE.FrontSide;
+mesh.renderOrder = 1;
+group.add( mesh );
+
+scene.add(group);
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<script src="../../js/three/QuickHull.js"></script>
+<script src="../../js/three/geometry/ConvexGeometry.js"></script>
+<script type="text/javascript">
+init();
+function init () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(2,2,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0x222222 ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	camera.add( light ); // 居然添加到摄像机上了?????????????
+
+	var group = new THREE.Group();
+
+	// 顶点
+	var vertices = new THREE.DodecahedronGeometry(1).vertices; // 获得12面体的顶点
+	
+	var texture = new THREE.TextureLoader().load( './disc.png' );
+	var pointsMaterial = new THREE.PointsMaterial( {
+		color: 0x0080ff,
+		map: texture,
+		size: 0.5,
+		alphaTest: 0.5,
+		depthTest: false
+	});
+	var pointsGeometry = new THREE.BufferGeometry().setFromPoints( vertices );
+	var points = new THREE.Points( pointsGeometry, pointsMaterial );
+	group.add(points);
+	
+	// 凸包
+	var meshMaterial = new THREE.MeshLambertMaterial( {
+		color: 0xffffff,
+		opacity: 0.5,
+		transparent: true
+	} );
+
+	var meshGeometry = new THREE.ConvexBufferGeometry( vertices );
+	var mesh = new THREE.Mesh( meshGeometry, meshMaterial );
+	mesh.material.side = THREE.BackSide;
+	mesh.renderOrder = 0;
+	group.add( mesh );
+
+	var mesh = new THREE.Mesh( meshGeometry, meshMaterial.clone() );
+	mesh.material.side = THREE.FrontSide;
+	mesh.renderOrder = 1;
+	group.add( mesh );
+
+	scene.add(group);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		group.rotation.set(v, 0, -v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+<div class="aTitle">高级几何体 - 扫描几何体 ???</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数：</b>
+THREE.LatheGeometry(points, segments, phiStart, phiLength)
+* points: 顶点数组（沿Y轴扫描）
+* segments: 分段数，默认为：12
+* phiStart：创建时从圆的何处开始，默认值为：0
+* phiLength：扫描的角度，默认值为：2PI
+
+<b>脚本：</b>
+
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(2,2,70);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	scene.add( light );
+
+	// 生成顶点
+	var points = [];
+    var height = 5;
+    var count = 30;
+    for (var i = 0; i < count; i++) {
+        points.push(
+        	new THREE.Vector3((Math.sin(i * 0.2) + Math.cos(i * 0.3)) * height + 12,
+        	( i - count ) + count / 2),
+        	0
+        );
+    }
+    var latheGeometry = new THREE.LatheGeometry(points, 64, 0, Math.PI * 2);
+	var meshMaterial = new THREE.MeshLambertMaterial( {
+		color: 0xffffff,
+		opacity: 0.5,
+		transparent: true
+	});
+	var mesh = new THREE.Mesh( latheGeometry, meshMaterial );
+	scene.add(mesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		mesh.rotation.set(v, 0, 0);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+<div class="aTitle">高级几何体 - 拉伸几何体</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数：</b>
+THREE.ExtrudeGeometry(shapes, options)
+* shapes: 一个图形或多个图形数组
+* options: 操作对象
+	# curveSegments：拉伸图形时曲线分成多少段，默认：12
+	# steps： 该属性指定拉伸提沿深度方向分成多少段，默认：1
+	# depth：拉伸形状的深度，默认：100
+	# bevelEnabled： 是否应用斜角，默认： true
+	# bevelThickness：指定斜角的深度， 默认：6
+	# bevelSize: 指定斜角的高度，这个高度将增加几何体的高度，默认：2
+	# bevelSegments：斜角的分段数，默认：3
+	# extrudePath：指定图形沿什么路径（THREE.CurvePath）拉伸，默认：z轴
+	# UVGenerator：当给材质使用纹理时，UV映射确定纹理的哪一部分用于特定面。？？？？
+
+<b>脚本：</b>
+var shape = drawShape();
+var options = {
+    depth: 2,
+    bevelThickness: 1,
+    bevelSize: 1,
+    bevelSegments: 1,
+    bevelEnabled: true,
+    curveSegments: 16,
+    steps: 2
+};
+var geom = new THREE.ExtrudeGeometry(drawShape(), options);
+// 几何体位移，进行居中
+geom.applyMatrix(new THREE.Matrix4().makeTranslation(-20, -25, 0));
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534, 
+	side: THREE.DoubleSide, flatShading: true } );
+var mesh = new THREE.Mesh( geom, material );
+scene.add(mesh);
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(0,0,50);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	light.position.set(0,0,50);
+	scene.add( light );
+
+	var shape = drawShape();
+	var options = {
+        depth: 2,
+        bevelThickness: 1,
+        bevelSize: 1,
+        bevelSegments: 1,
+        bevelEnabled: true,
+        curveSegments: 16,
+        steps: 2
+    };
+	var geom = new THREE.ExtrudeGeometry(drawShape(), options);
+	// 几何体位移，进行居中
+	geom.applyMatrix(new THREE.Matrix4().makeTranslation(-20, -25, 0));
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534, side: THREE.DoubleSide, flatShading: true } );
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		mesh.rotation.set(0, v, 0);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+
+function drawShape() {
+    // create a basic shape
+    var shape = new THREE.Shape();
+
+    // startpoint
+    shape.moveTo(10, 10);
+
+    // straight line upwards
+    shape.lineTo(10, 40);
+
+    // the top of the figure, curve to the right
+    shape.bezierCurveTo(15, 25, 25, 25, 30, 40);
+
+    // spline back down
+    shape.splineThru(
+            [new THREE.Vector2(32, 30),
+                new THREE.Vector2(28, 20),
+                new THREE.Vector2(30, 10),
+            ]);
+
+    // curve at the bottom
+    shape.quadraticCurveTo(20, 15, 10, 10);
+
+    // add 'eye' hole one
+    var hole1 = new THREE.Path();
+    hole1.absellipse(16, 24, 2, 3, 0, Math.PI * 2, true);
+    shape.holes.push(hole1);
+
+    // add 'eye hole 2'
+    var hole2 = new THREE.Path();
+    hole2.absellipse(23, 24, 2, 3, 0, Math.PI * 2, true);
+    shape.holes.push(hole2);
+
+    // add 'mouth'
+    var hole3 = new THREE.Path();
+    hole3.absarc(20, 16, 2, 0, Math.PI, true);
+    shape.holes.push(hole3);
+
+    // return the shape
+    return shape;
+}
+</script>
+
+
+<div class="aTitle">高级几何体 - 管状几何体</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数：</b>
+THREE.TubeGeometry(path, tubularSegments, radius,  radialSegments, closed)
+* path: Curve对象指定的路径
+* tubularSegments: 管道长度的分段数，默认：64
+* radius：管道的半径，默认：1
+* radialSegments：管道圆周的分段数，默认：8
+* closed：是否将管道的头尾连接，默认：false
+<b>脚本：</b>
+
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+	</div>
+</div>
+
+<script type="text/javascript">
+init4();
+function init4 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app4')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(0,0,50);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	light.position.set(0,0,50);
+	scene.add( light );
+
+	function CustomSinCurve( scale ) {
+		THREE.Curve.call( this );
+		this.scale = ( scale === undefined ) ? 1 : scale;
+	}
+
+	CustomSinCurve.prototype = Object.create( THREE.Curve.prototype );
+	CustomSinCurve.prototype.constructor = CustomSinCurve;
+
+	CustomSinCurve.prototype.getPoint = function ( t ) {
+		var tx = t * 3 - 1.5;
+		var ty = Math.sin( 2 * Math.PI * t );
+		var tz = 0;
+		return new THREE.Vector3( tx, ty, tz ).multiplyScalar( this.scale );
+	};
+
+	var path = new CustomSinCurve( 10 );
+	var geom = new THREE.TubeGeometry( path, 64, 2, 16, false );
+
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534, side: THREE.DoubleSide, flatShading: true } );
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		mesh.rotation.set(v, v, 0);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+</body>
+</html>

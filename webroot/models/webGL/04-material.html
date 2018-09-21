@@ -34,6 +34,11 @@
    * 法向材质可以将材质的颜色设置为其法向量的方向，有时候对于调试很有帮助。
 
    THREE.MeshNormalMaterial()
+
+<b>5. 深度材质</b>
+   * 深度材质使用从摄像机到网格的距离来决定如何给网格上色
+   HREE.MeshDepthMaterial
+
 		</pre>
 	</div>
 </div>
@@ -110,9 +115,11 @@ THREE.MeshLambertMaterial(opt)
 
 <b>常用属性</b>
 1. color：是用来表现材质对散射光的反射能力，也是最常用来设置材质颜色的属性
-2. emissive：是材质的自发光颜色，可以用来表现光源的颜色
-// 3. ambient： 表示对环境光的反射能力，只有当设置了AmbientLight后，该值才是有效的
-// 材质对环境光的反射能力与环境光强相乘后得到材质实际表现的颜色(<a href="07-light.html">参看</a>)
+2. emissive：是材质的自发光颜色，可以用来表现光源的颜色。默认值为黑色。
+             （它其实并不像一个光源，只是一种纯粹的、不受其他光照影响的颜色）
+<!-- 3. ambient： 表示对环境光的反射能力，只有当设置了AmbientLight后，该值才是有效的
+             这个颜色会与环境光提供的颜色相乘。默认值为白色。
+// 材质对环境光的反射能力与环境光强相乘后得到材质实际表现的颜色(<a href="07-light.html">参看</a>) -->
 
 
 <b>示例：</b>
@@ -596,5 +603,699 @@ function init7 () {
 	renderer.render(scene, camera);
 }
 </script>
+
+
+<div class="aTitle">深度材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+摄像机到网格的距离决定物体的颜色
+<b>公式：</b>
+THREE.MeshDepthMaterial(opt)
+		</pre>
+	</div>
+	<div class="aShow note" id="app8">
+	</div>
+</div>
+<script type="text/javascript">
+init8();
+function init8 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app8');
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 8);
+	camera.position.set(2,2,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 正方体
+	var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1, 2, 2, 2),
+	    new THREE.MeshDepthMaterial()
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+
+<div class="aTitle">常规材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+由法向量（与面垂直的向量）决定颜色
+* 如果是球体，旋转时颜色不变，就像静止的
+<b>公式：</b>
+THREE.MeshNormalMaterial(opt)
+
+<b>脚本：</b>
+var geom = new THREE.CubeGeometry(1, 1, 1, 2, 2, 2);
+// 球体，旋转时颜色不变，就像静止的
+// new THREE.SphereGeometry(1, 64, 64);
+var materal = new THREE.MeshNormalMaterial();
+var cube = new THREE.Mesh(geom, materal);
+scene.add(cube);
+		</pre>
+	</div>
+	<div class="aShow note" id="app9">
+	</div>
+</div>
+<script type="text/javascript">
+init9();
+function init9 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app9');
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 8);
+	camera.position.set(2,2,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	var geom = new THREE.CubeGeometry(1, 1, 1, 2, 2, 2);
+	// 球体，旋转时颜色不变，就像静止的
+	// new THREE.SphereGeometry(1, 64, 64); 
+	var materal = new THREE.MeshNormalMaterial();
+	var cube = new THREE.Mesh(geom, materal);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 100
+		v = v % (Math.PI * 2)
+		cube.rotation.set(v, v, v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+<div class="aTitle">多个面使用不同材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本:</b>
+// 正方体
+var geom = new THREE.CubeGeometry(1, 1, 1, 2, 2, 2);
+var materials = [];
+for (var  i = 0; i < 6; i++) {
+	var h = i * 60;
+	var color = new THREE.Color("hsl("+h+", 100%, 50%)");
+	materials.push(new THREE.MeshBasicMaterial({color: color}));
+}
+
+var cube = new THREE.Mesh(geom, materials);
+scene.add(cube);
+		</pre>
+	</div>
+	<div class="aShow note" id="app10">
+	</div>
+</div>
+<script type="text/javascript">
+init10();
+function init10 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app10');
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 8);
+	camera.position.set(2,2,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 正方体
+	var geom = new THREE.CubeGeometry(1, 1, 1, 2, 2, 2);
+	var materials = [];
+	for (var  i = 0; i < 6; i++) {
+		var h = i * 60;
+		var color = new THREE.Color("hsl("+h+", 100%, 50%)");
+		materials.push(new THREE.MeshBasicMaterial({color: color}));
+	}
+	
+	var cube = new THREE.Mesh(geom, materials);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 100
+		v = v % (Math.PI * 2)
+		cube.rotation.set(v, -v, -v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+
+<div class="aTitle">线段基础材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数:</b>
+THREE.LineBasicMaterial(opt)
+* color：线的颜色
+* linewidth: 线的宽度
+
+<b>脚本:</b>
+var vertices = []; // 所有顶点
+var colors = []; // 所有颜色
+var hilbertPoints = hilbert3D( new THREE.Vector3( 0,0,0 ), 200.0, 1, 0, 1, 2, 3, 4, 5, 6, 7 );
+
+/*// 创建普通三维直角线
+var geometry = new THREE.Geometry();
+vertices = hilbertPoints;
+for ( var i = 0; i < hilbertPoints.length; i++ ) {
+	var color = new THREE.Color();
+	color.setHSL( i / hilbertPoints.length, 1.0, 0.5 );
+	colors.push(color);
+}
+geometry.vertices = vertices;
+geometry.colors = colors;*/
+
+// 创建平滑的三维样条曲线
+var point = new THREE.Vector3();
+var color = new THREE.Color();
+var subdivisions = 6; // 细分倍数
+var spline = new THREE.CatmullRomCurve3( hilbertPoints );
+for ( var i = 0; i < hilbertPoints.length * subdivisions; i++ ) {
+	var t = i / ( hilbertPoints.length * subdivisions );
+	spline.getPoint( t, point );
+	vertices.push( point.x, point.y, point.z );
+
+	color.setHSL( i / ( hilbertPoints.length * subdivisions ), 1.0, 0.5 );
+	colors.push( color.r, color.g, color.b );
+}
+var geometry = new THREE.BufferGeometry();
+geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+
+
+<mark>var material = new THREE.LineBasicMaterial({
+	color: 0xffffff,
+	vertexColors: THREE.VertexColors
+});</mark>
+
+<mark>var line = new THREE.Line(geometry,  material);</mark>
+scene.add( line );
+		</pre>
+	</div>
+	<div class="aShow note" id="app11">
+	</div>
+</div>
+<script type="text/javascript">
+init11();
+function init11 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app11');
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000);
+	camera.position.set(0, 0, 700);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	
+	var vertices = []; // 所有顶点
+	var colors = []; // 所有颜色
+	var hilbertPoints = hilbert3D( new THREE.Vector3( 0,0,0 ), 200.0, 1, 0, 1, 2, 3, 4, 5, 6, 7 );
+
+	/*// 创建普通三维直角线
+	var geometry = new THREE.Geometry();
+	vertices = hilbertPoints;
+	for ( var i = 0; i < hilbertPoints.length; i++ ) {
+		var color = new THREE.Color();
+		color.setHSL( i / hilbertPoints.length, 1.0, 0.5 );
+		colors.push(color);
+	}
+	geometry.vertices = vertices;
+	geometry.colors = colors;*/
+
+	// 创建平滑的三维样条曲线
+	var point = new THREE.Vector3();
+	var color = new THREE.Color();
+	var subdivisions = 6; // 细分倍数
+	var spline = new THREE.CatmullRomCurve3( hilbertPoints );
+	for ( var i = 0; i < hilbertPoints.length * subdivisions; i++ ) {
+		var t = i / ( hilbertPoints.length * subdivisions );
+		spline.getPoint( t, point );
+		vertices.push( point.x, point.y, point.z );
+	
+		color.setHSL( i / ( hilbertPoints.length * subdivisions ), 1.0, 0.5 );
+		colors.push( color.r, color.g, color.b );
+	}
+	var geometry = new THREE.BufferGeometry();
+	geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+	geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+
+
+	var material = new THREE.LineBasicMaterial({
+		color: 0xffffff,
+		vertexColors: THREE.VertexColors
+	});
+
+	var line = new THREE.Line(geometry,  material);
+	scene.add( line );
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 120
+		v = v % (Math.PI * 2)
+		line.rotation.set(v, -v, -v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+	
+}
+
+/**
+ * Hilbert Curve: Generates 2D-Coordinates in a very fast way.
+ *
+ * @author Dylan Grafmyre
+ *
+ * Based on work by:
+ * @author Thomas Diewald
+ * @link http://www.openprocessing.org/visuals/?visualID=15599
+ *
+ * Based on `examples/canvas_lines_colors.html`:
+ * @author OpenShift guest
+ * @link https://github.com/mrdoob/three.js/blob/8413a860aa95ed29c79cbb7f857c97d7880d260f/examples/canvas_lines_colors.html
+ * @see  Line 149 - 186
+ *
+ * @param center     Center of Hilbert curve.
+ * @param size       Total width of Hilbert curve.
+ * @param iterations Number of subdivisions.
+ * @param v0         Corner index -X, +Y, -Z.
+ * @param v1         Corner index -X, +Y, +Z.
+ * @param v2         Corner index -X, -Y, +Z.
+ * @param v3         Corner index -X, -Y, -Z.
+ * @param v4         Corner index +X, -Y, -Z.
+ * @param v5         Corner index +X, -Y, +Z.
+ * @param v6         Corner index +X, +Y, +Z.
+ * @param v7         Corner index +X, +Y, -Z.
+ */
+function hilbert3D( center, size, iterations, v0, v1, v2, v3, v4, v5, v6, v7 ) {
+
+	// Default Vars
+	var center = undefined !== center ? center : new THREE.Vector3( 0, 0, 0 ),
+		size = undefined !== size ? size : 10,
+		half = size / 2,
+		iterations = undefined !== iterations ? iterations : 1,
+		v0 = undefined !== v0 ? v0 : 0,
+		v1 = undefined !== v1 ? v1 : 1,
+		v2 = undefined !== v2 ? v2 : 2,
+		v3 = undefined !== v3 ? v3 : 3,
+		v4 = undefined !== v4 ? v4 : 4,
+		v5 = undefined !== v5 ? v5 : 5,
+		v6 = undefined !== v6 ? v6 : 6,
+		v7 = undefined !== v7 ? v7 : 7
+	;
+
+	var vec_s = [
+		new THREE.Vector3( center.x - half, center.y + half, center.z - half ),
+		new THREE.Vector3( center.x - half, center.y + half, center.z + half ),
+		new THREE.Vector3( center.x - half, center.y - half, center.z + half ),
+		new THREE.Vector3( center.x - half, center.y - half, center.z - half ),
+		new THREE.Vector3( center.x + half, center.y - half, center.z - half ),
+		new THREE.Vector3( center.x + half, center.y - half, center.z + half ),
+		new THREE.Vector3( center.x + half, center.y + half, center.z + half ),
+		new THREE.Vector3( center.x + half, center.y + half, center.z - half )
+	];
+
+	var vec = [
+		vec_s[ v0 ],
+		vec_s[ v1 ],
+		vec_s[ v2 ],
+		vec_s[ v3 ],
+		vec_s[ v4 ],
+		vec_s[ v5 ],
+		vec_s[ v6 ],
+		vec_s[ v7 ]
+	];
+
+	// Recurse iterations
+	if ( -- iterations >= 0 ) {
+
+		var tmp = [];
+
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 0 ], half, iterations, v0, v3, v4, v7, v6, v5, v2, v1 ) );
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 1 ], half, iterations, v0, v7, v6, v1, v2, v5, v4, v3 ) );
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 2 ], half, iterations, v0, v7, v6, v1, v2, v5, v4, v3 ) );
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 3 ], half, iterations, v2, v3, v0, v1, v6, v7, v4, v5 ) );
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 4 ], half, iterations, v2, v3, v0, v1, v6, v7, v4, v5 ) );
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 5 ], half, iterations, v4, v3, v2, v5, v6, v1, v0, v7 ) );
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 6 ], half, iterations, v4, v3, v2, v5, v6, v1, v0, v7 ) );
+		Array.prototype.push.apply( tmp, hilbert3D( vec[ 7 ], half, iterations, v6, v5, v2, v1, v0, v3, v4, v7 ) );
+
+		// Return recursive call
+		return tmp;
+
+	}
+
+	// Return complete Hilbert Curve.
+	return vec;
+
+}
+
+</script>
+
+
+<div class="aTitle">线段虚线材质</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数:</b>
+THREE.LineDashedMaterial(opt)
+* color：线的颜色
+* linewidth: 线的宽度
+* dashSize: 虚线段的长度
+* gapSize: 虚线间隔的宽度
+* scale: 缩放dashSize和gapSize
+
+<b>脚本:</b>
+var geometry = new THREE.BufferGeometry();
+geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+
+
+var material = new THREE.LineDashedMaterial({
+	color: 0xffffff,
+	vertexColors: THREE.VertexColors,
+	linewidth: 1,
+	dashSize: 16,
+	gapSize: 4,
+	scale: 1
+});
+
+var line = new THREE.Line(geometry,  material);
+<mark>line.computeLineDistances();</mark>
+scene.add( line );
+		</pre>
+	</div>
+	<div class="aShow note" id="app12">
+	</div>
+</div>
+<script type="text/javascript">
+init12();
+function init12 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app12');
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000);
+	camera.position.set(0, 0, 700);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	
+	var vertices = []; // 所有顶点
+	var colors = []; // 所有颜色
+	var hilbertPoints = hilbert3D( new THREE.Vector3( 0,0,0 ), 200.0, 1, 0, 1, 2, 3, 4, 5, 6, 7 );
+
+	/*// 创建普通三维直角线
+	var geometry = new THREE.Geometry();
+	vertices = hilbertPoints;
+	for ( var i = 0; i < hilbertPoints.length; i++ ) {
+		var color = new THREE.Color();
+		color.setHSL( i / hilbertPoints.length, 1.0, 0.5 );
+		colors.push(color);
+	}
+	geometry.vertices = vertices;
+	geometry.colors = colors;*/
+
+	// 创建平滑的三维样条曲线
+	var point = new THREE.Vector3();
+	var color = new THREE.Color();
+	var subdivisions = 6; // 细分倍数
+	var spline = new THREE.CatmullRomCurve3( hilbertPoints );
+	for ( var i = 0; i < hilbertPoints.length * subdivisions; i++ ) {
+		var t = i / ( hilbertPoints.length * subdivisions );
+		spline.getPoint( t, point );
+		vertices.push( point.x, point.y, point.z );
+	
+		color.setHSL( i / ( hilbertPoints.length * subdivisions ), 1.0, 0.5 );
+		colors.push( color.r, color.g, color.b );
+	}
+	var geometry = new THREE.BufferGeometry();
+	geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+	geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+
+
+	var material = new THREE.LineDashedMaterial({
+		color: 0xffffff,
+		vertexColors: THREE.VertexColors,
+		linewidth: 1,
+		dashSize: 16,
+		gapSize: 4,
+		scale: 1
+	});
+
+	var line = new THREE.Line(geometry,  material);
+	line.computeLineDistances(); // *** 重要：计算线段顶点间的距离，否则无法显示虚线
+	scene.add( line );
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 120
+		v = v % (Math.PI * 2)
+		line.rotation.set(v, -v, -v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+	
+}
+</script>
+
+<div class="aTitle">着色器材质????(待完善)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+THREE.ShaderMaterial(opt)
+		</pre>
+	</div>
+	<div class="aShow note" id="app111">
+	</div>
+</div>
+<script id="waterVertexShader" type="x-shader/x-vertex">
+	uniform sampler2D heightmap;
+	#define PHONG
+	varying vec3 vViewPosition;
+	#ifndef FLAT_SHADED
+		varying vec3 vNormal;
+	#endif
+	#include <common>
+	#include <uv_pars_vertex>
+	#include <uv2_pars_vertex>
+	#include <displacementmap_pars_vertex>
+	#include <envmap_pars_vertex>
+	#include <color_pars_vertex>
+	#include <morphtarget_pars_vertex>
+	#include <skinning_pars_vertex>
+	#include <shadowmap_pars_vertex>
+	#include <logdepthbuf_pars_vertex>
+	#include <clipping_planes_pars_vertex>
+	void main() {
+		vec2 cellSize = vec2( 1.0 / WIDTH, 1.0 / WIDTH );
+		#include <uv_vertex>
+		#include <uv2_vertex>
+		#include <color_vertex>
+		// # include <beginnormal_vertex>
+		// Compute normal from heightmap
+		vec3 objectNormal = vec3(
+			( texture2D( heightmap, uv + vec2( - cellSize.x, 0 ) ).x - texture2D( heightmap, uv + vec2( cellSize.x, 0 ) ).x ) * WIDTH / BOUNDS,
+			( texture2D( heightmap, uv + vec2( 0, - cellSize.y ) ).x - texture2D( heightmap, uv + vec2( 0, cellSize.y ) ).x ) * WIDTH / BOUNDS,
+			1.0 );
+		//<beginnormal_vertex>
+		#include <morphnormal_vertex>
+		#include <skinbase_vertex>
+		#include <skinnormal_vertex>
+		#include <defaultnormal_vertex>
+	#ifndef FLAT_SHADED // Normal computed with derivatives when FLAT_SHADED
+		vNormal = normalize( transformedNormal );
+	#endif
+		//# include <begin_vertex>
+		float heightValue = texture2D( heightmap, uv ).x;
+		vec3 transformed = vec3( position.x, position.y, heightValue );
+		//<begin_vertex>
+		#include <morphtarget_vertex>
+		#include <skinning_vertex>
+		#include <displacementmap_vertex>
+		#include <project_vertex>
+		#include <logdepthbuf_vertex>
+		#include <clipping_planes_vertex>
+		vViewPosition = - mvPosition.xyz;
+		#include <worldpos_vertex>
+		#include <envmap_vertex>
+		#include <shadowmap_vertex>
+	}
+</script>
+<script type="text/javascript">
+init111();
+function init111 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app111')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 500);
+	camera.position.set(0,300,300);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x999999);
+	scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 200, 200, 200 );
+	lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+	var BOUNDS = 512;
+	var WIDTH = 128;
+
+	var geometry = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, WIDTH-1, WIDTH-1 );
+	// 材料
+	/*var material = new THREE.MeshPhongMaterial({
+		// emissive: 0xff0000,
+		color: 0xff0000,
+	    specular: 0xffff00,
+	    shininess: 100
+	});*/
+	var material = new THREE.ShaderMaterial( {
+		uniforms: THREE.UniformsUtils.merge( [
+			THREE.ShaderLib[ 'phong' ].uniforms,
+			{
+				heightmap: { value: null }
+			}
+		] ),
+		vertexShader: document.getElementById( 'waterVertexShader' ).textContent,
+		fragmentShader: THREE.ShaderChunk[ 'meshphong_frag' ]
+	} );
+	material.lights = true;
+	material.color = new THREE.Color(0x0040C0);
+	material.specular = new THREE.Color( 0x111111 );
+	material.shininess = 50;
+
+	material.uniforms.diffuse.value = material.color;
+	material.uniforms.specular.value = material.specular;
+	material.uniforms.shininess.value = Math.max( material.shininess, 1e-4 );
+	material.uniforms.opacity.value = material.opacity;
+
+	material.defines.WIDTH = WIDTH.toFixed( 1 );
+	material.defines.BOUNDS = BOUNDS.toFixed( 1 );
+
+	var waterMesh = new THREE.Mesh(
+		geometry,
+	    material
+	);
+	waterMesh.rotation.x = - Math.PI / 2;
+	scene.add(waterMesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+		
 </body>
 </html>

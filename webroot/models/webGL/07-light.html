@@ -654,15 +654,13 @@ function init6 () {
 	rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
 	scene.add( rectLightHelper );
 
-	// 软阴影(默认：THREE.PCFShadowMap)
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	// 进行渲染
 	renderer.render(scene, camera);
 }
 </script>
 
 
-<div class="aTitle">特殊光源 - 镜头光晕</div>
+<div class="aTitle">特殊光源 - 镜头光晕?????</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
@@ -704,6 +702,19 @@ function init7 () {
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 	scene.add(camera);
 
+	// 物体
+	/*var cube = new THREE.Mesh(
+		new THREE.TorusGeometry(1, 0.3, 64, 64, Math.PI * 2),
+	    new THREE.MeshLambertMaterial({
+            color: 0x0d11c2,
+            emissive: 0x114e19
+        })
+	);
+	cube.position.set(0, 0, 0);
+	cube.rotation.set(-Math.PI / 3, 0 , 0);
+	cube.castShadow = true
+	scene.add(cube);*/
+
 	/*// 平面
 	var plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20),
 	    new THREE.MeshLambertMaterial({
@@ -715,8 +726,8 @@ function init7 () {
 	scene.add(plane);*/
 
 	// 环境光
-	var ambientLight = new THREE.AmbientLight(0x555555);
-	scene.add(ambientLight);
+	// var ambientLight = new THREE.AmbientLight(0x555555);
+	// scene.add(ambientLight);
 
 	/*// 平行光
 	var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -726,7 +737,8 @@ function init7 () {
 
 	// 使用光晕的点光源
 	var pointLight = new THREE.PointLight( 0xffffff, 1.5, 2000 );
-	pointLight.position.set( 0, 0, 100 );
+	pointLight.position.set( 0, 2, 100 );
+	// pointLight.target = cube;
 	var textureLoader = new THREE.TextureLoader();
 	var textureFlare0 = textureLoader.load( "./lensflare/lensflare0.png" );
 	var textureFlare1 = textureLoader.load( "./lensflare/lensflare2.png" );
@@ -734,13 +746,13 @@ function init7 () {
 
 	var lensflare = new THREE.Lensflare();
 	lensflare.addElement( new THREE.LensflareElement( textureFlare0, 512, 0 ) );
-	lensflare.addElement( new THREE.LensflareElement( textureFlare1, 512, 0 ) );
-	lensflare.addElement( new THREE.LensflareElement( textureFlare2, 60, 0.6 ) );
+	// lensflare.addElement( new THREE.LensflareElement( textureFlare1, 5, 0 ) );
+	// lensflare.addElement( new THREE.LensflareElement( textureFlare2, 3, 0.6 ) );
 	pointLight.add( lensflare );
 	scene.add( pointLight );
 
 	// 软阴影(默认：THREE.PCFShadowMap)
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	// 进行渲染
 	renderer.render(scene, camera);
 }
