@@ -245,5 +245,562 @@ function init2 () {
 
 </script>
 
+<div class="aTitle">选择对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数：</b>
+new THREE.Raycaster(origin, direction, near, far)
+射线：
+* origin: 光线投射的起点向量
+* direction: 光线投射的方向向量
+* near: 投射近点,默认值为0
+* far: 投射远点,默认值为无穷大
+<b>方法：</b>
+1. setFromCamera(coords, camera)
+* coords: 鼠标的二维坐标(在规范化的设备坐标NDC中)，X 和 Y 分量应该介于 -1 和 1 之间
+* camera: 射线起点处的相机
+
+2. intersectObject(object, recursive, optionalTarget)
+* object: 用来检测和射线相交的物体
+* recursive: 如果为true,还检查所有后代,否则只检查该对象本身。默认值为false
+* optionalTarget：（可选）设定结果的目标，否则，实例化一个新数组
+					如果设置，则必须在每次调用之前清除此数组（即，数组长度＝0）
+返回结果数组：
+[ { distance, point, face, faceIndex, indices, object }, ... ]
+* distance: 射线的起点到相交点的距离 
+* point: 在世界坐标中的交叉点 
+* face: 相交的面 
+* faceIndex: 相交的面的索引 
+* indices: 组成相交面的顶点索引 
+* object: 相交的对象
+
+<b>脚本：</b>
+document.addEventListener('mousedown', onDocumentMouseDown, false);
+
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+var canvasDom = document.getElementById('selectCanvas');
+
+function onDocumentMouseDown(event) {
+	var canvasRect = canvasDom.getBoundingClientRect();
+	/*mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;*/
+	mouse.x = ((event.clientX - canvasRect.x) / canvasRect.width ) * 2 - 1;
+	mouse.y = - ((event.clientY - canvasRect.y)  / canvasRect.height ) * 2 + 1;
+	
+	raycaster.setFromCamera( mouse, camera );
+	var intersects = raycaster.intersectObjects( scene.children );
+	for ( var i = 0; i < intersects.length; i++ ) {
+		if (intersects[0].object.material.opacity === 1) {
+        	intersects[0].object.material.opacity = 0.5;
+		} else {
+			intersects[0].object.material.opacity = 1;
+		}
+		
+	}
+	renderer.render( scene, camera );
+}
+
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app3');
+	renderer.domElement.id = 'selectCanvas';
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(0,0,5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	// var light = new THREE.AmbientLight(0xffffff);
+	// scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 100, 100, 200 );
+	lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+
+	// 物体
+	var cube1 = new THREE.Mesh(
+		new THREE.CubeGeometry(1, 1, 1),
+	    new THREE.MeshLambertMaterial({
+		    color: 0xffff00,
+			emissive: 0xff0000,
+			transparent: true
+		})
+	);
+	scene.add(cube1);
+
+
+	var cube2 = new THREE.Mesh(
+		new THREE.CubeGeometry(1, 1, 1),
+	    new THREE.MeshLambertMaterial({
+		    color: 0xffff00,
+			emissive: 0xff0000,
+			transparent: true
+		})
+	);
+	cube2.position.set(2, 2, -3);
+	scene.add(cube2);
+
+	
+	// 进行渲染
+	renderer.render(scene, camera);
+
+	var v = 0; // 旋转角度
+	function animate () {
+		v += Math.PI / 100
+		v = v % (Math.PI * 2)
+		cube1.rotation.set(v, v , -v);
+		cube2.rotation.set(v, v , v);
+		renderer.render(scene, camera);
+		requestAnimationFrame(animate);
+	}
+	animate();
+
+	// 选择
+	document.addEventListener('mousedown', onDocumentMouseDown, false);
+
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+    var canvasDom = document.getElementById('selectCanvas');
+
+	function onDocumentMouseDown(event) {
+		var canvasRect = canvasDom.getBoundingClientRect();
+		/*mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+		mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;*/
+		mouse.x = ((event.clientX - canvasRect.x) / canvasRect.width ) * 2 - 1;
+		mouse.y = - ((event.clientY - canvasRect.y)  / canvasRect.height ) * 2 + 1;
+		
+		raycaster.setFromCamera( mouse, camera );
+		var intersects = raycaster.intersectObjects( scene.children );
+		for ( var i = 0; i < intersects.length; i++ ) {
+			if (intersects[0].object.material.opacity === 1) {
+            	intersects[0].object.material.opacity = 0.5;
+			} else {
+				intersects[0].object.material.opacity = 1;
+			}
+			
+		}
+		renderer.render( scene, camera );
+	}
+
+}
+</script>
+
+
+<div class="aTitle">Tween.js 实现动画</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+https://github.com/tweenjs/tween.js
+https://github.com/tweenjs/es6-tween
+
+<b>缓动函数：</b>
+* 线性
+TWEEN.Easing.Linear.None (默认)
+* 其他 （都有In、Out、InOut三种）
+1. Quadratic (二次)
+TWEEN.Easing.Quadratic.In
+TWEEN.Easing.Quadratic.Out
+TWEEN.Easing.Quadratic.InOut
+2. Cubic (三次)
+3. Quartic (四次)
+4. Quintic (五次)
+5. Sinusoidal (正弦)
+6. Exponential (指数)
+7. Circular (圆形)
+8. Elastic (弹性)
+9. Back (反弹)
+10. Bounce (弹跳)
+<b>脚本:</b>
+&lt;script src="../../js/three/Tween.min.16.3.5.js"&gt;&lt;/script&gt;
+
+var position = { x: -3, y: -3, z: -3}; 
+var tween = new TWEEN.Tween(position)
+	.to({ x: 1, y: 0.8, z: 5 }, 2000)
+	.easing(TWEEN.Easing.Back.InOut)
+	.onUpdate(update);
+
+var tweenBack = new TWEEN.Tween(position)
+	.to({ x: -3, y: -3, z: -3 }, 2000)
+	.easing(TWEEN.Easing.Back.InOut)
+	.onUpdate(update);
+
+tween.chain(tweenBack);
+tweenBack.chain(tween);
+
+tween.start();	
+
+animate();
+
+function update() {
+		mesh.position.set(position.x, position.y, position.z);
+		renderer.render(scene, camera);
+}
+function animate(time) {
+    requestAnimationFrame(animate);
+    TWEEN.update(time);
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+	</div>
+</div>
+<script src="../../js/three/Tween.min.16.3.5.js"></script>
+<script type="text/javascript">
+init4();
+function init4 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app4');
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 15);
+	camera.position.set(0,0,10);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	// var light = new THREE.AmbientLight(0xffffff);
+	// scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 100, 100, 200 );
+	lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+
+	// 物体
+	var mesh = new THREE.Mesh(
+		new THREE.SphereGeometry(1, 64, 64),
+	    new THREE.MeshPhongMaterial( { 
+	    	color: 0x156289,
+	    	emissive: 0x072534,
+			flatShading: true 
+		})
+	);
+	scene.add(mesh);
+	
+
+	// 动画
+	var position = { x: -3, y: -3, z: -3}; 
+	var tween = new TWEEN.Tween(position)
+		.to({ x: 1, y: 0.8, z: 5 }, 2000)
+		.easing(TWEEN.Easing.Back.InOut)
+		.onUpdate(update);
+
+	var tweenBack = new TWEEN.Tween(position)
+		.to({ x: -3, y: -3, z: -3 }, 2000)
+		.easing(TWEEN.Easing.Back.InOut)
+		.onUpdate(update);
+
+	tween.chain(tweenBack);
+	tweenBack.chain(tween);
+
+	tween.start();	
+
+	animate();
+
+	function update() {
+			mesh.position.set(position.x, position.y, position.z);
+			renderer.render(scene, camera);
+	}
+	function animate(time) {
+	    requestAnimationFrame(animate);
+	    TWEEN.update(time);
+	}
+}
+</script>
+
+<div class="aTitle">Tween.js 曲线轨迹动画</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. 贝塞尔曲线
+TWEEN.Interpolation.Bezier
+
+2. Catmull-Rom 插值样条曲线
+TWEEN.Interpolation.CatmullRom
+
+<b>脚本：</b>
+&lt;script src="../../js/three/Tween.min.16.3.5.js"&gt;&lt;/script&gt;
+
+var isFinish = false;
+var position = { x: -80, y: -80}; 
+var tween = new TWEEN.Tween(position)
+	// x: [控制点x坐标, 结束点x坐标]，y:[控制点y坐标, 结束点y坐标]
+	.to({x: [-80, 80], y: [80, 80]}, 2000)
+	.onUpdate(update)
+	.onComplete(() => isFinish = true)
+	.interpolation(TWEEN.Interpolation.Bezier)
+	.easing(TWEEN.Easing.Linear.None)
+	.start();
+
+animate();
+
+function update() {
+	mesh.position.set(position.x, position.y, -3);
+	renderer.render(scene, camera);	
+}
+function animate(time) {
+	if (isFinish) {
+		return;
+	}
+    requestAnimationFrame(animate);
+    TWEEN.update(time);
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+	</div>
+</div>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(200, 200);
+	var parentEle = document.getElementById('app5');
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 2/2, 1, 300);
+	camera.position.set(0,0,240);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	// var light = new THREE.AmbientLight(0xffffff);
+	// scene.add(light);
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+	lights[ 0 ].position.set( 100, 100, 200 );
+	lights[ 1 ].position.set( - 100, - 200, - 100 );
+
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+
+
+	// 物体
+	var mesh = new THREE.Mesh(
+		new THREE.SphereGeometry(10, 64, 64),
+	    new THREE.MeshPhongMaterial( { 
+	    	color: 0x156289,
+	    	emissive: 0x072534,
+			flatShading: true 
+		})
+	);
+	scene.add(mesh);
+	
+
+	// 动画
+	var isFinish = false;
+	var position = { x: -80, y: -80}; 
+	var tween = new TWEEN.Tween(position)
+		// x: [控制点x坐标, 结束点x坐标]，y:[控制点y坐标, 结束点y坐标]
+		.to({x: [-80, 80], y: [80, 80]}, 2000)
+		.onUpdate(update)
+		.onComplete(() => isFinish = true)
+		.interpolation(TWEEN.Interpolation.Bezier)
+		.easing(TWEEN.Easing.Linear.None)
+		.start();
+
+	animate();
+
+	function update() {
+		mesh.position.set(position.x, position.y, -3);
+		renderer.render(scene, camera);	
+	}
+	function animate(time) {
+		if (isFinish) {
+			return;
+		}
+	    requestAnimationFrame(animate);
+	    TWEEN.update(time);
+	}
+}
+</script>
+
+
+<div class="aTitle">.gltf导入动画</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+&lt;script src="../../js/three/GLTFLoader.js"&gt;&lt;/script&gt;
+
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(400, 300);
+var parentEle = document.getElementById('app6')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0x000000);
+// 场景
+var scene = new THREE.Scene();
+
+var loader = new THREE.GLTFLoader();
+loader.load('./hand.gltf', 
+	function (gltf) {
+		// console.log(gltf);
+		gltf.scene.rotation.set(Math.PI/4,0,0);
+		scene.add(gltf.scene);
+        
+        // 正交投影摄像机
+		var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+		camera.position.set(0, 2, 3);
+		// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+		camera.lookAt(new THREE.Vector3(0, 0, 0));
+		scene.add(camera);
+
+		// 灯光
+		scene.add( new THREE.AmbientLight( 0x999999 ) );
+		var light = new THREE.PointLight( 0xffffff, 1 );
+		light.position.set(-5, 5, 5);
+		camera.add(light);
+
+		// 进行渲染
+		renderer.render(scene, camera);
+
+		var mixer = new THREE.AnimationMixer(gltf.scene);
+		<mark>var clips = gltf.animations;</mark>
+		clips.forEach( function ( clip ) {
+			var action = mixer.clipAction( clip );
+			action.play();
+		});
+
+		var clock = new THREE.Clock();
+		render();
+		function render() {
+			// 获得距离上次调用的时间间隔
+	        var delta = clock.getDelta();
+	        <mark>mixer.update(delta);</mark>
+	        renderer.render(scene, camera);
+	        requestAnimationFrame(render);
+	    }
+    },
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	function ( error ) {
+		console.log( 'An error happened', error);
+	}
+);
+		</pre>
+	</div>
+	<div class="aShow note" id="app6">
+	</div>
+</div>
+<script src="../../js/three/GLTFLoader.js"></script>
+<script type="text/javascript">
+init6();
+function init6 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app6')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+
+	var loader = new THREE.GLTFLoader();
+    loader.load('./hand.gltf', 
+    	function (gltf) {
+    		console.log(gltf);
+    		gltf.scene.rotation.set(Math.PI/4,0,0);
+    		scene.add(gltf.scene);
+	        
+	        // 正交投影摄像机
+			var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+			camera.position.set(0, 2, 3);
+			// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+			scene.add(camera);
+
+			// 灯光
+			scene.add( new THREE.AmbientLight( 0x999999 ) );
+			var light = new THREE.PointLight( 0xffffff, 1 );
+			light.position.set(-5, 5, 5);
+			camera.add(light);
+
+			// 进行渲染
+			renderer.render(scene, camera);
+
+			var mixer = new THREE.AnimationMixer(gltf.scene);
+			var clips = gltf.animations;
+			// var clip = THREE.AnimationClip.findByName(clips, 'Huesos ManoAction');
+			clips.forEach( function ( clip ) {
+				var action = mixer.clipAction( clip );
+				action.play();
+			});
+
+			var clock = new THREE.Clock();
+			render();
+			function render() {
+				// 获得距离上次调用的时间间隔
+		        var delta = clock.getDelta();
+		        mixer.update(delta);
+		        renderer.render(scene, camera);
+		        requestAnimationFrame(render);
+		    }
+	    },
+		// called while loading is progressing
+		function ( xhr ) {
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+		},
+		function ( error ) {
+			console.log( 'An error happened', error);
+		}
+    );
+}
+</script>
+
+
 </body>
 </html>

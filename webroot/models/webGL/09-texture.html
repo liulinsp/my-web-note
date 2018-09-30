@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>WebGL 纹理</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+</head>
+<body>
+<div class="aTitle" id="materialMap">凹凸贴图</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// 正方体
+var geom = new THREE.CubeGeometry(24, 24, 24);
+geom.computeVertexNormals();
+// 材料
+var material = new THREE.MeshPhongMaterial();
+var mesh = new THREE.Mesh(geom, material);
+mesh.rotation.set(Math.PI / 12, Math.PI / 12, 0);
+scene.add(mesh);
+
+// 纹理
+var textureLoader = new THREE.TextureLoader();
+textureLoader.load('./stone.jpg', function(texture) {
+	material.map = texture;
+    textureLoader.load('./stone-bump.jpg', function(bumpTexture) {
+    	material.bumpMap = bumpTexture;
+    	materialbumpScale = 0.2;
+    	renderer.render(scene, camera);
+
+    	var v = 0; // 旋转角度
+		function animate () {
+			v += Math.PI / 640;
+			v = v % (Math.PI * 2);
+			mesh.rotation.set(v, v, v);
+			renderer.render(scene, camera);
+			requestAnimationFrame(animate);
+		}
+		animate();
+    });
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+	</div>
+</div>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app5')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(0,0,40);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x242424);
+	scene.add(light);
+	var pointLight = new THREE.PointLight(0xffffff, 2, 320);
+	pointLight.position.set(50, 50, 100);
+	scene.add(pointLight);
+
+	// 正方体
+	var geom = new THREE.CubeGeometry(24, 24, 24);
+	geom.computeVertexNormals();
+	// 材料
+	var material = new THREE.MeshPhongMaterial();
+	var mesh = new THREE.Mesh(geom, material);
+	mesh.rotation.set(Math.PI / 12, Math.PI / 12, 0);
+	scene.add(mesh);
+
+	// 纹理
+	var textureLoader = new THREE.TextureLoader();
+	textureLoader.load('./stone.jpg', function(texture) {
+		material.map = texture;
+	    textureLoader.load('./stone-bump.jpg', function(bumpTexture) {
+	    	material.bumpMap = bumpTexture;
+	    	materialbumpScale = 0.2;
+	    	renderer.render(scene, camera);
+
+	    	var v = 0; // 旋转角度
+			function animate () {
+				v += Math.PI / 640;
+				v = v % (Math.PI * 2);
+				mesh.rotation.set(v, v, v);
+				renderer.render(scene, camera);
+				requestAnimationFrame(animate);
+			}
+			animate();
+	    });
+	});
+}
+</script>	
+</body>
+</html>

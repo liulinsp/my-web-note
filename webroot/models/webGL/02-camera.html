@@ -181,5 +181,135 @@ function init2 () {
 }
 </script>
 
+<div class="aTitle">照相机控制器 - 轨迹球</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(200, 150);
+var parentEle = document.getElementById('app3')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0x000000);
+// 场景
+var scene = new THREE.Scene();
+// 透视投影摄像机
+var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+camera.position.set(2, 2, 3);
+// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+camera.lookAt(new THREE.Vector3(0, 0, 0));
+var trackballControls = new THREE.TrackballControls(camera);
+
+trackballControls.rotateSpeed = 8.0;
+trackballControls.zoomSpeed = 1.0;
+trackballControls.panSpeed = 1.0;
+trackballControls.noZoom = true; // 禁止缩放
+// trackballControls.noPan=false;
+trackballControls.staticMoving = true;
+// trackballControls.dynamicDampingFactor=0.3;
+// scene.add(camera);
+
+// 光照
+scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+var light1 = new THREE.PointLight( 0xffffff, 1 );
+light1.position.set(0,0,50);
+scene.add( light1 );
+
+var light2 = new THREE.PointLight( 0xffffff, 1 );
+light2.position.set(10,10,-20);
+scene.add( light2 );
+
+// 正方体
+var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1),
+    new THREE.MeshPhongMaterial( { 
+    	color: 0x156289,
+    	emissive: 0x072534,
+    	flatShading: true
+    } )
+);
+scene.add(cube);
+
+// 进行渲染
+var clock = new THREE.Clock();
+render();
+function render() {
+	// 获得距离上次调用的时间间隔
+    var delta = clock.getDelta(); 
+    trackballControls.update(delta);
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script src="../../js/three/controls/TrackballControls.js"></script>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 透视投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(2, 2, 3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	var trackballControls = new THREE.TrackballControls(camera);
+
+    trackballControls.rotateSpeed = 8.0;
+    trackballControls.zoomSpeed = 1.0;
+    trackballControls.panSpeed = 1.0;
+	trackballControls.noZoom = true; // 禁止缩放
+	// 如设置为true, 则禁用 按下鼠标右键平移的功能???
+	// trackballControls.noPan= false;
+    trackballControls.staticMoving = true;
+	// trackballControls.dynamicDampingFactor=0.3;
+	// scene.add(camera);
+
+	// 光照
+	scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+	var light1 = new THREE.PointLight( 0xffffff, 1 );
+	light1.position.set(0,0,50);
+	scene.add( light1 );
+
+	var light2 = new THREE.PointLight( 0xffffff, 1 );
+	light2.position.set(10,10,-20);
+	scene.add( light2 );
+
+	// 正方体
+	var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1),
+	    new THREE.MeshPhongMaterial( { 
+	    	color: 0x156289,
+	    	emissive: 0x072534,
+	    	flatShading: true
+	    } )
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	var clock = new THREE.Clock();
+	render();
+	function render() {
+		// 获得距离上次调用的时间间隔
+        var delta = clock.getDelta();
+        trackballControls.update(delta);
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+}
+</script>
+
 </body>
 </html>

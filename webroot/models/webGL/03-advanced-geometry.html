@@ -394,6 +394,144 @@ function drawShape() {
 }
 </script>
 
+<div class="aTitle">高级几何体 - 从SVG拉伸</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数：</b>
+THREE.ExtrudeGeometry(shapes, options)
+* shapes: 一个图形或多个图形数组
+* options: 操作对象
+	# curveSegments：拉伸图形时曲线分成多少段，默认：12
+	# steps： 该属性指定拉伸提沿深度方向分成多少段，默认：1
+	# depth：拉伸形状的深度，默认：100
+	# bevelEnabled： 是否应用斜角，默认： true
+	# bevelThickness：指定斜角的深度， 默认：6
+	# bevelSize: 指定斜角的高度，这个高度将增加几何体的高度，默认：2
+	# bevelSegments：斜角的分段数，默认：3
+	# extrudePath：指定图形沿什么路径（THREE.CurvePath）拉伸，默认：z轴
+	# UVGenerator：当给材质使用纹理时，UV映射确定纹理的哪一部分用于特定面。？？？？
+
+<b>页面：</b>
+&lt;div id="qq" style="display:none"&gt;
+	&lt;svg version="1.1" xmlns="http://www.w3.org/2000/svg" 
+		xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+		viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" 
+		xml:space="preserve"&gt;
+	&lt;g&gt;&lt;path id="qq-path" d="M828.7,454.7c0,0,60.5,85.7,81..."/&gt;&lt;/g&gt;
+	&lt;/svg&gt;
+&lt;/div&gt;
+
+<b>脚本：</b>
+&lt;script src="../../js/three/d3-threeD.js"&gt;&lt;/script&gt;
+
+function drawQQShape() {
+    <mark>var svgString = document.querySelector("#qq-path").getAttribute("d");
+    var shape = transformSVGPathExposed(svgString);</mark>
+    console.log(shape);
+    return shape;
+}
+
+var shape = drawQQShape();
+var options = {
+    depth: 100,
+    bevelThickness: 32,
+    bevelSize: 32,
+    bevelSegments: 8,
+    bevelEnabled: true,
+    curveSegments: 16,
+    steps: 2
+};
+var geom = new THREE.ExtrudeGeometry(shape, options);
+// 几何体位移，进行居中
+geom.applyMatrix(new THREE.Matrix4().makeTranslation(-500, -500, 0));
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+									side: THREE.DoubleSide, flatShading: true } );
+var mesh = new THREE.Mesh( geom, material );
+scene.add(mesh);
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+		<div id="qq" style="display:none">
+			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+			<g><path id="qq-path" d="M828.7,454.7c0,0,60.5,85.7,81,161.6c8.9,33.3,12.8,66.9,9.2,99.9c-3.9,34.9-18.5,49.9-18.5,49.9s-7,13-16.2,14.3c-2.3,0.3-7.3-1.1-9.2-2.4c-23.9-15-44-59.4-44-59.4s-2.2-6.6-4.6-7.1c-2.3-0.6-4.6,4.7-4.6,4.7s-8.9,32.5-20.8,54.6c-18,33.6-41.6,61.9-41.6,61.9s-4,2.2-4.6,4.7c-0.5,2.2,2.3,4.7,2.3,4.7s42.3,19.4,64.7,38.1c20.3,16.9,18.5,33.2,18.5,33.2s2.1,24.4-18.5,42.9c-18.6,16.7-56.1,27.6-85.5,30.9c-47.6,5.3-107.4,2.5-152.7-7.1c-32.4-6.8-64.6-11.6-83.5-14c-18.9,2.4-51.2,7.1-83.5,14c-45.3,9.7-105.1,12.4-152.7,7.1c-29.4-3.3-66.9-14.2-85.5-30.9c-20.6-18.5-18.5-42.9-18.5-42.9s-1.8-16.3,18.5-33.2c22.4-18.7,64.7-38.1,64.7-38.1s2.8-2.5,2.3-4.7c-0.6-2.5-4.6-4.7-4.6-4.7S217,804.5,199,770.9c-11.9-22.2-20.8-54.6-20.8-54.6s-2.4-5.4-4.6-4.7c-2.4,0.5-4.6,7.1-4.6,7.1S148.8,763,125,778c-2,1.4-6.9,2.7-9.2,2.4c-9.1-1.3-16.2-14.3-16.2-14.3s-14.6-15-18.5-49.9c-3.6-33,0.3-66.6,9.2-99.9c20.5-75.9,81-161.6,81-161.6s2.7-0.3,2.3-2.4c-0.6-2.6-4.6-7.1-4.6-7.1s-10.7-26.2-4.6-57.1c5.5-28.5,27.7-61.9,27.7-61.9s1.6-18.9,6.2-45.2c5.7-32.4,15.9-76.1,33.1-109.3c36.6-70.8,97.2-109.5,97.2-109.5S367.4,10,483.2,10c129.3,0,188.2,52.2,188.2,52.2s60.6,38.7,97.2,109.5c17.2,33.2,27.4,76.9,33.1,109.3c4.6,26.3,6.2,45.2,6.2,45.2s22.3,33.4,27.7,61.9c6.1,30.9-4.6,57.1-4.6,57.1s-4,4.5-4.6,7.1C826,454.4,828.7,454.7,828.7,454.7z"/></g>
+			</svg>
+		</div>
+	</div>
+</div>
+<script src="../../js/three/d3-threeD.js"></script>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app5')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 2500);
+	camera.position.set(0,0,2000);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	light.position.set(0,0,500);
+	scene.add( light );
+
+	var shape = drawQQShape();
+	var options = {
+        depth: 100,
+        bevelThickness: 32,
+        bevelSize: 32,
+        bevelSegments: 8,
+        bevelEnabled: true,
+        curveSegments: 16,
+        steps: 2
+    };
+	var geom = new THREE.ExtrudeGeometry(shape, options);
+	// 几何体位移，进行居中
+	geom.applyMatrix(new THREE.Matrix4().makeTranslation(-500, -500, 0));
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534, side: THREE.DoubleSide, flatShading: true } );
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		mesh.rotation.set(Math.PI, v, 0);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+
+function drawQQShape() {
+    var svgString = document.querySelector("#qq-path").getAttribute("d");
+    var shape = transformSVGPathExposed(svgString);
+    return shape;
+}
+</script>
 
 <div class="aTitle">高级几何体 - 管状几何体</div>
 <div class="aPane">
@@ -407,7 +545,28 @@ THREE.TubeGeometry(path, tubularSegments, radius,  radialSegments, closed)
 * radialSegments：管道圆周的分段数，默认：8
 * closed：是否将管道的头尾连接，默认：false
 <b>脚本：</b>
+function CustomSinCurve( scale ) {
+	THREE.Curve.call( this );
+	this.scale = ( scale === undefined ) ? 1 : scale;
+}
 
+CustomSinCurve.prototype = Object.create( THREE.Curve.prototype );
+CustomSinCurve.prototype.constructor = CustomSinCurve;
+
+CustomSinCurve.prototype.getPoint = function ( t ) {
+	var tx = t * 3 - 1.5;
+	var ty = Math.sin( 2 * Math.PI * t );
+	var tz = 0;
+	return new THREE.Vector3( tx, ty, tz ).multiplyScalar( this.scale );
+};
+
+var path = new CustomSinCurve( 10 );
+<mark>var geom = new THREE.TubeGeometry( path, 64, 2, 16, false );</mark>
+
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+		side: THREE.DoubleSide, flatShading: true } );
+var mesh = new THREE.Mesh( geom, material );
+scene.add(mesh);
 		</pre>
 	</div>
 	<div class="aShow note" id="app4">
@@ -484,6 +643,212 @@ function init4 () {
 	}
 	animate();
 }
+</script>
+
+
+<div class="aTitle">高级几何体 - 基于公式的几何体</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>构造函数：</b>
+THREE.ParametricGeometry(func, slices, stacks)
+* func: 计算函数, u、v 的取值范围从0到1
+  1) u值用来确定向量的x坐标
+  2) v值用来确定向量的z坐标
+* slices: 定义u值应该分为多少份
+* radius：定义v值应该分为多少份
+
+<b>脚本：</b>
+// 莱克因瓶 函数
+function klein( v, u, target ) {
+	u *= Math.PI;
+	v *= 2 * Math.PI;
+	u = u * 2;
+	var x, y, z;
+	if ( u < Math.PI ) {
+		x = 3 * Math.cos( u ) * ( 1 + Math.sin( u ) ) + ( 2 * ( 1 - Math.cos( u ) / 2 ) ) * Math.cos( u ) * Math.cos( v );
+		z = - 8 * Math.sin( u ) - 2 * ( 1 - Math.cos( u ) / 2 ) * Math.sin( u ) * Math.cos( v );
+	} else {
+		x = 3 * Math.cos( u ) * ( 1 + Math.sin( u ) ) + ( 2 * ( 1 - Math.cos( u ) / 2 ) ) * Math.cos( v + Math.PI );
+		z = - 8 * Math.sin( u );
+	}
+	y = - 2 * ( 1 - Math.cos( u ) / 2 ) * Math.sin( v );
+	target.set( x, y, z );
+}
+
+var geom = new THREE.ParametricGeometry( klein, 64, 64 );
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+				 side: THREE.DoubleSide, flatShading: true } );
+var mesh = new THREE.Mesh( geom, material );
+scene.add(mesh);
+		</pre>
+	</div>
+	<div class="aShow note" id="app6">
+	</div>
+</div>
+
+<script type="text/javascript">
+init6();
+function init6 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app6')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 50);
+	camera.position.set(0,30,30);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	light.position.set(0,0,50);
+	scene.add( light );
+
+	var geom = new THREE.ParametricGeometry( klein, 64, 64 );
+
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534, side: THREE.DoubleSide, flatShading: true } );
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		mesh.rotation.set(v, v, 0);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+
+// 莱克因瓶 函数
+function klein( v, u, target ) {
+	u *= Math.PI;
+	v *= 2 * Math.PI;
+	u = u * 2;
+	var x, y, z;
+	if ( u < Math.PI ) {
+		x = 3 * Math.cos( u ) * ( 1 + Math.sin( u ) ) + ( 2 * ( 1 - Math.cos( u ) / 2 ) ) * Math.cos( u ) * Math.cos( v );
+		z = - 8 * Math.sin( u ) - 2 * ( 1 - Math.cos( u ) / 2 ) * Math.sin( u ) * Math.cos( v );
+	} else {
+		x = 3 * Math.cos( u ) * ( 1 + Math.sin( u ) ) + ( 2 * ( 1 - Math.cos( u ) / 2 ) ) * Math.cos( v + Math.PI );
+		z = - 8 * Math.sin( u );
+	}
+	y = - 2 * ( 1 - Math.cos( u ) / 2 ) * Math.sin( v );
+	target.set( x, y, z );
+}
+</script>
+
+
+<div class="aTitle">高级几何体 - ThreeBSP组合的几何体</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+&lt;script src="../../js/three/ThreeBSP.js"&gt;&lt;/script&gt;
+
+var sphere1 = new THREE.Mesh( new THREE.SphereGeometry(1, 32, 32));
+var sphere2 = new THREE.Mesh( new THREE.SphereGeometry(1, 32, 32));
+sphere2.position.set(1,0,0);
+var sphere1BSP = new ThreeBSP(sphere1);
+var sphere2BSP = new ThreeBSP(sphere2);
+var geom = sphere1BSP.<mark>subtract</mark>(sphere2BSP).toGeometry(); // 相减
+// var geom = sphere1BSP.<mark>intersect</mark>(sphere2BSP).toGeometry(); // 相交
+// var geom = sphere1BSP.<mark>union</mark>(sphere2BSP).toGeometry(); // 合并
+
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534, 
+		side: THREE.DoubleSide, flatShading: true } );
+var mesh = new THREE.Mesh(geom, material);
+scene.add(mesh);
+		</pre>
+	</div>
+	<div class="aShow note" id="app7">
+	</div>
+</div>
+<script src="../../js/three/ThreeBSP.js"></script>
+<script type="text/javascript">
+init7();
+function init7 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app7')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(0,0,5);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	light.position.set(0,0,50);
+	scene.add( light );
+	
+	var sphere1 = new THREE.Mesh( new THREE.SphereGeometry(1, 32, 32));
+	var sphere2 = new THREE.Mesh( new THREE.SphereGeometry(1, 32, 32));
+	sphere2.position.set(1,0,0);
+	var sphere1BSP = new ThreeBSP(sphere1);
+	var sphere2BSP = new ThreeBSP(sphere2);
+	var geom = sphere1BSP.subtract(sphere2BSP).toGeometry(); // 相减
+	// var geom = sphere1BSP.intersect(sphere2BSP).toGeometry(); // 相交
+	// var geom = sphere1BSP.union(sphere2BSP).toGeometry(); // 合并
+
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534, side: THREE.DoubleSide, flatShading: true } );
+	var mesh = new THREE.Mesh(geom, material);
+	scene.add(mesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		mesh.rotation.set(v, v, v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+
 </script>
 </body>
 </html>

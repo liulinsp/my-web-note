@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>webGL 高级几何体</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">几何体组合</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+* 所有对象的定位、旋转和变形都以组为单位
+* 当对象数量特别多时有性能问题
+<b>脚本：</b>
+var group = new THREE.Group();
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+					side: THREE.DoubleSide, flatShading: true } );
+var torus = new THREE.Mesh(
+	new THREE.TorusGeometry(3, 0.5, 64, 64, Math.PI * 2),
+	material
+);
+group.add(torus);
+var sphere = new THREE.Mesh(
+	new THREE.SphereGeometry(2.5, 64, 64),
+	material
+);
+group.add(sphere);
+scene.add(group);
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<script type="text/javascript">
+init1();
+function init1 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 50);
+	camera.position.set(0, 0, 10);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0x222222 ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	camera.add( light );
+
+	var group = new THREE.Group();
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+						side: THREE.DoubleSide, flatShading: true } );
+	var torus = new THREE.Mesh(
+		new THREE.TorusGeometry(3, 0.5, 64, 64, Math.PI * 2),
+		material
+	);
+	group.add(torus);
+	var sphere = new THREE.Mesh(
+		new THREE.SphereGeometry(2.5, 64, 64),
+		material
+	);
+	group.add(sphere);
+	scene.add(group);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		group.rotation.set(v, v, -v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+
+<div class="aTitle">多个网格合并</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var num = 300;
+var geometry = new THREE.Geometry();
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+					side: THREE.DoubleSide, flatShading: true } );
+for (var i = 0; i < num; i++) {
+	var boxMesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1));
+    boxMesh.position.set(
+    	-10 + Math.round((Math.random() * 20)),
+    	Math.round((Math.random() * 10)),
+    	-10 + Math.round((Math.random() * 20))
+    );
+    boxMesh.rotation.set(
+    	Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+    );
+    <mark>boxMesh.updateMatrix();</mark>
+	<mark>geometry.merge(boxMesh.geometry, boxMesh.matrix, i);</mark>
+}
+var mesh = new THREE.Mesh(geometry, material)
+scene.add(mesh);
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 500);
+	camera.position.set(0, 26, 0);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0x222222 ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	camera.add( light );
+
+	var num = 500;
+	var geometry = new THREE.Geometry();
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+						side: THREE.DoubleSide, flatShading: true } );
+	for (var i = 0; i < num; i++) {
+		var boxMesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1));
+        boxMesh.position.set(
+	    	-10 + Math.round((Math.random() * 20)),
+	    	Math.round((Math.random() * 10)),
+	    	-8 + Math.round((Math.random() * 16))
+	    );
+	    boxMesh.rotation.set(
+	    	Math.random() * Math.PI,
+	        Math.random() * Math.PI,
+	        Math.random() * Math.PI
+	    );
+        boxMesh.updateMatrix();
+		geometry.merge(boxMesh.geometry, boxMesh.matrix, i);
+	}
+	var mesh = new THREE.Mesh(geometry, material)
+	scene.add(mesh);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+
+
+	var v = 0; // 旋转角度
+	var id = null; // 动画ID
+	var isStart = true; // 是否开始动画
+	var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.msRequestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;
+
+	function animate () {
+		v += Math.PI / 160;
+		v = v % (Math.PI * 2);
+		mesh.rotation.set(v, v, -v);
+		renderer.render(scene, camera);
+		id = requestAnimationFrame(animate);
+	}
+	animate();
+}
+</script>
+
+<div class="aTitle">从外部加载几何体 - JSON - THREE.Mesh</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>导出：</b>
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+					side: THREE.DoubleSide, flatShading: true } );
+var geometry = new THREE.BoxGeometry(1, 1, 1);
+var mesh = new THREE.Mesh(geometry, material);
+console.log(JSON.stringify(<mark>mesh.toJSON()</mark>));
+
+<b>导入：</b>
+var dataJson = {
+    "metadata": {
+        "version": 4.5,
+        "type": "Object",
+        "generator": "Object3D.toJSON"
+    },
+    "geometries": [
+        {
+            "uuid": "375ACE61-AD1A-404C-9648-821EDCADFBC4",
+            "type": "BoxGeometry",
+            "width": 1,
+            "height": 1,
+            "depth": 1
+        }
+    ],
+    "materials": [
+        {
+            "uuid": "4CA0D117-C1F7-4DC3-BAC5-CF0F74DF9783",
+            "type": "MeshPhongMaterial",
+            "color": 1401481,
+            "emissive": 468276,
+            "specular": 1118481,
+            "shininess": 30,
+            "flatShading": true,
+            "side": 2,
+            "depthFunc": 3,
+            "depthTest": true,
+            "depthWrite": true
+        }
+    ],
+    "object": {
+        "uuid": "5B960140-DA1E-4174-90BD-D8E7B553C048",
+        "type": "Mesh",
+        "layers": 1,
+        "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+        "geometry": "375ACE61-AD1A-404C-9648-821EDCADFBC4",
+        "material": "4CA0D117-C1F7-4DC3-BAC5-CF0F74DF9783"
+    }
+}
+var loader = new THREE.ObjectLoader();
+var mesh = loader.parse(dataJson);
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(1, 1, 3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0x222222 ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	camera.add( light );
+
+	
+	// var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+	//					side: THREE.DoubleSide, flatShading: true } );
+	// var geometry = new THREE.BoxGeometry(1, 1, 1);
+	// var mesh = new THREE.Mesh(geometry, material);
+	// console.log(JSON.stringify(mesh.toJSON()));
+	// scene.add(mesh);
+	var dataJson = {
+	    "metadata": {
+	        "version": 4.5,
+	        "type": "Object",
+	        "generator": "Object3D.toJSON"
+	    },
+	    "geometries": [
+	        {
+	            "uuid": "375ACE61-AD1A-404C-9648-821EDCADFBC4",
+	            "type": "BoxGeometry",
+	            "width": 1,
+	            "height": 1,
+	            "depth": 1
+	        }
+	    ],
+	    "materials": [
+	        {
+	            "uuid": "4CA0D117-C1F7-4DC3-BAC5-CF0F74DF9783",
+	            "type": "MeshPhongMaterial",
+	            "color": 1401481,
+	            "emissive": 468276,
+	            "specular": 1118481,
+	            "shininess": 30,
+	            "flatShading": true,
+	            "side": 2,
+	            "depthFunc": 3,
+	            "depthTest": true,
+	            "depthWrite": true
+	        }
+	    ],
+	    "object": {
+	        "uuid": "5B960140-DA1E-4174-90BD-D8E7B553C048",
+	        "type": "Mesh",
+	        "layers": 1,
+	        "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+	        "geometry": "375ACE61-AD1A-404C-9648-821EDCADFBC4",
+	        "material": "4CA0D117-C1F7-4DC3-BAC5-CF0F74DF9783"
+	    }
+	}
+	var loader = new THREE.ObjectLoader();
+    var mesh = loader.parse(dataJson);
+    scene.add(mesh);
+	
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+<div class="aTitle">从外部加载几何体 - JSON - 场景</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>导出：</b>
+// 场景
+var scene = new THREE.Scene();
+// 正交投影摄像机
+var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+camera.position.set(1, 1, 3);
+// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+camera.lookAt(new THREE.Vector3(0, 0, 0));
+scene.add(camera);
+
+// 灯光
+scene.add( new THREE.AmbientLight( 0x222222 ) );
+var light = new THREE.PointLight( 0xffffff, 1 );
+camera.add( light );
+
+
+var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+				side: THREE.DoubleSide, flatShading: true } );
+var geometry = new THREE.BoxGeometry(1, 1, 1);
+var mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+console.log(JSON.stringify(scene.toJSON()));
+// 进行渲染
+renderer.render(scene, camera);
+
+<b>导入：</b>
+var sceneJSON = {
+    "metadata": {
+        "version": 4.5,
+        "type": "Object",
+        "generator": "Object3D.toJSON"
+    },
+    "geometries": [
+        {
+            "uuid": "857E5DE2-B90A-4AB7-A65F-D332A2F0A348",
+            "type": "BoxGeometry",
+            "width": 1,
+            "height": 1,
+            "depth": 1
+        }
+    ],
+    "materials": [
+        {
+            "uuid": "2DF4037B-2B2F-4548-8E05-E870371F7E88",
+            "type": "MeshPhongMaterial",
+            "color": 1401481,
+            "emissive": 468276,
+            "specular": 1118481,
+            "shininess": 30,
+            "flatShading": true,
+            "side": 2,
+            "depthFunc": 3,
+            "depthTest": true,
+            "depthWrite": true
+        }
+    ],
+    "object": {
+        "uuid": "08F9B1AE-7D13-49C5-877A-813B38E7CF12",
+        "type": "Scene",
+        "layers": 1,
+        "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+        "children": [
+            {
+                "uuid": "F4F05E53-E9E6-4EDC-985D-B896A10794C9",
+                "type": "PerspectiveCamera",
+                "layers": 1,
+                "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,1,1,3,1],
+                "children": [
+                    {
+                        "uuid": "970335F5-2DB5-4B10-AFBF-AE866E100B70",
+                        "type": "PointLight",
+                        "layers": 1,
+                        "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+                        "color": 16777215,
+                        "intensity": 1,
+                        "distance": 0,
+                        "decay": 1,
+                        "shadow": {
+                            "camera": {
+                                "uuid": "ECDD0D5A-8634-482C-B526-C94704B37A9B",
+                                "type": "PerspectiveCamera",
+                                "layers": 1,
+                                "fov": 90,
+                                "zoom": 1,
+                                "near": 0.5,
+                                "far": 500,
+                                "focus": 10,
+                                "aspect": 1,
+                                "filmGauge": 35,
+                                "filmOffset": 0
+                            }
+                        }
+                    }
+                ],
+                "fov": 45,
+                "zoom": 1,
+                "near": 1,
+                "far": 10,
+                "focus": 10,
+                "aspect": 1.3333333333333333,
+                "filmGauge": 35,
+                "filmOffset": 0
+            },
+            {
+                "uuid": "DE712C59-C521-416F-BC6A-B5D6B2F71072",
+                "type": "AmbientLight",
+                "layers": 1,
+                "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+                "color": 2236962,
+                "intensity": 1
+            },
+            {
+                "uuid": "A48D8AE5-7C13-4D92-B7E5-47BAD0171550",
+                "type": "Mesh",
+                "layers": 1,
+                "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+                "geometry": "857E5DE2-B90A-4AB7-A65F-D332A2F0A348",
+                "material": "2DF4037B-2B2F-4548-8E05-E870371F7E88"
+            }
+        ]
+    }
+}
+var loader = new THREE.ObjectLoader();
+var scene = loader.parse( sceneJSON );
+
+var camera = null;
+scene.children.forEach(function (item) {
+	if(item instanceof THREE.Camera){
+		camera = item;
+	}
+});
+camera.lookAt(0, 0, 0);
+
+// 进行渲染
+renderer.render(scene, camera);
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+	</div>
+</div>
+<script type="text/javascript">
+init4();
+function init4 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 150);
+	var parentEle = document.getElementById('app4')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	/*// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(1, 1, 3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 灯光
+	scene.add( new THREE.AmbientLight( 0x222222 ) );
+	var light = new THREE.PointLight( 0xffffff, 1 );
+	camera.add( light );
+
+	
+	var material = new THREE.MeshPhongMaterial( { color: 0x156289, emissive: 0x072534,
+					side: THREE.DoubleSide, flatShading: true } );
+	var geometry = new THREE.BoxGeometry(1, 1, 1);
+	var mesh = new THREE.Mesh(geometry, material);
+	scene.add(mesh);
+	console.log(JSON.stringify(scene.toJSON()));*/
+	var sceneJSON = {
+	    "metadata": {
+	        "version": 4.5,
+	        "type": "Object",
+	        "generator": "Object3D.toJSON"
+	    },
+	    "geometries": [
+	        {
+	            "uuid": "857E5DE2-B90A-4AB7-A65F-D332A2F0A348",
+	            "type": "BoxGeometry",
+	            "width": 1,
+	            "height": 1,
+	            "depth": 1
+	        }
+	    ],
+	    "materials": [
+	        {
+	            "uuid": "2DF4037B-2B2F-4548-8E05-E870371F7E88",
+	            "type": "MeshPhongMaterial",
+	            "color": 1401481,
+	            "emissive": 468276,
+	            "specular": 1118481,
+	            "shininess": 30,
+	            "flatShading": true,
+	            "side": 2,
+	            "depthFunc": 3,
+	            "depthTest": true,
+	            "depthWrite": true
+	        }
+	    ],
+	    "object": {
+	        "uuid": "08F9B1AE-7D13-49C5-877A-813B38E7CF12",
+	        "type": "Scene",
+	        "layers": 1,
+	        "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+	        "children": [
+	            {
+	                "uuid": "F4F05E53-E9E6-4EDC-985D-B896A10794C9",
+	                "type": "PerspectiveCamera",
+	                "layers": 1,
+	                "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,1,1,3,1],
+	                "children": [
+	                    {
+	                        "uuid": "970335F5-2DB5-4B10-AFBF-AE866E100B70",
+	                        "type": "PointLight",
+	                        "layers": 1,
+	                        "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+	                        "color": 16777215,
+	                        "intensity": 1,
+	                        "distance": 0,
+	                        "decay": 1,
+	                        "shadow": {
+	                            "camera": {
+	                                "uuid": "ECDD0D5A-8634-482C-B526-C94704B37A9B",
+	                                "type": "PerspectiveCamera",
+	                                "layers": 1,
+	                                "fov": 90,
+	                                "zoom": 1,
+	                                "near": 0.5,
+	                                "far": 500,
+	                                "focus": 10,
+	                                "aspect": 1,
+	                                "filmGauge": 35,
+	                                "filmOffset": 0
+	                            }
+	                        }
+	                    }
+	                ],
+	                "fov": 45,
+	                "zoom": 1,
+	                "near": 1,
+	                "far": 10,
+	                "focus": 10,
+	                "aspect": 1.3333333333333333,
+	                "filmGauge": 35,
+	                "filmOffset": 0
+	            },
+	            {
+	                "uuid": "DE712C59-C521-416F-BC6A-B5D6B2F71072",
+	                "type": "AmbientLight",
+	                "layers": 1,
+	                "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+	                "color": 2236962,
+	                "intensity": 1
+	            },
+	            {
+	                "uuid": "A48D8AE5-7C13-4D92-B7E5-47BAD0171550",
+	                "type": "Mesh",
+	                "layers": 1,
+	                "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+	                "geometry": "857E5DE2-B90A-4AB7-A65F-D332A2F0A348",
+	                "material": "2DF4037B-2B2F-4548-8E05-E870371F7E88"
+	            }
+	        ]
+	    }
+	}
+	var loader = new THREE.ObjectLoader();
+	var scene = loader.parse( sceneJSON );
+	
+	var camera = null;
+	scene.children.forEach(function (item) {
+		if(item instanceof THREE.Camera){
+			camera = item;
+		}
+	});
+	camera.lookAt(0, 0, 0);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+}
+</script>
+
+<div class="aTitle">从外部加载几何体 - .gltf (blender导出)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+* 下载blender插件，导出gltf文件
+https://github.com/KhronosGroup/glTF-Blender-Exporter
+
+<b>脚本：</b>
+&lt;script src="../../js/three/GLTFLoader.js"&gt;&lt;/script&gt;
+
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(200, 300);
+var parentEle = document.getElementById('app5')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0xfefefe);
+// 场景
+var scene = new THREE.Scene();
+
+var loader = new THREE.GLTFLoader();
+loader.load('./misc_chair01.gltf', 
+	function (gltf) {
+        scene.add(gltf.scene);
+
+        // 正交投影摄像机
+		var camera = new THREE.PerspectiveCamera(45, 2/3, 1, 10);
+		camera.position.set(0, 3, 3);
+		// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+		camera.lookAt(new THREE.Vector3(0, 1, 0));
+		scene.add(camera);
+
+		// 灯光
+		scene.add( new THREE.AmbientLight( 0xffffff ) );
+		var light = new THREE.PointLight( 0xffffff, 1 );
+		light.position.set(-5, 5, 5);
+		camera.add(light);
+
+		// 进行渲染
+		renderer.render(scene, camera);
+		var v = 0;
+		function animate () {
+			v += Math.PI/1000;
+			if (v > Math.PI * 2) {
+				v = v - Math.PI * 2;
+			}
+			var x = 3 * Math.sin(v);
+			var z = 3 * Math.cos(v);
+			camera.position.set(x, 3, z);
+			camera.lookAt(new THREE.Vector3(0, 1, 0));
+			renderer.render(scene, camera);
+			requestAnimationFrame(animate);
+		}
+		animate();
+    },
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	function ( error ) {
+		console.log( 'An error happened', error);
+	}
+);
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+	</div>
+</div>
+<script src="../../js/three/GLTFLoader.js"></script>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 300);
+	var parentEle = document.getElementById('app5')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xffffff);
+	// 场景
+	var scene = new THREE.Scene();
+
+	var loader = new THREE.GLTFLoader();
+    loader.load('./misc_chair01.gltf', 
+    	function (gltf) {
+	        scene.add(gltf.scene);
+
+	        // 正交投影摄像机
+			var camera = new THREE.PerspectiveCamera(45, 2/3, 1, 10);
+			camera.position.set(0, 3, 3);
+			// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+			camera.lookAt(new THREE.Vector3(0, 1, 0));
+			scene.add(camera);
+
+			// 灯光
+			scene.add( new THREE.AmbientLight( 0xffffff ) );
+			var light = new THREE.PointLight( 0xffffff, 1 );
+			light.position.set(-5, 5, 5);
+			camera.add(light);
+
+			// 进行渲染
+			renderer.render(scene, camera);
+			var v = 0;
+			function animate () {
+				v += Math.PI/1000;
+				if (v > Math.PI * 2) {
+					v = v - Math.PI * 2;
+				}
+				var x = 3 * Math.sin(v);
+				var z = 3 * Math.cos(v);
+				camera.position.set(x, 3, z);
+				camera.lookAt(new THREE.Vector3(0, 1, 0));
+				renderer.render(scene, camera);
+				requestAnimationFrame(animate);
+			}
+			animate();
+	    },
+		// called while loading is progressing
+		function ( xhr ) {
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+		},
+		function ( error ) {
+			console.log( 'An error happened', error);
+		}
+    );
+}
+</script>
+
+
+<div class="aTitle">从外部加载几何体 - .json (blender导出)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+* 下载blender插件，导出json文件
+https://github.com/mrdoob/three.js/tree/r92
+three.js-r92\utils\exporters\blender\addons\io_three 拷贝到 
+D:\Program Files\Blender Foundation\Blender\2.79\scripts\addons
+
+<b>脚本：</b>	
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(200, 300);
+var parentEle = document.getElementById('app6')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0x000000);
+// 场景
+var scene = new THREE.Scene();
+
+var loader = new THREE.JSONLoader();
+loader.load('./misc_chair01.json', 
+	function (geometry, materials) {
+
+        // 正交投影摄像机
+		var camera = new THREE.PerspectiveCamera(45, 2/3, 1, 10);
+		camera.position.set(0, 3, 3);
+		// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+		camera.lookAt(new THREE.Vector3(0, 1, 0));
+		scene.add(camera);
+
+		// 灯光
+		scene.add( new THREE.AmbientLight( 0x999999 ) );
+		var light = new THREE.PointLight( 0xffffff, 1 );
+		light.position.set(-5, 5, 5);
+		camera.add(light);
+
+		var material = new THREE.MeshPhongMaterial( { color: 0x895915, emissive: 0x342107,
+				side: THREE.DoubleSide, flatShading: true } );
+		var mesh = new THREE.Mesh(geometry, material);
+		scene.add(mesh);
+
+		// 进行渲染
+		renderer.render(scene, camera);
+		var v = 0;
+		function animate () {
+			v += Math.PI/1000;
+			if (v > Math.PI * 2) {
+				v = v - Math.PI * 2;
+			}
+			var x = 3 * Math.sin(v);
+			var z = 3 * Math.cos(v);
+			camera.position.set(x, 3, z);
+			camera.lookAt(new THREE.Vector3(0, 1, 0));
+			renderer.render(scene, camera);
+			requestAnimationFrame(animate);
+		}
+		animate();
+    },
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	function ( error ) {
+		console.log( 'An error happened', error);
+	}
+);
+		</pre>
+	</div>
+	<div class="aShow note" id="app6">
+	</div>
+</div>
+<script type="text/javascript">
+init6();
+function init6 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(200, 300);
+	var parentEle = document.getElementById('app6')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+
+	var loader = new THREE.JSONLoader();
+    loader.load('./misc_chair01.json', 
+    	function (geometry, materials) {
+
+	        // 正交投影摄像机
+			var camera = new THREE.PerspectiveCamera(45, 2/3, 1, 10);
+			camera.position.set(0, 3, 3);
+			// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+			camera.lookAt(new THREE.Vector3(0, 1, 0));
+			scene.add(camera);
+
+			// 灯光
+			scene.add( new THREE.AmbientLight( 0x999999 ) );
+			var light = new THREE.PointLight( 0xffffff, 1 );
+			light.position.set(-5, 5, 5);
+			camera.add(light);
+
+			var material = new THREE.MeshPhongMaterial( { color: 0x895915, emissive: 0x342107,
+					side: THREE.DoubleSide, flatShading: true } );
+			var mesh = new THREE.Mesh(geometry, material);
+			scene.add(mesh);
+
+			// 进行渲染
+			renderer.render(scene, camera);
+			var v = 0;
+			function animate () {
+				v += Math.PI/1000;
+				if (v > Math.PI * 2) {
+					v = v - Math.PI * 2;
+				}
+				var x = 3 * Math.sin(v);
+				var z = 3 * Math.cos(v);
+				camera.position.set(x, 3, z);
+				camera.lookAt(new THREE.Vector3(0, 1, 0));
+				renderer.render(scene, camera);
+				requestAnimationFrame(animate);
+			}
+			animate();
+	    },
+		// called while loading is progressing
+		function ( xhr ) {
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+		},
+		function ( error ) {
+			console.log( 'An error happened', error);
+		}
+    );
+}
+</script>
+
+<div class="aTitle">从外部加载几何体 - .obj (blender导出)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(400, 300);
+var parentEle = document.getElementById('app7')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0x000000);
+// 场景
+var scene = new THREE.Scene();
+
+var mtlLoader = new THREE.MTLLoader();
+var objLoader = new THREE.OBJLoader();
+
+mtlLoader.load('./butterfly.mtl', function (materials) {
+	materials.preload();
+	objLoader.setMaterials(materials)
+		.load('./butterfly.obj', 
+	    	function (object) {
+	    		console.log(object);
+	    		var wingLB = object.children[4];
+	    		var wingRB = object.children[5];
+	    		var wingLF = object.children[6];
+	    		var wingRF = object.children[7];
+	    		console.log(wingLB)
+	    		wingLB.material.transparent = true;
+	    		wingRB.material.transparent = true;
+	    		wingLF.material.transparent = true;
+	    		wingRF.material.transparent = true;
+
+	    		wingRF.material.opacity = 0.9;
+	    		wingRB.material.opacity = 0.9;
+	    		wingLF.material.opacity = 0.9;
+	    		wingRF.material.opacity = 0.9;
+
+	    		wingLB.material.depthTest = false;
+	    		wingRB.material.depthTest = false;
+	    		wingLF.material.depthTest = false;
+	    		wingRF.material.depthTest = false;
+
+	    		wingLB.material.side = THREE.DoubleSide;
+	    		wingRB.material.side = THREE.DoubleSide;
+	    		wingLF.material.side = THREE.DoubleSide;
+	    		wingRF.material.side = THREE.DoubleSide;
+	    		object.scale.set(6, 6, 6);
+	    		scene.add( object );
+
+		        // 正交投影摄像机
+				var camera = new THREE.PerspectiveCamera(45, 4/3, 0.2, 5);
+				camera.position.set(0, 0, 1);
+				// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+				camera.lookAt(new THREE.Vector3(0, 0, 0));
+				scene.add(camera);
+
+				// 灯光
+				scene.add( new THREE.AmbientLight( 0x999999 ) );
+				var light = new THREE.PointLight( 0xffffff, 1 );
+				light.position.set(-5, 5, 5);
+				camera.add(light);
+
+				// 进行渲染
+				renderer.render(scene, camera);
+				var v = 0;
+				function animate () {
+					v += Math.PI/1000;
+					if (v > Math.PI * 2) {
+						v = v - Math.PI * 2;
+					}
+					var x = 2 * Math.sin(v);
+					var z = 2 * Math.cos(v);
+					camera.position.set(x, 3, z);
+					camera.lookAt(new THREE.Vector3(0, 0, 0));
+					renderer.render(scene, camera);
+					requestAnimationFrame(animate);
+				}
+				animate();
+	    	},
+			// called while loading is progressing
+			function ( xhr ) {
+				console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+			},
+			function ( error ) {
+				console.log( 'An error happened', error);
+			}
+		)
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app7">
+	</div>
+</div>
+<script src="../../js/three/MTLLoader.js"></script>
+<script src="../../js/three/OBJLoader.js"></script>
+<script type="text/javascript">
+init7();
+function init7 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app7')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+
+	var mtlLoader = new THREE.MTLLoader();
+	var objLoader = new THREE.OBJLoader();
+
+	mtlLoader.load('./butterfly.mtl', function (materials) {
+		materials.preload();
+		objLoader.setMaterials(materials)
+			.load('./butterfly.obj', 
+		    	function (object) {
+		    		var wingLB = object.children[4];
+		    		var wingRB = object.children[5];
+		    		var wingLF = object.children[6];
+		    		var wingRF = object.children[7];
+		    		
+		    		wingLB.material.transparent = true;
+		    		wingRB.material.transparent = true;
+		    		wingLF.material.transparent = true;
+		    		wingRF.material.transparent = true;
+
+		    		wingRF.material.opacity = 0.9;
+		    		wingRB.material.opacity = 0.9;
+		    		wingLF.material.opacity = 0.9;
+		    		wingRF.material.opacity = 0.9;
+
+		    		wingLB.material.depthTest = false;
+		    		wingRB.material.depthTest = false;
+		    		wingLF.material.depthTest = false;
+		    		wingRF.material.depthTest = false;
+
+		    		wingLB.material.side = THREE.DoubleSide;
+		    		wingRB.material.side = THREE.DoubleSide;
+		    		wingLF.material.side = THREE.DoubleSide;
+		    		wingRF.material.side = THREE.DoubleSide;
+		    		object.scale.set(6, 6, 6);
+		    		scene.add( object );
+
+			        // 正交投影摄像机
+					var camera = new THREE.PerspectiveCamera(45, 3/3, 0.2, 5);
+					camera.position.set(0, 0, 1);
+					// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+					camera.lookAt(new THREE.Vector3(0, 0, 0));
+					scene.add(camera);
+
+					// 灯光
+					scene.add( new THREE.AmbientLight( 0x999999 ) );
+					var light = new THREE.PointLight( 0xffffff, 1 );
+					light.position.set(-5, 5, 5);
+					camera.add(light);
+
+					// 进行渲染
+					renderer.render(scene, camera);
+					var v = 0;
+					function animate () {
+						v += Math.PI/1000;
+						if (v > Math.PI * 2) {
+							v = v - Math.PI * 2;
+						}
+						var x = 2 * Math.sin(v);
+						var z = 2 * Math.cos(v);
+						camera.position.set(x, 3, z);
+						camera.lookAt(new THREE.Vector3(0, 0, 0));
+						renderer.render(scene, camera);
+						requestAnimationFrame(animate);
+					}
+					animate();
+		    	},
+				// called while loading is progressing
+				function ( xhr ) {
+					console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+				},
+				function ( error ) {
+					console.log( 'An error happened', error);
+				}
+			)
+	});
+}
+</script>
+
+<script type="text/javascript">
+init8();
+function init8 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app7')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xffffff);
+	// 场景
+	var scene = new THREE.Scene();
+
+	var mtlLoader = new THREE.MTLLoader();
+	var objLoader = new THREE.OBJLoader();
+
+	mtlLoader.load('./misc_chair01.mtl', function (materials) {
+		materials.preload();
+		objLoader.setMaterials(materials)
+			.load('./misc_chair01.obj', 
+		    	function (object) {
+		    		scene.add( object );
+
+			        // 正交投影摄像机
+					var camera = new THREE.PerspectiveCamera(45, 3/3, 0.2, 5);
+					camera.position.set(0, 2, 3);
+					// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+					camera.lookAt(new THREE.Vector3(0, 1, 0));
+					scene.add(camera);
+
+					// 灯光
+					scene.add( new THREE.AmbientLight( 0xffffff ) );
+					var light = new THREE.PointLight( 0xffffff, 1 );
+					light.position.set(-5, 5, 5);
+					camera.add(light);
+
+					// 进行渲染
+					renderer.render(scene, camera);
+					var v = 0;
+					function animate () {
+						v += Math.PI/1000;
+						if (v > Math.PI * 2) {
+							v = v - Math.PI * 2;
+						}
+						var x = 3 * Math.sin(v);
+						var z = 3 * Math.cos(v);
+						camera.position.set(x, 2, z);
+						camera.lookAt(new THREE.Vector3(0, 1, 0));
+						renderer.render(scene, camera);
+						requestAnimationFrame(animate);
+					}
+					animate();
+		    	},
+				// called while loading is progressing
+				function ( xhr ) {
+					console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+				},
+				function ( error ) {
+					console.log( 'An error happened', error);
+				}
+			)
+	});
+}
+</script>
+</body>
+</html>
