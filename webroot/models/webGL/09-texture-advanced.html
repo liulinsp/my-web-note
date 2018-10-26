@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>WebGL 高级纹理</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle" id="materialMap">uv映射贴图</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+var faceVertexUvs = cubeGeometry.faceVertexUvs;
+// 右侧面-左上角
+faceVertexUvs[0][0][0].set(0,0.33333);
+faceVertexUvs[0][0][1].set(0,0);
+faceVertexUvs[0][0][2].set(0.33333,0.33333);
+
+// 右侧面-右下角
+faceVertexUvs[0][1][0].set(0,0);
+faceVertexUvs[0][1][1].set(0.33333,0);
+faceVertexUvs[0][1][2].set(0.33333,0.33333);
+
+// 左侧面-左上角
+faceVertexUvs[0][2][0].set(0.33333,0.33333);
+faceVertexUvs[0][2][1].set(0.33333,0);
+faceVertexUvs[0][2][2].set(0.66666,0.33333);
+
+// 左侧面-右下角
+faceVertexUvs[0][3][0].set(0.33333,0);
+faceVertexUvs[0][3][1].set(0.66666,0);
+faceVertexUvs[0][3][2].set(0.66666,0.33333);
+
+// 上面-左上角
+faceVertexUvs[0][4][0].set(0.66666,0.33333);
+faceVertexUvs[0][4][1].set(0.66666,0);
+faceVertexUvs[0][4][2].set(1,0.33333);
+
+// 上面-右下角
+faceVertexUvs[0][5][0].set(0.66666,0);
+faceVertexUvs[0][5][1].set(1,0);
+faceVertexUvs[0][5][2].set(1,0.33333);
+
+// 下面-左上角
+faceVertexUvs[0][6][0].set(0,0.66666);
+faceVertexUvs[0][6][1].set(0,0.33333);
+faceVertexUvs[0][6][2].set(0.33333,0.66666);
+
+// 下面-右下角
+faceVertexUvs[0][7][0].set(0,0.33333);
+faceVertexUvs[0][7][1].set(0.33333,0.33333);
+faceVertexUvs[0][7][2].set(0.33333,0.66666);
+
+// 前面-左上角
+faceVertexUvs[0][8][0].set(0.33333,0.66666);
+faceVertexUvs[0][8][1].set(0.33333,0.33333);
+faceVertexUvs[0][8][2].set(0.66666,0.66666);
+
+// 前面-右下角
+faceVertexUvs[0][9][0].set(0.33333,0.33333);
+faceVertexUvs[0][9][1].set(0.66666,0.33333);
+faceVertexUvs[0][9][2].set(0.66666,0.66666);
+
+// 后面-左上角
+faceVertexUvs[0][10][0].set(0.66666,0.66666);
+faceVertexUvs[0][10][1].set(0.66666,0.33333);
+faceVertexUvs[0][10][2].set(1,0.66666);
+
+// 后面-右下角
+faceVertexUvs[0][11][0].set(0.66666,0.33333);
+faceVertexUvs[0][11][1].set(1,0.33333);
+faceVertexUvs[0][11][2].set(1,0.66666);
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<script src="../../js/three/controls/TrackballControls.js"></script>
+<script type="text/javascript">
+init1();
+function init1 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(0,0,24);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	// scene.add(camera);
+
+	var trackballControls = new THREE.TrackballControls(camera);
+    trackballControls.rotateSpeed = 8.0;
+    trackballControls.zoomSpeed = 1.0;
+    trackballControls.panSpeed = 1.0;
+	trackballControls.noZoom = true; // 禁止缩放
+	// 如设置为true, 则禁用 按下鼠标右键平移的功能???
+	// trackballControls.noPan= false;
+    trackballControls.staticMoving = true;
+
+	var texture = new THREE.TextureLoader().load('./uv-map.png');
+	var meshMaterial = new THREE.MeshBasicMaterial({
+		map: texture
+	});
+	var cubeGeometry = new THREE.BoxGeometry(12, 12, 12);
+	var faceVertexUvs = cubeGeometry.faceVertexUvs;
+	// 右侧面-左上角
+	faceVertexUvs[0][0][0].set(0,0.33333);
+	faceVertexUvs[0][0][1].set(0,0);
+	faceVertexUvs[0][0][2].set(0.33333,0.33333);
+
+	// 右侧面-右下角
+	faceVertexUvs[0][1][0].set(0,0);
+	faceVertexUvs[0][1][1].set(0.33333,0);
+	faceVertexUvs[0][1][2].set(0.33333,0.33333);
+
+	// 左侧面-左上角
+	faceVertexUvs[0][2][0].set(0.33333,0.33333);
+	faceVertexUvs[0][2][1].set(0.33333,0);
+	faceVertexUvs[0][2][2].set(0.66666,0.33333);
+
+	// 左侧面-右下角
+	faceVertexUvs[0][3][0].set(0.33333,0);
+	faceVertexUvs[0][3][1].set(0.66666,0);
+	faceVertexUvs[0][3][2].set(0.66666,0.33333);
+
+	// 上面-左上角
+	faceVertexUvs[0][4][0].set(0.66666,0.33333);
+	faceVertexUvs[0][4][1].set(0.66666,0);
+	faceVertexUvs[0][4][2].set(1,0.33333);
+
+	// 上面-右下角
+	faceVertexUvs[0][5][0].set(0.66666,0);
+	faceVertexUvs[0][5][1].set(1,0);
+	faceVertexUvs[0][5][2].set(1,0.33333);
+
+	// 下面-左上角
+	faceVertexUvs[0][6][0].set(0,0.66666);
+	faceVertexUvs[0][6][1].set(0,0.33333);
+	faceVertexUvs[0][6][2].set(0.33333,0.66666);
+
+	// 下面-右下角
+	faceVertexUvs[0][7][0].set(0,0.33333);
+	faceVertexUvs[0][7][1].set(0.33333,0.33333);
+	faceVertexUvs[0][7][2].set(0.33333,0.66666);
+
+	// 前面-左上角
+	faceVertexUvs[0][8][0].set(0.33333,0.66666);
+	faceVertexUvs[0][8][1].set(0.33333,0.33333);
+	faceVertexUvs[0][8][2].set(0.66666,0.66666);
+
+	// 前面-右下角
+	faceVertexUvs[0][9][0].set(0.33333,0.33333);
+	faceVertexUvs[0][9][1].set(0.66666,0.33333);
+	faceVertexUvs[0][9][2].set(0.66666,0.66666);
+
+	// 后面-左上角
+	faceVertexUvs[0][10][0].set(0.66666,0.66666);
+	faceVertexUvs[0][10][1].set(0.66666,0.33333);
+	faceVertexUvs[0][10][2].set(1,0.66666);
+
+	// 后面-右下角
+	faceVertexUvs[0][11][0].set(0.66666,0.33333);
+	faceVertexUvs[0][11][1].set(1,0.33333);
+	faceVertexUvs[0][11][2].set(1,0.66666);
+	var cube = new THREE.Mesh(cubeGeometry, meshMaterial);
+	scene.add(cube);
+
+	// 进行渲染
+	var clock = new THREE.Clock();
+	render();
+	function render() {
+		// 获得距离上次调用的时间间隔
+        var delta = clock.getDelta();
+        trackballControls.update(delta);
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">重复纹理</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+* texture.wrapS 纹理沿x轴方向的行为
+* texture.wrapT 纹理沿y轴方向的行为
+这些属性有三个选项：
+1. THREE.ClampToEdgeWrapping 不会重复，默认值
+1. THREE.RepeatWrapping 允许纹理重复自己
+2. THREE.MirroredRepeatWrapping 镜像重复
+<b>脚本：</b>
+// 纹理
+var texture = new THREE.TextureLoader().load('./grid.png');
+<mark>texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;</mark>
+<mark>texture.repeat.set(8, 8);</mark>
+
+// 材质
+var meshMaterial = new THREE.MeshBasicMaterial({
+	map: texture
+});
+
+var cubeGeometry = new THREE.BoxGeometry(12, 12, 12);
+var cube = new THREE.Mesh(cubeGeometry, meshMaterial);
+scene.add(cube);
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script src="../../js/three/controls/TrackballControls.js"></script>
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(0,0,32);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	// scene.add(camera);
+
+	var trackballControls = new THREE.TrackballControls(camera);
+    trackballControls.rotateSpeed = 8.0;
+    trackballControls.zoomSpeed = 1.0;
+    trackballControls.panSpeed = 1.0;
+	trackballControls.noZoom = true; // 禁止缩放
+	// 如设置为true, 则禁用 按下鼠标右键平移的功能???
+	// trackballControls.noPan= false;
+    trackballControls.staticMoving = true;
+
+	// 纹理
+	var texture = new THREE.TextureLoader().load('./grid.png');
+	texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+	texture.repeat.set(8, 8);
+
+	// 材质
+	var meshMaterial = new THREE.MeshBasicMaterial({
+		map: texture
+	});
+
+	var cubeGeometry = new THREE.BoxGeometry(12, 12, 12);
+	var cube = new THREE.Mesh(cubeGeometry, meshMaterial);
+	scene.add(cube);
+
+	// 进行渲染
+	var clock = new THREE.Clock();
+	render();
+	function render() {
+		// 获得距离上次调用的时间间隔
+        var delta = clock.getDelta();
+        trackballControls.update(delta);
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">在画布上绘制图案并作为纹理</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// 纹理
+var canvas = draw();
+var texture = new THREE.CanvasTexture(canvas);
+texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+texture.repeat.set(2, 2);
+
+// 材质
+var material = new THREE.MeshPhongMaterial({
+	color: 0x77ff77,
+	bumpMap: texture,
+	bumpScale: 0.5
+});
+
+var geom = new THREE.SphereGeometry(8, 64, 64);
+var cube = new THREE.Mesh(geom, material);
+scene.add(cube);
+
+// 绘制凹凸纹理
+function draw () {
+	var canvas = document.createElement("canvas");
+    canvas.setAttribute("width", 256);
+    canvas.setAttribute("height", 256);
+    document.getElementById('app3').appendChild(canvas);
+    var ctx = canvas.getContext("2d");
+    var date = new Date();
+    var pn = new Perlin('rnd' + date.getTime());
+    fillWithPerlin(pn, ctx);
+    function fillWithPerlin(perlin, ctx) {
+        for (var x = 0; x < 512; x++) {
+            for (var y = 0; y < 512; y++) {
+                var base = new THREE.Color(0xffffff);
+                var value = perlin.noise(x / 10, y / 10, 0);
+                base.multiplyScalar(value);
+                ctx.fillStyle = "#" + base.getHexString();
+                ctx.fillRect(x, y, 1, 1);
+            }
+        }
+    }
+    return canvas;
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script src="../../js/three/perlin.js"></script>
+<script src="../../js/three/controls/TrackballControls.js"></script>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(0,0,32);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	// scene.add(camera);
+
+	var trackballControls = new THREE.TrackballControls(camera);
+    trackballControls.rotateSpeed = 8.0;
+    trackballControls.zoomSpeed = 1.0;
+    trackballControls.panSpeed = 1.0;
+	trackballControls.noZoom = true; // 禁止缩放
+	// 如设置为true, 则禁用 按下鼠标右键平移的功能???
+	// trackballControls.noPan= false;
+    trackballControls.staticMoving = true;
+
+    // 光照
+	var light = new THREE.AmbientLight(0x666666);
+	scene.add(light);
+	var pointLight1 = new THREE.PointLight(0xffffff, 0.6, 520);
+	pointLight1.position.set(-50, -50, -50);
+	scene.add(pointLight1);
+	var pointLight2 = new THREE.PointLight(0xffffff, 0.4, 400);
+	pointLight2.position.set(50, 50, 50);
+	scene.add(pointLight2);
+
+	// 纹理
+	var canvas = draw();
+	var texture = new THREE.CanvasTexture(canvas);
+	texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+	texture.repeat.set(2, 2);
+	
+	// 材质
+	var material = new THREE.MeshPhongMaterial({
+		color: 0x77ff77,
+		bumpMap: texture,
+		bumpScale: 0.5
+	});
+
+	var geom = new THREE.SphereGeometry(8, 64, 64);
+	var cube = new THREE.Mesh(geom, material);
+	scene.add(cube);
+
+	// 进行渲染
+	var clock = new THREE.Clock();
+	render();
+	function render() {
+		// 获得距离上次调用的时间间隔
+        var delta = clock.getDelta();
+        trackballControls.update(delta);
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+}
+
+function draw () {
+	var canvas = document.createElement("canvas");
+    canvas.setAttribute("width", 256);
+    canvas.setAttribute("height", 256);
+    document.getElementById('app3').appendChild(canvas);
+    var ctx = canvas.getContext("2d");
+    var date = new Date();
+    var pn = new Perlin('rnd' + date.getTime());
+    fillWithPerlin(pn, ctx);
+    function fillWithPerlin(perlin, ctx) {
+        for (var x = 0; x < 512; x++) {
+            for (var y = 0; y < 512; y++) {
+                var base = new THREE.Color(0xffffff);
+                var value = perlin.noise(x / 10, y / 10, 0);
+                base.multiplyScalar(value);
+                ctx.fillStyle = "#" + base.getHexString();
+                ctx.fillRect(x, y, 1, 1);
+            }
+        }
+    }
+    return canvas;
+}
+</script>
+</body>
+</html>

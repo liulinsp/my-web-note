@@ -7,6 +7,8 @@
 	<script src="../../js/three/three.js"></script>
 </head>
 <body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
 <div class="aTitle" id="materialMap">凹凸贴图</div>
 <div class="aPane">
 	<div class="aCode">
@@ -26,8 +28,8 @@ var textureLoader = new THREE.TextureLoader();
 textureLoader.load('./stone.jpg', function(texture) {
 	material.map = texture;
     textureLoader.load('./stone-bump.jpg', function(bumpTexture) {
-    	material.bumpMap = bumpTexture;
-    	materialbumpScale = 0.2;
+    	material.<mark>bumpMap</mark> = bumpTexture;
+    	material.bumpScale = 0.5;
     	renderer.render(scene, camera);
 
     	var v = 0; // 旋转角度
@@ -43,16 +45,16 @@ textureLoader.load('./stone.jpg', function(texture) {
 });
 		</pre>
 	</div>
-	<div class="aShow note" id="app5">
+	<div class="aShow note" id="app1">
 	</div>
 </div>
 <script type="text/javascript">
-init5();
-function init5 () {
+init1();
+function init1 () {
 	// HTML中无canvas标签，自动创建
 	var renderer = new THREE.WebGLRenderer({antialias:true});
 	renderer.setSize(400, 300);
-	var parentEle = document.getElementById('app5')
+	var parentEle = document.getElementById('app1')
 	parentEle.appendChild(renderer.domElement);
 
 	// 将背景色（用于清除画面的颜色)
@@ -88,7 +90,7 @@ function init5 () {
 		material.map = texture;
 	    textureLoader.load('./stone-bump.jpg', function(bumpTexture) {
 	    	material.bumpMap = bumpTexture;
-	    	materialbumpScale = 0.2;
+	    	material.bumpScale = 0.5;
 	    	renderer.render(scene, camera);
 
 	    	var v = 0; // 旋转角度
@@ -103,6 +105,439 @@ function init5 () {
 	    });
 	});
 }
-</script>	
+</script>
+
+<div class="aTitle" id="materialMap">法向量贴图</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// 正方体
+var geom = new THREE.CubeGeometry(24, 24, 24);
+geom.computeVertexNormals();
+// 材料
+var material = new THREE.MeshPhongMaterial();
+var mesh = new THREE.Mesh(geom, material);
+mesh.rotation.set(Math.PI / 12, Math.PI / 12, 0);
+scene.add(mesh);
+
+// 纹理
+var textureLoader = new THREE.TextureLoader();
+textureLoader.load('./metal-floor.jpg', function(texture) {
+	material.map = texture;
+    textureLoader.load('./metal-floor-normal.jpg', function(normalTexture) {
+    	material.<mark>normalMap</mark> = normalTexture;
+    	material.normalScale.set(1, 1);
+    	renderer.render(scene, camera);
+
+    	var v = 0; // 旋转角度
+		function animate () {
+			v += Math.PI / 640;
+			v = v % (Math.PI * 2);
+			mesh.rotation.set(v, v, v);
+			renderer.render(scene, camera);
+			requestAnimationFrame(animate);
+		}
+		animate();
+    });
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100);
+	camera.position.set(0,0,40);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x242424);
+	scene.add(light);
+	var pointLight = new THREE.PointLight(0xffffff, 2, 320);
+	pointLight.position.set(50, 50, 100);
+	scene.add(pointLight);
+
+	// 正方体
+	var geom = new THREE.CubeGeometry(24, 24, 24);
+	geom.computeVertexNormals();
+	// 材料
+	var material = new THREE.MeshPhongMaterial();
+	var mesh = new THREE.Mesh(geom, material);
+	mesh.rotation.set(Math.PI / 12, Math.PI / 12, 0);
+	scene.add(mesh);
+
+	// 纹理
+	var textureLoader = new THREE.TextureLoader();
+	textureLoader.load('./metal-floor.jpg', function(texture) {
+		material.map = texture;
+	    textureLoader.load('./metal-floor-normal.jpg', function(normalTexture) {
+	    	material.normalMap = normalTexture;
+	    	material.normalScale.set(1, 1);
+	    	renderer.render(scene, camera);
+
+	    	var v = 0; // 旋转角度
+			function animate () {
+				v += Math.PI / 640;
+				v = v % (Math.PI * 2);
+				mesh.rotation.set(v, v, v);
+				renderer.render(scene, camera);
+				requestAnimationFrame(animate);
+			}
+			animate();
+	    });
+	});
+}
+</script>
+
+<div class="aTitle" id="materialMap">光照贴图创建阴影效果</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// 纹理
+var textureLoader = new THREE.TextureLoader();
+textureLoader.load('./light-map.png', function(lightMap) {
+	// 平面
+	var groundGeom = new THREE.PlaneGeometry(95, 95)
+	<mark>groundGeom.faceVertexUvs[1] = groundGeom.faceVertexUvs[0];</mark>
+	var plane = new THREE.Mesh(
+		groundGeom,
+	    new THREE.MeshLambertMaterial({
+	    	color: 0xa27042,
+	        <mark>lightMap</mark>: lightMap
+	    })
+	);
+	plane.position.set(0, 0, 0);
+	plane.rotation.set(-Math.PI / 2, 0 , 0);
+	scene.add(plane);
+
+	// 立方体
+	var meshMaterial = new THREE.MeshLambertMaterial({color: 0xcccccc});
+	var cubeGeometry = new THREE.BoxGeometry(12, 12, 12);
+	var cubeGeometry2 = new THREE.BoxGeometry(6, 6, 6);
+	var cube = new THREE.Mesh(cubeGeometry, meshMaterial);
+    var cube2 = new THREE.Mesh(cubeGeometry2, meshMaterial);
+    cube.position.set(0.4, 6, -0.5);
+    cube2.position.set(-13.2, 3, 0);
+    scene.add(cube);
+	scene.add(cube2);
+
+	renderer.render(scene, camera);
+});
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 200);
+	camera.position.set(10, 30, 50);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(10, 0, 0));
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x242424);
+	scene.add(light);
+	var pointLight1 = new THREE.PointLight(0xffffff, 1, 520);
+	pointLight1.position.set(-100, 100, -100);
+	scene.add(pointLight1);
+	var pointLight2 = new THREE.PointLight(0xffffff, 0.3, 1000);
+	pointLight2.position.set(100, 100, 200);
+	scene.add(pointLight2);
+
+	// 纹理
+	var textureLoader = new THREE.TextureLoader();
+	textureLoader.load('./light-map.png', function(lightMap) {
+		// 平面
+		var groundGeom = new THREE.PlaneGeometry(95, 95)
+		groundGeom.faceVertexUvs[1] = groundGeom.faceVertexUvs[0];
+		var plane = new THREE.Mesh(
+			groundGeom,
+		    new THREE.MeshLambertMaterial({
+		    	color: 0xa27042,
+		        lightMap: lightMap
+		    })
+		);
+		plane.position.set(0, 0, 0);
+		plane.rotation.set(-Math.PI / 2, 0 , 0);
+		scene.add(plane);
+
+		// 立方体
+		var meshMaterial = new THREE.MeshLambertMaterial({color: 0xcccccc});
+		var cubeGeometry = new THREE.BoxGeometry(12, 12, 12);
+		var cubeGeometry2 = new THREE.BoxGeometry(6, 6, 6);
+		var cube = new THREE.Mesh(cubeGeometry, meshMaterial);
+        var cube2 = new THREE.Mesh(cubeGeometry2, meshMaterial);
+        cube.position.set(0.4, 6, -0.5);
+        cube2.position.set(-13.2, 3, 0);
+        scene.add(cube);
+		scene.add(cube2);
+
+		renderer.render(scene, camera);
+	});
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">环境贴图创建反光效果</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// 设置背景图片
+scene.background = new THREE.CubeTextureLoader()
+	.setPath( './panorama/bridge/' )
+	.load([
+		'r.jpg', 'l.jpg', 'u.jpg', 'd.jpg', 'f.jpg', 'b.jpg'
+	], function () {
+		renderer.render(scene, camera);
+	});
+
+// 添加圆球
+var geometry = new THREE.SphereBufferGeometry( 10, 32, 16 );
+var material = new THREE.MeshBasicMaterial( { 
+	color: 0xffffff,
+	<mark>envMap</mark>: scene.background
+});
+for ( var i = 0; i < 50; i ++ ) {
+	var mesh = new THREE.Mesh( geometry, material );
+	mesh.position.x = Math.random() * 500 - 250;
+	mesh.position.y = Math.random() * 500 - 250;
+	mesh.position.z = Math.random() * 500 - 250;
+	mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 3 + 1;
+	scene.add( mesh );
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+	</div>
+</div>
+<script type="text/javascript">
+init4();
+function init4 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app4')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000);
+	camera.position.set(0, 0, 0);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	var target = new THREE.Vector3(0, 0, -50);
+	camera.lookAt(target);
+	scene.add(camera);
+
+	// 设置背景图片
+	scene.background = new THREE.CubeTextureLoader()
+		.setPath( './panorama/bridge/' )
+		.load([
+			'r.jpg', 'l.jpg', 'u.jpg', 'd.jpg', 'f.jpg', 'b.jpg'
+		], function () {
+			// renderer.render(scene, camera);
+		});
+
+	// 添加圆球
+	var geometry = new THREE.SphereBufferGeometry( 10, 32, 16 );
+	var material = new THREE.MeshBasicMaterial( { 
+		color: 0xffffff,
+		envMap: scene.background
+	});
+	for ( var i = 0; i < 50; i ++ ) {
+		var mesh = new THREE.Mesh( geometry, material );
+		mesh.position.x = Math.random() * 500 - 250;
+		mesh.position.y = Math.random() * 500 - 250;
+		mesh.position.z = Math.random() * 500 - 250;
+		mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 3 + 1;
+		scene.add( mesh );
+	}
+
+	// 旋转动画
+	var lon = 90, lat = 0;
+	var phi = 0, theta = 0;
+
+	function animate () {
+		lon +=  0.1;
+		lat = Math.max( - 85, Math.min( 85, lat ) );
+		phi = THREE.Math.degToRad( 90 - lat );
+		theta = THREE.Math.degToRad( lon );
+		target.x = Math.sin( phi ) * Math.cos( theta );
+		target.y = Math.cos( phi );
+		target.z = Math.sin( phi ) * Math.sin( theta );
+		camera.lookAt( target );
+		renderer.render(scene, camera);
+		requestAnimationFrame(animate);
+	}
+	animate();
+
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	//document.addEventListener( 'wheel', onDocumentMouseWheel, false );
+	document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+	document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+	function onDocumentMouseDown( event ) {
+		event.preventDefault();
+		document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+		document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	}
+	function onDocumentMouseMove( event ) {
+		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+		lon -= movementX * 0.1;
+		lat += movementY * 0.1;
+	}
+	function onDocumentMouseUp( event ) {
+		document.removeEventListener( 'mousemove', onDocumentMouseMove );
+		document.removeEventListener( 'mouseup', onDocumentMouseUp );
+	}
+
+	/*function onDocumentMouseWheel( event ) {
+		var fov = camera.fov + event.deltaY * 0.05;
+		camera.fov = THREE.Math.clamp( fov, 10, 75 );
+		camera.updateProjectionMatrix();
+	}*/
+
+	var touchX, touchY;
+	function onDocumentTouchStart( event ) {
+		event.preventDefault();
+		var touch = event.touches[ 0 ];
+		touchX = touch.screenX;
+		touchY = touch.screenY;
+	}
+	function onDocumentTouchMove( event ) {
+		event.preventDefault();
+		var touch = event.touches[ 0 ];
+		lon -= ( touch.screenX - touchX ) * 0.1;
+		lat += ( touch.screenY - touchY ) * 0.1;
+		touchX = touch.screenX;
+		touchY = touch.screenY;
+	}
+}
+</script>
+
+
+<div class="aTitle">高光贴图</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// 高光
+var specularTexture = new THREE.TextureLoader().load(
+	'./earth-spec.png',
+	function() {
+    	renderer.render(scene, camera);
+	}
+);
+
+// 材料
+var material = new THREE.MeshPhongMaterial({
+	color: 0x1e1e1e,
+	<mark>specularMap</mark>: specularTexture,
+	specular: 0x51eaf2,
+	shininess: 1
+});
+
+// 球体
+var cube = new THREE.Mesh(
+	new THREE.SphereGeometry(1, 64, 64),
+    material
+);
+scene.add(cube);
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+	</div>
+</div>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app5')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+	camera.position.set(0, 0, 3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	var target = new THREE.Vector3(0, 0, 0);
+	camera.lookAt(target);
+	scene.add(camera);
+
+	// 光照
+	var light = new THREE.AmbientLight(0x242424);
+	scene.add(light);
+	var pointLight = new THREE.PointLight(0xffffff, 2, 320);
+	pointLight.position.set(0, 0, 10);
+	scene.add(pointLight);
+
+	// 高光
+	var specularTexture = new THREE.TextureLoader().load(
+		'./earth-spec.png',
+		function() {
+	    	renderer.render(scene, camera);
+		}
+	);
+	
+	// 材料
+	var material = new THREE.MeshPhongMaterial({
+		color: 0x1e1e1e,
+		specularMap: specularTexture,
+		specular: 0x51eaf2,
+		shininess: 1
+	});
+
+	// 球体
+	var cube = new THREE.Mesh(
+		new THREE.SphereGeometry(1, 64, 64),
+	    material
+	);
+	scene.add(cube);
+
+	// 进行渲染
+	renderer.render(scene, camera);
+	
+}
+</script>
 </body>
 </html>

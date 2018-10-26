@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SVG图标变形</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.ham {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 400ms;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.hamRotate.active {
+  transform: rotate(45deg);
+}
+.line {
+  fill:none;
+  transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+  stroke:#000;
+  stroke-width:5.5;
+  stroke-linecap:round;
+}
+
+.ham1 .top {
+  stroke-dasharray: 40 139;
+}
+.ham1 .bottom {
+  stroke-dasharray: 40 180;
+}
+.ham1.active .top {
+  stroke-dashoffset: -98px;
+}
+.ham1.active .bottom {
+  stroke-dashoffset: -138px;
+}
+
+.ham2 .top {
+  stroke-dasharray: 40 121;
+}
+.ham2 .bottom {
+  stroke-dasharray: 40 121;
+}
+.ham2.active .top {
+  stroke-dashoffset: -102px;
+}
+.ham2.active .bottom {
+  stroke-dashoffset: -102px;
+}
+</style>
+<div class="aTitle">SVG线段图标变形 - 样式控制</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+参考：http://yanshi.sucaihuo.com/jquery/38/3885/demo/
+
+<b>样式：</b>
+.ham {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 400ms;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.hamRotate.active {
+  transform: rotate(45deg);
+}
+.line {
+  fill:none;
+  transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+  stroke:#000;
+  stroke-width:5.5;
+  stroke-linecap:round;
+}
+
+.ham1 .top {
+  stroke-dasharray: 40 139;
+}
+.ham1 .bottom {
+  stroke-dasharray: 40 180;
+}
+.ham1.active .top {
+  stroke-dashoffset: -98px;
+}
+.ham1.active .bottom {
+  stroke-dashoffset: -138px;
+}
+
+.ham2 .top {
+  stroke-dasharray: 40 121;
+}
+.ham2 .bottom {
+  stroke-dasharray: 40 121;
+}
+.ham2.active .top {
+  stroke-dashoffset: -102px;
+}
+.ham2.active .bottom {
+  stroke-dashoffset: -102px;
+}
+
+<b>页面</b>
+&lt;svg class="ham hamRotate ham1" viewBox="0 0 100 100" width="80"
+	 onclick="this.classList.toggle('active')"&gt;
+  &lt;path
+        class="line top"
+        d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 
+        -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,
+        4.171617 -13.637059,16.368042 v 40" /&gt;
+  &lt;path
+        class="line middle"
+        d="m 30,50 h 40" /&gt;
+  &lt;path
+        class="line bottom"
+        d="m 30,67 h 40 c 12.796276,0 15.357889,-11.717785 15.357889,-26.851538
+         0,-15.133752 -4.786586,-27.274118 -16.667516,-27.274118 -11.88093,0 
+         -18.499247,6.994427 -18.435284,17.125656 l 0.252538,40" /&gt;
+&lt;/svg&gt;
+
+&lt;svg class="ham ham2" viewBox="0 0 100 100" width="80" 
+	onclick="this.classList.toggle('active')"&gt;
+  &lt;path
+        class="line top"
+        d="m 70,33 h -40 c -6.5909,0 -7.763966,-4.501509 -7.763966,-7.511428 0,
+        -4.721448 3.376452,-9.583771 13.876919,-9.583771 14.786182,0 11.409257,
+        14.896182 9.596449,21.970818 -1.812808,7.074636 -15.709402,12.124381
+         -15.709402,12.124381" /&gt;
+  &lt;path
+        class="line middle"
+        d="m 30,50 h 40" /&gt;
+  &lt;path
+        class="line bottom"
+        d="m 70,67 h -40 c -6.5909,0 -7.763966,4.501509 -7.763966,7.511428 0,4.721448
+         3.376452,9.583771 13.876919,9.583771 14.786182,0 11.409257,-14.896182 9.596449,
+         -21.970818 -1.812808,-7.074636 -15.709402,-12.124381 -15.709402,-12.124381" /&gt;
+&lt;/svg&gt;
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+<svg class="ham hamRotate ham1" viewBox="0 0 100 100" width="80" onclick="this.classList.toggle('active')">
+  <path
+        class="line top"
+        d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,4.171617 -13.637059,16.368042 v 40" />
+  <path
+        class="line middle"
+        d="m 30,50 h 40" />
+  <path
+        class="line bottom"
+        d="m 30,67 h 40 c 12.796276,0 15.357889,-11.717785 15.357889,-26.851538 0,-15.133752 -4.786586,-27.274118 -16.667516,-27.274118 -11.88093,0 -18.499247,6.994427 -18.435284,17.125656 l 0.252538,40" />
+</svg>
+
+<svg class="ham ham2" viewBox="0 0 100 100" width="80" onclick="this.classList.toggle('active')">
+  <path
+        class="line top"
+        d="m 70,33 h -40 c -6.5909,0 -7.763966,-4.501509 -7.763966,-7.511428 0,-4.721448 3.376452,-9.583771 13.876919,-9.583771 14.786182,0 11.409257,14.896182 9.596449,21.970818 -1.812808,7.074636 -15.709402,12.124381 -15.709402,12.124381" />
+  <path
+        class="line middle"
+        d="m 30,50 h 40" />
+  <path
+        class="line bottom"
+        d="m 70,67 h -40 c -6.5909,0 -7.763966,4.501509 -7.763966,7.511428 0,4.721448 3.376452,9.583771 13.876919,9.583771 14.786182,0 11.409257,-14.896182 9.596449,-21.970818 -1.812808,-7.074636 -15.709402,-12.124381 -15.709402,-12.124381" />
+</svg>
+	</div>
+</div>
+<script type="text/javascript">
+
+</script>
+
+
+<div class="aTitle">SVG填充图标变形 - svg-morpheus (锚点个数要保持一致)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>github:</b> https://github.com/alexk111/SVG-Morpheus
+
+<b>页面</b>
+&lt;svg id="weather" version="1.1" xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+	viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" 
+	xml:space="preserve"&gt;
+	&lt;g id="cloud" style="display:none"&gt;&lt;path 
+		d="M199,461c13.436-99.876,84.532-176.111,175.619-217.814,88.022-40.3,
+		194.713-48.353,286.079-14.333C764.686,267.572,848.825,360.792,863,
+		523c200.29,38.012,130.959,269.462,14,268,0.705,0-167.556-.34-341
+		.912-0.528C348.05,790.27,154,790.243,154,791-34.6,795.386-49.538,
+		447.842,199,461Z"/&gt;&lt;/g&gt;
+	&lt;g id="lightning" style="display:none"&gt;&lt;path d="M190,537L399,
+		10H811L541,352l236,2L213,986,401,538Z"/&gt;&lt;/g&gt;
+&lt;/svg&gt;
+
+<b>脚本：</b>
+&lt;script type="text/javascript" src="../../js/svg-morpheus.js"&gt;&lt;/script&gt;
+
+var weatherIcon = new SVGMorpheus('#weather');
+var curWeatherIcon = ''
+
+function changeWeather () {
+	curWeatherIcon = curWeatherIcon === 'cloud' ? 'lightning' : 'cloud';
+	// weatherIcon.to(curWeatherIcon, {duration: 300, easing: 'quad-in-out', rotation: 'none'});
+	weatherIcon.to(curWeatherIcon, {duration: 500, easing: 'elastic-out', rotation: 'none'});
+}
+
+changeWeather();
+setInterval(changeWeather, 2000);
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+<svg id="weather" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+	<g id="cloud" style="display:none"><path d="M199,461c13.436-99.876,84.532-176.111,175.619-217.814,88.022-40.3,194.713-48.353,286.079-14.333C764.686,267.572,848.825,360.792,863,523c200.29,38.012,130.959,269.462,14,268,0.705,0-167.556-.34-341.912-0.528C348.05,790.27,154,790.243,154,791-34.6,795.386-49.538,447.842,199,461Z"/></g>
+	<g id="lightning" style="display:none"><path d="M190,537L399,10H811L541,352l236,2L213,986,401,538Z"/></g>
+</svg>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/svg-morpheus.js"></script>
+<script type="text/javascript">
+var weatherIcon = new SVGMorpheus('#weather');
+var curWeatherIcon = ''
+
+function changeWeather () {
+	curWeatherIcon = curWeatherIcon === 'cloud' ? 'lightning' : 'cloud';
+	weatherIcon.to(curWeatherIcon, {duration: 500, easing: 'elastic-out', rotation: 'none'});
+}
+
+changeWeather();
+setInterval(changeWeather, 2000);
+</script>
+
+<div class="aTitle">SVG描边图标变形 - svg-morpheus (锚点个数要保持一致)</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>页面</b>
+&lt;svg id="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" 
+	xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+	viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" 
+	style="fill: none;stroke: #000;stroke-width: 50px;stroke-linecap: round;fill-rule: evenodd;"&gt;
+	&lt;g id="star" style="display:none"&gt;&lt;path d="M501.387,84L358.66,344.95,67,406.612,270.9,
+		621.985l-38.12,293.121L499.613,793.568,770,916l-38.12-295.8L934,404.825,644.113,344.95Z"/&gt;&lt;/g&gt;
+	&lt;g id="heart" style="display:none"&gt;&lt;path d="M500.313,282.7C427.048,96.313,259.8,69.973,
+		164.286,176.032,122.613,222.306,94.6,293.782,94,388.165c-0.452,70.752,23.955,123.134,59.5,
+		165.08,50.181,59.222,122.556,97.638,178.5,137.573,92.66,66.161,168.943,195.193,168.943,
+		195.193S583.236,755.2,669.01,688.968c53.347-41.19,123.358-78.233,173.615-133.923,
+		38.1-42.218,64.847-95.153,64.377-168.734-0.6-94.286-28.9-164.536-70.865-209.533C739.472,
+		73.124,570.315,103.473,500.313,282.7Z"/&gt;&lt;/g&gt;
+&lt;/svg&gt;
+
+<b>脚本：</b>
+&lt;script type="text/javascript" src="../../js/svg-morpheus.js"&gt;&lt;/script&gt;
+
+var svgIcon = new SVGMorpheus('#icon');
+var curIcon = ''
+
+function change () {
+	curIcon = curIcon === 'star' ? 'heart' : 'star';
+	svgIcon.to(curIcon, {duration: 500, easing: 'quad-in-out', rotation: 'clock'});
+}
+
+change();
+setInterval(change, 2000);
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+<svg id="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" style="fill: none;stroke: #000;stroke-width: 50px;stroke-linecap: round;fill-rule: evenodd;">
+	<g id="star" style="display:none"><path d="M501.387,84L358.66,344.95,67,406.612,270.9,621.985l-38.12,293.121L499.613,793.568,770,916l-38.12-295.8L934,404.825,644.113,344.95Z"/></g>
+	<g id="heart" style="display:none"><path d="M500.313,282.7C427.048,96.313,259.8,69.973,164.286,176.032,122.613,222.306,94.6,293.782,94,388.165c-0.452,70.752,23.955,123.134,59.5,165.08,50.181,59.222,122.556,97.638,178.5,137.573,92.66,66.161,168.943,195.193,168.943,195.193S583.236,755.2,669.01,688.968c53.347-41.19,123.358-78.233,173.615-133.923,38.1-42.218,64.847-95.153,64.377-168.734-0.6-94.286-28.9-164.536-70.865-209.533C739.472,73.124,570.315,103.473,500.313,282.7Z"/></g>
+</svg>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/svg-morpheus.js"></script>
+<script type="text/javascript">
+var svgIcon = new SVGMorpheus('#icon');
+var curIcon = ''
+
+function change () {
+	curIcon = curIcon === 'star' ? 'heart' : 'star';
+	svgIcon.to(curIcon, {duration: 1000, easing: 'quad-in-out', rotation: 'clock'});
+}
+
+change();
+setInterval(change, 2000);
+</script>
+
+
+<div class="aTitle">SVG变形(TweenMax + MorphSVGPlugin) 【可兼容IE9】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+TweenMax参考: https://www.tweenmax.com.cn/
+
+&lt;svg id="sex" version="1.1" xmlns="http://www.w3.org/2000/svg"
+	 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+	 viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"&gt;
+&lt;g&gt;
+	&lt;path id="boy" d="M199,461c13.436-99.876,84.532-176.111,175.619-217.814,
+	88.022-40.3,194.713-48.353,286.079-14.333C764.686,267.572,848.825,360.792,
+	863,523c200.29,38.012,130.959,269.462,14,268,0.705,0-167.556-.34-341
+	.912-0.528C348.05,790.27,154,790.243,154,791-34.6,795.386-49.538,447
+	.842,199,461Z"/&gt;
+	&lt;path style="display:none" id="girl" 
+		d="M190,537L399,10H811L541,352l236,2L213,986,401,538Z"/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;
+
+&lt;script type="text/javascript" src="../../js/TweenMax.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="../../js/MorphSVGPlugin.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+var boy = document.getElementById("boy").getAttribute("d");
+TweenLite.set("svg", {visibility:"visible"});
+var tl = new TimelineMax({repeat:-1, repeatDelay:0.5, delay:1});
+tl.to("#boy", 0.5, {morphSVG:"#girl" , ease:Back.easeOut})
+  .to("#boy", 0.5, {morphSVG:boy,  ease:Bounce.easeOut}, "+=0.5")
+&lt;/script&gt;
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+<svg id="sex" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g>
+	<path id="boy" d="M199,461c13.436-99.876,84.532-176.111,175.619-217.814,88.022-40.3,194.713-48.353,286.079-14.333C764.686,267.572,848.825,360.792,863,523c200.29,38.012,130.959,269.462,14,268,0.705,0-167.556-.34-341.912-0.528C348.05,790.27,154,790.243,154,791-34.6,795.386-49.538,447.842,199,461Z"/>
+	<path style="display:none" id="girl" d="M190,537L399,10H811L541,352l236,2L213,986,401,538Z"/>
+</g></svg>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/TweenMax.min.js"></script>
+<script type="text/javascript" src="../../js/MorphSVGPlugin.min.js"></script>
+<script type="text/javascript">
+var boy = document.getElementById("boy").getAttribute("d");
+TweenLite.set("svg", {visibility:"visible"});
+var tl = new TimelineMax({repeat:-1, repeatDelay:0.5, delay:1});
+tl.to("#boy", 0.5, {morphSVG:"#girl" , ease:Back.easeOut})
+  .to("#boy", 0.5, {morphSVG:boy,  ease:Bounce.easeOut}, "+=0.5")
+</script>
+</body>
+</html>
+
+
+
+

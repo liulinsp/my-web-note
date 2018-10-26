@@ -15,6 +15,7 @@
 		<pre class="note">
 1. 正交投影照相机
 2. 透视投影照相机
+3. 立方体相机（或全景相机）
 		</pre>
 	</div>
 </div>
@@ -181,6 +182,208 @@ function init2 () {
 }
 </script>
 
+<div class="aTitle">立方体相机（或全景相机）</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本：</b>
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(400, 300);
+var parentEle = document.getElementById('app3')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0x000000);
+// 场景
+var scene = new THREE.Scene();
+// 模糊
+scene.fog = new THREE.Fog( 0, 1000, 10000 );
+// 透视投影摄像机
+var camera = new THREE.PerspectiveCamera(45, 4/3, 2, 10000);
+camera.position.set(500, 300, 1200);
+// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+camera.lookAt(new THREE.Vector3(0, 300, 0));
+scene.add(camera);
+
+// 环境光(深褐色)
+scene.add( new THREE.AmbientLight(0x3f2806) );
+// 中心点光源（橘黄色）
+var pointLight = new THREE.PointLight(0xffaa00, 1, 5000);
+scene.add( pointLight );
+// 太阳光（白色）
+var sunLight = new THREE.PointLight(0xffffff, 0.3, 0, Math.PI/2);
+sunLight.position.set(1000, 2000, 1000);
+sunLight.castShadow = true;
+sunLight.shadow.camera.left = -1000;
+sunLight.shadow.camera.right = 1000;
+sunLight.shadow.camera.top = 1000;
+sunLight.shadow.camera.bottom = -1000;
+sunLight.shadow.camera.near = 750;
+sunLight.shadow.camera.far = 10000;
+scene.add(sunLight);
+
+// 地面
+var groundMaterial = new THREE.MeshPhongMaterial( { 
+	shininess: 80,
+	color: 0xffffff,
+	specular: 0xffffff,
+} );
+var planeGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+var ground = new THREE.Mesh( planeGeometry, groundMaterial );
+ground.position.set( 0, 0, 0 );
+ground.rotation.x = - Math.PI / 2;
+ground.scale.set( 1000, 1000, 1000 );
+ground.receiveShadow = true;
+scene.add( ground );
+
+// 正方体
+var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+var cube = new THREE.Mesh(
+	new THREE.CubeGeometry(200, 2200, 200),
+    cubeMaterial
+);
+cube.material.color.offsetHSL( 0.1, -0.1, 0 );
+cube.rotation.y = Math.PI / 2;
+cube.position.set(-200, 100, 200);
+cube.castShadow = true; 
+scene.add(cube);
+
+// 全景相机
+<mark>var cubeCamera = new THREE.CubeCamera( 1, 10000, 128 );</mark>
+// 添加反光圆球
+var sphereGeometry = new THREE.SphereGeometry( 160, 32, 32 );
+var sphereMaterial = new THREE.MeshPhongMaterial( { 
+	color: 0xffffff,
+	specular: 0x999999,
+	shininess: 50,
+	// 使用全景相机做环境贴图
+	<mark>envMap: cubeCamera.renderTarget.texture</mark>
+});
+var mesh = new THREE.Mesh( sphereGeometry, sphereMaterial );
+mesh.add( cubeCamera );
+mesh.position.set(100, 160, -500);
+mesh.castShadow = true;
+scene.add(mesh);
+
+// 告诉渲染器渲染阴影
+renderer.shadowMap.enabled = true;
+// 软阴影(默认：THREE.PCFShadowMap)
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// 所有纹理和颜色进行γ
+renderer.gammaInput = true;
+// 所有的纹理和颜色都需要进行γ输出
+renderer.gammaOutput = true;
+
+mesh.visible = false;
+<mark>cubeCamera.update( renderer, scene );</mark>
+mesh.visible = true;
+
+renderer.render(scene, camera);
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 模糊
+	scene.fog = new THREE.Fog( 0, 1000, 10000 );
+	// 透视投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 2, 10000);
+	camera.position.set(500, 300, 1200);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 300, 0));
+	scene.add(camera);
+
+	// 环境光(深褐色)
+	scene.add( new THREE.AmbientLight(0x3f2806) );
+	// 中心点光源（橘黄色）
+	var pointLight = new THREE.PointLight(0xffaa00, 1, 5000);
+	scene.add( pointLight );
+	// 太阳光（白色）
+	var sunLight = new THREE.PointLight(0xffffff, 0.3, 0, Math.PI/2);
+	sunLight.position.set(1000, 2000, 1000);
+	sunLight.castShadow = true;
+	sunLight.shadow.camera.left = -1000;
+	sunLight.shadow.camera.right = 1000;
+	sunLight.shadow.camera.top = 1000;
+	sunLight.shadow.camera.bottom = -1000;
+	sunLight.shadow.camera.near = 750;
+	sunLight.shadow.camera.far = 10000;
+	scene.add(sunLight);
+
+	// 地面
+	var groundMaterial = new THREE.MeshPhongMaterial( { 
+		shininess: 80,
+		color: 0xffffff,
+		specular: 0xffffff,
+	} );
+	var planeGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+	var ground = new THREE.Mesh( planeGeometry, groundMaterial );
+	ground.position.set( 0, 0, 0 );
+	ground.rotation.x = - Math.PI / 2;
+	ground.scale.set( 1000, 1000, 1000 );
+	ground.receiveShadow = true;
+	scene.add( ground );
+
+	// 正方体
+	var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+	var cube = new THREE.Mesh(
+		new THREE.CubeGeometry(200, 2200, 200),
+	    cubeMaterial
+	);
+	cube.material.color.offsetHSL( 0.1, -0.1, 0 );
+	cube.rotation.y = Math.PI / 2;
+	cube.position.set(-200, 100, 200);
+	cube.castShadow = true; 
+	scene.add(cube);
+
+	// 全景相机
+	var cubeCamera = new THREE.CubeCamera( 1, 10000, 128 );
+	// 添加反光圆球
+	var sphereGeometry = new THREE.SphereGeometry( 160, 32, 32 );
+	var sphereMaterial = new THREE.MeshPhongMaterial( { 
+		color: 0xffffff,
+		specular: 0x999999,
+		shininess: 50,
+		// 使用全景相机做环境贴图
+		envMap: cubeCamera.renderTarget.texture
+	});
+	var mesh = new THREE.Mesh( sphereGeometry, sphereMaterial );
+	mesh.add( cubeCamera );
+	mesh.position.set(100, 160, -500);
+	mesh.castShadow = true;
+	scene.add(mesh);
+
+	// 告诉渲染器渲染阴影
+	renderer.shadowMap.enabled = true;
+	// 软阴影(默认：THREE.PCFShadowMap)
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// 所有纹理和颜色进行γ
+	renderer.gammaInput = true;
+	// 所有的纹理和颜色都需要进行γ输出
+	renderer.gammaOutput = true;
+
+	mesh.visible = false;
+	cubeCamera.update( renderer, scene );
+	mesh.visible = true;
+
+	renderer.render(scene, camera);
+}
+</script>
+
 <div class="aTitle">照相机控制器 - 轨迹球</div>
 <div class="aPane">
 	<div class="aCode">
@@ -244,17 +447,17 @@ function render() {
 }
 		</pre>
 	</div>
-	<div class="aShow note" id="app3">
+	<div class="aShow note" id="app5">
 	</div>
 </div>
 <script src="../../js/three/controls/TrackballControls.js"></script>
 <script type="text/javascript">
-init3();
-function init3 () {
+init5();
+function init5 () {
 	// HTML中无canvas标签，自动创建
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(200, 150);
-	var parentEle = document.getElementById('app3')
+	var parentEle = document.getElementById('app5')
 	parentEle.appendChild(renderer.domElement);
 
 	// 将背景色（用于清除画面的颜色)

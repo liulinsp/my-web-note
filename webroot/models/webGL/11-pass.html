@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>WebGL 后期处理通道</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">后期处理通道</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>通道介绍:</b>
+<b>BloomPass</b> 该通道通过增强场景中明亮区域来模拟真实世界中的摄像机
+<b>DotScreenPass</b> 该通道会将黑点图层应用到屏幕的原始图片上
+<b>FilmPass</b> 该通道通过扫描线和失真来模拟电视屏幕效果
+<b>GlitchPass</b> 该通道会随机地在屏幕上显示电脉冲
+<b>MaskPass</b> 使用通道可以再当前图片上添加掩码，后续的通道只会影响掩码区域
+<b>RenderPass</b> 该通道会在当前场景和摄像机的基础上渲染出一个新场景
+<b>SavePass</b> 该通道执行时会复制当前渲染结果，在后续的步骤中可以使用（用处不大）
+<b>ShaderPass</b> 该通道接受自定义的着色器作为参数，以生成一个高级、自定义
+	的后期处理通道
+<b>TexturePass</b> 该通道将组合器的当前状态保存为纹理，然后将其作为参数传入到
+    其他的EffectComposer组合器中
+
+* 不是所有通道的处理结果都会显示在屏幕上，想要将通道处理结果输出到屏幕上，
+  可以使用THREE.ShaderPass和THREE.CopyShader
+* 如果想要重用THREE.EffectComposer特定实例的处理结果，可以使用THREE.TexturePass
+* 如果在THREE.EffectComposer中有多个THREE.RenderPass,需要确保clear属性被设置为
+  false。否则，只能看到最后一个THREE.RenderPass的处理结果。
+
+<b>代码：</b>
+&lt;script src="../../js/three/shaders/CopyShader.js"&gt;&lt;/script&gt;
+&lt;script src="../../js/three/shaders/FilmShader.js"&gt;&lt;/script&gt;
+&lt;script src="../../js/three/shaders/ConvolutionShader.js"&gt;&lt;/script&gt;
+
+&lt;script src="../../js/three/postprocessing/EffectComposer.js"&gt;&lt;/script&gt;
+&lt;script src="../../js/three/postprocessing/ShaderPass.js"&gt;&lt;/script&gt;
+&lt;!-- &lt;script src="../../js/three/postprocessing/MaskPass.js"&gt;&lt;/script&gt; --&gt;
+&lt;script src="../../js/three/postprocessing/RenderPass.js"&gt;&lt;/script&gt;
+&lt;script src="../../js/three/postprocessing/BloomPass.js"&gt;&lt;/script&gt;
+&lt;script src="../../js/three/postprocessing/FilmPass.js"&gt;&lt;/script&gt;
+&lt;script id="fragmentShader" type="x-shader/x-fragment"&gt;
+	uniform float time;
+	uniform float fogDensity;
+	uniform vec3 fogColor;
+	uniform sampler2D texture1;
+	uniform sampler2D texture2;
+	varying vec2 vUv;
+	void main( void ) {
+		vec2 position = - 1.0 + 2.0 * vUv;
+		vec4 noise = texture2D( texture1, vUv );
+		vec2 T1 = vUv + vec2( 1.5, - 1.5 ) * time * 0.02;
+		vec2 T2 = vUv + vec2( - 0.5, 2.0 ) * time * 0.01;
+		T1.x += noise.x * 2.0;
+		T1.y += noise.y * 2.0;
+		T2.x -= noise.y * 0.2;
+		T2.y += noise.z * 0.2;
+		float p = texture2D( texture1, T1 * 2.0 ).a;
+		vec4 color = texture2D( texture2, T2 * 2.0 );
+		vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
+		if( temp.r &gt; 1.0 ) { temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+		if( temp.g &gt; 1.0 ) { temp.rb += temp.g - 1.0; }
+		if( temp.b &gt; 1.0 ) { temp.rg += temp.b - 1.0; }
+		gl_FragColor = temp;
+		float depth = gl_FragCoord.z / gl_FragCoord.w;
+		const float LOG2 = 1.442695;
+		float fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );
+		fogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );
+		gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+	}
+&lt;/script&gt;
+
+&lt;script id="vertexShader" type="x-shader/x-vertex"&gt;
+	uniform vec2 uvScale;
+	varying vec2 vUv;
+	void main()
+	{
+		vUv = uvScale * uv;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+&lt;/script&gt;
+
+
+var textureLoader = new THREE.TextureLoader();
+var uniforms = {
+	fogDensity: { value: 0.45 },
+	fogColor: { value: new THREE.Vector3( 0, 0, 0 ) },
+	time: { value: 1.0 },
+	uvScale: { value: new THREE.Vector2( 3.0, 1.0 ) },
+	texture1: { value: textureLoader.load( './lava/cloud.png' ) },
+	texture2: { value: textureLoader.load( './lava/lavatile.jpg' ) }
+};
+uniforms.texture1.value.wrapS = uniforms.texture1.value.wrapT = THREE.RepeatWrapping;
+uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.RepeatWrapping;
+
+var material = new THREE.ShaderMaterial( {
+	uniforms: uniforms,
+	vertexShader: document.getElementById( 'vertexShader' ).textContent,
+	fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+} );
+
+var mesh = new THREE.Mesh( new THREE.TorusBufferGeometry( 0.65, 0.3, 30, 30 ), material );
+mesh.rotation.x = 0.3;
+scene.add(mesh);
+
+renderer.autoClear = false;
+
+// 效果组合器
+// EffectComposer.js依赖ShaderPass.js，CopyShader.js
+var composer = new THREE.EffectComposer( renderer );
+// RenderPass这个通道会渲染场景，但不会将渲染结果输出到屏幕上
+var renderModel = new THREE.RenderPass( scene, camera );
+composer.addPass( renderModel );
+
+// 将结果输出到屏幕上,不会增加任何效果
+var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+effectCopy.renderToScreen = true; 
+composer.addPass( effectCopy );
+
+/* // 辉光，该通道通过增强场景中明亮区域来模拟真实世界中的摄像机
+// BloomPass.js依赖ConvolutionShader.js
+var effectBloom = new THREE.BloomPass( 1.25 );
+composer.addPass( effectBloom );
+
+// FilmPass通过扫描线和失真来模拟电视屏幕效果
+// 这个通道可以将结果输出到屏幕上
+// FilmPass.js依赖FilmShader.js
+var effectFilm = new THREE.FilmPass(0.8, 0.325, 256, false); 
+effectFilm.renderToScreen = true; 
+composer.addPass(effectFilm);  */
+
+
+var clock = new THREE.Clock();
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+
+	var delta = clock.getDelta();
+	uniforms.time.value += 0.5 * delta;
+	mesh.rotation.y += 0.0125 * delta;
+	mesh.rotation.x += 0.05 * delta;
+	renderer.clear();
+	composer.render(delta);
+	// renderer.render( scene, camera );
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<script src="../../js/three/shaders/CopyShader.js"></script>
+<script src="../../js/three/shaders/FilmShader.js"></script>
+<script src="../../js/three/shaders/ConvolutionShader.js"></script>
+<script src="../../js/three/shaders/FXAAShader.js"></script>
+
+<script src="../../js/three/postprocessing/EffectComposer.js"></script>
+<script src="../../js/three/postprocessing/ShaderPass.js"></script>
+<script src="../../js/three/postprocessing/MaskPass.js"></script>
+<script src="../../js/three/postprocessing/RenderPass.js"></script>
+<script src="../../js/three/postprocessing/BloomPass.js"></script>
+<script src="../../js/three/postprocessing/FilmPass.js"></script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+	uniform float time;
+	uniform float fogDensity;
+	uniform vec3 fogColor;
+	uniform sampler2D texture1;
+	uniform sampler2D texture2;
+	varying vec2 vUv;
+	void main( void ) {
+		vec2 position = - 1.0 + 2.0 * vUv;
+		vec4 noise = texture2D( texture1, vUv );
+		vec2 T1 = vUv + vec2( 1.5, - 1.5 ) * time * 0.02;
+		vec2 T2 = vUv + vec2( - 0.5, 2.0 ) * time * 0.01;
+		T1.x += noise.x * 2.0;
+		T1.y += noise.y * 2.0;
+		T2.x -= noise.y * 0.2;
+		T2.y += noise.z * 0.2;
+		float p = texture2D( texture1, T1 * 2.0 ).a;
+		vec4 color = texture2D( texture2, T2 * 2.0 );
+		vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
+		if( temp.r > 1.0 ) { temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+		if( temp.g > 1.0 ) { temp.rb += temp.g - 1.0; }
+		if( temp.b > 1.0 ) { temp.rg += temp.b - 1.0; }
+		gl_FragColor = temp;
+		float depth = gl_FragCoord.z / gl_FragCoord.w;
+		const float LOG2 = 1.442695;
+		float fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );
+		fogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );
+		gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+	}
+</script>
+
+<script id="vertexShader" type="x-shader/x-vertex">
+	uniform vec2 uvScale;
+	varying vec2 vUv;
+	void main()
+	{
+		vUv = uvScale * uv;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+init1();
+function init1 () {
+		// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x000000);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 200);
+	camera.position.set(0,0,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	var textureLoader = new THREE.TextureLoader();
+	var uniforms = {
+		fogDensity: { value: 0.45 },
+		fogColor: { value: new THREE.Vector3( 0, 0, 0 ) },
+		time: { value: 1.0 },
+		uvScale: { value: new THREE.Vector2( 3.0, 1.0 ) },
+		texture1: { value: textureLoader.load( './lava/cloud.png' ) },
+		texture2: { value: textureLoader.load( './lava/lavatile.jpg' ) }
+	};
+	uniforms.texture1.value.wrapS = uniforms.texture1.value.wrapT = THREE.RepeatWrapping;
+	uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.RepeatWrapping;
+
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'vertexShader' ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+	} );
+
+	var mesh = new THREE.Mesh( new THREE.TorusBufferGeometry( 0.65, 0.3, 30, 30 ), material );
+	mesh.rotation.x = 0.3;
+	scene.add(mesh);
+
+	renderer.autoClear = false;
+	
+	// 效果组合器
+	// EffectComposer.js依赖ShaderPass.js，CopyShader.js
+	var composer = new THREE.EffectComposer( renderer );
+	// RenderPass这个通道会渲染场景，但不会将渲染结果输出到屏幕上
+	var renderModel = new THREE.RenderPass( scene, camera );
+	composer.addPass( renderModel );
+
+	var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+	effectCopy.renderToScreen = true; 
+	composer.addPass( effectCopy );
+	
+	var clock = new THREE.Clock();
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.time.value += 0.5 * delta;
+		mesh.rotation.y += 0.0125 * delta;
+		mesh.rotation.x += 0.05 * delta;
+		renderer.clear();
+		composer.render( delta );
+		// renderer.render( scene, camera );
+	}
+}
+</script>
+
+
+<div class="aTitle">使用掩码的高级效果</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>代码：</b>
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 背景场景
+	var sceneBG = new THREE.Scene();
+	// 背景相机
+	var cameraBG = new THREE.OrthographicCamera(-200, 200, 150, -150, 1, 110);
+	cameraBG.position.set(0, 0, 5);
+	var materialColor = new THREE.MeshBasicMaterial({
+        map: new THREE.TextureLoader().load("./panorama/bridge/f.jpg"),
+        depthTest: false
+    });
+    var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), materialColor);
+    bgPlane.position.z = -100;
+    bgPlane.scale.set(400, 300, 1);
+    sceneBG.add(bgPlane);
+
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 200);
+	camera.position.set(0,0,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 环境光(深褐色)
+	scene.add( new THREE.AmbientLight(0x3f2806) );
+	// 太阳光（白色）
+	var sunLight = new THREE.PointLight(0xffffff, 0.3, 0, Math.PI/2);
+	sunLight.position.set(100, 200, 100);
+	scene.add(sunLight);
+
+	var mesh = new THREE.Mesh(
+		new THREE.TorusBufferGeometry( 0.65, 0.3, 64, 64 ), 
+		new THREE.MeshPhongMaterial( { 
+			shininess: 80,
+			color: 0xffffff,
+			specular: 0xffffff,
+		})
+	);
+	scene.add(mesh);
+
+	renderer.autoClear = false;
+
+	// 效果组合器
+	// EffectComposer.js依赖ShaderPass.js，CopyShader.js
+	var composer = new THREE.EffectComposer( renderer );
+
+	var renderModelBG = new THREE.RenderPass( sceneBG, cameraBG );
+	var renderModel = new THREE.RenderPass( scene, camera );
+	renderModel.clear = false;
+
+	var effectBloom = new THREE.BloomPass( 2.25 );
+	// 锯齿优化
+	var effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
+	effectFXAA.renderToScreen = true; 
+	// var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+	// effectCopy.renderToScreen = true; 
+	
+	var clearMask = new THREE.ClearMaskPass();
+	var mask = new THREE.MaskPass(scene, camera);
+	mask.inverse = true;// 掩码反向
+
+	// 模板缓存是一种特殊类型的缓存，用于限制渲染区域
+	// 启用模板缓存后就可以使用掩码了
+	<mark>composer.renderTarget1.stencilBuffer = true;
+    composer.renderTarget2.stencilBuffer = true;</mark>
+
+	composer.addPass( renderModelBG );
+	composer.addPass( renderModel );
+	<mark>composer.addPass( mask );</mark>
+	composer.addPass( effectBloom );
+	<mark>composer.addPass( clearMask );</mark>
+	composer.addPass( effectFXAA );
+	// composer.addPass( effectCopy );
+	
+	var clock = new THREE.Clock();
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		mesh.rotation.y += 0.0125 * delta;
+		mesh.rotation.x += 0.05 * delta;
+		renderer.clear();
+		composer.render( delta );
+		// renderer.render( scene, camera );
+	}
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 背景场景
+	var sceneBG = new THREE.Scene();
+	// 背景相机
+	var cameraBG = new THREE.OrthographicCamera(-200, 200, 150, -150, 1, 110);
+	cameraBG.position.set(0, 0, 5);
+	var materialColor = new THREE.MeshBasicMaterial({
+        map: new THREE.TextureLoader().load("./panorama/bridge/f.jpg"),
+        depthTest: false
+    });
+    var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), materialColor);
+    bgPlane.position.z = -100;
+    bgPlane.scale.set(400, 300, 1);
+    sceneBG.add(bgPlane);
+
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 200);
+	camera.position.set(0,0,3);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 环境光(深褐色)
+	scene.add( new THREE.AmbientLight(0x3f2806) );
+	// 太阳光（白色）
+	var sunLight = new THREE.PointLight(0xffffff, 0.3, 0, Math.PI/2);
+	sunLight.position.set(100, 200, 100);
+	scene.add(sunLight);
+
+	var mesh = new THREE.Mesh(
+		new THREE.TorusBufferGeometry( 0.65, 0.3, 64, 64 ), 
+		new THREE.MeshPhongMaterial( { 
+			shininess: 80,
+			color: 0xffffff,
+			specular: 0xffffff,
+		})
+	);
+	scene.add(mesh);
+
+	renderer.autoClear = false;
+
+	// 效果组合器
+	// EffectComposer.js依赖ShaderPass.js，CopyShader.js
+	var composer = new THREE.EffectComposer( renderer );
+
+	var renderModelBG = new THREE.RenderPass( sceneBG, cameraBG );
+	var renderModel = new THREE.RenderPass( scene, camera );
+	renderModel.clear = false;
+
+	var effectBloom = new THREE.BloomPass( 2.25 );
+	// 锯齿优化
+	var effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
+	effectFXAA.renderToScreen = true; 
+	// var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+	// effectCopy.renderToScreen = true; 
+	
+	var clearMask = new THREE.ClearMaskPass();
+	var mask = new THREE.MaskPass(scene, camera);
+	mask.inverse = true;// 掩码反向
+
+	// 模板缓存是一种特殊类型的缓存，用于限制渲染区域
+	// 启用模板缓存后就可以使用掩码了
+	composer.renderTarget1.stencilBuffer = true;
+    composer.renderTarget2.stencilBuffer = true;
+
+	composer.addPass( renderModelBG );
+	composer.addPass( renderModel );
+	composer.addPass( mask );
+
+	composer.addPass( effectBloom );
+
+	composer.addPass( clearMask );
+	composer.addPass( effectFXAA );
+	// composer.addPass( effectCopy );
+	
+	var clock = new THREE.Clock();
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		mesh.rotation.y += 0.0125 * delta;
+		mesh.rotation.x += 0.05 * delta;
+		renderer.clear();
+		composer.render( delta );
+		// renderer.render( scene, camera );
+	}
+}
+</script>
+
+
+<div class="aTitle">使用THREE.ShaderPass自定义效果</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>简单着色器：</b>
+<b>MirrorShader</b> 该着色器可以为部分屏幕创建镜面效果
+<b>HueSaturationShader</b> 该着色器可以改变颜色的色调和饱和度
+<b>VignetteShader</b> 该做色漆可以添加晕映效果，该效果可以在图片的中央周围显示黑色的边框
+<b>ColorCorrectionShader</b> 该着色器可以调整颜色分布
+<b>RGBShiftShader</b> 该着色器可以将构成颜色的红、绿、蓝分开
+<b>BrightnessContrast</b> 该着色器可以改变图片的亮度和对比度
+<b>ColorifyShader</b> 该着色器可以将颜色覆盖在整个屏幕上
+<b>SepiaShader</b> 该着色器可以再屏幕上创建类似乌贼黑的效果
+<b>KaleidoShader</b> 该着色器在场景上添加类似万花筒的效果，该效果围绕场景的中央呈径向反射
+<b>LuminosityShader</b> 该着色器提供了亮度效果，可以显示场景的亮度
+<b>TechnicolorShader</b> 该着色器可以模拟类似老电影里面的两条彩色效果
+
+<b>模糊效果的着色器：</b>
+<b>HorizontalBlurShader/VerticalBlurShader</b> 这两个着色器可以向整个屏幕添加模糊效果
+<b>HorizontalTiltShiftShader/VerticalTiltShiftShader</b> 这两个着色器可以创建出倾斜平移可以
+    使得场景中只有部分图片看起来比较尖锐，从而创建出一个微缩的场景
+<b>TriangleBlurShader</b> 该着色器使用基于三角形的方法在场景中添加模糊效果
+
+<b>高级效果着色器：</b>
+<b>BleachBypassShader</b> 该着色器可以创建出漂白的效果。通过该效果可以使得图片看上去像覆盖了一层银
+<b>EdgeShader</b> 使用该着色器可以找到图片的尖锐边界并突显他们
+<b>FXAAShader</b> 该着色器可以在后期处理阶段添加抗锯齿效果。如果在渲染阶段添加抗锯齿效果影响效率，
+    那么可以使用该着色器来添加
+<b>FocusShader</b> 这是一个简单的着色器，其渲染结果是中央比较尖锐，而边界比较模糊
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="app3">
+	</div> -->
+</div>
+<script type="text/javascript">
+init3();
+function init3 () {
+
+}
+</script>

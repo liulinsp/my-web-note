@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>生命周期测试</title>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+</head>
+<body>
+	<div class="aShow note" id="app1">
+		<div>{{msg}}</div>
+		<div><button @click="change">更改</button></div>
+		<div><button @click="over">销毁</button></div>
+	</div>
+	<script>
+var app1 = new Vue({
+	el:"#app1",
+	data:{
+		msg:"Hello World!"
+	},
+	beforeCreate () {
+		console.log('### beforeCreate')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},
+	created () {
+		console.log('### created')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},
+	beforeMount () {
+		console.log('### beforeMount')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},
+	mounted () {
+		console.log('### mounted')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},
+	beforeUpdate () {
+		console.log('### beforeUpdate')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},	
+	updated () {
+		console.log('### updated')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},
+	beforeDestroy () {
+		console.log('### beforeDestroy')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},
+	destroyed () {
+		console.log('### destroyed')
+		console.log('this.msg = ', this.msg)
+		console.log('this.$el = ', this.$el && this.$el.outerHTML)
+	},
+	methods: {
+		change () {
+			this.msg = '你好，世界！'
+		},
+		over () {
+			this.$destroy()
+		}
+	}
+});
+	</script>
+</body>
+</html>

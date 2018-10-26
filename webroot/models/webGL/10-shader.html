@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>WebGL 着色器</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle" id="materialMap">着色器</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+着色器网站：https://www.shadertoy.com/browse
+参考资料：https://www.2cto.com/kf/201712/703636.html
+着色器转换：https://shaderfrog.com 【没有试验成功】
+
+* 着色器通常分为：
+	1. 几何着色器（Geometry Shader）
+	2. 顶点着色器（Vertex Shader）
+	3. 片元着色器（Fragment Shader）等等
+
+<b>顶点着色器：</b>
+&lt;script id="vertexShader" type="x-shader/x-vertex"&gt;
+varying vec2 vUv;
+void main()
+{
+	vUv = uv;
+	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+	gl_Position = projectionMatrix * mvPosition;
+}
+&lt;/script&gt;
+
+<b>片元着色器：</b>
+&lt;script id="ocean_fragment_shader" type="x-shader/x-fragment"&gt;
+uniform float iTime;
+varying vec2 vUv;
+void main(void) {
+	vec2 p = - 1.0 + 2.0 * vUv;
+	float a = iTime * 40.0;
+	float d, e, f, g = 1.0 / 40.0 ,h ,i ,r ,q;
+	e = 400.0 * ( p.x * 0.5 + 0.5 );
+	f = 400.0 * ( p.y * 0.5 + 0.5 );
+	i = 200.0 + sin( e * g + a / 150.0 ) * 20.0;
+	d = 200.0 + cos( f * g / 2.0 ) * 18.0 + cos( e * g ) * 7.0;
+	r = sqrt( pow( abs( i - e ), 2.0 ) + pow( abs( d - f ), 2.0 ) );
+	q = f / r;
+	e = ( r * cos( q ) ) - a / 2.0;
+	f = ( r * sin( q ) ) - a / 2.0;
+	d = sin( e * g ) * 176.0 + sin( e * g ) * 164.0 + r;
+	h = ( ( f + d ) + a / 2.0 ) * g;
+	i = cos( h + r * p.x / 1.3 ) * ( e + e + a ) + cos( q * g * 6.0 ) * ( r + h / 3.0 );
+	h = sin( f * g ) * 144.0 - sin( e * g ) * 212.0 * p.x;
+	h = ( h + ( f - e ) * q + sin( r - ( a + h ) / 7.0 ) * 10.0 + i / 4.0 ) * g;
+	i += cos( h * 2.3 * sin( a / 350.0 - q ) ) * 184.0 * sin( q - ( r * 4.3 + a / 12.0 ) * g )
+		 + tan( r * g + h ) * 184.0 * cos( r * g + h );
+	i = mod( i / 5.6, 256.0 ) / 64.0;
+	if ( i &lt; 0.0 ) i += 4.0;
+	if ( i &gt;= 2.0 ) i = 4.0 - i;
+	d = r / 350.0;
+	d += sin( d * d * 8.0 ) * 0.52;
+	f = ( sin( a * g ) + 1.0 ) / 2.0;
+	gl_FragColor = vec4( vec3( f * i / 1.6, i / 2.0 + d / 13.0, i ) * d * p.x 
+			+ vec3( i / 1.3 + d / 8.0, i / 2.0 + d / 18.0, i ) * d * ( 1.0 - p.x ), 1.0 );
+}
+&lt;/script&gt;
+
+<b>脚本：</b>
+// 物体
+var uniforms = {iTime: { value: 1.0 }} // 參數
+var material = new THREE.ShaderMaterial( {
+	uniforms: uniforms,
+	vertexShader: document.getElementById( 'vertexShader' ).textContent,
+	fragmentShader: document.getElementById('ocean_fragment_shader').textContent
+});
+var geom = new THREE.PlaneBufferGeometry(48, 36);
+var mesh = new THREE.Mesh( geom, material );
+scene.add(mesh);
+
+var clock = new THREE.Clock();
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+
+	var delta = clock.getDelta();
+	uniforms.iTime.value += delta * 5;
+	renderer.render( scene, camera );
+}
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<!-- <script id="ocean_fragment_shader" type="x-shader/x-fragment">
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+	vec2 p = fragCoord.xy / iResolution.xy;
+	vec2 q = p - vec2(0.5, 0.5);
+
+	q.x += sin(iTime* 0.6) * 0.2;
+	q.y += cos(iTime* 0.4) * 0.3;
+
+	float len = length(q);
+
+	float a = atan(q.y, q.x) + iTime * 0.3;
+	float b = atan(q.y, q.x) + iTime * 0.3;
+	float r1 = 0.3 / len + iTime * 0.5;
+	float r2 = 0.2 / len + iTime * 0.5;
+
+	float m = (1.0 + sin(iTime * 0.5)) / 2.0;
+	vec4 tex1 = texture(iChannel0, vec2(a + 0.1 / len, r1 ));
+	vec4 tex2 = texture(iChannel1, vec2(b + 0.1 / len, r2 ));
+	vec3 col = vec3(mix(tex1, tex2, m));
+	fragColor = vec4(col * len * 1.5, 1.0);
+}
+</script> -->
+<!-- <script id="ocean_fragment_shader" type="x-shader/x-fragment">
+uniform float iTime;
+uniform sampler2D iChannel0;
+uniform sampler2D iChannel1;
+
+varying vec2 vUv;
+
+void main(void)
+{
+	vec2 p = -1.0 + 2.0 * vUv;
+	vec2 q = p - vec2(0.5, 0.5);
+
+	q.x += sin(iTime* 0.6) * 0.2;
+	q.y += cos(iTime* 0.4) * 0.3;
+
+	float len = length(q);
+
+	float a = atan(q.y, q.x) + iTime * 0.3;
+	float b = atan(q.y, q.x) + iTime * 0.3;
+	float r1 = 0.3 / len + iTime * 0.5;
+	float r2 = 0.2 / len + iTime * 0.5;
+
+	float m = (1.0 + sin(iTime * 0.5)) / 2.0;
+	vec4 tex1 = texture2D(iChannel0, vec2(a + 0.1 / len, r1 ));
+	vec4 tex2 = texture2D(iChannel1, vec2(b + 0.1 / len, r2 ));
+	vec3 col = vec3(mix(tex1, tex2, m));
+	gl_FragColor = vec4(col * len * 1.5, 1.0);
+}
+</script> -->
+<script id="ocean_fragment_shader" type="x-shader/x-fragment">
+uniform float iTime;
+varying vec2 vUv;
+void main(void) {
+	vec2 p = - 1.0 + 2.0 * vUv;
+	float a = iTime * 40.0;
+	float d, e, f, g = 1.0 / 40.0 ,h ,i ,r ,q;
+	e = 400.0 * ( p.x * 0.5 + 0.5 );
+	f = 400.0 * ( p.y * 0.5 + 0.5 );
+	i = 200.0 + sin( e * g + a / 150.0 ) * 20.0;
+	d = 200.0 + cos( f * g / 2.0 ) * 18.0 + cos( e * g ) * 7.0;
+	r = sqrt( pow( abs( i - e ), 2.0 ) + pow( abs( d - f ), 2.0 ) );
+	q = f / r;
+	e = ( r * cos( q ) ) - a / 2.0;
+	f = ( r * sin( q ) ) - a / 2.0;
+	d = sin( e * g ) * 176.0 + sin( e * g ) * 164.0 + r;
+	h = ( ( f + d ) + a / 2.0 ) * g;
+	i = cos( h + r * p.x / 1.3 ) * ( e + e + a ) + cos( q * g * 6.0 ) * ( r + h / 3.0 );
+	h = sin( f * g ) * 144.0 - sin( e * g ) * 212.0 * p.x;
+	h = ( h + ( f - e ) * q + sin( r - ( a + h ) / 7.0 ) * 10.0 + i / 4.0 ) * g;
+	i += cos( h * 2.3 * sin( a / 350.0 - q ) ) * 184.0 * sin( q - ( r * 4.3 + a / 12.0 ) * g ) + tan( r * g + h ) * 184.0 * cos( r * g + h );
+	i = mod( i / 5.6, 256.0 ) / 64.0;
+	if ( i < 0.0 ) i += 4.0;
+	if ( i >= 2.0 ) i = 4.0 - i;
+	d = r / 350.0;
+	d += sin( d * d * 8.0 ) * 0.52;
+	f = ( sin( a * g ) + 1.0 ) / 2.0;
+	gl_FragColor = vec4( vec3( f * i / 1.6, i / 2.0 + d / 13.0, i ) * d * p.x + vec3( i / 1.3 + d / 8.0, i / 2.0 + d / 18.0, i ) * d * ( 1.0 - p.x ), 1.0 );
+}
+</script>
+<script id="vertexShader" type="x-shader/x-vertex">
+	varying vec2 vUv;
+	void main()
+	{
+		vUv = uv;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(400, 300);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 200);
+	camera.position.set(0,0,40);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 物体
+	var uniforms = {iTime: { value: 1.0 }} // 參數
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'vertexShader' ).textContent,
+		fragmentShader: document.getElementById('ocean_fragment_shader').textContent
+	});
+	var geom = new THREE.PlaneBufferGeometry(48, 36);
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	var clock = new THREE.Clock();
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.iTime.value += delta * 5;
+		renderer.render( scene, camera );
+	}
+</script>
+
+</body>
+</html>

@@ -2,40 +2,29 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 	<title>测试</title>
 	<style>
 		*{
 			margin: 0;
 			padding: 0;
 		}
+		.outer{
+			width: 100vw;
+			height: 100vw;
+			background-color: yellow;
+		}
+		.inner{
+			width: 13.3333vw;
+			height: 13.333vw;
+			background-color: red;
+		}
 	</style>
 </head>
 <body>
-	<a id='a' target="_blank">下载</a>
-	<script src="../../js/jquery-1.9.1.js"></script>
+	<div class="outer">
+		<div class="inner"></div>
+	</div>
 </body>
-<script>
-	$('#a').click(function () {
-		var that = this;
-		$.ajax({
-			url: 'http://localhost:3000/api/user/signIn',
-			method: 'GET',
-			// async: false,
-			success: function () {
-				$(that).attr("href", 'http://www.baidu.com');
-			}
-		})
-	})
-</script>
-<script>
-	setTimeout(function(){console.log('t')},0)
-	Promise.resolve().then(function (){
-		console.log('p')
-	})
-	console.log('m1')
-</script>
-<script>
-	console.log('m2')
-</script>
+
 </html>

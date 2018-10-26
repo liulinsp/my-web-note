@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>噪点文字效果</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.text-bg{
+	background-color: #000;
+}
+.info{
+	font-size: 32px;
+	font-weight: bold;
+	text-align: center;
+}
+.noise-text{
+	background: url('./noise.png') center center repeat;
+	background-size: 80px 60px;
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	-ms-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	animation: scratchy .253s linear forwards infinite;
+}
+
+@keyframes scratchy {
+	0% {
+		background-position: 0 0;
+	}
+	25% {
+		background-position: 0 0;
+	}
+	26% {
+		background-position: 20px -20px;
+	}
+	50% {
+		background-position: 20px -20px;
+	}
+	51% {
+		background-position: 40px -40px;
+	}
+	75% {
+		background-position: 40px -40px;
+	}
+	76% {
+		background-position: 60px -60px;
+	}
+	99% {
+		background-position: 60px -60px;
+	}
+	100% {
+		background-position: 0 0;
+	}
+}
+</style>
+<div class="aTitle">噪点文字效果</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>注意：</b>background-clip: text;的兼容性很差，慎用
+
+IE9+ 支持background-clip的其他值：
+border-box、content-box、padding-box
+
+<b>HTML：</b>
+&lt;p class="info noise-text"&gt;GAME OVER&lt;/p&gt;
+
+<b>样式：</b>
+.noise-text{
+	background: url('./noise.png') center center repeat;
+	background-size: 80px 60px;
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	-ms-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	animation: scratchy .253s linear forwards infinite;
+}
+
+@keyframes scratchy {
+	0% {
+		background-position: 0 0;
+	}
+	25% {
+		background-position: 0 0;
+	}
+	26% {
+		background-position: 20px -20px;
+	}
+	50% {
+		background-position: 20px -20px;
+	}
+	51% {
+		background-position: 40px -40px;
+	}
+	75% {
+		background-position: 40px -40px;
+	}
+	76% {
+		background-position: 60px -60px;
+	}
+	99% {
+		background-position: 60px -60px;
+	}
+	100% {
+		background-position: 0 0;
+	}
+}
+		</pre>
+	</div>
+	<div class="aShow text-bg">
+		<p class="info noise-text">GAME OVER</p>
+	</div>
+</div>
