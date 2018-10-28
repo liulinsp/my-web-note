@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>地球</title>
+	<title>三角碎片示例</title>
 	<link rel="stylesheet" type="text/css" href="../../css/main.css">
 	<script src="../../js/three/three.js"></script>
 	<style>
@@ -225,6 +225,163 @@ function init1 () {
 
 	}
 }
+</script>
+
+
+<div class="aTitle">三角碎片示例</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script src="../../js/three/Tween.min.16.3.5.js"></script>
+<script type="text/javascript">
+    init2();
+    function init2 () {
+        // HTML中无canvas标签，自动创建
+        var renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(400, 300);
+        var parentEle = document.getElementById('app2')
+        parentEle.appendChild(renderer.domElement);
+
+        // 将背景色（用于清除画面的颜色)
+        renderer.setClearColor(0x000000);
+        // 场景
+        var scene = new THREE.Scene();
+        // 正交投影摄像机
+        var camera = new THREE.PerspectiveCamera(45, 4/3, 100, 1000);
+        camera.position.set(0, 0, 400);
+        // 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+        camera.lookAt(new THREE.Vector3(0, 30, 0));
+        scene.add(camera);
+
+        var num = 128;
+        var r = 60;
+        var R = 120;
+        var d = 24, d2 = d/2; // 三角形大小
+        var geometry = new THREE.BufferGeometry();
+        var positions = new Float32Array(num * 3 * 3);
+        var targetPositions =  new Float32Array(num * 3 * 3);
+
+        for (var i = 0; i < num; i++) {
+            var angle = Math.PI * 2 / num * i
+			var randomR = r - (r / 4) + Math.random() * (r / 2);
+            var x =  randomR * Math.sin(angle);
+            var y =  randomR * Math.cos(angle);
+            var z = 0;
+
+            var targetR = R - (R / 4) + Math.random() * (R / 2);
+            var X =  targetR * Math.sin(angle);
+            var Y =  targetR * Math.cos(angle);
+            var Z = 0;
+
+            var ax = x + Math.random() * d - d2;
+            var ay = y + Math.random() * d - d2;
+            var az = z + Math.random() * d - d2;
+
+            var bx = x + Math.random() * d - d2;
+            var by = y + Math.random() * d - d2;
+            var bz = z + Math.random() * d - d2;
+
+            var cx = x + Math.random() * d - d2;
+            var cy = y + Math.random() * d - d2;
+            var cz = z + Math.random() * d - d2;
+
+            // console.log(ax, ay, az, '#', bx, by, bz, '#', cx, cy, cz,);
+
+            // 位置
+            positions[i * 9] = ax;
+            positions[i * 9 + 1] = ay;
+            positions[i * 9 + 2] = az;
+
+            positions[i * 9 + 3] = bx;
+            positions[i * 9 + 4] = by;
+            positions[i * 9 + 5] = bz;
+
+            positions[i * 9 + 6] = cx;
+            positions[i * 9 + 7] = cy;
+            positions[i * 9 + 8] = cz;
+
+
+            targetPositions[i * 9] = ax + X;
+            targetPositions[i * 9 + 1] = ay + Y;
+            targetPositions[i * 9 + 2] = az;
+
+            targetPositions[i * 9 + 3] = bx + X;
+            targetPositions[i * 9 + 4] = by + Y;
+            targetPositions[i * 9 + 5] = bz;
+
+            targetPositions[i * 9 + 6] = cx + X;
+            targetPositions[i * 9 + 7] = cy + Y;
+            targetPositions[i * 9 + 8] = cz;
+        }
+
+        geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.computeBoundingSphere();
+
+        console.log(geometry)
+
+        var material = new THREE.MeshBasicMaterial({
+			color: 0x5F4B8B,
+            transparent: true,
+            opacity: 0.65
+        })
+        var mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        console.log(mesh)
+
+        var next = null;
+
+		var fromPosition = new Float32Array(positions);
+        var tween = new TWEEN.Tween(fromPosition)
+            .to(targetPositions, 2000)
+            .easing(TWEEN.Easing.Cubic.Out)
+            .onUpdate(update)
+            .onComplete(function () {next = tweenBack});
+        tween.start();
+
+        function update(v) {
+            geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
+            geometry.attributes.position.needsUpdate = true;
+
+            mesh.rotation.set(0, 0, v * Math.PI * 2);
+            renderer.render(scene, camera);
+        }
+
+        var tweenBack = new TWEEN.Tween(fromPosition)
+            .to(positions, 2000)
+            .easing(TWEEN.Easing.Cubic.In)
+            .onUpdate(updateBack)
+			.onComplete(function () {next = tween});
+        tween.start();
+
+        function updateBack(v) {
+            geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
+            geometry.attributes.position.needsUpdate = true;
+
+            mesh.rotation.set(0, 0, v * Math.PI * 2);
+            renderer.render(scene, camera);
+        }
+
+        animate();
+        function animate(time) {
+            requestAnimationFrame(animate);
+            TWEEN.update(time);
+        }
+
+
+        renderer.domElement.addEventListener("click", function () {
+            if (next) {
+                next.start();
+                next = null;
+			}
+		})
+    }
 </script>
 </body>
 </html>
