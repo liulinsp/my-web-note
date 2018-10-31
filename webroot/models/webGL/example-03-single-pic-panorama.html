@@ -19,6 +19,7 @@
 	var height = window.innerHeight;
 	// HTML中无canvas标签，自动创建
 	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize(width, height);
 	var parentEle = document.getElementById('earth')
 	parentEle.appendChild(renderer.domElement);

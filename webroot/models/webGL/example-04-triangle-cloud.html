@@ -69,10 +69,10 @@ function init1 () {
 	// 场景
 	var scene = new THREE.Scene();
 	// 正交投影摄像机
-	var camera = new THREE.PerspectiveCamera(45, 1/1, 100, 1000);
+	var camera = new THREE.PerspectiveCamera(45, 1/1, 100, 2000);
 	camera.position.set(0, 0, 800);
 	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
-	camera.lookAt(new THREE.Vector3(0, 30, 0));
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
 	scene.add(camera);
 
 	var num = 800;
@@ -95,21 +95,6 @@ function init1 () {
         var y =  r * Math.cos(angle);
         var z = 0;
 
-        
-
-        /*var ax = x - (d / 4) - (Math.random() * d / 4);
-        var ay = y + (d / 4) + (Math.random() * d / 4);
-        var az = z + (Math.random() * d)  - (d / 2);
-
-        var bx = x + (d / 4) + (Math.random() * d / 4);
-        var by = y + (d / 4) + (Math.random() * d / 4);
-        var bz = z + (Math.random() * d) - (d / 2);
-
-        var cx = x + (d / 2) - (Math.random() * d / 4);
-        var cy = y - (d / 4) - (Math.random() * d / 4);
-        var cz = z + (Math.random() * d) - (d / 2);*/
-
-        
         var ax = x + Math.random() * d - d2;
         var ay = y + Math.random() * d - d2;
         var az = z + Math.random() * d - d2;
@@ -232,6 +217,140 @@ function init1 () {
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
+// HTML中无canvas标签，自动创建
+var renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(400, 400);
+var parentEle = document.getElementById('app2')
+parentEle.appendChild(renderer.domElement);
+
+// 将背景色（用于清除画面的颜色)
+renderer.setClearColor(0xffffff);
+// 场景
+var scene = new THREE.Scene();
+// 正交投影摄像机
+var camera = new THREE.PerspectiveCamera(45, 4/4, 100, 1000);
+camera.position.set(0, 0, 400);
+// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+camera.lookAt(new THREE.Vector3(0, 0, 0));
+scene.add(camera);
+
+var num = 128; // 三角形个数
+var r = 60; // 初始环形半径
+var R = 100; // 散开半径
+var d = 24, d2 = d/2; // 三角形大小
+var geometry = new THREE.BufferGeometry(); // 所有三角形组成的几何体
+var positions = new Float32Array(num * 3 * 3); // 起始位置
+var targetPositions =  new Float32Array(num * 3 * 3); // 散开位置
+
+for (var i = 0; i < num; i++) {
+    var angle = Math.PI * 2 / num * i
+	var randomR = r - (r / 4) + Math.random() * (r / 2);
+    var x =  randomR * Math.sin(angle);
+    var y =  randomR * Math.cos(angle);
+    var z = 0;
+
+    var targetR = R - (R / 4) + Math.random() * (R / 2);
+    var X =  targetR * Math.sin(angle);
+    var Y =  targetR * Math.cos(angle);
+    var Z = 0;
+
+    var ax = x + Math.random() * d - d2;
+    var ay = y + Math.random() * d - d2;
+    var az = z + Math.random() * d - d2;
+
+    var bx = x + Math.random() * d - d2;
+    var by = y + Math.random() * d - d2;
+    var bz = z + Math.random() * d - d2;
+
+    var cx = x + Math.random() * d - d2;
+    var cy = y + Math.random() * d - d2;
+    var cz = z + Math.random() * d - d2;
+
+    // console.log(ax, ay, az, '#', bx, by, bz, '#', cx, cy, cz,);
+
+    // 位置
+    positions[i * 9] = ax;
+    positions[i * 9 + 1] = ay;
+    positions[i * 9 + 2] = az;
+
+    positions[i * 9 + 3] = bx;
+    positions[i * 9 + 4] = by;
+    positions[i * 9 + 5] = bz;
+
+    positions[i * 9 + 6] = cx;
+    positions[i * 9 + 7] = cy;
+    positions[i * 9 + 8] = cz;
+
+
+    targetPositions[i * 9] = ax + X;
+    targetPositions[i * 9 + 1] = ay + Y;
+    targetPositions[i * 9 + 2] = az;
+
+    targetPositions[i * 9 + 3] = bx + X;
+    targetPositions[i * 9 + 4] = by + Y;
+    targetPositions[i * 9 + 5] = bz;
+
+    targetPositions[i * 9 + 6] = cx + X;
+    targetPositions[i * 9 + 7] = cy + Y;
+    targetPositions[i * 9 + 8] = cz;
+}
+
+geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+geometry.computeBoundingSphere();
+
+var material = new THREE.MeshBasicMaterial({
+	color: 0xfb00ff,
+    transparent: true,
+    opacity: 0.5
+})
+var mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+
+/* 动画 */
+var next = null; // 下一个动画
+var duration = 2600; // 动画时长
+var fromPosition = new Float32Array(positions); // 动画开始位置
+
+// 正向动画
+var tween = new TWEEN.Tween(fromPosition)
+    .to(targetPositions, duration)
+    .easing(TWEEN.Easing.Elastic.Out)
+    .onUpdate(function (v) {
+        geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
+        geometry.attributes.position.needsUpdate = true;
+        mesh.rotation.set(0, 0, v * Math.PI);
+        renderer.render(scene, camera);
+    })
+    .onComplete(function () {next = tweenBack});
+
+// 反向动画
+var tweenBack = new TWEEN.Tween(fromPosition)
+    .to(positions, duration)
+    .easing(TWEEN.Easing.Elastic.Out)
+    .onUpdate( function (v) {
+        geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
+        geometry.attributes.position.needsUpdate = true;
+
+        mesh.rotation.set(0, 0, Math.PI * (1 + v));
+        renderer.render(scene, camera);
+    })
+	.onComplete(function () {next = tween});
+
+tween.start();
+
+animate();
+function animate(time) {
+    requestAnimationFrame(animate);
+    TWEEN.update(time);
+}
+
+renderer.domElement.addEventListener("click", function () {
+    if (next) {
+        next.start();
+        next = null;
+	}
+})
 
 		</pre>
 	</div>
@@ -244,28 +363,28 @@ function init1 () {
     function init2 () {
         // HTML中无canvas标签，自动创建
         var renderer = new THREE.WebGLRenderer({antialias:true});
-        renderer.setSize(400, 300);
+        renderer.setSize(400, 400);
         var parentEle = document.getElementById('app2')
         parentEle.appendChild(renderer.domElement);
 
         // 将背景色（用于清除画面的颜色)
-        renderer.setClearColor(0x000000);
+        renderer.setClearColor(0xffffff);
         // 场景
         var scene = new THREE.Scene();
         // 正交投影摄像机
-        var camera = new THREE.PerspectiveCamera(45, 4/3, 100, 1000);
+        var camera = new THREE.PerspectiveCamera(45, 4/4, 100, 1000);
         camera.position.set(0, 0, 400);
         // 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
-        camera.lookAt(new THREE.Vector3(0, 30, 0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
         scene.add(camera);
 
-        var num = 128;
-        var r = 60;
-        var R = 120;
+        var num = 128; // 三角形个数
+        var r = 60; // 初始环形半径
+        var R = 100; // 散开半径
         var d = 24, d2 = d/2; // 三角形大小
-        var geometry = new THREE.BufferGeometry();
-        var positions = new Float32Array(num * 3 * 3);
-        var targetPositions =  new Float32Array(num * 3 * 3);
+        var geometry = new THREE.BufferGeometry(); // 所有三角形组成的几何体
+        var positions = new Float32Array(num * 3 * 3); // 起始位置
+        var targetPositions =  new Float32Array(num * 3 * 3); // 散开位置
 
         for (var i = 0; i < num; i++) {
             var angle = Math.PI * 2 / num * i
@@ -323,57 +442,52 @@ function init1 () {
         geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.computeBoundingSphere();
 
-        console.log(geometry)
-
         var material = new THREE.MeshBasicMaterial({
-			color: 0x5F4B8B,
+			color: 0xfb00ff,
             transparent: true,
-            opacity: 0.65
+            opacity: 0.5
         })
         var mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
-        console.log(mesh)
 
-        var next = null;
+        /* 动画 */
+        var next = null; // 下一个动画
+        var duration = 2600; // 动画时长
+		var fromPosition = new Float32Array(positions); // 动画开始位置
 
-		var fromPosition = new Float32Array(positions);
+		// 正向动画
         var tween = new TWEEN.Tween(fromPosition)
-            .to(targetPositions, 2000)
-            .easing(TWEEN.Easing.Cubic.Out)
-            .onUpdate(update)
+            .to(targetPositions, duration)
+            .easing(TWEEN.Easing.Elastic.Out)
+            .onUpdate(function (v) {
+	            geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
+	            geometry.attributes.position.needsUpdate = true;
+	            mesh.rotation.set(0, 0, v * Math.PI);
+	            renderer.render(scene, camera);
+	        })
             .onComplete(function () {next = tweenBack});
-        tween.start();
-
-        function update(v) {
-            geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
-            geometry.attributes.position.needsUpdate = true;
-
-            mesh.rotation.set(0, 0, v * Math.PI * 2);
-            renderer.render(scene, camera);
-        }
-
+        
+        // 反向动画
         var tweenBack = new TWEEN.Tween(fromPosition)
-            .to(positions, 2000)
-            .easing(TWEEN.Easing.Cubic.In)
-            .onUpdate(updateBack)
+            .to(positions, duration)
+            .easing(TWEEN.Easing.Elastic.Out)
+            .onUpdate( function (v) {
+	            geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
+	            geometry.attributes.position.needsUpdate = true;
+
+	            mesh.rotation.set(0, 0, Math.PI * (1 + v));
+	            renderer.render(scene, camera);
+	        })
 			.onComplete(function () {next = tween});
+        
         tween.start();
-
-        function updateBack(v) {
-            geometry.addAttribute('position', new THREE.BufferAttribute(fromPosition, 3));
-            geometry.attributes.position.needsUpdate = true;
-
-            mesh.rotation.set(0, 0, v * Math.PI * 2);
-            renderer.render(scene, camera);
-        }
 
         animate();
         function animate(time) {
             requestAnimationFrame(animate);
             TWEEN.update(time);
         }
-
 
         renderer.domElement.addEventListener("click", function () {
             if (next) {

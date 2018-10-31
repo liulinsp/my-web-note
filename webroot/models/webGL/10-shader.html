@@ -210,6 +210,7 @@ void main(void) {
 		fragmentShader: document.getElementById('ocean_fragment_shader').textContent
 	});
 	var geom = new THREE.PlaneBufferGeometry(48, 36);
+	console.log(geom)
 	var mesh = new THREE.Mesh( geom, material );
 	scene.add(mesh);
 

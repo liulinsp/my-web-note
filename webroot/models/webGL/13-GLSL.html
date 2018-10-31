@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>OpenGL着色语言（OpenGL Shading Language）</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script src="../../js/three/three.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">基础</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+易百教程：https://www.yiibai.com/webgl/webgl_shaders.html
+参考：https://blog.csdn.net/jeffasd/article/details/77989274?locationNum=10&fps=1
+
+<b>1. 基本类型</b>
+<b>void</b> 空类型，即不返回任何值
+<b>bool</b> 布尔类型：true/false
+<b>int</b> 带符号的整数
+<b>float</b> 带符号的浮点数
+<b>vec2, vec3, vec4</b> n维浮点数向量
+<b>bvec2, bvec3, bvec4</b> n维布尔向量
+<b>ivec2, ivec3, ivec4</b> n维整数向量
+<b>mat2, mat3, mat4</b> 2*2，3*3,4*4 浮点数矩阵
+<b>sampler2D</b> 2D纹理
+<b>samplerCube</b> 盒纹理
+
+<b>2. 基本结构和数组</b>
+<b>结构：</b>
+struct type-name{}
+
+<b>数组：</b>
+float foo[3] 
+
+<b>3. 向量的分量访问</b>
+glsl中的向量(vec2,vec3,vec4)往往有特殊的含义,比如:
+	1. 代表一个空间坐标(x,y,z,w)
+	2. 代表一个颜色(r,g,b,a)
+	3. 代表一个纹理坐标(s,t,p,q)
+所以glsl提供了一些更人性化的分量访问方式。
+
+vec4 v=vec4(1.0,2.0,3.0,1.0);
+float x = v.x; //1.0
+float x1 = v.r; //1.0
+float x2 = v[0]; //1.0
+
+vec3 xyz = v.xyz; //vec3(1.0,2.0,3.0)
+vec3 xyz1 = vec(v[0],v[1],v[2]); //vec3(1.0,2.0,3.0)
+vec3 rgb = v.rgb; //vec3(1.0,2.0,3.0)
+
+vec2 xyzw = v.xyzw; //vec4(1.0,2.0,3.0,1.0);
+vec2 rgba = v.rgba; //vec4(1.0,2.0,3.0,1.0);
+
+<b>4. 运算</b>
+* glsl中,没有隐式类型转换,原则上glsl要求任何表达式
+左右两侧(l-value),(r-value)的类型必须一致
+
+* 显示转换：
+int a = int(2.0);
+float a= float(2);
+bool c = bool(0);//0或0.0转换为false
+bool c1 = bool(1);//非0转换为true
+
+<b>5. 变量限定符</b>
+<b>none</b> (默认的可省略)本地变量,可读可写,函数的输入参数既是这种类型
+<b>const</b> 声明变量或函数的参数为只读类型
+<b>attribute</b> 只能存在于vertex shader中,一般用于保存顶点或法线数据,
+				 它可以在数据缓冲区中读取数据
+<b>uniform</b> 在运行时shader无法改变uniform变量, 一般用来放置程序传递
+               给shader的变换矩阵，材质，光照参数等等
+<b>varying</b> 主要负责在vertex 和 fragment 之间传递变量
+
+* attribute变量是全局且只读的,它只能在vertex shader中使用,只能与浮点数,
+  向量或矩阵变量组合，一般attribute变量用来放置程序传递来的模型顶点,
+  法线,颜色,纹理等数据它可以访问数据缓冲区
+* uniform变量是全局且只读的,在整个shader执行完毕前其值不会改变,他可以和
+  任意基本类型变量组合, 一般我们使用uniform变量来放置外部程序传递来的环境
+  数据(如点光源位置,模型的变换矩阵等等) 这些数据在运行中显然是不需要被改变的
+* varying类型变量是 vertex shader 与 fragment shader 之间的信使,一般
+  我们在 vertex shader 中修改它然后在fragment shader使用它,但不能在
+  fragment shader中修改它
+
+<b>6. 函数参数限定符</b>
+<b>in</b> 复制到函数中在函数中可读写（默认）
+<b>out</b> 返回时从函数中复制出来
+<b>inout</b> 复制到函数中并在返回时复制出来
+
+<b>7. 函数</b>
+* glsl允许在程序的最外部声明函数.函数不能嵌套,不能递归调用
+* 必须声明返回值类型(无返回值时声明为void) 
+
+<b>8. 数据类型</b>
+//一般类型
+float pSize = 10.0;
+float pSize1;
+pSize1=10.0;
+...
+
+//复合类型
+vec4 color = vec4(0.0, 1.0, 0.0, 1.0);
+vec4 color1;
+color1 =vec4(0.0, 1.0, 0.0, 1.0);
+...
+
+//结构
+struct light {
+    float intensity;
+    vec3 position;
+};
+light lightVar = light(3.0, vec3(1.0, 2.0, 3.0));
+
+//数组
+const float c[3] = float[3](5.0, 7.2, 1.1);
+
+<b>9. 精度限定</b>
+* 变量的精度首先是由精度限定符决定
+* 在变量前面加上 highp mediump lowp 即可完成对该变量的精度声明
+lowp float color;
+varying mediump vec2 Coord;
+lowp ivec2 foo(lowp mat3);
+highp mat4 m;
+
+<b>10. invariant关键字</b>
+* 由于shader在编译时会进行一些内部优化,可能会导致同样的运算在不同shader里
+  结果不一定精确相等.这会引起一些问题,尤其是vertx shader向fragmeng shader传
+  值的时候. 所以我们需要使用invariant 关键字来显式要求计算结果必须精确一致
+* 当然我们也可使用 #pragma STDGL invariant(all)来命令所有输出变量必须精确
+  一致, 但这样会限制编译器优化程度,降低性能
+
+#pragma STDGL invariant(all) //所有输出变量为 invariant
+invariant varying texCoord; //varying在传递数据的时候声明为invariant
+
+<b>11. 限定符的顺序</b>
+1.在一般变量中: invariant > storage > precision
+2.在参数中: storage > parameter > precision
+
+// invariant > storage > precision
+invariant varying lowp float color; 
+
+//storage > parameter > precision
+void doubleSize(const in lowp float s){ 
+    float s1=s;
+}
+		</pre>
+	</div>
+	<!-- <div class="aShow note" id="app1">
+	</div> -->
+</div>
+
+<div class="aTitle">内置函数库</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>通用函数:</b>
+T abs(T x)	返回x的绝对值
+T sign(T x)	比较x与0的值,大于,等于,小于 分别返回 1.0 ,0.0,-1.0
+T floor(T x)	返回<=x的最大整数
+T ceil(T x)	返回>=等于x的最小整数
+T fract(T x)	获取x的小数部分
+T mod(T x, T y) 
+T mod(T x, float y)	取x,y的余数
+T min(T x, T y) 
+T min(T x, float y)	取x,y的最小值
+T max(T x, T y) 
+T max(T x, float y)	取x,y的最大值
+T clamp(T x, T minVal, T maxVal) 
+T clamp(T x, float minVal,float maxVal)	min(max(x, minVal), maxVal),返回值被限定在 minVal,maxVal之间
+T mix(T x, T y, T a) 
+T mix(T x, T y, float a)	取x,y的线性混合,x*(1-a)+y*a
+T step(T edge, T x) 
+T step(float edge, T x)	如果 x<edge 返回 0.0 否则返回1.0
+T smoothstep(T edge0, T edge1, T x) 
+T smoothstep(float edge0,float edge1, T x)	如果x<edge0 返回 0.0 如果x>edge1返回1.0, 否则返回Hermite插值
+
+<b>角度 & 三角函数:</b>
+T radians(T degrees)	角度转弧度
+T degrees(T radians)	弧度转角度
+T sin(T angle)	正弦函数,角度是弧度
+T cos(T angle)	余弦函数,角度是弧度
+T tan(T angle)	正切函数,角度是弧度
+T asin(T x)	反正弦函数,返回值是弧度
+T acos(T x)	反余弦函数,返回值是弧度
+T atan(T y, T x)
+T atan(T y_over_x)	反正切函数,返回值是弧度
+
+<b>指数函数:</b>
+T pow(T x, T y)	返回x的y次幂 xy
+T exp(T x)	返回x的自然指数幂 ex
+T log(T x)	返回x的自然对数 ln
+T exp2(T x)	返回2的x次幂 2x
+T log2(T x)	返回2为底的对数 log2
+T sqrt(T x)	开根号 √x
+T inversesqrt(T x)	先开根号,在取倒数,就是 1/√x
+
+<b>几何函数:</b>
+float length(T x)	返回矢量x的长度
+float distance(T p0, T p1)	返回p0 p1两点的距离
+float dot(T x, T y)	返回x y的点积
+vec3 cross(vec3 x, vec3 y)	返回x y的叉积
+T normalize(T x)	对x进行归一化,保持向量方向不变但长度变为1
+T faceforward(T N, T I, T Nref)	根据 矢量 N 与Nref 调整法向量
+T reflect(T I, T N)	返回 I - 2 * dot(N,I) * N, 结果是入射矢量 I 关于法向量N的 镜面反射矢量
+T refract(T I, T N, float eta)	返回入射矢量I关于法向量N的折射矢量,折射率为eta
+
+<b>矩阵函数:</b>
+mat matrixCompMult(mat x, mat y)	将矩阵 x 和 y的元素逐分量相乘
+
+<b>向量函数:</b>
+bvec lessThan(T x, T y)	逐分量比较x < y,将结果写入bvec对应位置
+bvec lessThanEqual(T x, T y)	逐分量比较 x <= y,将结果写入bvec对应位置
+bvec greaterThan(T x, T y)	逐分量比较 x > y,将结果写入bvec对应位置
+bvec greaterThanEqual(T x, T y)	逐分量比较 x >= y,将结果写入bvec对应位置
+bvec equal(T x, T y) 
+bvec equal(bvec x, bvec y)	逐分量比较 x == y,将结果写入bvec对应位置
+bvec notEqual(T x, T y) 
+bvec notEqual(bvec x, bvec y)	逐分量比较 x!= y,将结果写入bvec对应位置
+bool any(bvec x)	如果x的任意一个分量是true,则结果为true
+bool all(bvec x)	如果x的所有分量是true,则结果为true
+bvec not(bvec x)	bool矢量的逐分量取反
+
+<b>纹理查询函数:</b>
+以下函数只在vertex shader中可用:
+vec4 texture2DLod(sampler2D sampler, vec2 coord, float lod);
+vec4 texture2DProjLod(sampler2D sampler, vec3 coord, float lod);
+vec4 texture2DProjLod(sampler2D sampler, vec4 coord, float lod);
+vec4 textureCubeLod(samplerCube sampler, vec3 coord, float lod);
+
+以下函数只在fragment shader中可用:
+vec4 texture2D(sampler2D sampler, vec2 coord, float bias);
+vec4 texture2DProj(sampler2D sampler, vec3 coord, float bias);
+vec4 texture2DProj(sampler2D sampler, vec4 coord, float bias);
+vec4 textureCube(samplerCube sampler, vec3 coord, float bias);
+
+在 vertex shader 与 fragment shader 中都可用:
+vec4 texture2D(sampler2D sampler, vec2 coord);
+vec4 texture2DProj(sampler2D sampler, vec3 coord);
+vec4 texture2DProj(sampler2D sampler, vec4 coord);
+vec4 textureCube(samplerCube sampler, vec3 coord);
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">预编译指令和宏</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>1. 预编译指令</b>
+#define #undef #if #ifdef #ifndef #else
+#elif #endif #error #pragma #extension #version #line
+
+<b>2. 内置的宏</b>
+__LINE__ : 当前源码中的行号.
+__VERSION__ : 一个整数,指示当前的glsl版本 比如 100 ps: 100 = v1.00
+GL_ES : 如果当前是在 OPGL ES 环境中运行则 GL_ES 被设置成1,一般用来检查当前环境是不是 OPENGL ES.
+GL_FRAGMENT_PRECISION_HIGH : 如果当前系统glsl的片元着色器支持高浮点精度,则设置为1.一般用于检查着色器精度
+
+示例：如何通过判断系统环境,来选择合适的精度:
+#ifdef GL_ES //
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+
+<b>3. 内置的特殊变量</b>
+ 1) vertex Shader
+<b>output 类型的内置变量</b>
+* highp vec4 gl_Position; 
+	gl_Position 放置顶点坐标信息
+
+* mediump float gl_PointSize;
+	gl_PointSize 需要绘制点的大小,(只在gl.POINTS模式下有效)
+
+2) fragment Shader
+<b>input 类型的内置变量</b>
+* mediump vec4 gl_FragCoord;
+片元在framebuffer画面的相对位置
+
+* bool gl_FrontFacing;
+标志当前图元是不是正面图元的一部分
+
+* mediump vec2 gl_PointCoord;
+经过插值计算后的纹理坐标,点的范围是0.0到1.0
+
+<b>output 类型的内置变量</b>
+* mediump vec4 gl_FragColor;
+设置当前片点的颜色
+
+* mediump vec4 gl_FragData[n]
+设置当前片点的颜色,使用glDrawBuffers数据数组
+
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">WebGLProgram 内置uniforms 和 attributes </div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+参考：https://threejs.org/docs/index.html#api/en/renderers/webgl/WebGLProgram
+
+<b>1. 顶点着色器</b>
+  <b>1) 不需要判断的</b>
+// = object.matrixWorld
+uniform mat4 modelMatrix;
+
+// = camera.matrixWorldInverse * object.matrixWorld
+uniform mat4 modelViewMatrix;
+
+// = camera.projectionMatrix
+uniform mat4 projectionMatrix;
+
+// = camera.matrixWorldInverse
+uniform mat4 viewMatrix;
+
+// = inverse transpose of modelViewMatrix
+uniform mat3 normalMatrix;
+
+// = camera position in world space
+uniform vec3 cameraPosition;
+
+// geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+// default vertex attributes provided by Geometry and BufferGeometry
+attribute vec3 position;
+attribute vec3 normal;
+attribute vec2 uv;
+  <b>2) 需要判断的</b>
+#ifdef USE_COLOR
+	// vertex color attribute
+	attribute vec3 color;
+#endif
+
+#ifdef USE_MORPHTARGETS
+
+	attribute vec3 morphTarget0;
+	attribute vec3 morphTarget1;
+	attribute vec3 morphTarget2;
+	attribute vec3 morphTarget3;
+
+	#ifdef USE_MORPHNORMALS
+
+		attribute vec3 morphNormal0;
+		attribute vec3 morphNormal1;
+		attribute vec3 morphNormal2;
+		attribute vec3 morphNormal3;
+
+	#else
+
+		attribute vec3 morphTarget4;
+		attribute vec3 morphTarget5;
+		attribute vec3 morphTarget6;
+		attribute vec3 morphTarget7;
+
+	#endif
+#endif
+
+#ifdef USE_SKINNING
+	attribute vec4 skinIndex;
+	attribute vec4 skinWeight;
+#endif
+
+<b>2. 片元着色器</b>
+uniform mat4 viewMatrix;
+uniform vec3 cameraPosition;
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle" id="materialMap">示例着色器 - 层层圆环</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+&lt;script id="ocean_fragment_shader" type="x-shader/x-fragment"&gt;
+	uniform float iTime;
+	varying vec2 vUv;
+	varying vec3 vPosition;
+	void main(void) {
+		float d = sqrt(vPosition.x * vPosition.x + vPosition.y * vPosition.y)
+				  + mod(iTime * 4.0, 3.1415926 * 2.0);
+		float R = abs(sin(d / 2.0));
+		float G = abs(sin(d / 2.0 + 3.1415926 / 2.0));
+		gl_FragColor = vec4(R, G, 1.0, 1.0);
+	}
+&lt;/script&gt;
+&lt;script id="vertexShader" type="x-shader/x-vertex"&gt;
+	varying vec2 vUv;
+	varying vec3 vPosition;
+	void main()
+	{
+		vUv = uv;
+		vPosition = position;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+&lt;/script&gt;
+		</pre>
+	</div>
+	<div class="aShow note" id="app1">
+	</div>
+</div>
+<script id="test1_fragment_shader" type="x-shader/x-fragment">
+	uniform float iTime;
+	varying vec2 vUv;
+	varying vec3 vPosition;
+	void main(void) {
+		float d = sqrt(vPosition.x * vPosition.x + vPosition.y * vPosition.y)
+				  + mod(iTime * 4.0, 3.1415926 * 2.0);
+		float R = abs(sin(d / 2.0));
+		float G = abs(sin(d / 2.0 + 3.1415926 / 2.0));
+		gl_FragColor = vec4(R, G, 1.0, 1.0);
+	}
+</script>
+<script id="test1_vertexShader" type="x-shader/x-vertex">
+	varying vec2 vUv;
+	varying vec3 vPosition;
+	void main()
+	{
+		vUv = uv;
+		vPosition = position;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+init1();
+function init1 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app1')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 3/3, 1, 200);
+	camera.position.set(0,0,40);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 物体
+	var uniforms = {iTime: { value: 1.0 }} // 參數
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'test1_vertexShader' ).textContent,
+		fragmentShader: document.getElementById('test1_fragment_shader').textContent
+	});
+	var geom = new THREE.PlaneBufferGeometry(48, 36);
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	var clock = new THREE.Clock();
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.iTime.value += delta;
+		renderer.render( scene, camera );
+	}
+}
+</script>
+
+<div class="aTitle" id="materialMap">示例着色器 - 渐变色三角</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+&lt;script id="test2_fragment_shader" type="x-shader/x-fragment"&gt;
+	uniform float iTime;
+	varying vec3 vColor;
+	void main(void) {
+		gl_FragColor = vec4(vColor, 1.0);
+	}
+&lt;/script&gt;
+&lt;script id="test2_vertexShader" type="x-shader/x-vertex"&gt;
+	attribute vec3 color;
+	varying vec3 vColor;
+	void main()
+	{
+		vColor = color;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+&lt;/script&gt;
+		</pre>
+	</div>
+	<div class="aShow note" id="app2">
+	</div>
+</div>
+<script id="test2_fragment_shader" type="x-shader/x-fragment">
+	uniform float iTime;
+	varying vec3 vColor;
+	void main(void) {
+		gl_FragColor = vec4(vColor, 1.0);
+	}
+</script>
+<script id="test2_vertexShader" type="x-shader/x-vertex">
+	attribute vec3 color;
+	varying vec3 vColor;
+	void main()
+	{
+		vColor = color;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+init2();
+function init2 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(300, 300);
+	var parentEle = document.getElementById('app2')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 正交投影摄像机
+	var camera = new THREE.PerspectiveCamera(45, 3/3, 1, 200);
+	camera.position.set(0,0,4);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 物体
+	var uniforms = {iTime: { value: 1.0 }} // 參數
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'test2_vertexShader' ).textContent,
+		fragmentShader: document.getElementById('test2_fragment_shader').textContent
+	});
+	var geom = new THREE.BufferGeometry();
+	var positions = new Float32Array([
+		-1.0, 1.0,  0.0,
+		 0.0, -0.414,  0.0,
+		 1.0,  1.0,  0.0
+	]);
+	var colors = new Float32Array([
+		1.0, 0.0, 1.0,
+		0.0, 1.0, 1.0,
+		1.0, 1.0, 0.0
+	]);
+
+	geom.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+	geom.addAttribute('color', new THREE.BufferAttribute(colors, 3));
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	var clock = new THREE.Clock();
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.iTime.value += delta;
+		renderer.render( scene, camera );
+	}
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">示例着色器 - 云层</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+https://www.shadertoy.com/view/XslGRr
+		</pre>
+	</div>
+	<div class="aShow note" id="app3">
+	</div>
+</div>
+<script id="test3_fragment_shader" type="x-shader/x-fragment">
+// Created by inigo quilez - iq/2013
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+
+// Volumetric clouds. It performs level of detail (LOD) for faster rendering
+uniform float iTime;
+uniform vec2 iResolution;
+uniform sampler2D iChannel0;
+vec2 iMouse = vec2(0.0, 0.0);
+float noise( in vec3 x )
+{
+    vec3 p = floor(x);
+    vec3 f = fract(x);
+	f = f*f*(3.0-2.0*f);
+    
+	vec2 uv = (p.xy+vec2(37.0,17.0)*p.z) + f.xy;
+    vec2 rg = texture2D( iChannel0, (uv+ 0.5)/256.0, 0. ).yx;
+    
+	return -1.0+2.0*mix( rg.x, rg.y, f.z );
+}
+
+float map5( in vec3 p )
+{
+	vec3 q = p - vec3(0.0,0.1,1.0)*iTime;
+	float f;
+    f  = 0.50000*noise( q ); q = q*2.02;
+    f += 0.25000*noise( q ); q = q*2.03;
+    f += 0.12500*noise( q ); q = q*2.01;
+    f += 0.06250*noise( q ); q = q*2.02;
+    f += 0.03125*noise( q );
+	return clamp( 1.5 - p.y - 2.0 + 1.75*f, 0.0, 1.0 );
+}
+
+float map4( in vec3 p )
+{
+	vec3 q = p - vec3(0.0,0.1,1.0)*iTime;
+	float f;
+    f  = 0.50000*noise( q ); q = q*2.02;
+    f += 0.25000*noise( q ); q = q*2.03;
+    f += 0.12500*noise( q ); q = q*2.01;
+    f += 0.06250*noise( q );
+	return clamp( 1.5 - p.y - 2.0 + 1.75*f, 0.0, 1.0 );
+}
+float map3( in vec3 p )
+{
+	vec3 q = p - vec3(0.0,0.1,1.0)*iTime;
+	float f;
+    f  = 0.50000*noise( q ); q = q*2.02;
+    f += 0.25000*noise( q ); q = q*2.03;
+    f += 0.12500*noise( q );
+	return clamp( 1.5 - p.y - 2.0 + 1.75*f, 0.0, 1.0 );
+}
+float map2( in vec3 p )
+{
+	vec3 q = p - vec3(0.0,0.1,1.0)*iTime;
+	float f;
+    f  = 0.50000*noise( q ); q = q*2.02;
+    f += 0.25000*noise( q );;
+	return clamp( 1.5 - p.y - 2.0 + 1.75*f, 0.0, 1.0 );
+}
+
+vec3 sundir = normalize( vec3(-1.0,0.0,-1.0) );
+
+vec4 integrate( in vec4 sum, in float dif, in float den, in vec3 bgcol, in float t )
+{
+    // lighting
+    vec3 lin = vec3(0.65,0.7,0.75)*1.4 + vec3(1.0, 0.6, 0.3)*dif;        
+    vec4 col = vec4( mix( vec3(1.0,0.95,0.8), vec3(0.25,0.3,0.35), den ), den );
+    col.xyz *= lin;
+    col.xyz = mix( col.xyz, bgcol, 1.0-exp(-0.003*t*t) );
+    // front to back blending    
+    col.a *= 0.4;
+    col.rgb *= col.a;
+    return sum + col*(1.0-sum.a);
+}
+
+#define MARCH(STEPS,MAPLOD) for(int i=0; i<STEPS; i++) { vec3  pos = ro + t*rd; if( pos.y<-3.0 || pos.y>2.0 || sum.a > 0.99 ) break; float den = MAPLOD( pos ); if( den>0.01 ) { float dif =  clamp((den - MAPLOD(pos+0.3*sundir))/0.6, 0.0, 1.0 ); sum = integrate( sum, dif, den, bgcol, t ); } t += max(0.05,0.02*t); }
+
+vec4 raymarch( in vec3 ro, in vec3 rd, in vec3 bgcol, in ivec2 px )
+{
+	vec4 sum = vec4(0.0);
+
+	float t = 0.0;
+
+    MARCH(30,map5);
+    MARCH(30,map4);
+    MARCH(30,map3);
+    MARCH(30,map2);
+
+    return clamp( sum, 0.0, 1.0 );
+}
+
+mat3 setCamera( in vec3 ro, in vec3 ta, float cr )
+{
+	vec3 cw = normalize(ta-ro);
+	vec3 cp = vec3(sin(cr), cos(cr),0.0);
+	vec3 cu = normalize( cross(cw,cp) );
+	vec3 cv = normalize( cross(cu,cw) );
+    return mat3( cu, cv, cw );
+}
+
+vec4 render( in vec3 ro, in vec3 rd, in ivec2 px )
+{
+    // background sky     
+	float sun = clamp( dot(sundir,rd), 0.0, 1.0 );
+	vec3 col = vec3(0.6,0.71,0.75) - rd.y*0.2*vec3(1.0,0.5,1.0) + 0.15*0.5;
+	col += 0.2*vec3(1.0,.6,0.1)*pow( sun, 8.0 );
+
+    // clouds    
+    vec4 res = raymarch( ro, rd, col, px );
+    col = col*(1.0-res.w) + res.xyz;
+    
+    // sun glare    
+	col += 0.2*vec3(1.0,0.4,0.2)*pow( sun, 3.0 );
+
+    return vec4( col, 1.0 );
+}
+
+void main()
+{
+    vec2 p = (-iResolution.xy + 2.0*gl_FragCoord.xy)/ iResolution.y;
+
+    vec2 m = iMouse.xy/iResolution.xy;
+    
+    // camera
+    vec3 ro = 4.0*normalize(vec3(sin(3.0*m.x), 0.4*m.y, cos(3.0*m.x)));
+	vec3 ta = vec3(0.0, -1.0, 0.0);
+    mat3 ca = setCamera( ro, ta, 0.0 );
+    // ray
+    vec3 rd = ca * normalize( vec3(p.xy,1.5));
+    
+    gl_FragColor = render( ro, rd, ivec2(gl_FragCoord-0.5) );
+}
+</script>
+<script id="test3_vertexShader" type="x-shader/x-vertex">
+	void main()
+	{
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+init3();
+function init3 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(500, 300);
+	var parentEle = document.getElementById('app3')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 摄像机
+	var camera = new THREE.PerspectiveCamera(45, 5/3, 1, 2000);
+	camera.position.set(0,0,360);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	var texture = new THREE.TextureLoader().load( "./cloud_noise.png");
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	// 物体
+	var uniforms = {
+		iTime: { value: 1.0 },
+		iResolution: { value: new THREE.Vector2(500.0, 300.0)},
+		iChannel0: {value: texture}
+	}
+
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'test3_vertexShader' ).textContent,
+		fragmentShader: document.getElementById('test3_fragment_shader').textContent
+	});
+
+	var geom = new THREE.PlaneBufferGeometry(500, 300);
+	// var geom = new THREE.TorusBufferGeometry(10, 3, 64, 100);
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	renderer.render( scene, camera );
+
+	var clock = new THREE.Clock();
+	var time = 0;
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.iTime.value += delta;
+		/*time += delta;
+		mesh.rotation.set(0, time, 0);*/
+		renderer.render( scene, camera );
+	}
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">示例着色器 - 雨滴水纹</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+https://www.shadertoy.com/view/ldfyzl
+		</pre>
+	</div>
+	<div class="aShow note" id="app4">
+	</div>
+</div>
+<script id="test4_fragment_shader" type="x-shader/x-fragment">
+uniform float iTime;
+uniform vec2 iResolution;
+uniform sampler2D iChannel0;
+vec2 iMouse = vec2(0.0, 0.0);
+
+// Maximum number of cells a ripple can cross.
+#define MAX_RADIUS 2
+
+// Set to 1 to hash twice. Slower, but less patterns.
+#define DOUBLE_HASH 0
+
+// Hash functions shamefully stolen from:
+// https://www.shadertoy.com/view/4djSRW
+#define HASHSCALE1 .1031
+#define HASHSCALE3 vec3(.1031, .1030, .0973)
+
+float hash12(vec2 p)
+{
+	vec3 p3  = fract(vec3(p.xyx) * HASHSCALE1);
+    p3 += dot(p3, p3.yzx + 19.19);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+vec2 hash22(vec2 p)
+{
+	vec3 p3 = fract(vec3(p.xyx) * HASHSCALE3);
+    p3 += dot(p3, p3.yzx+19.19);
+    return fract((p3.xx+p3.yz)*p3.zy);
+
+}
+
+void main()
+{
+    float resolution = 10. * exp2(-3.*iMouse.x/iResolution.x);
+	vec2 uv = gl_FragCoord.xy / iResolution.y * resolution;
+    vec2 p0 = floor(uv);
+
+    vec2 circles = vec2(0.);
+    for (int j = -MAX_RADIUS; j <= MAX_RADIUS; ++j)
+    {
+        for (int i = -MAX_RADIUS; i <= MAX_RADIUS; ++i)
+        {
+			vec2 pi = p0 + vec2(i, j);
+            #if DOUBLE_HASH
+            vec2 hsh = hash22(pi);
+            #else
+            vec2 hsh = pi;
+            #endif
+            vec2 p = pi + hash22(hsh);
+
+            float t = fract(0.3*iTime + hash12(hsh));
+            vec2 v = p - uv;
+            float d = length(v) - (float(MAX_RADIUS) + 1.)*t;
+
+            float h = 1e-3;
+            float d1 = d - h;
+            float d2 = d + h;
+            float p1 = sin(31.*d1) * smoothstep(-0.6, -0.3, d1) * smoothstep(0., -0.3, d1);
+            float p2 = sin(31.*d2) * smoothstep(-0.6, -0.3, d2) * smoothstep(0., -0.3, d2);
+            circles += 0.5 * normalize(v) * ((p2 - p1) / (2. * h) * (1. - t) * (1. - t));
+        }
+    }
+    circles /= float((MAX_RADIUS*2+1)*(MAX_RADIUS*2+1));
+
+    float intensity = mix(0.01, 0.15, smoothstep(0.1, 0.6, abs(fract(0.05*iTime + 0.5)*2.-1.)));
+    vec3 n = vec3(circles, sqrt(1. - dot(circles, circles)));
+    vec3 color = texture2D(iChannel0, uv/resolution - intensity*n.xy).rgb + 5.*pow(clamp(dot(n, normalize(vec3(1., 0.7, 0.5))), 0., 1.), 6.);
+	gl_FragColor = vec4(color, 1.0);
+}
+</script>
+<script id="test4_vertexShader" type="x-shader/x-vertex">
+	void main()
+	{
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+init4();
+function init4 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(500, 300);
+	var parentEle = document.getElementById('app4')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 摄像机
+	var camera = new THREE.PerspectiveCamera(45, 5/3, 1, 2000);
+	camera.position.set(0,0,360);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	var texture = new THREE.TextureLoader().load( "./iChannel0.png");
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	// 物体
+	var uniforms = {
+		iTime: { value: 1.0 },
+		iResolution: { value: new THREE.Vector2(500.0, 300.0)},
+		iChannel0: {value: texture}
+	}
+
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'test4_vertexShader' ).textContent,
+		fragmentShader: document.getElementById('test4_fragment_shader').textContent
+	});
+
+	var geom = new THREE.PlaneBufferGeometry(500, 300);
+	// var geom = new THREE.TorusBufferGeometry(10, 3, 64, 100);
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	renderer.render( scene, camera );
+
+	var clock = new THREE.Clock();
+	var time = 0;
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.iTime.value += delta;
+		/*time += delta;
+		mesh.rotation.set(0, time, 0);*/
+		renderer.render( scene, camera );
+	}
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">示例着色器 - 火焰</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+https://www.shadertoy.com/view/Ms2SD1
+		</pre>
+	</div>
+	<div class="aShow note" id="app5">
+	</div>
+</div>
+<script id="test5_fragment_shader" type="x-shader/x-fragment">
+uniform float iTime;
+uniform vec2 iResolution;
+uniform sampler2D iChannel0;
+vec2 iMouse = vec2(0.0, 0.0);
+
+/*
+ * "Seascape" by Alexander Alekseev aka TDM - 2014
+ * License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+ * Contact: tdmaav@gmail.com
+ */
+
+const int NUM_STEPS = 8;
+const float PI	 	= 3.141592;
+const float EPSILON	= 1e-3;
+#define EPSILON_NRM (0.1 / iResolution.x)
+
+// sea
+const int ITER_GEOMETRY = 3;
+const int ITER_FRAGMENT = 5;
+const float SEA_HEIGHT = 0.6;
+const float SEA_CHOPPY = 4.0;
+const float SEA_SPEED = 0.8;
+const float SEA_FREQ = 0.16;
+const vec3 SEA_BASE = vec3(0.1,0.19,0.22);
+const vec3 SEA_WATER_COLOR = vec3(0.8,0.9,0.6);
+#define SEA_TIME (1.0 + iTime * SEA_SPEED)
+const mat2 octave_m = mat2(1.6,1.2,-1.2,1.6);
+
+// math
+mat3 fromEuler(vec3 ang) {
+	vec2 a1 = vec2(sin(ang.x),cos(ang.x));
+    vec2 a2 = vec2(sin(ang.y),cos(ang.y));
+    vec2 a3 = vec2(sin(ang.z),cos(ang.z));
+    mat3 m;
+    m[0] = vec3(a1.y*a3.y+a1.x*a2.x*a3.x,a1.y*a2.x*a3.x+a3.y*a1.x,-a2.y*a3.x);
+	m[1] = vec3(-a2.y*a1.x,a1.y*a2.y,a2.x);
+	m[2] = vec3(a3.y*a1.x*a2.x+a1.y*a3.x,a1.x*a3.x-a1.y*a3.y*a2.x,a2.y*a3.y);
+	return m;
+}
+float hash( vec2 p ) {
+	float h = dot(p,vec2(127.1,311.7));	
+    return fract(sin(h)*43758.5453123);
+}
+float noise( in vec2 p ) {
+    vec2 i = floor( p );
+    vec2 f = fract( p );	
+	vec2 u = f*f*(3.0-2.0*f);
+    return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ), 
+                     hash( i + vec2(1.0,0.0) ), u.x),
+                mix( hash( i + vec2(0.0,1.0) ), 
+                     hash( i + vec2(1.0,1.0) ), u.x), u.y);
+}
+
+// lighting
+float diffuse(vec3 n,vec3 l,float p) {
+    return pow(dot(n,l) * 0.4 + 0.6,p);
+}
+float specular(vec3 n,vec3 l,vec3 e,float s) {    
+    float nrm = (s + 8.0) / (PI * 8.0);
+    return pow(max(dot(reflect(e,n),l),0.0),s) * nrm;
+}
+
+// sky
+vec3 getSkyColor(vec3 e) {
+    e.y = max(e.y,0.0);
+    return vec3(pow(1.0-e.y,2.0), 1.0-e.y, 0.6+(1.0-e.y)*0.4);
+}
+
+// sea
+float sea_octave(vec2 uv, float choppy) {
+    uv += noise(uv);        
+    vec2 wv = 1.0-abs(sin(uv));
+    vec2 swv = abs(cos(uv));    
+    wv = mix(wv,swv,wv);
+    return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
+}
+
+float map(vec3 p) {
+    float freq = SEA_FREQ;
+    float amp = SEA_HEIGHT;
+    float choppy = SEA_CHOPPY;
+    vec2 uv = p.xz; uv.x *= 0.75;
+    
+    float d, h = 0.0;    
+    for(int i = 0; i < ITER_GEOMETRY; i++) {        
+    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
+    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+        h += d * amp;        
+    	uv *= octave_m; freq *= 1.9; amp *= 0.22;
+        choppy = mix(choppy,1.0,0.2);
+    }
+    return p.y - h;
+}
+
+float map_detailed(vec3 p) {
+    float freq = SEA_FREQ;
+    float amp = SEA_HEIGHT;
+    float choppy = SEA_CHOPPY;
+    vec2 uv = p.xz; uv.x *= 0.75;
+    
+    float d, h = 0.0;    
+    for(int i = 0; i < ITER_FRAGMENT; i++) {        
+    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
+    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+        h += d * amp;        
+    	uv *= octave_m; freq *= 1.9; amp *= 0.22;
+        choppy = mix(choppy,1.0,0.2);
+    }
+    return p.y - h;
+}
+
+vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {  
+    float fresnel = clamp(1.0 - dot(n,-eye), 0.0, 1.0);
+    fresnel = pow(fresnel,3.0) * 0.65;
+        
+    vec3 reflected = getSkyColor(reflect(eye,n));    
+    vec3 refracted = SEA_BASE + diffuse(n,l,80.0) * SEA_WATER_COLOR * 0.12; 
+    
+    vec3 color = mix(refracted,reflected,fresnel);
+    
+    float atten = max(1.0 - dot(dist,dist) * 0.001, 0.0);
+    color += SEA_WATER_COLOR * (p.y - SEA_HEIGHT) * 0.18 * atten;
+    
+    color += vec3(specular(n,l,eye,60.0));
+    
+    return color;
+}
+
+// tracing
+vec3 getNormal(vec3 p, float eps) {
+    vec3 n;
+    n.y = map_detailed(p);    
+    n.x = map_detailed(vec3(p.x+eps,p.y,p.z)) - n.y;
+    n.z = map_detailed(vec3(p.x,p.y,p.z+eps)) - n.y;
+    n.y = eps;
+    return normalize(n);
+}
+
+float heightMapTracing(vec3 ori, vec3 dir, out vec3 p) {  
+    float tm = 0.0;
+    float tx = 1000.0;    
+    float hx = map(ori + dir * tx);
+    if(hx > 0.0) return tx;   
+    float hm = map(ori + dir * tm);    
+    float tmid = 0.0;
+    for(int i = 0; i < NUM_STEPS; i++) {
+        tmid = mix(tm,tx, hm/(hm-hx));                   
+        p = ori + dir * tmid;                   
+    	float hmid = map(p);
+		if(hmid < 0.0) {
+        	tx = tmid;
+            hx = hmid;
+        } else {
+            tm = tmid;
+            hm = hmid;
+        }
+    }
+    return tmid;
+}
+
+// main
+void main() {
+	vec2 uv = gl_FragCoord.xy / iResolution.xy;
+    uv = uv * 2.0 - 1.0;
+    uv.x *= iResolution.x / iResolution.y;    
+    float time = iTime * 0.3 + iMouse.x*0.01;
+        
+    // ray
+    vec3 ang = vec3(sin(time*3.0)*0.1,sin(time)*0.2+0.3,time);    
+    vec3 ori = vec3(0.0,3.5,time*5.0);
+    vec3 dir = normalize(vec3(uv.xy,-2.0)); dir.z += length(uv) * 0.15;
+    dir = normalize(dir) * fromEuler(ang);
+    
+    // tracing
+    vec3 p;
+    heightMapTracing(ori,dir,p);
+    vec3 dist = p - ori;
+    vec3 n = getNormal(p, dot(dist,dist) * EPSILON_NRM);
+    vec3 light = normalize(vec3(0.0,1.0,0.8)); 
+             
+    // color
+    vec3 color = mix(
+        getSkyColor(dir),
+        getSeaColor(p,n,light,dir,dist),
+    	pow(smoothstep(0.0,-0.05,dir.y),0.3));
+        
+    // post
+	gl_FragColor = vec4(pow(color,vec3(0.75)), 1.0);
+}
+</script>
+<script id="test5_vertexShader" type="x-shader/x-vertex">
+	void main()
+	{
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+init5();
+function init5 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(500, 300);
+	var parentEle = document.getElementById('app5')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0xeeeeee);
+	// 场景
+	var scene = new THREE.Scene();
+	// 摄像机
+	var camera = new THREE.PerspectiveCamera(45, 5/3, 1, 2000);
+	camera.position.set(0,0,360);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 物体
+	var uniforms = {
+		iTime: { value: 1.0 },
+		iResolution: { value: new THREE.Vector2(500.0, 300.0)}
+	}
+
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'test5_vertexShader' ).textContent,
+		fragmentShader: document.getElementById('test5_fragment_shader').textContent
+	});
+
+	var geom = new THREE.PlaneBufferGeometry(500, 300);
+	// var geom = new THREE.TorusBufferGeometry(10, 3, 64, 100);
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	renderer.render( scene, camera );
+
+	var clock = new THREE.Clock();
+	var time = 0;
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.iTime.value += delta;
+		/*time += delta;
+		mesh.rotation.set(0, time, 0);*/
+		renderer.render( scene, camera );
+	}
+}
+</script>
+
+
+<div class="aTitle" id="materialMap">示例着色器</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+https://www.shadertoy.com/view/MdX3zr
+		</pre>
+	</div>
+	<div class="aShow note" id="app6">
+	</div>
+</div>
+<script id="test6_fragment_shader" type="x-shader/x-fragment">
+uniform float iTime;
+uniform vec2 iResolution;
+uniform sampler2D iChannel0;
+vec2 iMouse = vec2(0.0, 0.0);
+
+float noise(vec3 p) //Thx to Las^Mercury
+{
+	vec3 i = floor(p);
+	vec4 a = dot(i, vec3(1., 57., 21.)) + vec4(0., 57., 21., 78.);
+	vec3 f = cos((p-i)*acos(-1.))*(-.5)+.5;
+	a = mix(sin(cos(a)*a),sin(cos(1.+a)*(1.+a)), f.x);
+	a.xy = mix(a.xz, a.yw, f.y);
+	return mix(a.x, a.y, f.z);
+}
+
+float sphere(vec3 p, vec4 spr)
+{
+	return length(spr.xyz-p) - spr.w;
+}
+
+float flame(vec3 p)
+{
+	float d = sphere(p*vec3(1.,.5,1.), vec4(.0,-1.,.0,1.));
+	return d + (noise(p+vec3(.0,iTime*2.,.0)) + noise(p*3.)*.5)*.25*(p.y) ;
+}
+
+float scene(vec3 p)
+{
+	return min(100.-length(p) , abs(flame(p)) );
+}
+
+vec4 raymarch(vec3 org, vec3 dir)
+{
+	float d = 0.0, glow = 0.0, eps = 0.02;
+	vec3  p = org;
+	bool glowed = false;
+	
+	for(int i=0; i<64; i++)
+	{
+		d = scene(p) + eps;
+		p += d * dir;
+		if( d>eps )
+		{
+			if(flame(p) < .0)
+				glowed=true;
+			if(glowed)
+       			glow = float(i)/64.;
+		}
+	}
+	return vec4(p,glow);
+}
+
+void main()
+{
+	vec2 v = -1.0 + 2.0 * gl_FragCoord.xy / iResolution.xy;
+	v.x *= iResolution.x/iResolution.y;
+	
+	vec3 org = vec3(0., -2., 4.);
+	vec3 dir = normalize(vec3(v.x*1.6, -v.y, -1.5));
+	
+	vec4 p = raymarch(org, dir);
+	float glow = p.w;
+	
+	vec4 col = mix(vec4(1.,.5,.1,1.), vec4(0.1,.5,1.,1.), p.y*.02+.4);
+	
+	gl_FragColor = mix(vec4(0.), col, pow(glow*2.,4.));
+	// gl_FragColor = mix(vec4(1.), mix(vec4(1.,.5,.1,1.),vec4(0.1,.5,1.,1.),p.y*.02+.4), pow(glow*2.,4.));
+
+}
+</script>
+<script id="test6_vertexShader" type="x-shader/x-vertex">
+	void main()
+	{
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+<script type="text/javascript">
+init6();
+function init6 () {
+	// HTML中无canvas标签，自动创建
+	var renderer = new THREE.WebGLRenderer({antialias:true});
+	renderer.setSize(300, 400);
+	var parentEle = document.getElementById('app6')
+	parentEle.appendChild(renderer.domElement);
+
+	// 将背景色（用于清除画面的颜色)
+	renderer.setClearColor(0x666666);
+	// 场景
+	var scene = new THREE.Scene();
+	// 摄像机
+	var camera = new THREE.PerspectiveCamera(45, 3/4, 1, 1000);
+	camera.position.set(0,0,480);
+	// 照相机默认沿z轴负方向观察，通过设置lookAt的位置可以改变观察的方向
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+
+	// 物体
+	var uniforms = {
+		iTime: { value: 1.0 },
+		iResolution: { value: new THREE.Vector2(300.0, 400.0)}
+	}
+
+	var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById( 'test6_vertexShader' ).textContent,
+		fragmentShader: document.getElementById('test6_fragment_shader').textContent
+	});
+
+	var geom = new THREE.PlaneBufferGeometry(300, 400);
+	// var geom = new THREE.TorusBufferGeometry(10, 3, 64, 100);
+	var mesh = new THREE.Mesh( geom, material );
+	scene.add(mesh);
+
+	renderer.render( scene, camera );
+
+	var clock = new THREE.Clock();
+	var time = 0;
+	animate();
+	function animate() {
+		requestAnimationFrame( animate );
+
+		var delta = clock.getDelta();
+		uniforms.iTime.value += delta;
+		/*time += delta;
+		mesh.rotation.set(0, time, 0);*/
+		renderer.render( scene, camera );
+	}
+}
+</script>
+</body>
+</html>
