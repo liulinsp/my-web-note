@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas 绘制</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<div class="aTitle">颜色、渐变、图案</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>属性：</b>
+<b>strokeStyle</b> 线条颜色
+<b>fillStyle</b> 填充样式
+属性值：颜色值、渐变对象、pattern对象
+
+<b>1. 颜色：</b>
+#ffffff
+rgba(255, 255, 255, 0.5)
+rgb(255, 255, 255)
+hsl(20, 60%, 90%)
+hsla(20, 60%, 90%, 0.5)
+black
+
+<b>2. 渐变：</b>
+1. linear 线性渐变
+context.createLinearGradient(x0,y0,x1,y1);
+
+2. radial 放射渐变
+context.createRadialGradient(x0,y0,r0,x1,y1,r1);
+
+gradient.addColorStop(stop,color);
+* gradient对象请使用 addColorStop() 方法规定不同的颜色
+* stop 介于 0.0 与 1.0 之间的值，表示渐变中开始与结束之间的位置
+
+<b>3. 图案</b>
+context.createPattern(image,"repeat|repeat-x|repeat-y|no-repeat");
+* 用createPattern()方法来创建图案
+
+function drawImg () {
+	var image = new Image();
+	// image.src = '../../img/bk.png';
+	image.src = otherCanvas.toDataURL();
+	image.onload = function () {
+		var pattern = context.createPattern(image, 'no-repeat');
+		context.fillStyle = pattern;
+		context.fillRect(0, 0, WIDTH, HEIGHT);
+	}
+	
+}
+		</pre>
+	</div>
+	<div class="aShow note" id = "app0">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 300; // 画布宽
+	var HEIGHT = 200; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app0').append(canvas);
+
+	var context = canvas.getContext('2d');
+
+	drawLinearGradient();
+	drawRadialGradient();
+	
+	function drawLinearGradient () {
+		var linearGradient = context.createLinearGradient(50, 50, 150, 50);
+		linearGradient.addColorStop(0, 'Yellow');
+		linearGradient.addColorStop(0.5, 'LightGreen');
+		linearGradient.addColorStop(1, 'LightBlue');
+
+		context.fillStyle = linearGradient;
+		context.fillRect(50, 50, 100, 100);
+	}
+
+	function drawRadialGradient () {
+		var centerX = 250;
+		var centerY = 100;
+		var width = 100;
+		var radialGradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, width / 2 * 1.414);
+		radialGradient.addColorStop(0, 'Yellow');
+		radialGradient.addColorStop(0.5, 'LightGreen');
+		radialGradient.addColorStop(1, 'LightBlue');
+
+		context.fillStyle = radialGradient;
+		context.fillRect(centerX - width / 2, centerY - width / 2, width, width);
+	}
+
+
+	var canvas2 = document.createElement('canvas');
+	canvas2.setAttribute('width', WIDTH);
+	canvas2.setAttribute('height', HEIGHT);
+	document.getElementById('app0').append(canvas2);
+
+	var context2 = canvas2.getContext('2d');
+	drawImg();
+	function drawImg () {
+		var image = new Image();
+		// image.src = '../../img/bk.png';
+		image.src = canvas.toDataURL();
+		image.onload = function () {
+			var pattern = context.createPattern(image, 'no-repeat');
+			context2.fillStyle = pattern;
+			context2.fillRect(0, 0, WIDTH, HEIGHT);
+		}
+		
+	}
+
+})()
+
+</script>
+
+<div class="aTitle">线条样式</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>lineWidth：线条宽度</b>
+* 默认：1
+
+<b>lineCap：端点</b>
+* butt 平直边缘（默认）
+* round 圆形线帽
+* square 方形线帽
+
+<b>lineJoin: 角点</b>
+* miter 尖角（默认）
+* bevel 斜角
+* round 圆角
+
+<b>miterLimit：最大斜接长度</b>
+* 斜接长度超过 miterLimit 的值，边角会以 
+  lineJoin 的 "bevel" 类型来显示
+* 默认：10
+		</pre>
+	</div>
+	<div class="aShow note" id = "app1">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 300; // 画布宽
+	var HEIGHT = 300; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app1').append(canvas);
+
+	var context = canvas.getContext('2d');
+	context.lineWidth = 10;
+	drawLineCap();
+	drawLineJoin();
+	drawMiterLimit();
+
+	function drawLineCap() {
+		context.save();
+		context.fillText('lineCap:', 20, 10);
+		
+		context.lineCap = 'butt';
+		context.beginPath();
+		context.moveTo(20, 30);
+		context.lineTo(60, 30);
+		context.stroke();
+		context.fillText('butt', 70, 35);
+
+		context.lineCap = 'round';
+		context.beginPath();
+		context.moveTo(20, 60);
+		context.lineTo(60, 60);
+		context.stroke();
+		context.fillText('round', 70, 65);
+
+		context.lineCap = 'square';
+		context.beginPath();
+		context.moveTo(20, 90);
+		context.lineTo(60, 90);
+		context.stroke();
+		context.fillText('square', 70, 95);
+
+		context.restore();
+	}
+
+	function drawLineJoin() {
+		context.save();
+		context.fillText('lineJoin:', 20, 135);
+
+		context.lineJoin = 'miter';
+		context.beginPath();
+		context.moveTo(60, 150);
+		context.lineTo(20, 150);
+		context.lineTo(20, 180);
+		context.stroke();
+		context.fillText('miter', 70, 155);
+
+		context.lineJoin = 'bevel';
+		context.beginPath();
+		context.moveTo(60, 200);
+		context.lineTo(20, 200);
+		context.lineTo(20, 230);
+		context.stroke();
+		context.fillText('bevel', 70, 205);
+
+		context.lineJoin = 'round';
+		context.beginPath();
+		context.moveTo(60, 250);
+		context.lineTo(20, 250);
+		context.lineTo(20, 280);
+		context.stroke();
+		context.fillText('round', 70, 255);
+
+		context.restore();
+	}
+
+	function drawMiterLimit () {
+		context.save();
+		context.fillText('miterLimit:', 200, 20);
+
+		context.miterLimit = 10;
+		context.beginPath();
+		context.moveTo(280, 50);
+		context.lineTo(200, 50);
+		context.lineTo(280, 70);
+		context.stroke();
+		context.fillText('miterLimit = 10', 200, 90);
+
+		context.miterLimit = 5;
+		context.beginPath();
+		context.moveTo(280, 150);
+		context.lineTo(200, 150);
+		context.lineTo(280, 170);
+		context.stroke();
+		context.fillText('miterLimit = 5', 200, 190);
+
+		context.restore();
+	}
+	
+})()
+</script>
+
+<div class="aTitle">绘制矩形</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+* 清除矩形
+clearRect(double x, double y, double w, double h)
+* 描边矩形
+strokeRect(double x, double y, double w, double h)
+* 填充矩形
+fillRect(double x, double y, double w, double h)
+
+<b>脚本：</b>
+var WIDTH = 300; // 画布宽
+var HEIGHT = 200; // 画布高
+
+var context = canvas.getContext('2d');
+context.strokeRect(50, 50, 100, 100);
+context.fillRect(200, 50, 100, 100);
+canvas.addEventListener('click', function () {
+	context.clearRect(0, 0, WIDTH, HEIGHT);
+});
+		</pre>
+	</div>
+	<div class="aShow note" id = "app2">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 300; // 画布宽
+	var HEIGHT = 200; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app2').append(canvas);
+
+	var context = canvas.getContext('2d');
+
+	context.strokeRect(50, 50, 100, 100);
+	context.fillRect(200, 50, 100, 100);
+	canvas.addEventListener('click', function () {
+		context.clearRect(0, 0, WIDTH, HEIGHT);
+	});
+})()
+
+</script>
+
+
+
+</body>
+</html>

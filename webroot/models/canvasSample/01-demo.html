@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas示例</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">绘制简单图形</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+context.save();
+context.restore();
+
+content.getImageData(0, 0, canvas.width, canvas.height);
+content.putImageData(imageData, 0, 0);
+
+立即模式绘图系统、保留模式绘图系统
+
+canvas.toDataURL() 方法来保存Canvas的图像
+
+		</pre>
+	</div>
+	<div class="aShow note" id = "app1">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 300; // 画布大小
+	var FONT_SIZE = 40; // 字体大小
+	// 圆外半径
+	var outerR = WIDTH / 2 * 0.8;
+	// 圆内半径
+	var innerR = WIDTH / 2 * 0.6;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', WIDTH);
+	var context = canvas.getContext('2d');
+	context.font = FONT_SIZE + 'px Arial';
+	context.textBaseline = 'middle';
+	drawCircle();
+	drawText();
+
+	document.getElementById('app1').append(canvas);
+
+	// 画圆
+	function drawCircle() {
+		context.save();
+		// 画外圆
+		context.fillStyle="#333333";
+		context.beginPath();
+		context.arc(WIDTH / 2, WIDTH / 2, outerR, 0, Math.PI * 2, true);
+		context.fill();
+
+		// 画内圆
+		context.fillStyle="#FFFFFF";
+		context.beginPath();
+		context.arc(WIDTH / 2, WIDTH / 2, innerR, 0, Math.PI * 2, true);
+		context.fill();
+
+		context.restore();
+	}
+
+	function drawText () {
+		var text = 'HELLO!';
+		var textWidth; // 数字宽度
+		textWidth = context.measureText(text).width;
+		context.fillText(
+				text,
+				WIDTH / 2 - textWidth / 2,
+				WIDTH / 2 
+		);
+	}
+})()
+
+</script>
+
+
+
+</body>
+</html>
