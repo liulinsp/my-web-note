@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas 图像</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<div class="aTitle">绘制图像</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. context.drawImage(img,x,y);
+   在画布上定位图像
+
+2. context.drawImage(img,x,y,width,height);
+   在画布上定位图像，并规定图像的宽度和高度
+   * 如果规定的图像大小与图片大小不一致，会拉伸或缩小图像
+
+3. context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+   剪切图像，并在画布上定位被剪切的部分
+   * sx、sy 剪切的坐标位置
+   * swidth、sheight 剪切图像的大小
+   * x、y 放置图像的位置
+   * width、height 绘制图像的大小
+
+【也可以将另一个canvas当做image绘制到canvas中】
+		</pre>
+	</div>
+	<div class="aShow note" id = "app1">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 210; // 画布宽
+	var HEIGHT = 100; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app1').appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+
+	var image = new Image();
+	image.src = '../../img/bk.png';
+	image.onload = function () {
+		context.drawImage(image, 0, 0, 100, 100);
+		context.drawImage(image, 0, 0, 100, 100, 110, 0, 100, 100);
+
+		// 将上面canvas的内容绘制到另外一个canvas中
+		var canvas2 = document.createElement('canvas');
+		canvas2.setAttribute('width', WIDTH);
+		canvas2.setAttribute('height', HEIGHT);
+		document.getElementById('app1').appendChild(canvas2);
+		var context2 = canvas2.getContext('2d');
+		context2.drawImage(canvas, 0, 0, WIDTH, HEIGHT, WIDTH/4, HEIGHT/4, WIDTH/2, HEIGHT/2);
+	}
+})();
+</script>
+
+
+<div class="aTitle">ImageData对象</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+ImageData 对象包含三个属性：
+* width 图像的宽度
+* height 图像的高度
+* data 包含各个像素设备值的数组
+
+1. context.getImageData(x,y,width,height);
+   返回 ImageData 对象，该对象为画布上指定的矩形复制像素数据
+
+2. context.putImageData(imgData,x,y,dirtyX,dirtyY,dirtyWidth,dirtyHeight);
+   把图像数据（从指定的 ImageData 对象）放回画布上
+   * x、y 画布中放置图像的位置
+   * dirtyX、dirtyY 数据图像中开始绘制的位置
+   * dirtyWidth、dirtyHeight 绘制图像的大小
+
+3. var imgData=context.createImageData(width,height);
+    以指定的尺寸（以像素计）创建新的 ImageData 对象
+
+   var imgData=context.createImageData(imageData);
+   创建与指定的另一个 ImageData 对象尺寸相同的新 ImageData 对象
+   （不会复制图像数据）
+
+<b>脚本：</b>
+context2.putImageData(imageData, 0, 0, 50, 50, 100, 100);
+
+<b>注意：</b>跨域的图片canvas是可以绘制的，但是不能保存和修改
+也就是说，跨域的图片可以使用drawImage()，但是调用toDataUrl() 
+或 getImageData() 时浏览器会抛出异常
+		</pre>
+	</div>
+	<div class="aShow note" id = "app2">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 100; // 画布宽
+	var HEIGHT = 100; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app2').appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+	context.fillStyle = 'rgba(120, 255, 255, 0.6)';
+	context.fillRect(0, 0, 100, 100);
+	context.fillStyle = 'rgb(200, 78, 120)'
+	context.fillRect(25, 25, 50, 50);
+	var imageData = context.getImageData(0, 0, WIDTH, HEIGHT);
+
+	var canvas2 = document.createElement('canvas');
+	canvas2.setAttribute('width', WIDTH);
+	canvas2.setAttribute('height', HEIGHT);
+	document.getElementById('app2').appendChild(canvas2);
+	var context2 = canvas2.getContext('2d');
+	context2.putImageData(imageData, 0, 0, 25, 25, 50, 50);
+
+	var canvas3 = document.createElement('canvas');
+	canvas3.setAttribute('width', WIDTH);
+	canvas3.setAttribute('height', HEIGHT);
+	document.getElementById('app2').appendChild(canvas3);
+	var context3 = canvas3.getContext('2d');
+	// var newImgData = context3.createImageData(WIDTH, HEIGHT);
+	var newImgData = context3.createImageData(imageData);
+	for (var i = 0; i < imageData.data.length; i++) {
+		if (i % 4 === 2) {
+			// 蓝色减100
+			newImgData.data[i] = imageData.data[i] - 100;
+		} else {
+			newImgData.data[i] = imageData.data[i];
+		}
+	}
+	context3.putImageData(newImgData, 0, 0);
+})();
+</script>
+
+
+<div class="aTitle">从文件系统中拖放图像【兼容性差】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+<b>脚本:</b>
+var image = new Image();
+	window.requestFileSystem = window.requestFileSystem 
+						|| window.webkitRequestFileSystem
+	image.onload = function () {
+		context.drawImage(image, 0, 0, WIDTH, HEIGHT);
+	}
+
+	canvas.addEventListener('dragenter', function (e) {
+		e.preventDefault();
+		e.dataTransfer.effectAllowed = 'copy';
+	}, false);
+
+	canvas.addEventListener('dragover', function (e) {
+		e.preventDefault();
+	}, false);
+
+	canvas.addEventListener('drop', function (e) {
+		e.preventDefault();
+		var file = e.dataTransfer.files[0];
+		window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024,
+			function (fs) {
+				fs.root.getFile (file.name, {create: true},
+					function (fileEntry) {
+						fileEntry.createWriter(function (writer) {
+							writer.write(file);
+						});
+						image.src = fileEntry.toURL();
+					},
+					function (e) {
+						alert(e.code)
+					}
+				);
+			},
+			function (e) {
+				alert(e);
+			}
+		);
+	}, false);
+		</pre>
+	</div>
+	<div class="aShow note" id = "app3">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 300; // 画布宽
+	var HEIGHT = 300; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app3').appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+	context.font = '16px sans-serif';
+	context.textAlign = 'center';
+	context.textBaseline = 'middle';
+	context.strokeRect(0, 0, WIDTH, HEIGHT);
+	context.fillText('请将图片拖放到这里', WIDTH / 2, HEIGHT / 2);
+
+	var image = new Image();
+	window.requestFileSystem = window.requestFileSystem 
+								|| window.webkitRequestFileSystem
+	image.onload = function () {
+		context.drawImage(image, 0, 0, WIDTH, HEIGHT);
+	}
+
+	canvas.addEventListener('dragenter', function (e) {
+		e.preventDefault();
+		e.dataTransfer.effectAllowed = 'copy';
+	}, false);
+
+	canvas.addEventListener('dragover', function (e) {
+		e.preventDefault();
+	}, false);
+
+	canvas.addEventListener('drop', function (e) {
+		e.preventDefault();
+		var file = e.dataTransfer.files[0];
+		window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024,
+			function (fs) {
+				fs.root.getFile (file.name, {create: true},
+					function (fileEntry) {
+						fileEntry.createWriter(function (writer) {
+							writer.write(file);
+						});
+						image.src = fileEntry.toURL();
+					},
+					function (e) {
+						alert(e.code)
+					}
+				);
+			},
+			function (e) {
+				alert(e);
+			}
+		);
+	}, false);
+})();
+</script>
+</body>
+</html>

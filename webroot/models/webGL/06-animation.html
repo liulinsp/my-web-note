@@ -17,11 +17,27 @@
 var v = 0; // 旋转角度
 var id = null; // 动画ID
 var isStart = true; // 是否开始动画
-var requestAnimationFrame = window.requestAnimationFrame 
+
+window.requestAnimationFrame = (function () {
+	return window.requestAnimationFrame 
+    || window.mozRequestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    || window.msRequestAnimationFrame
+    || function (callback, element) {
+    	var self = this, start, finish;
+    	window.setTimeout(function () {
+    		start = +new Date();
+    		callback(start);
+    		finish = +new Date();
+    		self.timeout = 1000 / 60 - (finish - start);
+    	}, self.timeout);
+    }
+})();
+/* var requestAnimationFrame = window.requestAnimationFrame 
     || window.mozRequestAnimationFrame
     || window.webkitRequestAnimationFrame
     || window.msRequestAnimationFrame;
-window.requestAnimationFrame = requestAnimationFrame;
+window.requestAnimationFrame = requestAnimationFrame; */
 function animate () {
 	v += Math.PI / 100
 	v = v % (Math.PI * 2)
@@ -99,11 +115,26 @@ function init () {
 	var v = 0; // 旋转角度
 	var id = null; // 动画ID
 	var isStart = true; // 是否开始动画
-	var requestAnimationFrame = window.requestAnimationFrame 
+	/*var requestAnimationFrame = window.requestAnimationFrame 
         || window.mozRequestAnimationFrame
         || window.webkitRequestAnimationFrame
         || window.msRequestAnimationFrame;
-	window.requestAnimationFrame = requestAnimationFrame;
+	window.requestAnimationFrame = requestAnimationFrame;*/
+	window.requestAnimationFrame = (function () {
+		return window.requestAnimationFrame 
+	    || window.mozRequestAnimationFrame
+	    || window.webkitRequestAnimationFrame
+	    || window.msRequestAnimationFrame
+	    || function (callback, element) {
+	    	var self = this, start, finish;
+	    	window.setTimeout(function () {
+	    		start = +new Date();
+	    		callback(start);
+	    		finish = +new Date();
+	    		self.timeout = 1000 / 60 - (finish - start);
+	    	}, self.timeout);
+	    }
+	})();
 
 	function animate () {
 		v += Math.PI / 100

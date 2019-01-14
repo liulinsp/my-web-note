@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas 动画</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<div class="aTitle">三角动画</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+	var WIDTH = 500; // 画布宽
+	var HEIGHT = 500; // 画布高
+	var canvas; // 画布
+	var context; // 画布上下文
+
+	var triangles = []; // 三角数组
+	var triangle; // 三角对象
+	var num = 100; // 三角数量
+	var size = 16; // 三角大小
+	var r = 100; // 三角开始半径
+	var R = 280; // 三角结束半径
+	var rotateAngle = Math.PI / 2; // 整体旋转半径
+
+	var fromPosition = []; // 所有三角开始坐标的数组，数据结构为[x1, y1, x2, y2...]
+	var toPosition = []; // 所有三角终点坐标的数组，数据结构为[x1', y1', x2', y2'...]
+	var position = []; // 动画当前坐标数组，结构同上
+	var animateAngle = Math.PI; // 动画过程中三角形旋转角度
+	var duration = 3000; // 动画时间
+	var tween; // 正向动画
+	var tweenBack; // 反向动画
+	var next; // 下一个动画
+
+	canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app1').appendChild(canvas);
+
+	context = canvas.getContext('2d');
+	context.fillStyle = 'rgba(252, 96, 244, 0.5)';
+	context.translate(WIDTH / 2, HEIGHT / 2);
+
+	for (var i = 0; i < num; i++) {
+		var point1 = {x: -Math.random() * size / 2 - size / 2, y : Math.random() * size / 2 + size / 10};
+		var point2 = {x: Math.random() * size/ 2 + size / 2, y : Math.random() * size / 2 + size / 10};
+		var point3 = {x: 0 - point1.x - point2.x, y: 0 - point1.y - point2.y};
+		var triangleAngle = Math.random() * 2 * Math.PI;
+		var positionAngle = ((i + Math.random() * 0.005) / num) * 2 * Math.PI  ;
+		triangle = {
+			points: [point1, point2, point3],
+			triangleAngle: triangleAngle,
+			positionAngle: positionAngle
+		};
+		triangles.push(triangle);
+
+		var fromR = r * (1 - 1 / 4) + Math.random() * r / 2;
+		var toR = R * (1 - 1 / 4) + Math.random() * R / 2;
+		var begin = {x: fromR * Math.sin(positionAngle), y: fromR * Math.cos(positionAngle)}
+
+		var end = {
+			x: toR * Math.sin(positionAngle + rotateAngle),
+			y: toR * Math.cos(positionAngle  + rotateAngle)
+		}
+		fromPosition.push(begin.x, begin.y);
+		toPosition.push(end.x, end.y);
+	}
+
+	function draw(curPosition, addAngle) {
+		addAngle = addAngle ? addAngle * animateAngle : 0;
+		for (var i = 0; i < num; i++) {
+			var triangle = triangles[i]
+			var points = triangle.points;
+			var triangleAngle = triangle.triangleAngle + addAngle;
+			var positionAngle = triangle.positionAngle;
+			var newPoints = [];
+			for (var k = 0; k < 3; k++) {
+				var rawPoint = points[k];
+				var newPonit = {};
+				newPonit.x = rawPoint.x * Math.cos(triangleAngle) - rawPoint.y * Math.sin(triangleAngle)
+						+  curPosition[i * 2];
+				newPonit.y = rawPoint.y * Math.cos(triangleAngle) + rawPoint.x * Math.sin(triangleAngle)
+						+  curPosition[i * 2 + 1];
+				newPoints.push(newPonit);
+			}
+
+			context.beginPath();
+			context.moveTo(newPoints[newPoints.length -1].x, newPoints[newPoints.length -1].y);
+			for (var j = 0; j < newPoints.length; j++) {
+				context.lineTo(newPoints[j].x, newPoints[j].y);
+			}
+			context.fill();
+		}
+	}
+
+	// draw(toRadius)
+
+
+	position = [].concat(fromPosition);
+	// 正向动画
+    tween = new TWEEN.Tween(position)
+        .to(toPosition, duration)
+        .easing(TWEEN.Easing.Elastic.Out)
+        .onUpdate(function (v) {
+        	context.clearRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT);
+            draw(position, v);
+        })
+        .onComplete(function () {next = tweenBack});
+    
+    // 反向动画
+    tweenBack = new TWEEN.Tween(position)
+        .to(fromPosition, duration)
+        .easing(TWEEN.Easing.Elastic.Out)
+        .onUpdate( function (v) {
+        	context.clearRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT);
+            draw(position, v);
+        })
+		.onComplete(function () {next = tween});
+    tween.start();
+
+    animate();
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update(time);
+    }
+
+    canvas.addEventListener('click', function () {
+		if (next) {
+            next.start();
+            next = null;
+		}
+	});
+		</pre>
+	</div>
+	<div class="aShow note" id = "app1">
+	</div>
+</div>
+<script src="../../js/three/Tween.min.16.3.5.js"></script>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 500; // 画布宽
+	var HEIGHT = 500; // 画布高
+	var canvas; // 画布
+	var context; // 画布上下文
+
+	var triangles = []; // 三角数组
+	var triangle; // 三角对象
+	var num = 100; // 三角数量
+	var size = 16; // 三角大小
+	var r = 100; // 三角开始半径
+	var R = 280; // 三角结束半径
+	var rotateAngle = Math.PI / 2; // 整体旋转半径
+
+	var fromPosition = []; // 所有三角开始坐标的数组，数据结构为[x1, y1, x2, y2...]
+	var toPosition = []; // 所有三角终点坐标的数组，数据结构为[x1', y1', x2', y2'...]
+	var position = []; // 动画当前坐标数组，结构同上
+	var animateAngle = Math.PI; // 动画过程中三角形旋转角度
+	var duration = 3000; // 动画时间
+	var tween; // 正向动画
+	var tweenBack; // 反向动画
+	var next; // 下一个动画
+
+	canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app1').appendChild(canvas);
+
+	context = canvas.getContext('2d');
+	context.fillStyle = 'rgba(252, 96, 244, 0.5)';
+	context.translate(WIDTH / 2, HEIGHT / 2);
+
+	for (var i = 0; i < num; i++) {
+		var point1 = {x: -Math.random() * size / 2 - size / 2, y : Math.random() * size / 2 + size / 10};
+		var point2 = {x: Math.random() * size/ 2 + size / 2, y : Math.random() * size / 2 + size / 10};
+		var point3 = {x: 0 - point1.x - point2.x, y: 0 - point1.y - point2.y};
+		var triangleAngle = Math.random() * 2 * Math.PI;
+		var positionAngle = ((i + Math.random() * 0.005) / num) * 2 * Math.PI  ;
+		triangle = {
+			points: [point1, point2, point3],
+			triangleAngle: triangleAngle,
+			positionAngle: positionAngle
+		};
+		triangles.push(triangle);
+
+		var fromR = r * (1 - 1 / 4) + Math.random() * r / 2;
+		var toR = R * (1 - 1 / 4) + Math.random() * R / 2;
+		var begin = {x: fromR * Math.sin(positionAngle), y: fromR * Math.cos(positionAngle)}
+
+		var end = {
+			x: toR * Math.sin(positionAngle + rotateAngle),
+			y: toR * Math.cos(positionAngle  + rotateAngle)
+		}
+		fromPosition.push(begin.x, begin.y);
+		toPosition.push(end.x, end.y);
+	}
+
+	function draw(curPosition, addAngle) {
+		addAngle = addAngle ? addAngle * animateAngle : 0;
+		for (var i = 0; i < num; i++) {
+			var triangle = triangles[i]
+			var points = triangle.points;
+			var triangleAngle = triangle.triangleAngle + addAngle;
+			var positionAngle = triangle.positionAngle;
+			var newPoints = [];
+			for (var k = 0; k < 3; k++) {
+				var rawPoint = points[k];
+				var newPonit = {};
+				newPonit.x = rawPoint.x * Math.cos(triangleAngle) - rawPoint.y * Math.sin(triangleAngle)
+						+  curPosition[i * 2];
+				newPonit.y = rawPoint.y * Math.cos(triangleAngle) + rawPoint.x * Math.sin(triangleAngle)
+						+  curPosition[i * 2 + 1];
+				newPoints.push(newPonit);
+			}
+
+			context.beginPath();
+			context.moveTo(newPoints[newPoints.length -1].x, newPoints[newPoints.length -1].y);
+			for (var j = 0; j < newPoints.length; j++) {
+				context.lineTo(newPoints[j].x, newPoints[j].y);
+			}
+			context.fill();
+		}
+	}
+
+	// draw(toRadius)
+
+
+	position = [].concat(fromPosition);
+	// 正向动画
+    tween = new TWEEN.Tween(position)
+        .to(toPosition, duration)
+        .easing(TWEEN.Easing.Elastic.Out)
+        .onUpdate(function (v) {
+        	context.clearRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT);
+            draw(position, v);
+        })
+        .onComplete(function () {next = tweenBack});
+    
+    // 反向动画
+    tweenBack = new TWEEN.Tween(position)
+        .to(fromPosition, duration)
+        .easing(TWEEN.Easing.Elastic.Out)
+        .onUpdate( function (v) {
+        	context.clearRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT);
+            draw(position, v);
+        })
+		.onComplete(function () {next = tween});
+    tween.start();
+
+    animate();
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update(time);
+    }
+
+    canvas.addEventListener('click', function () {
+		if (next) {
+            next.start();
+            next = null;
+		}
+	});
+	
+})();
+</script>
+
+<div class="aTitle">测试</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+
+		</pre>
+	</div>
+	<div class="aShow note" id = "app2">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 500; // 画布宽
+	var HEIGHT = 500; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app2').appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+	
+	context.translate(WIDTH / 2, HEIGHT / 2);
+	// context.rotate(Math.PI * 1.5);
+
+	context.beginPath();
+	context.arc(0, 0, 5, 0, Math.PI * 2);
+	context.fill();
+
+	var A = {x: 100, y: 100};
+	context.fillStyle = 'rgb(252, 96, 244)';
+	context.beginPath();
+	context.arc(A.x, A.y, 5, 0, Math.PI * 2);
+	context.fill();
+
+	var rotate = 15;
+	var B = {
+		x: Math.cos(rotate * Math.PI / 180) * A.x - Math.sin(rotate * Math.PI / 180) * A.y,
+		y: Math.sin(rotate * Math.PI / 180) * A.x + Math.cos(rotate * Math.PI / 180) * A.y
+	};
+	context.fillStyle = 'rgb(96, 96, 244)';
+	context.beginPath();
+	context.arc(B.x, B.y, 5, 0, Math.PI * 2);
+	context.fill();
+	console.log(B)
+
+})();
+</script>
+</body>
+</html>

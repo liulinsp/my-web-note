@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas 文本</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+<div class="aTitle">文本的方法</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. context.fillText(text,x,y,maxWidth)
+   在画布上绘制填充的文本
+
+2. context.strokeText(text,x,y,maxWidth);
+   在画布上绘制描边文本
+
+3. context.measureText(text).width;
+   返回一个对象，该对象包含以像素计的指定字体宽度
+		</pre>
+	</div>
+	<div class="aShow note" id = "app1" style="background: #333">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 300; // 画布宽
+	var HEIGHT = 160; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app1').appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+
+	context.font = 'bold 30px sans-serif';
+	context.textBaseline = 'top';
+	context.lineWidth = 2;
+
+	context.fillStyle = '#1F5B9B';
+	context.strokeStyle = '#1F5B9B';
+	context.fillText('纯色填充', 10, 10);
+	context.strokeText('纯色描边', 160, 10);
+
+	var linearGradient = context.createLinearGradient(0, 0, 300, 100);
+	linearGradient.addColorStop(0, 'Yellow');
+	linearGradient.addColorStop(0.25, 'LightGreen');
+	linearGradient.addColorStop(0.5, 'LightBlue');
+	linearGradient.addColorStop(0.75, '#E981FF');
+	linearGradient.addColorStop(1, '#FF835F');
+	context.fillStyle = linearGradient;
+	context.strokeStyle = linearGradient;
+	context.fillText('渐变填充', 10, 60);
+	context.strokeText('渐变描边', 160, 60);
+
+	var image = new Image();
+	image.src = '../../img/bk.png';
+	image.onload = function () {
+		var pattern = context.createPattern(image, 'repeat');
+		context.fillStyle = pattern;
+		context.strokeStyle = pattern;
+		context.fillText('图案填充', 10, 110);
+		context.strokeText('图案描边', 160, 110);
+	}
+
+})();
+
+(function () {
+	var WIDTH = 300; // 画布宽
+	var HEIGHT = 100; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app1').appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+
+	context.font = 'bold 40px sans-serif';
+	context.textBaseline = 'top';
+	context.lineWidth = 2;
+
+	var text = 'FILL TEXT'
+	var image = new Image();
+	image.src = '../cssSample/noise.png';
+	image.onload = function () {
+		var pattern = context.createPattern(image, 'repeat');
+		context.fillStyle = pattern;
+		context.strokeStyle = pattern;
+		context.fillText(text, 10, 10);
+
+		window.requestAnimationFrame = (function () {
+			return window.requestAnimationFrame 
+		    || window.mozRequestAnimationFrame
+		    || window.webkitRequestAnimationFrame
+		    || window.msRequestAnimationFrame
+		    || function (callback, element) {
+		    	var self = this, start, finish;
+		    	window.setTimeout(function () {
+		    		start = +new Date();
+		    		callback(start);
+		    		finish = +new Date();
+		    		self.timeout = 1000 / 60 - (finish - start);
+		    	}, self.timeout);
+		    }
+		})();
+
+		animate();
+		var offset = 0;
+		var time = new Date().getTime();
+		function animate() {
+			var curTime = new Date().getTime();
+			if (curTime - time > 100) {
+				context.clearRect(0, -offset, WIDTH, HEIGHT);
+				if (offset > 1000) {
+					offset = 0;
+				}
+				offset += 100;
+				context.setTransform(1, 0, 0, 1, 0, offset);
+				context.fillText(text, 10, 10 - offset);
+				time = curTime;
+			}
+			requestAnimationFrame(animate)
+		}
+		
+	}
+})();
+
+</script>
+
+
+<div class="aTitle">字型属性</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. context.font="italic small-caps bold 12px arial";
+   文本内容的当前字体属性，该属性是一个CSS3格式的字型字符串
+   * canvas默认的字型是 10px sans-serif。
+   * font-style、font-variant与font-weight的默认值均为normal。
+   <b>属性值：</b>
+   * font-style: normal | italic | oblique
+   * font-variant: normal | small-caps
+   * font-weight: normal | bold | bolder | lighter | 100 - 900
+   * font-size/line-height
+   * font-family
+   ...
+		</pre>
+	</div>
+</div>
+
+<div class="aTitle">文本定位</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+1. context.textAlign="center|end|left|right|start";
+   设置或返回文本内容的当前对齐方式
+   * start	默认。文本在指定的位置开始。
+   * end	文本在指定的位置结束。
+   * center	文本的中心被放置在指定的位置。
+   * left	文本在指定的位置开始。
+   * right	文本在指定的位置结束。
+
+2. context.textBaseline="alphabetic|top|hanging
+                   |middle|ideographic|bottom";
+   设置或返回在绘制文本时的当前文本基线
+   * alphabetic	默认。文本基线是普通的字母基线。
+   * top	文本基线是 em 方框的顶端。
+   * hanging	文本基线是悬挂基线。
+   * middle	文本基线是 em 方框的正中。
+   * ideographic	文本基线是表意基线。
+   * bottom	文本基线是 em 方框的底端。
+   【 "hanging" 和 "ideographic" 在不同的浏览器上效果不同】
+<img src="http://www.runoob.com/wp-content/uploads/2013/11/img_textbaseline.gif">
+		</pre>
+	</div>
+	<div class="aShow note" id = "app2">
+	</div>
+</div>
+<script type="text/javascript">
+(function () {
+	var WIDTH = 450; // 画布宽
+	var HEIGHT = 200; // 画布高
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', WIDTH);
+	canvas.setAttribute('height', HEIGHT);
+	document.getElementById('app2').appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+	context.font = '14px sans-serif';
+	context.strokeStyle = '#12DF27';
+
+	var aligns = ['start', 'center', 'end'];
+	var baselines = ['top', 'middle', 'bottom', 'alphabetic', 'ideographic', 'hanging'];
+
+	for (var i = 0; i < aligns.length; i++) {
+		context.beginPath();
+		context.moveTo(15.5 + i * 210, 0);
+		context.lineTo(15.5 + i * 210, HEIGHT);
+		context.stroke();
+	}
+
+	for (var j = 0; j < baselines.length; j++) {
+		context.beginPath();
+		context.moveTo(0, 20 + 30 * j);
+		context.lineTo(WIDTH, 20 + 30 * j);
+		context.stroke();
+	}
+
+	for (var i = 0; i < aligns.length; i++) {
+		for (var j = 0; j < baselines.length; j++) {
+			context.textAlign = aligns[i];
+			context.textBaseline = baselines[j];
+			context.fillText(aligns[i] + ' ' + baselines[j],15 + i * 210, 20 + 30 * j)
+		}
+	}
+	
+
+})();
+</script>
+</body>
+</html>

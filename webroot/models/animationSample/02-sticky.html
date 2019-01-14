@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>粘性动画</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../../js/TweenMax.min.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.container{
+	width: 200px;
+	margin: 0 auto;
+	border-radius: 50%;
+}
+.sticky{
+	position: relative;
+}
+.bg{
+	width: 200px;
+	height: 200px;
+	background: url(./img/bg.png) center no-repeat;
+	background-size: 100% 100%;
+}
+.title{
+	position: absolute;
+	width: 100%;
+    height: 100%;
+    top:  0;
+    left: 0;
+	line-height: 200px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: #fff;
+}
+</style>
+<div class="aTitle">粘性动画</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+class StickyElement {
+	constructor (el, radiusX, radiusY) {
+		this.el = el;
+		this.radiusX = radiusX || 1.9,
+        this.radiusY = radiusY || 3,
+		this.setEvents();
+	}
+	setEvents () {
+		this.el.addEventListener("mouseenter", e => {
+            return this.onOver(e)
+        }),
+        this.el.addEventListener("mouseleave", e => {
+            return this.onOut(e)
+        })
+	}
+	onOver () {
+		TweenMax.to(this.el, 1.1, {
+            ease: Elastic.easeOut,
+            css: {
+                force3D: true,
+                scale: 1.15
+            }
+        })
+        TweenMax.to(document.querySelector(".bg"), .6, {
+            ease: Quint.easeOut,
+            css: {
+                force3D: true,
+                rotation: 109
+            }
+        }),
+        TweenMax.to(document.querySelector(".title"), .3, {
+            ease: Quint.easeOut,
+            css: {
+                force3D: true,
+                scale: 1 / 1.15
+            }
+        }),
+        this.el.addEventListener("mousemove", e => {
+            return this.onMouseMove(e)
+        })
+	}
+
+	onMouseMove (e) {
+		var curTime = new Date().getTime();
+        if (!(curTime - this.lastTime < 20)) {
+        	this.lastTime = curTime;
+
+        	let {offsetWidth, offsetHeight, offsetLeft, offsetTop} = this.el;
+		    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		    this.mouseX = e.pageX - offsetLeft - (offsetWidth / 2);
+            this.mouseY = e.pageY - offsetTop - (offsetHeight / 2) - scrollTop;
+		    let x = this.mouseX;
+		    let y = this.mouseY;
+		    TweenMax.to(this.el, .5, {
+                ease: Power2.easeOut,
+                css: {
+                    force3D: true,
+                    x: this.mouseX - x / this.radiusX,
+                    y: this.mouseY - y / this.radiusY
+                }
+            })
+        }
+	}
+
+	onOut (e) {
+		this.el.removeEventListener("mousemove",  e => {
+            return this.onMouseMove(e)
+        })
+		TweenMax.to(document.querySelector(".bg"), 1, {
+            ease: Elastic.easeOut,
+            css: {
+                force3D: true,
+                rotation: 0,
+                clearProps: "all"
+            }
+        }),
+        TweenMax.to(this.el, 1, {
+            ease: Elastic.easeOut,
+            css: {
+                force3D: true,
+                x: 0,
+                y: 0,
+                scale: 1,
+                clearProps: "all"
+            }
+        }),
+        TweenMax.to(document.querySelector(".title"), .3, {
+            ease: Quint.easeOut,
+            css: {
+                force3D: true,
+                scale: 1,
+                clearProps: "scale"
+            }
+        })
+	}
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="container">
+			<div id="stickyEle" class="sticky">
+				<div class="bg"></div>
+				<div class="title">HOME</div>
+			</div>
+		</div>		
+	</div>
+</div>
+<script type="text/javascript">
+class StickyElement {
+	constructor (el, radiusX, radiusY) {
+		this.el = el;
+		this.radiusX = radiusX || 1.9,
+        this.radiusY = radiusY || 3,
+		this.setEvents();
+	}
+	setEvents () {
+		this.el.addEventListener("mouseenter", e => {
+            return this.onOver(e)
+        }),
+        this.el.addEventListener("mouseleave", e => {
+            return this.onOut(e)
+        })
+	}
+	onOver () {
+		TweenMax.to(this.el, 1.1, {
+            ease: Elastic.easeOut,
+            css: {
+                force3D: true,
+                scale: 1.15
+            }
+        })
+        TweenMax.to(document.querySelector(".bg"), .6, {
+            ease: Quint.easeOut,
+            css: {
+                force3D: true,
+                rotation: 109
+            }
+        }),
+        TweenMax.to(document.querySelector(".title"), .3, {
+            ease: Quint.easeOut,
+            css: {
+                force3D: true,
+                scale: 1 / 1.15
+            }
+        }),
+        this.el.addEventListener("mousemove", e => {
+            return this.onMouseMove(e)
+        })
+	}
+
+	onMouseMove (e) {
+		var curTime = new Date().getTime();
+        if (!(curTime - this.lastTime < 20)) {
+        	this.lastTime = curTime;
+
+        	let {offsetWidth, offsetHeight, offsetLeft, offsetTop} = this.el;
+		    this.mouseX = e.pageX - offsetLeft - (offsetWidth / 2);
+            this.mouseY = e.pageY - offsetTop - (offsetHeight / 2);
+		    let x = this.mouseX;
+		    let y = this.mouseY;
+		    TweenMax.to(this.el, .5, {
+                ease: Power2.easeOut,
+                css: {
+                    force3D: true,
+                    x: this.mouseX - x / this.radiusX,
+                    y: this.mouseY - y / this.radiusY
+                }
+            })
+        }
+	}
+
+	onOut (e) {
+		this.el.removeEventListener("mousemove",  e => {
+            return this.onMouseMove(e)
+        })
+		TweenMax.to(document.querySelector(".bg"), 1, {
+            ease: Elastic.easeOut,
+            css: {
+                force3D: true,
+                rotation: 0,
+                clearProps: "all"
+            }
+        }),
+        TweenMax.to(this.el, 1, {
+            ease: Elastic.easeOut,
+            css: {
+                force3D: true,
+                x: 0,
+                y: 0,
+                scale: 1,
+                clearProps: "all"
+            }
+        }),
+        TweenMax.to(document.querySelector(".title"), .3, {
+            ease: Quint.easeOut,
+            css: {
+                force3D: true,
+                scale: 1,
+                clearProps: "scale"
+            }
+        })
+	}
+}
+new StickyElement(document.getElementById('stickyEle'), 2, 2)
+</script>
+</body>
+</html>

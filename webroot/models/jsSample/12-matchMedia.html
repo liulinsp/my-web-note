@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>媒体查询</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<script type="text/javascript" src="../../js/jquery-1.9.12.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+
+<div class="aTitle">matchMedia()【IE10及以上】</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+参考：<a href="../cssSample/15-media.html">媒体查询样式</a>
+
+* window.matchMedia() 返回一个新的 MediaQueryList 对象， 表示指定的媒体查询字符串解析后的结果
+* window.matchMedia() 方法的值可以是任何一个 CSS @media 规则 的特性
+
+1. MediaQueryList 对象有以下两个属性：
+media：查询语句的内容。
+matches：用于检测查询结果，如果文档匹配 media query 列表，值为 true，否则为 false。
+
+2. MediaQueryList 对象的事件监听
+* addListener(callback)
+添加一个新的监听器函数，该函数在媒体查询的结果发生变化时执行。
+
+* removeListener(callback)
+从媒体查询列表中删除之前添加的监听器。
+如果指定的监听器不在列表中，则不执行任何操作。
+
+<b>脚本：</b>
+var mediaQueryList = window.matchMedia('(max-width: 1024px)');
+
+doChange(mediaQueryList.matches);
+
+mediaQueryList.addListener(function (event) {
+	doChange(event.matches);
+})
+
+function doChange (matches) {
+	if (matches) {
+		document.body.style="background: #ECFDFA";
+	} else {
+		document.body.style="background: #F9F9F9";
+	}
+}
+		</pre>
+	</div>
+	<!-- <div class="aShow" id="showResult2">
+	</div> -->
+</div>
+<script type="text/javascript">
+var mediaQueryList = window.matchMedia('(max-width: 1024px)');
+
+doChange(mediaQueryList.matches);
+
+mediaQueryList.addListener(function (event) {
+	doChange(event.matches);
+})
+
+function doChange (matches) {
+	if (matches) {
+		document.body.style="background: #ECFDFA";
+	} else {
+		document.body.style="background: #F9F9F9";
+	}
+}
+</script>
+
+</body>
+</html>

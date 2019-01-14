@@ -75,4 +75,36 @@
 	color: #C71111;
 }
 
+table.pre-table{
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 10px 10px 10px 0px;
+    width: 300px;
+}
+
+table.pre-table thead{
+    background-color: #F6F6F6;
+}
+
+table.pre-table thead>tr, tbody>tr>td{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CFCFCF;
+}
+
+table.pre-table tbody>tr:nth-child(odd){
+    background-color: #FFFFFF;
+}
+
+table.pre-table tbody>tr:nth-child(even){
+    background-color: #F9F9F9;
+}
+  
+table.pre-table td{
+    padding: 3px 5px; 
+}
+table.pre-table thead td{
+    text-align: center;
+}
+
 
