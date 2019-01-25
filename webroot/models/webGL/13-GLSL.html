@@ -925,7 +925,7 @@ function init4 () {
 </script>
 
 
-<div class="aTitle" id="materialMap">示例着色器 - 火焰</div>
+<div class="aTitle" id="materialMap">示例着色器 - 海洋</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">
@@ -936,10 +936,14 @@ https://www.shadertoy.com/view/Ms2SD1
 	</div>
 </div>
 <script id="test5_fragment_shader" type="x-shader/x-fragment">
+// 时间
 uniform float iTime;
+// 分辨率
 uniform vec2 iResolution;
-uniform sampler2D iChannel0;
-vec2 iMouse = vec2(0.0, 0.0);
+// 鼠标位置
+uniform vec2 iMouse;
+
+// vec2 iMouse = vec2(0.0, 0.0);
 
 /*
  * "Seascape" by Alexander Alekseev aka TDM - 2014
@@ -1156,7 +1160,8 @@ function init5 () {
 	// 物体
 	var uniforms = {
 		iTime: { value: 1.0 },
-		iResolution: { value: new THREE.Vector2(500.0, 300.0)}
+		iResolution: { value: new THREE.Vector2(500.0, 300.0)},
+		iMouse: { value: new THREE.Vector2(0.0, 0.0) }
 	}
 
 	var material = new THREE.ShaderMaterial( {
@@ -1184,11 +1189,21 @@ function init5 () {
 		mesh.rotation.set(0, time, 0);*/
 		renderer.render( scene, camera );
 	}
+
+	var mouseStartPosition = null; // 鼠标起始位置
+	window.addEventListener("mousemove", function (event) {
+		if (!mouseStartPosition) {
+			mouseStartPosition = {x: event.clientX, y: event.clientY}
+		} else {
+			uniforms.iMouse.value.x = event.clientX - mouseStartPosition.x;
+        	uniforms.iMouse.value.y = event.clientY - mouseStartPosition.y;
+		}
+	})
 }
 </script>
 
 
-<div class="aTitle" id="materialMap">示例着色器</div>
+<div class="aTitle" id="materialMap">示例着色器-火焰</div>
 <div class="aPane">
 	<div class="aCode">
 		<pre class="note">

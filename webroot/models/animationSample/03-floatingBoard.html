@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>漂浮板子动画</title>
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../../js/TweenMax.min.js"></script>
+</head>
+<body>
+<div class="home"><a href="../../index.html">首页</a></div>
+
+<style>
+.container{
+	width: 200px;
+    height:  200px;
+	margin: 0 auto;
+	border-radius: 50%;
+}
+.board{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    height: 200px;
+}
+.bg{
+    width: 100%;
+    height: 100%;
+    background-color: #e70012;
+    transform: rotateZ(45deg);
+    border-radius: 5px;
+    box-shadow: 1px 0 5px rgba(0, 0, 0, .5)
+}
+.text{
+    position: absolute;
+    top: 0;
+    left:  0;
+    width: 100%;
+    height: 100%;
+    font-size: 140px;
+    line-height: 200px;
+    text-align: center;
+    font-family: '楷体';
+    font-weight: bold;
+}
+</style>
+<div class="aTitle">漂浮板子动画</div>
+<div class="aPane">
+	<div class="aCode">
+		<pre class="note">
+class FloatingBoard {
+    constructor (el, angle) {
+        this.el = el;
+        this.angle = angle || 15
+        this.setEvents();
+    }
+    setEvents () {
+        this.el.addEventListener("mouseenter", e => {
+            return this.onOver(e)
+        }),
+        this.el.addEventListener("mouseleave", e => {
+            return this.onOut(e)
+        })
+    }
+    onOver () {
+        this.el.addEventListener("mousemove", e => {
+            return this.onMouseMove(e)
+        })
+    }
+
+    onMouseMove (e) {
+        var x = e.pageX - this.el.offsetLeft,
+        y = e.pageY - this.el.offsetTop;
+
+        var px = x / this.el.offsetWidth, py = y / this.el.offsetHeight;
+        var xx = -this.angle + (this.angle * 2* px), 
+        yy = this.angle - (this.angle * 2 * py);
+        
+        TweenMax.to(this.el, 0.5, {
+            rotationY: xx, 
+            rotationX: yy, 
+            rotationZ: 0, 
+            transformPerspective: 1000, 
+            ease: Quad.easeOut
+        });
+    }
+
+    onOut (e) {
+        this.el.removeEventListener("mousemove",  e => {
+            return this.onMouseMove(e)
+        })
+        TweenMax.to(this.el, 0.5, {
+            rotationY: 0, 
+            rotationX: 0, 
+            rotationZ: 0, 
+            transformPerspective: 1000, 
+            ease: Quad.easeOut
+        });
+    }
+}
+		</pre>
+	</div>
+	<div class="aShow">
+		<div class="container">
+			<div id="board" class="board">
+                <div class="bg"></div>
+                <div class="text">福</div>
+            </div>
+		</div>		
+	</div>
+</div>
+<script type="text/javascript">
+class FloatingBoard {
+	constructor (el, angle) {
+		this.el = el;
+        this.angle = angle || 15
+		this.setEvents();
+	}
+	setEvents () {
+		this.el.addEventListener("mouseenter", e => {
+            return this.onOver(e)
+        }),
+        this.el.addEventListener("mouseleave", e => {
+            return this.onOut(e)
+        })
+	}
+	onOver () {
+        this.el.addEventListener("mousemove", e => {
+            return this.onMouseMove(e)
+        })
+	}
+
+	onMouseMove (e) {
+		var x = e.pageX - this.el.offsetLeft,
+        y = e.pageY - this.el.offsetTop;
+
+        var px = x / this.el.offsetWidth, py = y / this.el.offsetHeight;
+        var xx = -this.angle + (this.angle * 2* px), 
+        yy = this.angle - (this.angle * 2 * py);
+        
+        TweenMax.to(this.el, 0.5, {
+            rotationY: xx, 
+            rotationX: yy, 
+            rotationZ: 0, 
+            transformPerspective: 1000, 
+            ease: Quad.easeOut
+        });
+	}
+
+	onOut (e) {
+		this.el.removeEventListener("mousemove",  e => {
+            return this.onMouseMove(e)
+        })
+		TweenMax.to(this.el, 0.5, {
+            rotationY: 0, 
+            rotationX: 0, 
+            rotationZ: 0, 
+            transformPerspective: 1000, 
+            ease: Quad.easeOut
+        });
+	}
+}
+new FloatingBoard(document.getElementById('board'), 30)
+</script>
+</body>
+</html>
